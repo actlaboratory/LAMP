@@ -7,12 +7,12 @@
 """
 
 
-import player, lists, file_manager, list_manager
+import player, lists, event_processor, list_manager
 
 app=None
 play = player.player()
 playlist = lists.playlist()
 queue = lists.queue()
-fileManage = file_manager.fileManager()
-listManage = list_manager.listManager()
+eventProcess = event_processor.eventProcessor()
+
 

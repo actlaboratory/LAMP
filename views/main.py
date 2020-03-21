@@ -41,6 +41,17 @@ class MainView(BaseView):
 			self.app.config.getint(self.identifier,"positionY")
 		)
 		self.InstallMenuEvent(Menu(self.identifier),self.events.OnMenuSelect)
+		
+		# ボタン・音量スライダエリア
+		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
+		self.previousBtn = self.horizontalCreator.button(_("前"), self.events.onButtonClick)
+		self.playStopButton = self.horizontalCreator.button(_("再生"), self.events.onButtonClick)
+		self.nextBtn = self.horizontalCreator.button(_("次"), self.events.onButtonClick)
+
+		# リストビューエリア
+		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
+		self.playlistView = self.horizontalCreator.ListCtrl(1,wx.EXPAND,style=wx.LC_REPORT|wx.LC_NO_HEADER)
+		self.queueView = self.horizontalCreator.ListCtrl(1,wx.EXPAND,style=wx.LC_REPORT|wx.LC_NO_HEADER)
 
 class Menu(BaseMenu):
 	def Apply(self,target):
@@ -75,3 +86,11 @@ class Events(BaseEvents):
 			if ret==wx.ID_CANCEL: return
 			dialog(_("入力結果"),str(d.GetValue()))
 			return
+
+	def onButtonClick(self, event):
+			if event == globalVars.app.main.previousBtn:
+				return
+			if event == globalVars.app.main.playStopButton:
+				return
+			if event == globalVars.app.main.nextBtn:
+				return
