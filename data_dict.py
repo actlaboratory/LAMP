@@ -11,22 +11,20 @@ else:
 	from pybass import pybass
 	from pybass import pytags
 
-class listManager():
+class dataDict():
 	def __init__ (self):
 		pytags.TAGS_SetUTF8(True)
 		# dataNo:（ファイルパス, ファイル名, サイズ, タイトル, 長さ, アーティスト, アルバム, アルバムアーティスト）
-		self.fileDict = {}
+		self.dict = {}
 		self.dataNo = 0
 		# 表示する項目（タプルのインデックス）
 		self.showValue = 3
 		# リストビューへの一括追加用
-		self.addedItemCount = 0
 
 	# 複数ファイルを追加（ファイルパスリスト, 追加先リスト, 対応するリストビュー）
 	def addFiles(self, flst, lst, lcObj, id=-1):
 		# 作業するファイルのリスト（ファイルパス）
 		pathList = []
-		self.inputProgress = self.globalVars.progressDialog.inputProgress()
 		# リストで受け取ってフォルダとファイルに分ける
 		for s in flst:
 			if os.path.isfile(s) == True:
@@ -38,7 +36,6 @@ class listManager():
 		winsound.Beep(4000, 1000)
 		# 初期化
 		self.addedItemCount = 0
-		self.inputProgress.Destroy()
 
 	# ディレクトリパスからファイルリストを取得（ファイルパスリスト, ディレクトリパス）
 	def appendDirList(self, lst, dir):
@@ -52,10 +49,8 @@ class listManager():
 
 	# 辞書作成（ファイルパスリスト, 追加先リスト、リストビュー, インデックス=末尾追加）
 	def appendDict(self, paths, lst, lcObj, id=-1):
-		# プログレスバーに最大値をセット
+		addedItemCount = 0
 		itemCount = len(paths)
-		if itemCount > 0:
-			self.inputProgress.SetRange(itemCount)
 		for path in paths:
 			handle = pybass.BASS_StreamCreateFile(False, path, 0, 0, pybass.BASS_UNICODE)
 			if handle == 0:
@@ -73,19 +68,17 @@ class listManager():
 			pybass.BASS_StreamFree(handle)
 
 			# 辞書とリストビューに書き込んでdataNoに+1
-			self.fileDict[self.dataNo] = (path, fName, size, title, length, artist, album, albumArtist)
-			label = self.fileDict[self.dataNo][self.showValue]
+			self.dict[self.dataNo] = (path, fName, size, title, length, artist, album, albumArtist)
+			label = self.dict[self.dataNo][self.showValue]
 			if id == -1:
 				lst.appendF(path)
 				index = lcObj.Append([label])
 			else:
-				index = id+self.AddedItemCount
+				index = id+addedItemCount
 				lst.addF(index, path)
 				lcObj.InsertItem(index, label)
 			lcObj.SetItemData(index, self.dataNo)
-			self.addedItemCount += 1
-			if self.addedItemCount%(int(itemCount/100)+1) == 0:
-				self.inputProgress.Update(self.addedItemCount)
+			addedItemCount += 1
 			self.dataNo += 1
 
 

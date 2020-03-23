@@ -17,7 +17,7 @@ class listBase():
 		if index >= 0 and index < len(self.lst):
 			globalVars.listManage.addFiles(pathLst, self, self.lcObject, index)
 		elif index == -1:
-			globalVars.listManage.addFiles(pathLst, self, self.lcObject)
+			globalVars.dataDict.addFiles(pathLst, self, self.lcObject)
 
 	def appendF(self,fileName):
 		self.lst.append(fileName)
