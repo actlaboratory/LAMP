@@ -16,6 +16,8 @@ import errorCodes
 import globalVars
 import menuItemsStore
 
+import view_manager
+
 from logging import getLogger
 from simpleDialog import dialog
 from .base import *
@@ -51,6 +53,8 @@ class MainView(BaseView):
 		# リストビューエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
 		self.playlistView = self.horizontalCreator.ListCtrl(1,wx.EXPAND,style=wx.LC_REPORT|wx.LC_NO_HEADER)
+		globalVars.playlist.setListCtrl(self.playlistView)
+		view_manager.listViewSetting(self.playlistView)
 		self.queueView = self.horizontalCreator.ListCtrl(1,wx.EXPAND,style=wx.LC_REPORT|wx.LC_NO_HEADER)
 
 class Menu(BaseMenu):
