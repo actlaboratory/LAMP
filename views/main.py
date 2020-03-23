@@ -56,6 +56,8 @@ class MainView(BaseView):
 		globalVars.playlist.setListCtrl(self.playlistView)
 		view_manager.listViewSetting(self.playlistView)
 		self.queueView = self.horizontalCreator.ListCtrl(1,wx.EXPAND,style=wx.LC_REPORT|wx.LC_NO_HEADER)
+		globalVars.queue.setListCtrl(self.queueView)
+		view_manager.listViewSetting(self.queueView)
 
 class Menu(BaseMenu):
 	def Apply(self,target):
