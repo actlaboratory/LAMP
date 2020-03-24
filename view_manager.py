@@ -1,10 +1,14 @@
 import wx
 import globalVars
+import context_menus
 
 # イベントバインド関数
 def listViewSetting(lc):
 	lc.AppendColumn("")
 	lc.SetDropTarget(fileDrop(lc))
+	lc.Bind(wx.EVT_LIST_ITEM_ACTIVATED, globalVars.eventProcess.listSelection)
+	lc.Bind(wx.EVT_LIST_KEY_DOWN, globalVars.eventProcess.listViewKeyEvent)
+	lc.Bind(wx.EVT_CONTEXT_MENU, context_menus.contextMenuOnListView)
 
 # ドラッグアンドドロップクラス
 class fileDrop(wx.FileDropTarget):
