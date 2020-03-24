@@ -1,6 +1,7 @@
 import sys, platform, wx
 import winsound
 import globalVars
+import lc_manager
 
 def is64Bit():
     return sys.maxsize > 2 ** 32
@@ -26,9 +27,9 @@ class eventProcessor():
     def refreshView(self):
         # ボタン表示更新
         if self.stopFlag ==1 or globalVars.play.handle == 0:
-            globalVars.app.hMainView.playButton.SetLabel("再生")
+            globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
         elif globalVars.play.getChannelState() == pybass.BASS_ACTIVE_PLAYING:
-            globalVars.app.hMainView.playButton.SetLabel("一時停止")
+            globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
         else:
             globalVars.app.hMainView.playButton.SetLabel("再生")
 
@@ -43,6 +44,7 @@ class eventProcessor():
             self.nextFile()
 
     def previousFile(self):
+        p = False
         if self.stopFlag == 1:
             return None
         # プレイリスト再生中であれば
@@ -51,10 +53,12 @@ class eventProcessor():
             # プレイリストの1曲前を再生
             get = globalVars.playlist.getPrevious()
             if get != None:
-                globalVars.play.inputFile(get)
+                p = globalVars.play.inputFile(get)
         elif get != None:
             # キューなどからの復帰
-            globalVars.play.inputFile(get)
+            p = globalVars.play.inputFile(get)
+        # 停止中フラグの解除
+        if p: self.stopFlag = 0
 
     def playButtonControl(self):
         # 再生中は一時停止を実行

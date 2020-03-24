@@ -47,7 +47,7 @@ class MainView(BaseView):
 		# ボタン・音量スライダエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
 		self.previousBtn = self.horizontalCreator.button(_("前"), self.events.onButtonClick)
-		self.playStopButton = self.horizontalCreator.button(_("再生"), self.events.onButtonClick)
+		self.playPauseBtn = self.horizontalCreator.button(_("再生"), self.events.onButtonClick)
 		self.nextBtn = self.horizontalCreator.button(_("次"), self.events.onButtonClick)
 
 		# リストビューエリア
@@ -58,6 +58,11 @@ class MainView(BaseView):
 		self.queueView = self.horizontalCreator.ListCtrl(1,wx.EXPAND,style=wx.LC_REPORT|wx.LC_NO_HEADER)
 		globalVars.queue.setListCtrl(self.queueView)
 		view_manager.listViewSetting(self.queueView)
+
+		# タイマーの呼び出し
+		self.timer = wx.Timer(self.hFrame)
+		self.timer.Start(10)
+		self.hFrame.Bind(wx.EVT_TIMER, self.events.timerEvent)
 
 class Menu(BaseMenu):
 	def Apply(self,target):
@@ -94,9 +99,13 @@ class Events(BaseEvents):
 			return
 
 	def onButtonClick(self, event):
-			if event == globalVars.app.main.previousBtn:
+			if event == globalVars.app.previousBtn:
 				return
-			if event == globalVars.app.main.playStopButton:
+			if event == globalVars.app.playPauseBtn:
 				return
-			if event == globalVars.app.main.nextBtn:
+			if event == globalVars.app.nextBtn:
 				return
+
+	def timerEvent(self, evt):
+		globalVars.eventProcess.refreshView()
+		globalVars.eventProcess.fileChange()
