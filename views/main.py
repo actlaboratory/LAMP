@@ -70,13 +70,22 @@ class Menu(BaseMenu):
 		"""指定されたウィンドウに、メニューを適用する。"""
 
 		#メニューの大項目を作る
+		self.hOperationMenu=wx.Menu()
 		self.hHelpMenu=wx.Menu()
+
+		#操作メニューの中身
+		self.hOperationInVolumeMenu=wx.Menu()
+		self.hOperationMenu.AppendSubMenu(self.hOperationInVolumeMenu, _("音量"))
+		self.RegisterMenuCommand(self.hOperationInVolumeMenu, "VOLUME_DEFAULT", _("通常の音量に設定"))
+		self.RegisterMenuCommand(self.hOperationInVolumeMenu, "VOLUME_UP", _("音量を上げる"))
+		self.RegisterMenuCommand(self.hOperationInVolumeMenu, "VOLUME_DOWN", _("音量を下げる"))
 
 		#ヘルプメニューの中身
 		self.RegisterMenuCommand(self.hHelpMenu,"EXAMPLE",_("テストダイアログを閲覧"))
 
 		#メニューバーの生成
 		self.hMenuBar=wx.MenuBar()
+		self.hMenuBar.Append(self.hOperationMenu,_("操作"))
 		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ"))
 		target.SetMenuBar(self.hMenuBar)
 
@@ -91,7 +100,13 @@ class Events(BaseEvents):
 		selected=event.GetId()#メニュー識別しの数値が出る
 
 
-		if selected==menuItemsStore.getRef("EXAMPLE"):
+		if selected==menuItemsStore.getRef("VOLUME_DEFAULT"):
+			globalVars.play.setVolume(100)
+		elif selected==menuItemsStore.getRef("VOLUME_UP"):
+			globalVars.play.changeVolume(+5)
+		elif selected==menuItemsStore.getRef("VOLUME_DOWN"):
+			globalVars.play.changeVolume(-5)
+		elif selected==menuItemsStore.getRef("EXAMPLE"):
 			d=views.mkdir.Dialog()
 			d.Initialize()
 			ret=d.Show()
