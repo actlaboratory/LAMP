@@ -49,6 +49,7 @@ class MainView(BaseView):
 		self.previousBtn = self.horizontalCreator.button(_("前"), self.events.onButtonClick)
 		self.playPauseBtn = self.horizontalCreator.button(_("再生"), self.events.onButtonClick)
 		self.nextBtn = self.horizontalCreator.button(_("次"), self.events.onButtonClick)
+		self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
 
 		# リストビューエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
@@ -99,12 +100,12 @@ class Events(BaseEvents):
 			return
 
 	def onButtonClick(self, event):
-			if event == globalVars.app.previousBtn:
-				return
-			if event == globalVars.app.playPauseBtn:
-				return
-			if event == globalVars.app.nextBtn:
-				return
+			if event.GetEventObject() == globalVars.app.hMainView.previousBtn:
+				globalVars.eventProcess.previousFile()
+			if event.GetEventObject() == globalVars.app.hMainView.playPauseBtn:
+				globalVars.eventProcess.playButtonControl()
+			if event.GetEventObject() == globalVars.app.hMainView.nextBtn:
+				globalVars.eventProcess.nextFile()
 
 	def timerEvent(self, evt):
 		globalVars.eventProcess.refreshView()

@@ -37,7 +37,8 @@ class player():
 
         #早送りとかの設定をリセットして再生
         self.fastMoveReset()
-        self.channelPlay()
+        rtn = self.channelPlay()
+        return rtn
 
     def createChannel(self):
         #ファイルを読み込み、ストリームを生成

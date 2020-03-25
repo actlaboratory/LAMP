@@ -31,7 +31,7 @@ class eventProcessor():
         elif globalVars.play.getChannelState() == pybass.BASS_ACTIVE_PLAYING:
             globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
         else:
-            globalVars.app.hMainView.playButton.SetLabel("再生")
+            globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
 
         # リスト幅更新
         globalVars.app.hMainView.playlistView.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
@@ -72,6 +72,7 @@ class eventProcessor():
             globalVars.play.channelPlay()
 
     def nextFile(self):
+        p = False
         # ユーザ操作による停止ではないか
         if self.stopFlag == 1:
             return None
@@ -81,10 +82,12 @@ class eventProcessor():
             # キューが空の時はプレイリストを確認
             get = globalVars.playlist.getNext()
             if get != None:
-                globalVars.play.inputFile(get)
-
+                p = globalVars.play.inputFile(get)
+            else: # 再生するものがなければ停止とする
+                self.stopFlag = 1
         else:
-            globalVars.play.inputFile(get)
+            p = globalVars.play.inputFile(get)
+        if p: self.stopFlag = 0
 
     def stop(self):
         self.stopFlag = 1
@@ -117,7 +120,11 @@ class eventProcessor():
         iLst = lc_manager.getListCtrlSelections(evtObj)
         if len(iLst) == 1:
             index = evt.GetIndex()
-            globalVars.play.inputFile(lst.getFile(index, True))
+            p = globalVars.play.inputFile(lst.getFile(index, True))
+            if p: # 再生に成功
+                self.stopFlag = 0
+            else: # 再生に失敗（エラー処理）
+                self.stopFlag = 1
             if lst == globalVars.queue:
                 lst.deleteFile(index)
 
