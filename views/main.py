@@ -60,7 +60,7 @@ class MainView(BaseView):
 		globalVars.queue.setListCtrl(self.queueView)
 		view_manager.listViewSetting(self.queueView)
 
-		# タイマーの呼び出し
+# タイマーの呼び出し
 		self.timer = wx.Timer(self.hFrame)
 		self.timer.Start(10)
 		self.hFrame.Bind(wx.EVT_TIMER, self.events.timerEvent)
@@ -106,6 +106,10 @@ class Events(BaseEvents):
 			globalVars.play.changeVolume(+5)
 		elif selected==menuItemsStore.getRef("VOLUME_DOWN"):
 			globalVars.play.changeVolume(-5)
+		elif selected==menuItemsStore.getRef("FAST_FORWARD"):
+			globalVars.play.fastForward()
+		elif selected==menuItemsStore.getRef("REWIND"):
+			globalVars.play.rewind()
 		elif selected==menuItemsStore.getRef("EXAMPLE"):
 			d=views.mkdir.Dialog()
 			d.Initialize()
