@@ -1,4 +1,7 @@
 import sys, os, wx, time, winsound
+import threading
+import globalVars
+from views import mkProgress
 
 def is64Bit():
 	return sys.maxsize > 2 ** 32
@@ -19,12 +22,21 @@ class dataDict():
 		self.dataNo = 0
 		# 表示する項目（タプルのインデックス）
 		self.showValue = 3
-		# リストビューへの一括追加用
 
-	# 複数ファイルを追加（ファイルパスリスト, 追加先リスト, 対応するリストビュー）
+	# 複数ファイルを追加（ファイルパスリスト, 追加先リスト, 対応するリストビュー, 追加先インデックス=末尾）
 	def addFiles(self, flst, lst, lcObj, id=-1):
+		#プログレスダイアログ作成
+		progress=mkProgress.Dialog()
+		progress.Initialize(_("ファイルを集めています..."), _("読み込み中..."))
+		t1 = threading.Thread(target=self.addFilesThread,args=(flst,lst,lcObj,progress,id))
+		t1.start()
+
+	#ファイル追加スレッド（ファイルパスリスト, 追加先リスト, リストビュー, プログレスダイアログ）
+	def addFilesThread(self, flst, lst, lcObj, progress, id=-1):
 		# 作業するファイルのリスト（ファイルパス）
 		pathList = []
+		t2 = threading.Thread(target=progress.Show)
+		t2.start() # プログレスダイアログ表示
 		# リストで受け取ってフォルダとファイルに分ける
 		for s in flst:
 			if os.path.isfile(s) == True:
@@ -32,10 +44,9 @@ class dataDict():
 			else:
 				self.appendDirList(pathList, s)
 		# 作成したファイルパスのリストから辞書に追加
-		self.appendDict(pathList, lst, lcObj, id)
+		self.appendDict(pathList, lst, lcObj, progress, id)
 		winsound.Beep(4000, 1000)
-		# 初期化
-		self.addedItemCount = 0
+
 
 	# ディレクトリパスからファイルリストを取得（ファイルパスリスト, ディレクトリパス）
 	def appendDirList(self, lst, dir):
@@ -47,10 +58,11 @@ class dataDict():
 					f = tp[0] + "\\" + file
 					lst.append(f)
 
-	# 辞書作成（ファイルパスリスト, 追加先リスト、リストビュー, インデックス=末尾追加）
-	def appendDict(self, paths, lst, lcObj, id=-1):
+	# 辞書作成
+	def appendDict(self, paths, lst, lcObj, progress, id):
 		addedItemCount = 0
 		itemCount = len(paths)
+		if itemCount>0:progress.update(0,_("読み込み中")+"  0/"+str(itemCount),itemCount)
 		for path in paths:
 			handle = pybass.BASS_StreamCreateFile(False, path, 0, 0, pybass.BASS_UNICODE)
 			if handle == 0:
@@ -79,6 +91,11 @@ class dataDict():
 				lcObj.InsertItem(index, label)
 			lcObj.SetItemData(index, self.dataNo)
 			addedItemCount += 1
+			if addedItemCount!=0 and int(itemCount/100)!=0:
+				if addedItemCount%int(itemCount/100)==0: #プログレス更新
+					progress.update(addedItemCount,_("読み込み中")+"  "+str(addedItemCount)+"/"+str(itemCount),itemCount)
 			self.dataNo += 1
+		progress.Destroy()
+		globalVars.app.hMainView.hFrame.Enable()
 
 

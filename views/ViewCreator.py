@@ -287,6 +287,19 @@ class ViewCreator():
 		_winxptheme.SetWindowTheme(target.GetHandle(),"","")
 		target.SetFont(self.font.GetFont())
 
+	def gauge(self,label, x=0):
+		hStaticText=wx.StaticText(self.parent,-1,label=label)
+		self.sizer.Add(hStaticText,0)
+
+		hGauge=wx.Gauge(self.parent, -1,size=(x,-1))
+		self.SetFace(hGauge)
+		if x==-1:	#幅を拡張
+			self.sizer.Add(hGauge,1)
+		else:
+			self.sizer.Add(hGauge)
+		self.AddSpace(self.space)
+		return hGauge,hStaticText
+
 
 #parentで指定したsizerの下に、新たなBoxSizerを設置
 def BoxSizer(parent,orient=wx.VERTICAL,flg=0,border=0):
