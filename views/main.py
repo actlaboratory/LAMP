@@ -49,7 +49,14 @@ class MainView(BaseView):
 		self.previousBtn = self.horizontalCreator.button(_("前"), self.events.onButtonClick)
 		self.playPauseBtn = self.horizontalCreator.button(_("再生"), self.events.onButtonClick)
 		self.nextBtn = self.horizontalCreator.button(_("次"), self.events.onButtonClick)
+		self.stopBtn = self.horizontalCreator.button(_("停止"), self.events.onButtonClick)
 		self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
+
+		#トラックバーエリア
+		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
+		self.trackBar = self.horizontalCreator.slider(_("トラック"), 1000)
+
+
 
 		# リストビューエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
@@ -60,7 +67,7 @@ class MainView(BaseView):
 		globalVars.queue.setListCtrl(self.queueView)
 		view_manager.listViewSetting(self.queueView)
 
-# タイマーの呼び出し
+		# タイマーの呼び出し
 		self.timer = wx.Timer(self.hFrame)
 		self.timer.Start(10)
 		self.hFrame.Bind(wx.EVT_TIMER, self.events.timerEvent)
@@ -125,6 +132,8 @@ class Events(BaseEvents):
 				globalVars.eventProcess.playButtonControl()
 			if event.GetEventObject() == globalVars.app.hMainView.nextBtn:
 				globalVars.eventProcess.nextFile()
+			if event.GetEventObject() == globalVars.app.hMainView.stopBtn:
+				globalVars.eventProcess.stop()
 
 	def timerEvent(self, evt):
 		globalVars.eventProcess.refreshView()

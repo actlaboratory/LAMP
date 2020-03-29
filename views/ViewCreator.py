@@ -300,6 +300,16 @@ class ViewCreator():
 		self.AddSpace(self.space)
 		return hGauge,hStaticText
 
+	def slider(self, label, x=0):
+		hSlider=wx.Slider(self.parent, -1, size=(x,-1),style=wx.SL_BOTH)
+		self.SetFace(hSlider)
+		if x==-1:	#幅を拡張
+			self.sizer.Add(hSlider,1)
+		else:
+			self.sizer.Add(hSlider)
+		return hSlider
+
+
 
 #parentで指定したsizerの下に、新たなBoxSizerを設置
 def BoxSizer(parent,orient=wx.VERTICAL,flg=0,border=0):

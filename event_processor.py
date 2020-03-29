@@ -33,6 +33,18 @@ class eventProcessor():
         else:
             globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
 
+        #トラックバー更新
+        max = globalVars.play.getChannelLength()
+        if max != False and globalVars.play.getChannelState() != pybass.BASS_ACTIVE_STOPPED:
+            globalVars.app.hMainView.trackBar.SetMax(max)
+        else:
+            globalVars.app.hMainView.trackBar.SetMax(0)
+        val = globalVars.play.getChannelPosition()
+        if val != False and globalVars.play.getChannelState() != pybass.BASS_ACTIVE_STOPPED:
+            globalVars.app.hMainView.trackBar.SetValue(val)
+        else:
+            globalVars.app.hMainView.trackBar.SetValue(0)
+
         # リスト幅更新
         globalVars.app.hMainView.playlistView.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
         globalVars.app.hMainView.queueView.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)

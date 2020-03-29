@@ -79,9 +79,13 @@ class player():
     def getChannelState(self):
         return pybass.BASS_ChannelIsActive(self.handle)
 
+    def getChannelLength(self):
+        byte = pybass.BASS_ChannelGetLength(self.handle,pybass.BASS_POS_BYTE)
+        return pybass.BASS_ChannelBytes2Seconds(self.handle, byte)
+    
     def getChannelPosition(self):
         channelPositionByte = pybass.BASS_ChannelGetPosition(self.handle, pybass.BASS_POS_BYTE)
-        channelPositionSec = pybass.BASS_ChannelBytes2Seconds(handle, channelPositionByte)
+        channelPositionSec = pybass.BASS_ChannelBytes2Seconds(self.handle, channelPositionByte)
         return channelPositionSec
     
     def rewind(self):
