@@ -87,7 +87,11 @@ class player():
         channelPositionByte = pybass.BASS_ChannelGetPosition(self.handle, pybass.BASS_POS_BYTE)
         channelPositionSec = pybass.BASS_ChannelBytes2Seconds(self.handle, channelPositionByte)
         return channelPositionSec
-    
+
+    def setChannelPosition(self, sec):
+        channelPositionByte = pybass.BASS_ChannelSeconds2Bytes(self.handle, sec)
+        return pybass.BASS_ChannelSetPosition(self.handle, channelPositionByte, pybass.BASS_POS_BYTE)
+
     def rewind(self):
         if self.fastForwardFlag == 0 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
             pybass.BASS_ChannelSetAttribute(self.reverseHandle,bass_fx.BASS_ATTRIB_REVERSE_DIR,bass_fx.BASS_FX_RVS_REVERSE)

@@ -121,6 +121,10 @@ class eventProcessor():
             fileDialog.ShowModal()
             globalVars.queue.addFiles(fileDialog.GetPaths())
 
+    def trackBarCtrl(self, bar):
+        val = bar.GetValue()
+        globalVars.play.setChannelPosition(val)
+    
     # リストビューでアクティベートされたアイテムの処理
     def listSelection(self, evt):
         evtObj = evt.GetEventObject()

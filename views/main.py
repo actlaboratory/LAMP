@@ -55,6 +55,7 @@ class MainView(BaseView):
 		#トラックバーエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
 		self.trackBar = self.horizontalCreator.slider(_("トラック"), 1000)
+		self.trackBar.Bind(wx.EVT_COMMAND_SCROLL, self.events.onSlider)
 
 
 
@@ -135,6 +136,10 @@ class Events(BaseEvents):
 			if event.GetEventObject() == globalVars.app.hMainView.stopBtn:
 				globalVars.eventProcess.stop()
 
+	def onSlider(self, evt):
+		if evt.GetEventObject() == globalVars.app.hMainView.trackBar:
+			globalVars.eventProcess.trackBarCtrl(evt.GetEventObject())
+	
 	def timerEvent(self, evt):
 		globalVars.eventProcess.refreshView()
 		globalVars.eventProcess.fileChange()
