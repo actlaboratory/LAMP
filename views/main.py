@@ -24,6 +24,7 @@ from .base import *
 from simpleDialog import *
 
 import views.mkdir
+import views.mkOpenDialog
 
 
 class MainView(BaseView):
@@ -78,9 +79,14 @@ class Menu(BaseMenu):
 		"""指定されたウィンドウに、メニューを適用する。"""
 
 		#メニューの大項目を作る
+		self.hFileMenu=wx.Menu()
 		self.hOperationMenu=wx.Menu()
 		self.hHelpMenu=wx.Menu()
 
+		#ファイルメニューの中身
+		self.RegisterMenuCommand(self.hFileMenu,"FILE_OPEN",_("ファイルを開く"))
+		self.RegisterMenuCommand(self.hFileMenu,"DIR_OPEN",_("フォルダを開く"))
+		
 		#操作メニューの中身
 		self.hOperationInVolumeMenu=wx.Menu()
 		self.hOperationMenu.AppendSubMenu(self.hOperationInVolumeMenu, _("音量"))
@@ -93,6 +99,7 @@ class Menu(BaseMenu):
 
 		#メニューバーの生成
 		self.hMenuBar=wx.MenuBar()
+		self.hMenuBar.Append(self.hFileMenu,_("ファイル"))
 		self.hMenuBar.Append(self.hOperationMenu,_("操作"))
 		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ"))
 		target.SetMenuBar(self.hMenuBar)
@@ -108,7 +115,15 @@ class Events(BaseEvents):
 		selected=event.GetId()#メニュー識別しの数値が出る
 
 
-		if selected==menuItemsStore.getRef("VOLUME_DEFAULT"):
+		if selected==menuItemsStore.getRef("FILE_OPEN"):
+			dialog= views.mkOpenDialog.Dialog()
+			dialog.Initialize(0) #0=ファイルダイアログ
+			dialog.Show()
+		elif selected==menuItemsStore.getRef("DIR_OPEN"):
+			dialog= views.mkOpenDialog.Dialog()
+			dialog.Initialize(1) #1=ファイルダイアログ
+			dialog.Show()
+		elif selected==menuItemsStore.getRef("VOLUME_DEFAULT"):
 			globalVars.play.setVolume(100)
 		elif selected==menuItemsStore.getRef("VOLUME_UP"):
 			globalVars.play.changeVolume(+5)

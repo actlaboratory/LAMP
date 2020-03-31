@@ -106,21 +106,6 @@ class eventProcessor():
         globalVars.play.channelFree()
         globalVars.playlist.positionReset()
 
-    def browseButton(self, evt):
-        evtObj = evt.GetEventObject()
-        if evtObj == globalVars.app.hMainView.addPlayListButton:
-            fileDialog = wx.FileDialog(None, "ファイルを選択", style=wx.FD_OPEN | wx.FD_MULTIPLE)
-            fileDialog.ShowModal()
-            globalVars.playlist.addFiles(fileDialog.GetPaths())
-        elif evtObj == globalVars.app.hMainView.addDirPlayListButton:
-            dirDialog = wx.DirDialog(None, "フォルダを選択")
-            dirDialog.ShowModal()
-            globalVars.playlist.addFiles([dirDialog.GetPath()])
-        elif evtObj == globalVars.app.hMainView.addQueueButton:
-            fileDialog = wx.FileDialog(None, "ファイルを選択", style=wx.FD_OPEN | wx.FD_MULTIPLE)
-            fileDialog.ShowModal()
-            globalVars.queue.addFiles(fileDialog.GetPaths())
-
     def trackBarCtrl(self, bar):
         val = bar.GetValue()
         globalVars.play.setChannelPosition(val)
