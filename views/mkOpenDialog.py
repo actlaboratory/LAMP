@@ -11,7 +11,7 @@ from views.baseDialog import *
 class Dialog(BaseDialog):
     def Initialize(self, type): #0=ファイル、1=フォルダ選択ダイアログ
         self.type=type
-        self.identifier="sampleDirectoryDialog"#このビューを表す文字列
+        self.identifier="openDialog"#このビューを表す文字列
         self.log=getLogger(self.identifier)
         self.log.debug("created")
         if type==0:
@@ -51,9 +51,8 @@ class Dialog(BaseDialog):
     def onButtonClick(self, evt):
         if os.path.exists(self.iText.GetLabel())==False:
             return None
+        self.wnd.Hide()
         if evt.GetEventObject()==self.playlistBtn:
             globalVars.playlist.addFiles([self.iText.GetLabel()])
-            self.Destroy()
         elif evt.GetEventObject()==self.queueBtn:
             globalVars.queue.addFiles([self.iText.GetLabel()])
-            self.Destroy()

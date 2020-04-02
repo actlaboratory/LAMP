@@ -95,7 +95,7 @@ class dataDict():
 				if addedItemCount%int(itemCount/100)==0: #プログレス更新
 					progress.update(addedItemCount,_("読み込み中")+"  "+str(addedItemCount)+"/"+str(itemCount),itemCount)
 			self.dataNo += 1
-		progress.Destroy()
 		globalVars.app.hMainView.hFrame.Enable()
+		progress.Destroy()
 
 
