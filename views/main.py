@@ -51,6 +51,7 @@ class MainView(BaseView):
 		self.playPauseBtn = self.horizontalCreator.button(_("再生"), self.events.onButtonClick)
 		self.nextBtn = self.horizontalCreator.button(_("次"), self.events.onButtonClick)
 		self.stopBtn = self.horizontalCreator.button(_("停止"), self.events.onButtonClick)
+		self.repeatLoopBtn = self.horizontalCreator.button(_("ﾘﾋﾟｰﾄ/ﾙｰﾌﾟ"), self.events.onButtonClick)
 		self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
 
 		#トラックバーエリア
@@ -144,12 +145,14 @@ class Events(BaseEvents):
 	def onButtonClick(self, event):
 			if event.GetEventObject() == globalVars.app.hMainView.previousBtn:
 				globalVars.eventProcess.previousFile()
-			if event.GetEventObject() == globalVars.app.hMainView.playPauseBtn:
+			elif event.GetEventObject() == globalVars.app.hMainView.playPauseBtn:
 				globalVars.eventProcess.playButtonControl()
-			if event.GetEventObject() == globalVars.app.hMainView.nextBtn:
+			elif event.GetEventObject() == globalVars.app.hMainView.nextBtn:
 				globalVars.eventProcess.nextFile()
-			if event.GetEventObject() == globalVars.app.hMainView.stopBtn:
+			elif event.GetEventObject() == globalVars.app.hMainView.stopBtn:
 				globalVars.eventProcess.stop()
+			elif event.GetEventObject() == globalVars.app.hMainView.repeatLoopBtn:
+				globalVars.eventProcess.repeatLoopCtrl()
 
 	def onSlider(self, evt):
 		if evt.GetEventObject() == globalVars.app.hMainView.trackBar:

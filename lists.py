@@ -47,19 +47,25 @@ class listBase():
 		return rtn
 
 	# 任意のファイルを取得（インデックス=最終getFile, 再生位置移動=しない）
-	def getFile(self, index=-1, movePos=False):
+	def getFile(self, index=-2, movePos=False):
+		#インデックス指定の呼び出しに削除後の処理は考慮しない
 		if index >= 0 and index < len(self.lst):
 			self. isDeletePlayingFile = 0
 			rtn = self.lst[index]
-		# 第2引数なし（-1）で、再生中のファイルを返す
-		elif index == -1 and self.playIndex >= 0 and self.playIndex < len(self.lst):
+		elif index == -1 and len(self.lst) != 0:
+			self. isDeletePlayingFile = 0
+			index = len(self.lst)-1
+			rtn = self.lst[index]
+		# 第2引数なし（-2）で、再生中のファイルを返す
+		elif index == -2 and self.playIndex >= 0 and self.playIndex < len(self.lst):
 			if self.isDeletePlayingFile == 1:
 				rtn = None
-			rtn = self.lst[self.playIndex]
+			else:
+				rtn = self.lst[self.playIndex]
 		# 再生位置リセット状態でも None を返す
 		else:
 			rtn = None
-		if rtn != None and index != -1:
+		if rtn != None and index >= 0 and movePos == True:
 			self.playIndex = index
 			return rtn
 		else:

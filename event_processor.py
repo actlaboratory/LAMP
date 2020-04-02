@@ -18,6 +18,7 @@ else:
 class eventProcessor():
     def __init__(self):
         self.stopFlag = 0
+        self.repeatLoopFlag = 0 #リピート=1, ループ=2
 
 
     def freeBass(self):
@@ -51,9 +52,12 @@ class eventProcessor():
 
 
     def fileChange(self):
-        # ストリームがないか停止状態であれば次のファイルを再生
+        # ストリームがないか停止状態であればファイルを再生
         if globalVars.play.handle == 0 or globalVars.play.getChannelState() == pybass.BASS_ACTIVE_STOPPED:
-            self.nextFile()
+            if self.repeatLoopFlag == 1: #リピート
+                globalVars.play.inputFile(globalVars.play.fileName)
+            else: #それ以外（nextFileがループ処理）
+                self.nextFile()
 
     def previousFile(self):
         p = False
@@ -95,6 +99,10 @@ class eventProcessor():
             get = globalVars.playlist.getNext()
             if get != None:
                 p = globalVars.play.inputFile(get)
+            elif self.repeatLoopFlag == 2: #ﾙｰﾌﾟであれば先頭へ
+                get = globalVars.playlist.getFile(0,True)
+                if get != None:
+                    p = globalVars.play.inputFile(get)
             else: # 再生するものがなければ停止とする
                 self.stopFlag = 1
         else:
@@ -105,6 +113,13 @@ class eventProcessor():
         self.stopFlag = 1
         globalVars.play.channelFree()
         globalVars.playlist.positionReset()
+
+    #リピートﾙｰﾌﾟフラグを切り替え
+    def repeatLoopCtrl(self):
+        if self.repeatLoopFlag < 2:
+            self.repeatLoopFlag+=1
+        else:
+            self.repeatLoopFlag=0
 
     def trackBarCtrl(self, bar):
         val = bar.GetValue()
