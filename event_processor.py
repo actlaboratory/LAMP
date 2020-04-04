@@ -2,6 +2,7 @@ import sys, platform, wx
 import winsound
 import globalVars
 import lc_manager
+import menuItemsStore
 
 def is64Bit():
     return sys.maxsize > 2 ** 32
@@ -70,6 +71,10 @@ class eventProcessor():
             get = globalVars.playlist.getPrevious()
             if get != None:
                 p = globalVars.play.inputFile(get)
+            elif self.repeatLoopFlag == 2: #ループ指定の時は末尾へ
+                get = globalVars.playlist.getFile(-1, True)
+                if get != None:
+                    p = globalVars.play.inputFile(get)
         elif get != None:
             # キューなどからの復帰
             p = globalVars.play.inputFile(get)
@@ -114,12 +119,24 @@ class eventProcessor():
         globalVars.play.channelFree()
         globalVars.playlist.positionReset()
 
-    #リピートﾙｰﾌﾟフラグを切り替え
-    def repeatLoopCtrl(self):
-        if self.repeatLoopFlag < 2:
-            self.repeatLoopFlag+=1
-        else:
-            self.repeatLoopFlag=0
+    #リピートﾙｰﾌﾟフラグを切り替え(モード=順次)
+    def repeatLoopCtrl(self, mode=-1): #0=なし, 1=リピート, 2=ループ
+        if mode == -1:
+            if self.repeatLoopFlag < 2:
+                self.repeatLoopFlag+=1
+            else:
+                self.repeatLoopFlag=0
+        elif mode>=0 and mode<=2:
+            self.repeatLoopFlag = mode
+        if self.repeatLoopFlag == 0:
+            globalVars.app.hMainView.repeatLoopBtn.SetLabel("ﾘﾋﾟｰﾄ / ﾙｰﾌﾟ")
+            globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("REPEAT_LOOP_NONE"), True)
+        elif self.repeatLoopFlag == 1:
+            globalVars.app.hMainView.repeatLoopBtn.SetLabel("只今: リピート")
+            globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("RL_REPEAT"), True)
+        elif self.repeatLoopFlag == 2:
+            globalVars.app.hMainView.repeatLoopBtn.SetLabel("只今: ループ")
+            globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("RL_LOOP"), True)
 
     def trackBarCtrl(self, bar):
         val = bar.GetValue()

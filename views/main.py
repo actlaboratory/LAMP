@@ -89,11 +89,18 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hFileMenu,"DIR_OPEN",_("フォルダを開く"))
 		
 		#操作メニューの中身
+		#音量
 		self.hOperationInVolumeMenu=wx.Menu()
 		self.hOperationMenu.AppendSubMenu(self.hOperationInVolumeMenu, _("音量"))
 		self.RegisterMenuCommand(self.hOperationInVolumeMenu, "VOLUME_DEFAULT", _("通常の音量に設定"))
 		self.RegisterMenuCommand(self.hOperationInVolumeMenu, "VOLUME_UP", _("音量を上げる"))
 		self.RegisterMenuCommand(self.hOperationInVolumeMenu, "VOLUME_DOWN", _("音量を下げる"))
+		#リピート・ループ
+		self.hRepeatLoopInOperationMenu=wx.Menu()
+		self.hOperationMenu.AppendSubMenu(self.hRepeatLoopInOperationMenu, _("リピート・ループ")+"\tCtrl+R")
+		self.RegisterRadioItemCommand(self.hRepeatLoopInOperationMenu, "REPEAT_LOOP_NONE", _("解除する"))
+		self.RegisterRadioItemCommand(self.hRepeatLoopInOperationMenu, "RL_REPEAT", _("リピート"))
+		self.RegisterRadioItemCommand(self.hRepeatLoopInOperationMenu, "RL_LOOP", _("ループ"))
 
 		#ヘルプメニューの中身
 		self.RegisterMenuCommand(self.hHelpMenu,"EXAMPLE",_("テストダイアログを閲覧"))
@@ -134,13 +141,20 @@ class Events(BaseEvents):
 			globalVars.play.fastForward()
 		elif selected==menuItemsStore.getRef("REWIND"):
 			globalVars.play.rewind()
+		elif selected==menuItemsStore.getRef("REPEAT_LOOP"):
+			globalVars.eventProcess.repeatLoopCtrl()
+		elif selected==menuItemsStore.getRef("REPEAT_LOOP_NONE"):
+			globalVars.eventProcess.repeatLoopCtrl(0)
+		elif selected==menuItemsStore.getRef("RL_REPEAT"):
+			globalVars.eventProcess.repeatLoopCtrl(1)
+		elif selected==menuItemsStore.getRef("RL_LOOP"):
+			globalVars.eventProcess.repeatLoopCtrl(2)
 		elif selected==menuItemsStore.getRef("EXAMPLE"):
 			d=views.mkdir.Dialog()
 			d.Initialize()
 			ret=d.Show()
 			if ret==wx.ID_CANCEL: return
 			dialog(_("入力結果"),str(d.GetValue()))
-			return
 
 	def onButtonClick(self, event):
 			if event.GetEventObject() == globalVars.app.hMainView.previousBtn:
