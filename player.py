@@ -16,7 +16,7 @@ class player():
     def __init__ (self):
         # 必要な変数を生成
         self.fileName = None
-        self.handle = 0
+        self.handle = False
         self.reverseHandle = 0
         self.moveTempo = 0.0
         self.rewindFlag = 0
@@ -73,11 +73,20 @@ class player():
         self.fileName = None
 
     def pauseChannel(self):
-        if pybass.BASS_ChannelPause(self.handle) == False:
-            return pybass.BASS_ChannelPlay(self.handle, False)
+        return pybass.BASS_ChannelPause(self.handle)
+
 
     def getChannelState(self):
-        return pybass.BASS_ChannelIsActive(self.handle)
+        bassCode = pybass.BASS_ChannelIsActive(self.handle)
+        if bassCode == pybass.BASS_ACTIVE_PLAYING:
+            return 0
+        elif bassCode == pybass.BASS_ACTIVE_PAUSED:
+            return 1
+        else:
+            if self.handle == False:
+                return 3
+            else:
+                return 2
 
     def getChannelLength(self):
         byte = pybass.BASS_ChannelGetLength(self.handle,pybass.BASS_POS_BYTE)
@@ -139,3 +148,9 @@ class player():
         elif self.handleVolume > 2.0:
             self.handleVolume = 2.0
         pybass.BASS_ChannelSetAttribute(self.handle, pybass.BASS_ATTRIB_VOL, self.handleVolume)
+
+class state():
+    PLAYING = 0
+    PAUSED = 1
+    STOPED = 2
+    COLD = 3

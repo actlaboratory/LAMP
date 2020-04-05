@@ -174,4 +174,3 @@ class Events(BaseEvents):
 	
 	def timerEvent(self, evt):
 		globalVars.eventProcess.refreshView()
-		globalVars.eventProcess.fileChange()
