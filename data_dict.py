@@ -83,11 +83,11 @@ class dataDict():
 			self.dict[self.dataNo] = (path, fName, size, title, length, artist, album, albumArtist)
 			label = self.dict[self.dataNo][self.showValue]
 			if id == -1:
-				lst.appendF(path)
+				lst.appendF((path, self.dataNo))
 				index = lcObj.Append([label])
 			else:
 				index = id+addedItemCount
-				lst.addF(index, path)
+				lst.addF(index, (path, self.dataNo))
 				lcObj.InsertItem(index, label)
 			lcObj.SetItemData(index, self.dataNo)
 			addedItemCount += 1

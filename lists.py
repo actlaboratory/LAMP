@@ -2,7 +2,7 @@ import os, globalVars
 
 class listBase():
 	def __init__(self):
-		self. lst = []
+		self. lst = [] #(ファイルパス, データ連番)
 		self.playIndex = -1
 		self.isDeletePlayingFile = 0
 
@@ -15,7 +15,7 @@ class listBase():
 	# ファイル追加（外部から呼び出し）
 	def addFiles(self, pathLst, index=-1):
 		if index >= 0 and index < len(self.lst):
-			globalVars.listManage.addFiles(pathLst, self, self.lcObject, index)
+			globalVars.dataDict.addFiles(pathLst, self, self.lcObject, index)
 		elif index == -1:
 			globalVars.dataDict.addFiles(pathLst, self, self.lcObject)
 
@@ -59,13 +59,13 @@ class listBase():
 		# 第2引数なし（-2）で、再生中のファイルを返す
 		elif index == -2 and self.playIndex >= 0 and self.playIndex < len(self.lst):
 			if self.isDeletePlayingFile == 1:
-				rtn = None
+				rtn = ((None, None))((None, None))
 			else:
 				rtn = self.lst[self.playIndex]
 		# 再生位置リセット状態でも None を返す
 		else:
-			rtn = None
-		if rtn != None and index >= 0 and movePos == True:
+			rtn = ((None, None))
+		if rtn[0] != None and index >= 0 and movePos == True:
 			self.playIndex = index
 			return rtn
 		else:
@@ -80,10 +80,10 @@ class listBase():
 			# 戻る操作では再生位置のリセットは行わない
 			if self.playIndex == -1:
 				self.playIndex = 0
-				return None
+				return ((None, None))
 			return self.lst[self.playIndex]
 		else:
-			return None
+			return ((None, None))
 
 class playlist(listBase):
 	def getNext(self):
@@ -93,11 +93,11 @@ class playlist(listBase):
 			self.playIndex += 1
 			return self.lst[self.playIndex]
 		else:
-			return None
+			return ((None, None))
 
 class queue(listBase):
 	def getNext(self):
 		if len(self.lst) > 0:
 			return self.deleteFile(0)
 		else:
-			return None
+			return ((None, None))

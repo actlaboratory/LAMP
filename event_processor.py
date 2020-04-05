@@ -20,6 +20,7 @@ else:
 class eventProcessor():
     def __init__(self):
         self.repeatLoopFlag = 0 #リピート=1, ループ=2
+        self.playingDataNo = None
 
     def freeBass(self):
         # bass.dllをフリー
@@ -45,11 +46,13 @@ class eventProcessor():
         globalVars.app.hMainView.playlistView.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
         globalVars.app.hMainView.queueView.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
 
-    def play(self, fileName=None):
-        if fileName == None:
+    def play(self, listTpl=None):
+        if listTpl == None:
             rtn = globalVars.play.channelPlay()
         else:
-            rtn = globalVars.play.inputFile(fileName)
+            rtn = globalVars.play.inputFile(listTpl[0])
+            if rtn:
+                self.playingDataNo = listTpl[1]
         if rtn:
             globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
         else:
@@ -62,23 +65,23 @@ class eventProcessor():
     def fileChange(self):
         #自動で次のファイルを再生
         if self.repeatLoopFlag == 1: #リピート
-            self.play(globalVars.play.fileName)
+            self.play((globalVars.play.fileName, self.playingDataNo))
         else: #それ以外（nextFileがループ処理）
             self.nextFile()
 
     def previousFile(self):
         # プレイリスト再生中であれば
         get = globalVars.playlist.getFile()
-        if get == globalVars.play.fileName:
+        if get[1] == self.playingDataNo:
             # プレイリストの1曲前を再生
             get = globalVars.playlist.getPrevious()
-            if get != None:
+            if get[0] != None:
                 self.play(get)
             elif self.repeatLoopFlag == 2: #ループ指定の時は末尾へ
                 get = globalVars.playlist.getFile(-1, True)
-                if get != None:
+                if get[0] != None:
                     self.play(get)
-        elif get != None:
+        elif get[0] != None:
             # キューなどからの復帰
             self.play(get)
 
@@ -95,17 +98,18 @@ class eventProcessor():
     def nextFile(self):
         # キューを確認
         get = globalVars.queue.getNext()
-        if get == None:
+        if get[0] == None:
             # キューが空の時はプレイリストを確認
             get = globalVars.playlist.getNext()
-            if get != None:
+            if get[0] != None:
                 self.play(get)
             elif self.repeatLoopFlag == 2: #ﾙｰﾌﾟであれば先頭へ
                 get = globalVars.playlist.getFile(0,True)
-                if get != None:
+                if get[0] != None:
                     self.play(get)
-            else: # 再生するものがなければ停止とする
-                self.stop()
+            else: #再生終了後に次がなければ停止とする
+                if globalVars.play.getChannelState() == player.state.STOPED:
+                    self.stop()
         else:
             self.play(get)
 
@@ -114,6 +118,7 @@ class eventProcessor():
         globalVars.playlist.positionReset()
         globalVars.play.handle = False
         globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+        self.playingDataNo = None
 
     #リピートﾙｰﾌﾟフラグを切り替え(モード=順次)
     def repeatLoopCtrl(self, mode=-1): #0=なし, 1=リピート, 2=ループ

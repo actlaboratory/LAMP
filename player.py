@@ -18,7 +18,7 @@ class player():
         self.fileName = None
         self.handle = False
         self.reverseHandle = 0
-        self.moveTempo = 0.0
+        self.moveTempo = -100.0
         self.rewindFlag = 0
         self.fastForwardFlag = 0
         self.handleVolume = 1.0
@@ -105,24 +105,23 @@ class player():
         if self.fastForwardFlag == 0 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
             pybass.BASS_ChannelSetAttribute(self.reverseHandle,bass_fx.BASS_ATTRIB_REVERSE_DIR,bass_fx.BASS_FX_RVS_REVERSE)
             self.rewindFlag=1
-            if self.rewindFlag == 1 and self.moveTempo < 5000.0:
+            if self.moveTempo < 500.0:
                 self.moveTempo += 50.0
                 pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.moveTempo)
                 pybass.BASS_ChannelSetAttribute(self.reverseHandle,bass_fx.BASS_ATTRIB_REVERSE_DIR,bass_fx.BASS_FX_RVS_REVERSE)
-            self.rewindFlag = 1
         elif self.fastForwardFlag == 1 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
             self.fastMoveReset()
             
     def fastForward(self):
-        if self.rewindFlag == 0 and self.moveTempo < 5000.0 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
+        if self.rewindFlag == 0 and self.moveTempo < 500.0 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
             self.moveTempo += 50.0
             pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.moveTempo)
             self.fastForwardFlag = 1
         elif self.rewindFlag == 1 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
             self.fastMoveReset()
-    
+
     def fastMoveReset(self):
-        self.moveTempo = 0.0    
+        self.moveTempo = -100.0    
         self.rewindFlag = 0
         self.fastForwardFlag = 0
         pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,0.0)
