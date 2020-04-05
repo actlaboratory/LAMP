@@ -128,15 +128,16 @@ class player():
         pybass.BASS_ChannelSetAttribute(self.reverseHandle,bass_fx.BASS_ATTRIB_REVERSE_DIR, bass_fx.BASS_FX_RVS_FORWARD)
         pybass.BASS_ChannelUpdate(self.handle, 0)
 
-    # 音量変更（+-整数%）
+    # 音量変更（整数%）
     def changeVolume(self, num):
+        if num < 0 or num > 200:
+            return
         num = num/100
-        self.handleVolume += num
-        if self.handleVolume < 0.0:
-            self.handleVolume = 0.0
-        elif self.handleVolume > 2.0:
-            self.handleVolume = 2.0
+        self.handleVolume = num
         pybass.BASS_ChannelSetAttribute(self.handle, pybass.BASS_ATTRIB_VOL, self.handleVolume)
+
+    def getVolume(self):
+        return self.handleVolume*100
 
     # 音量設定（整数%）
     def setVolume(self, num):

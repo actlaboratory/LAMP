@@ -53,6 +53,8 @@ class MainView(BaseView):
 		self.stopBtn = self.horizontalCreator.button(_("停止"), self.events.onButtonClick)
 		self.repeatLoopBtn = self.horizontalCreator.button(_("ﾘﾋﾟｰﾄ/ﾙｰﾌﾟ"), self.events.onButtonClick)
 		self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
+		self.volumeSlider = self.horizontalCreator.slider(_("音量"), 100, val=100, max=200)
+		self.volumeSlider.Bind(wx.EVT_COMMAND_SCROLL, self.events.onSlider)
 
 		#トラックバーエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
@@ -132,11 +134,11 @@ class Events(BaseEvents):
 			dialog.Initialize(1) #1=ファイルダイアログ
 			dialog.Show()
 		elif selected==menuItemsStore.getRef("VOLUME_DEFAULT"):
-			globalVars.play.setVolume(100)
+			globalVars.eventProcess.changeVolume(vol=100)
 		elif selected==menuItemsStore.getRef("VOLUME_UP"):
-			globalVars.play.changeVolume(+5)
+			globalVars.eventProcess.changeVolume(+5)
 		elif selected==menuItemsStore.getRef("VOLUME_DOWN"):
-			globalVars.play.changeVolume(-5)
+			globalVars.eventProcess.changeVolume(-5)
 		elif selected==menuItemsStore.getRef("FAST_FORWARD"):
 			globalVars.play.fastForward()
 		elif selected==menuItemsStore.getRef("REWIND"):
@@ -169,7 +171,10 @@ class Events(BaseEvents):
 				globalVars.eventProcess.repeatLoopCtrl()
 
 	def onSlider(self, evt):
-		if evt.GetEventObject() == globalVars.app.hMainView.trackBar:
+		if evt.GetEventObject() == globalVars.app.hMainView.volumeSlider:
+			val = globalVars.app.hMainView.volumeSlider.GetValue()
+			globalVars.eventProcess.changeVolume(vol=val)
+		elif evt.GetEventObject() == globalVars.app.hMainView.trackBar:
 			globalVars.eventProcess.trackBarCtrl(evt.GetEventObject())
 	
 	def timerEvent(self, evt):
