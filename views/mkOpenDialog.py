@@ -19,6 +19,11 @@ class Dialog(BaseDialog):
         elif type==1:
             super().Initialize(self.app.hMainView.hFrame,_("フォルダを開く"))
         self.InstallControls()
+
+        #定数
+        self.PLAYLIST = 0
+        self.QUEUE = 1
+
         return True
 
     def InstallControls(self):
@@ -51,8 +56,9 @@ class Dialog(BaseDialog):
     def onButtonClick(self, evt):
         if os.path.exists(self.iText.GetLabel())==False:
             return None
-        self.wnd.Hide()
         if evt.GetEventObject()==self.playlistBtn:
-            globalVars.playlist.addFiles([self.iText.GetLabel()])
+            code = self.PLAYLIST
         elif evt.GetEventObject()==self.queueBtn:
-            globalVars.queue.addFiles([self.iText.GetLabel()])
+            code = self.QUEUE
+        self.wnd.EndModal(code)
+        

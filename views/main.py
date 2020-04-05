@@ -128,11 +128,19 @@ class Events(BaseEvents):
 		if selected==menuItemsStore.getRef("FILE_OPEN"):
 			dialog= views.mkOpenDialog.Dialog()
 			dialog.Initialize(0) #0=ファイルダイアログ
-			dialog.Show()
+			rtnCode = dialog.Show()
+			if rtnCode == dialog.PLAYLIST:
+				globalVars.playlist.addFiles([dialog.GetValue()])
+			elif rtnCode == dialog.QUEUE:
+				globalVars.queue.addFiles([dialog.GetValue])
 		elif selected==menuItemsStore.getRef("DIR_OPEN"):
 			dialog= views.mkOpenDialog.Dialog()
-			dialog.Initialize(1) #1=ファイルダイアログ
-			dialog.Show()
+			dialog.Initialize(1) #1=フォルダダイアログ
+			rtnCode = dialog.Show()
+			if rtnCode == dialog.PLAYLIST:
+				globalVars.playlist.addFiles([dialog.GetValue()])
+			elif rtnCode == dialog.QUEUE:
+				globalVars.queue.addFiles([dialog.GetValue])
 		elif selected==menuItemsStore.getRef("VOLUME_DEFAULT"):
 			globalVars.eventProcess.changeVolume(vol=100)
 		elif selected==menuItemsStore.getRef("VOLUME_UP"):
