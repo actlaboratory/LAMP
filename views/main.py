@@ -96,7 +96,7 @@ class Menu(BaseMenu):
 		#音量
 		self.hOperationInVolumeMenu=wx.Menu()
 		self.hOperationMenu.AppendSubMenu(self.hOperationInVolumeMenu, _("音量"))
-		self.RegisterMenuCommand(self.hOperationInVolumeMenu, "VOLUME_DEFAULT", _("通常の音量に設定"))
+		self.RegisterMenuCommand(self.hOperationInVolumeMenu, "VOLUME_DEFAULT", _("音量を100%に設定"))
 		self.RegisterMenuCommand(self.hOperationInVolumeMenu, "VOLUME_UP", _("音量を上げる"))
 		self.RegisterMenuCommand(self.hOperationInVolumeMenu, "VOLUME_DOWN", _("音量を下げる"))
 		#リピート・ループ

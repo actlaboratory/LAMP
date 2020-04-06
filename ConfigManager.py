@@ -53,6 +53,10 @@ class ConfigManager(configparser.ConfigParser):
 			self.add_section(section)
 			self.__getitem__(section).__setitem__(key,str(default))
 			return int(default)
+		except ValueError as e:
+			self.log.debug("repair intval "+str(default)+" at section "+section+", key "+key)
+			self[section][key]=str(default)
+			return int(default)
 
 	def add_section(self,name):
 		if not self.has_section(name):
