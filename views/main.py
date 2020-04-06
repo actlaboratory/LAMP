@@ -53,7 +53,9 @@ class MainView(BaseView):
 		self.stopBtn = self.horizontalCreator.button(_("停止"), self.events.onButtonClick)
 		self.repeatLoopBtn = self.horizontalCreator.button(_("ﾘﾋﾟｰﾄ/ﾙｰﾌﾟ"), self.events.onButtonClick)
 		self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
-		self.volumeSlider = self.horizontalCreator.slider(_("音量"), 100, val=100, max=200)
+		self.volumeSlider = self.horizontalCreator.slider(_("音量"), 100,
+			val=globalVars.app.config.getint("volume","default",default=100),
+			max=globalVars.app.config.getint("volume","max",default=200))
 		self.volumeSlider.Bind(wx.EVT_COMMAND_SCROLL, self.events.onSlider)
 
 		#トラックバーエリア

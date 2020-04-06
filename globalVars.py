@@ -7,12 +7,9 @@
 """
 
 
-import player, lists, event_processor, data_dict
-
 app=None
-play = player.player()
-playlist = lists.playlist()
-queue = lists.queue()
-eventProcess = event_processor.eventProcessor()
-dataDict = data_dict.dataDict()
-
+play = None
+playlist = None
+queue = None
+eventProcess = None
+dataDict = None

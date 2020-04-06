@@ -48,15 +48,15 @@ class eventProcessor():
     #音量変更（変更幅+-%=変更しない, %指定=無視）
     def changeVolume(self, change=0, vol=-2): #vol=-1でデフォルト
         if change >= -100 and change <= 100 and change != 0:
-            volume = globalVars.play.getVolume() + change
-            rtn = globalVars.play.changeVolume(volume)
+            vol = globalVars.play.getVolume() + change
+            rtn = globalVars.play.changeVolume(vol)
         elif change == 0 and vol == -1:
             globalVars.play.changeVolume(100)
         elif change == 0 and vol <= 200 and vol >= 0:
             globalVars.play.changeVolume(vol)
         rtn= globalVars.play.getVolume()
         globalVars.app.hMainView.volumeSlider.SetValue(rtn)
-        
+        globalVars.app.config["volume"]["default"] = str(int(rtn))
 
 
     def play(self, listTpl=None):

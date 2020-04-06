@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 #Application Main
 
+import player, lists, event_processor, data_dict
 import accessible_output2.outputs.auto
 import sys
 import ConfigManager
@@ -11,6 +12,7 @@ import wx
 import locale
 import win32api
 import datetime
+import globalVars
 from logging import getLogger, FileHandler, Formatter
 from simpleDialog import *
 
@@ -26,6 +28,7 @@ class Main(wx.App):
 		self.frozen=hasattr(sys,"frozen")
 		self.InitLogger()
 		self.LoadSettings()
+		self.SetGlobalVars()
 		locale.setlocale(locale.LC_TIME,self.config["general"]["locale"])
 		self.SetTimeZone()
 		self.InitTranslation()
@@ -97,3 +100,10 @@ class Main(wx.App):
 		hours=bias//60
 		minutes=bias%60
 		self.timezone=datetime.timezone(datetime.timedelta(hours=hours,minutes=minutes))
+
+	def SetGlobalVars(self):
+		globalVars.play = player.player()
+		globalVars.playlist = lists.playlist()
+		globalVars.queue = lists.queue()
+		globalVars.eventProcess = event_processor.eventProcessor()
+		globalVars.dataDict = data_dict.dataDict()

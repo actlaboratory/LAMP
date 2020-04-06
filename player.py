@@ -1,4 +1,4 @@
-import sys, platform
+import sys, platform, globalVars
 
 def is64Bit():
     return sys.maxsize > 2 ** 32
@@ -22,6 +22,7 @@ class player():
         self.rewindFlag = 0
         self.fastForwardFlag = 0
         self.handleVolume = 1.0
+        self.setVolume(globalVars.app.config.getint("volume", "default", default=100)) #音量読み込み
         #bass.dllの初期化
         pybass.BASS_Init(-1, 44100, 0, 0, 0)
         pybass.BASS_SetConfig(pybass.BASS_CONFIG_BUFFER, 150)
