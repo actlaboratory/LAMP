@@ -53,7 +53,7 @@ class dataDict():
 		# ボトムアップで探索
 		dirObj = os.walk(dir, False)
 		for tp in dirObj:
-			if len(tp[1]) == 0:
+			if len(tp[2]) != 0:
 				for file in tp[2]:
 					f = tp[0] + "\\" + file
 					lst.append(f)
