@@ -82,6 +82,12 @@ class eventProcessor():
         else: #それ以外（nextFileがループ処理）
             self.nextFile()
 
+    def previousBtn(self):
+        if globalVars.play.getChannelPosition() <= 5:
+            self.previousFile()
+        else:
+            globalVars.play.setChannelPosition(0)
+
     def previousFile(self):
         # プレイリスト再生中であれば
         get = globalVars.playlist.getFile()

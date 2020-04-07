@@ -93,6 +93,8 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hFileMenu,"DIR_OPEN",_("フォルダを開く"))
 		
 		#操作メニューの中身
+		self.RegisterMenuCommand(self.hOperationMenu, "PREVIOUS_TRACK", _("前へ・頭出し"))
+		self.RegisterMenuCommand(self.hOperationMenu, "NEXT_TRACK", _("次へ"))
 		#音量
 		self.hOperationInVolumeMenu=wx.Menu()
 		self.hOperationMenu.AppendSubMenu(self.hOperationInVolumeMenu, _("音量"))
@@ -143,6 +145,11 @@ class Events(BaseEvents):
 				globalVars.playlist.addFiles([dialog.GetValue()])
 			elif rtnCode == dialog.QUEUE:
 				globalVars.queue.addFiles([dialog.GetValue])
+		#操作
+		elif selected==menuItemsStore.getRef("PREVIOUS_TRACK"):
+			globalVars.eventProcess.previousBtn()
+		elif selected==menuItemsStore.getRef("NEXT_TRACK"):
+			globalVars.eventProcess.nextFile()
 		elif selected==menuItemsStore.getRef("VOLUME_DEFAULT"):
 			globalVars.eventProcess.changeVolume(vol=100)
 		elif selected==menuItemsStore.getRef("VOLUME_UP"):
@@ -170,7 +177,7 @@ class Events(BaseEvents):
 
 	def onButtonClick(self, event):
 			if event.GetEventObject() == globalVars.app.hMainView.previousBtn:
-				globalVars.eventProcess.previousFile()
+				globalVars.eventProcess.previousBtn()
 			elif event.GetEventObject() == globalVars.app.hMainView.playPauseBtn:
 				globalVars.eventProcess.playButtonControl()
 			elif event.GetEventObject() == globalVars.app.hMainView.nextBtn:

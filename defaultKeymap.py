@@ -8,6 +8,8 @@ defaultKeymap["mainView"]={
 	"VOLUME_UP": "ctrl+up",
 	"VOLUME_DOWN": "ctrl+down",
 	"VOLUME_DEFAULT": "ctrl+shift+up",
+	"NEXT_TRACK": "ctrl+shift+L",
+	"PREVIOUS_TRACK": "ctrl+shift+J",
 	"FAST_FORWARD": "ctrl+right",
 	"REWIND": "ctrl+left",
 	"REPEAT_LOOP": "ctrl+R",
