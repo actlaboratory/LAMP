@@ -16,6 +16,8 @@ defaultKeymap["mainView"]={
 	"REWIND": "ctrl+left",
 	"SKIP": "ctrl+L",
 	"REVERSE_SKIP": "ctrl+J",
+	"SKIP_INTERVAL_INCREASE": "ctrl+shift+right",
+	"SKIP_INTERVAL_DECREASE": "ctrl+shift+left",
 	"REPEAT_LOOP": "ctrl+R",
 	"EXAMPLE": "ctrl+F12/shift+delete/ctrl+c/INSERT/ctrl+BACK",
 }

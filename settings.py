@@ -15,5 +15,5 @@ def getSkipInterval():
     if sec < 60:
         string = str(int(sec))+_("秒")
     else:
-        string = str(int(sec%60))+_("分")
+        string = str(int(sec/60))+_("分")
     return (sec,string)

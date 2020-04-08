@@ -4,6 +4,7 @@ import globalVars
 import lc_manager
 import menuItemsStore
 import player
+import settings
 
 def is64Bit():
     return sys.maxsize > 2 ** 32
@@ -81,6 +82,21 @@ class eventProcessor():
             self.play((globalVars.play.fileName, self.playingDataNo))
         else: #それ以外（nextFileがループ処理）
             self.nextFile()
+
+    #スキップ間隔設定(増加=はい, 秒数直接指定=なし)
+    def setSkipInterval(self, increase=True, sec=None):
+        if sec == None:
+            sec = settings.getSkipInterval()[0]
+        idx = settings.skipInterval.index(sec)
+        if increase == True:
+            if idx < len(settings.skipInterval)-1:
+                settings.setSkipInterval(settings.skipInterval[idx+1])
+        else:
+            if idx > 0:
+                settings.setSkipInterval(settings.skipInterval[idx-1])
+        strVal = settings.getSkipInterval()[1]
+        globalVars.app.hMainView.menu.hOperationMenu.SetLabel(menuItemsStore.getRef("SKIP"), strVal+" "+_("進む"))
+        globalVars.app.hMainView.menu.hOperationMenu.SetLabel(menuItemsStore.getRef("REVERSE_SKIP"), strVal+" "+_("戻る"))
 
     #スキップ（秒, 方向=進む)
     def skip(self, sec, forward=True):

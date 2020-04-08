@@ -101,6 +101,11 @@ class Menu(BaseMenu):
 		skipRtn = settings.getSkipInterval()
 		self.RegisterMenuCommand(self.hOperationMenu, "SKIP", skipRtn[1]+" "+_("進む"))
 		self.RegisterMenuCommand(self.hOperationMenu, "REVERSE_SKIP", skipRtn[1]+" "+_("戻る"))
+		#スキップ間隔設定
+		self.hSetSkipIntervalInOperationMenu=wx.Menu()
+		self.hOperationMenu.AppendSubMenu(self.hSetSkipIntervalInOperationMenu, _("スキップ間隔設定"))
+		self.RegisterMenuCommand(self.hSetSkipIntervalInOperationMenu, "SKIP_INTERVAL_INCREASE", _("間隔を大きくする"))
+		self.RegisterMenuCommand(self.hSetSkipIntervalInOperationMenu, "SKIP_INTERVAL_DECREASE", _("間隔を小さくする"))
 		#音量
 		self.hOperationInVolumeMenu=wx.Menu()
 		self.hOperationMenu.AppendSubMenu(self.hOperationInVolumeMenu, _("音量"))
@@ -174,6 +179,10 @@ class Events(BaseEvents):
 			globalVars.eventProcess.skip(settings.getSkipInterval()[0])
 		elif selected==menuItemsStore.getRef("REVERSE_SKIP"):
 			globalVars.eventProcess.skip(settings.getSkipInterval()[0], False)
+		elif selected==menuItemsStore.getRef("SKIP_INTERVAL_INCREASE"):
+			globalVars.eventProcess.setSkipInterval()
+		elif selected==menuItemsStore.getRef("SKIP_INTERVAL_DECREASE"):
+			globalVars.eventProcess.setSkipInterval(False)
 		elif selected==menuItemsStore.getRef("REPEAT_LOOP"):
 			globalVars.eventProcess.repeatLoopCtrl()
 		elif selected==menuItemsStore.getRef("REPEAT_LOOP_NONE"):
