@@ -15,6 +15,7 @@ import constants
 import errorCodes
 import globalVars
 import menuItemsStore
+import settings
 
 import view_manager
 
@@ -93,8 +94,13 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hFileMenu,"DIR_OPEN",_("フォルダを開く"))
 		
 		#操作メニューの中身
-		self.RegisterMenuCommand(self.hOperationMenu, "PREVIOUS_TRACK", _("前へ・頭出し"))
+		self.RegisterMenuCommand(self.hOperationMenu, "PLAY_PAUSE", _("再生 / 一時停止"))
+		self.RegisterMenuCommand(self.hOperationMenu, "STOP", _("停止"))
+		self.RegisterMenuCommand(self.hOperationMenu, "PREVIOUS_TRACK", _("前へ / 頭出し"))
 		self.RegisterMenuCommand(self.hOperationMenu, "NEXT_TRACK", _("次へ"))
+		skipRtn = settings.getSkipInterval()
+		self.RegisterMenuCommand(self.hOperationMenu, "SKIP", skipRtn[1]+" "+_("進む"))
+		self.RegisterMenuCommand(self.hOperationMenu, "REVERSE_SKIP", skipRtn[1]+" "+_("戻る"))
 		#音量
 		self.hOperationInVolumeMenu=wx.Menu()
 		self.hOperationMenu.AppendSubMenu(self.hOperationInVolumeMenu, _("音量"))
@@ -146,6 +152,10 @@ class Events(BaseEvents):
 			elif rtnCode == dialog.QUEUE:
 				globalVars.queue.addFiles([dialog.GetValue])
 		#操作
+		elif selected==menuItemsStore.getRef("PLAY_PAUSE"):
+			globalVars.eventProcess.playButtonControl()
+		elif selected==menuItemsStore.getRef("STOP"):
+			globalVars.eventProcess.stop()
 		elif selected==menuItemsStore.getRef("PREVIOUS_TRACK"):
 			globalVars.eventProcess.previousBtn()
 		elif selected==menuItemsStore.getRef("NEXT_TRACK"):
@@ -160,6 +170,10 @@ class Events(BaseEvents):
 			globalVars.play.fastForward()
 		elif selected==menuItemsStore.getRef("REWIND"):
 			globalVars.play.rewind()
+		elif selected==menuItemsStore.getRef("SKIP"):
+			globalVars.eventProcess.skip(settings.getSkipInterval()[0])
+		elif selected==menuItemsStore.getRef("REVERSE_SKIP"):
+			globalVars.eventProcess.skip(settings.getSkipInterval()[0], False)
 		elif selected==menuItemsStore.getRef("REPEAT_LOOP"):
 			globalVars.eventProcess.repeatLoopCtrl()
 		elif selected==menuItemsStore.getRef("REPEAT_LOOP_NONE"):

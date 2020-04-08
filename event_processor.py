@@ -82,6 +82,14 @@ class eventProcessor():
         else: #それ以外（nextFileがループ処理）
             self.nextFile()
 
+    #スキップ（秒, 方向=進む)
+    def skip(self, sec, forward=True):
+        pos = globalVars.play.getChannelPosition()
+        if forward == True:
+            globalVars.play.setChannelPosition(pos+sec)
+        else:
+            globalVars.play.setChannelPosition(pos-sec)
+    
     def previousBtn(self):
         if globalVars.play.getChannelPosition() <= 5:
             self.previousFile()

@@ -191,6 +191,8 @@ str2key={
 	"8": ord('8'),
 	"9": ord('9'),
 
+	";": ord(";")
+
 }
 
 class KeymapHandler():

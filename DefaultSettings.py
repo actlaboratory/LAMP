@@ -23,6 +23,9 @@ class DefaultSettings:
 			"sizeX": "800",
 			"sizeY": "600",
 		}
+		config["player"]={
+			"skipInterval": "30"
+		}
 		config["volume"]={
 			"default": "100",
 			"max": "200",
