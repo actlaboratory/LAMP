@@ -1,5 +1,6 @@
 import wx
 import os
+import datetime
 import globalVars
 
 #定数
@@ -31,3 +32,26 @@ def loadM3u(path=None, playlist=2):
     elif playlist == 1: #ADD
         globalVars.playlist.addFiles(rtn)
     return rtn
+
+#プレイリスト自動保存
+def autoSaveM3u8():
+    os.makedirs("./pl_auto_save", exist_ok=True)
+    t = datetime.datetime.now()
+    saveM3U8("./pl_auto_save/"+t.strftime("%Y%m%d%H%M%s.m3u8"))
+
+#プレイリスト保存(保存先=参照):
+def saveM3u8(path=None):
+    if path != None:
+        dir = os.path.dirname(path)
+    if path == None or os.path.isdir(dir) == False:
+        fd = wx.FileDialog(None, _("プレイリストファイル保存"), wildcard=_("m3u8ファイル (.m3u8)")+"|*.m3u8", style=wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT)
+        fd.ShowModal()
+        path = fd.GetPath()
+    path = os.path.splitext(path)[0]+".m3u8" #必ずm3u8ファイルを保存する
+    with open(path, "w", encoding="utf-8") as f:
+        lst = []
+        for t in globalVars.playlist.lst:
+            lst.append(t[0])
+        f.write("\n".join(lst))
+
+    
