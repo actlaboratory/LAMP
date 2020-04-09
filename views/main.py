@@ -16,6 +16,7 @@ import errorCodes
 import globalVars
 import menuItemsStore
 import settings
+import m3uManager
 
 import view_manager
 
@@ -92,6 +93,7 @@ class Menu(BaseMenu):
 		#ファイルメニューの中身
 		self.RegisterMenuCommand(self.hFileMenu,"FILE_OPEN",_("ファイルを開く"))
 		self.RegisterMenuCommand(self.hFileMenu,"DIR_OPEN",_("フォルダを開く"))
+		self.RegisterMenuCommand(self.hFileMenu,"M3U_OPEN",_("プレイリストを開く"))
 		
 		#操作メニューの中身
 		self.RegisterMenuCommand(self.hOperationMenu, "PLAY_PAUSE", _("再生 / 一時停止"))
@@ -156,6 +158,8 @@ class Events(BaseEvents):
 				globalVars.playlist.addFiles([dialog.GetValue()])
 			elif rtnCode == dialog.QUEUE:
 				globalVars.queue.addFiles([dialog.GetValue])
+		elif selected==menuItemsStore.getRef("M3U_OPEN"):
+			m3uManager.loadM3u()
 		#操作
 		elif selected==menuItemsStore.getRef("PLAY_PAUSE"):
 			globalVars.eventProcess.playButtonControl()

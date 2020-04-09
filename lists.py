@@ -31,6 +31,12 @@ class listBase():
 		elif index > self.playIndex and index < len(self.lst):
 			self.lst.insert(index, fileName)
 
+	# 全消去
+	def deleteAllFiles(self):
+		for i in range(len(self.lst)):
+			self.deleteFile(i)
+		self.playIndex = -1
+
 	def deleteFile(self, index):
 		if index >= 0 and index < self.playIndex:
 			self.playIndex -= 1
