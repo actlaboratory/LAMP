@@ -115,7 +115,7 @@ class eventProcessor():
     def previousFile(self):
         # プレイリスト再生中であれば
         get = globalVars.playlist.getFile()
-        if get[1] == self.playingDataNo:
+        if get[1] == self.playingDataNo or get[1] == None:
             # プレイリストの1曲前を再生
             get = globalVars.playlist.getPrevious()
             if get[0] != None:

@@ -11,3 +11,4 @@ dist/
 *.exp
 *.lib
 *.spec
+pl_auto_save
