@@ -1,36 +1,51 @@
 import wx
 import globalVars
-
-# ポップアップメニュー作成（項目リスト, 無効インデックスリスト）
-def makeMenu(val, disableId):
-	rtn = wx.Menu()
-	idCount = 0
-	for s in val:
-		item = wx.MenuItem(rtn, idCount, s)
-		rtn.Append(item)
-		if idCount in disableId:
-			rtn.Enable(idCount, False)
-		idCount += 1
-	return rtn
+import menuItemsStore
+from views.base import BaseMenu, BaseEvents
 
 def contextMenuOnListView(evt):
-	values = []
-	disable = []
-	evtObj = evt.GetEventObject()
-	# リストからメニュー作成
-	if evtObj == globalVars.app.hMainView.playlistView:
-		if evtObj.GetSelectedItemCount() == 0:
-			values = [_("貼り付け")]
-		else:
-			values = [_("再生"), _("キューに追加"), _("キューの先頭に割り込み"), _("コピー"), _("貼り付け"), _("削除"), _("このファイルについて")]
-	elif evtObj == globalVars.app.hMainView.queueView:
-		if evtObj.GetSelectedItemCount() == 0:
-			values = [_("貼り付け")]
-		else:
-			values = [_("再生"), _("プレイリストに追加"), _("コピー"), _("貼り付け"), _("削除"), _("このファイルについて")]
-	# 無効な選択
-	if evtObj.GetSelectedItemCount() > 1:
-		disable.append(values.index(_("再生")))
-		disable.append(values.index(_("このファイルについて")))
-	menu = makeMenu(values, disable)
-	globalVars.app.hMainView.hFrame.PopupMenu(menu)
+	menu=Menu("mainView")
+	events = Events(evt.GetEventObject(), "listView")
+	menu.Apply(evt.GetEventObject())
+	evt.GetEventObject().PopupMenu(menu.hPopupMenu)
+	evt.GetEventObject().Bind(wx.EVT_MENU, events.OnMenuSelect)
+
+class Menu(BaseMenu):
+	def Apply(self,target):
+		"""指定されたウィンドウに、メニューを適用する。"""
+
+		#メニューの大項目を作る
+		self.hPopupMenu=wx.Menu()
+
+		#ポップアップメニューの中身
+		self.RegisterMenuCommand(self.hPopupMenu,"POPUP_PLAY",_("再生"))
+		if target.GetSelectedItemCount() != 1:
+			self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_PLAY"), False)
+		if target == globalVars.app.hMainView.playlistView:
+			self.RegisterMenuCommand(self.hPopupMenu,"POPUP_ADD_QUEUE_HEAD",_("キューの先頭に割り込み"))
+			self.RegisterMenuCommand(self.hPopupMenu,"POPUP_ADD_QUEUE",_("キューに追加"))
+			if target.GetSelectedItemCount() == 0:
+				self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_ADD_QUEUE_HEAD"), False)
+				self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_ADD_QUEUE"), False)
+		if target == globalVars.app.hMainView.queueView:
+			self.RegisterMenuCommand(self.hPopupMenu,"POPUP_ADD_PLAYLIST",_("プレイリストに追加"))
+			if target.GetSelectedItemCount() == 0:
+				self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_ADD_PLAYLIST"), False)
+		self.RegisterMenuCommand(self.hPopupMenu,"POPUP_COPPY",_("コピー"))
+		self.RegisterMenuCommand(self.hPopupMenu,"POPUP_PASTE",_("貼り付け"))
+		self.RegisterMenuCommand(self.hPopupMenu,"POPUP_DELETE",_("削除"))
+		self.RegisterMenuCommand(self.hPopupMenu,"POPUP_ABOUT",_("このファイルについて"))
+		if target.GetSelectedItemCount() == 0:
+			self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_COPPY"), False)
+			self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_DELETE"), False)
+			self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_ABOUT"), False)
+
+
+class Events(BaseEvents):
+	def OnMenuSelect(self,event):
+		"""メニュー項目が選択されたときのイベントハンドら。"""
+		selected=event.GetId()#メニュー識別しの数値が出る
+
+
+		if selected==menuItemsStore.getRef("FILE_OPEN"):
+			pass
