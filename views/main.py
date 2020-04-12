@@ -54,11 +54,12 @@ class MainView(BaseView):
 		self.nextBtn = self.horizontalCreator.button(_("次"), self.events.onButtonClick)
 		self.stopBtn = self.horizontalCreator.button(_("停止"), self.events.onButtonClick)
 		self.repeatLoopBtn = self.horizontalCreator.button(_("ﾘﾋﾟｰﾄ/ﾙｰﾌﾟ"), self.events.onButtonClick)
-		self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
 		self.volumeSlider = self.horizontalCreator.slider(_("音量"), 100,
 			val=globalVars.app.config.getint("volume","default",default=100),
 			max=globalVars.app.config.getint("volume","max",default=200))
 		self.volumeSlider.Bind(wx.EVT_COMMAND_SCROLL, self.events.onSlider)
+		self.muteBtn = self.horizontalCreator.button(_("ﾐｭｰﾄ"), self.events.onButtonClick)
+		#self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
 
 		#トラックバーエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
@@ -112,11 +113,12 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hSetSkipIntervalInOperationMenu, "SKIP_INTERVAL_INCREASE", _("間隔を大きくする"))
 		self.RegisterMenuCommand(self.hSetSkipIntervalInOperationMenu, "SKIP_INTERVAL_DECREASE", _("間隔を小さくする"))
 		#音量
-		self.hOperationInVolumeMenu=wx.Menu()
-		self.hOperationMenu.AppendSubMenu(self.hOperationInVolumeMenu, _("音量"))
-		self.RegisterMenuCommand(self.hOperationInVolumeMenu, "VOLUME_DEFAULT", _("音量を100%に設定"))
-		self.RegisterMenuCommand(self.hOperationInVolumeMenu, "VOLUME_UP", _("音量を上げる"))
-		self.RegisterMenuCommand(self.hOperationInVolumeMenu, "VOLUME_DOWN", _("音量を下げる"))
+		self.hVolumeInOperationMenu=wx.Menu()
+		self.hOperationMenu.AppendSubMenu(self.hVolumeInOperationMenu, _("音量"))
+		self.RegisterMenuCommand(self.hVolumeInOperationMenu, "VOLUME_DEFAULT", _("音量を100%に設定"))
+		self.RegisterMenuCommand(self.hVolumeInOperationMenu, "VOLUME_UP", _("音量を上げる"))
+		self.RegisterMenuCommand(self.hVolumeInOperationMenu, "VOLUME_DOWN", _("音量を下げる"))
+		self.RegisterMenuCommand(self.hVolumeInOperationMenu, "MUTE", _("消音に設定"))
 		#リピート・ループ
 		self.hRepeatLoopInOperationMenu=wx.Menu()
 		self.hOperationMenu.AppendSubMenu(self.hRepeatLoopInOperationMenu, _("リピート・ループ")+"\tCtrl+R")
@@ -182,6 +184,8 @@ class Events(BaseEvents):
 			globalVars.eventProcess.changeVolume(+5)
 		elif selected==menuItemsStore.getRef("VOLUME_DOWN"):
 			globalVars.eventProcess.changeVolume(-5)
+		elif selected==menuItemsStore.getRef("MUTE"):
+			globalVars.eventProcess.mute()
 		elif selected==menuItemsStore.getRef("FAST_FORWARD"):
 			globalVars.play.fastForward()
 		elif selected==menuItemsStore.getRef("REWIND"):
@@ -220,6 +224,8 @@ class Events(BaseEvents):
 				globalVars.eventProcess.stop()
 			elif event.GetEventObject() == globalVars.app.hMainView.repeatLoopBtn:
 				globalVars.eventProcess.repeatLoopCtrl()
+			elif event.GetEventObject() == globalVars.app.hMainView.muteBtn:
+				globalVars.eventProcess.mute()
 
 	def onSlider(self, evt):
 		if evt.GetEventObject() == globalVars.app.hMainView.volumeSlider:

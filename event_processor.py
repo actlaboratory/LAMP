@@ -22,6 +22,7 @@ class eventProcessor():
     def __init__(self):
         self.repeatLoopFlag = 0 #リピート=1, ループ=2
         self.playingDataNo = None
+        self.muteFlag = 0 #初期値はミュート解除
 
     def freeBass(self):
         # bass.dllをフリー
@@ -46,8 +47,25 @@ class eventProcessor():
         # リスト幅更新
         globalVars.app.hMainView.playlistView.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
         globalVars.app.hMainView.queueView.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
+
+    def mute(self):
+        if self.muteFlag == 0: #ミュート処理
+            globalVars.play.changeVolume(0)
+            self.muteFlag = 1
+            globalVars.app.hMainView.volumeSlider.Disable()
+            globalVars.app.hMainView.muteBtn.SetLabel("ﾐｭｰﾄ解除")
+            globalVars.app.hMainView.menu.hVolumeInOperationMenu.SetLabel(menuItemsStore.getRef("MUTE"), _("消音を解除"))
+        elif self.muteFlag == 1: #ミュート解除処理
+            val = globalVars.app.hMainView.volumeSlider.GetValue()
+            globalVars.play.changeVolume(val)
+            self.muteFlag = 0
+            globalVars.app.hMainView.volumeSlider.Enable()
+            globalVars.app.hMainView.muteBtn.SetLabel("ﾐｭｰﾄ")
+            globalVars.app.hMainView.menu.hVolumeInOperationMenu.SetLabel(menuItemsStore.getRef("MUTE"), _("消音に設定"))
+
     #音量変更（変更幅+-%=変更しない, %指定=無視）
     def changeVolume(self, change=0, vol=-2): #vol=-1でデフォルト
+        if self.muteFlag == 1: return None
         if change >= -100 and change <= 100 and change != 0:
             vol = globalVars.play.getVolume() + change
             rtn = globalVars.play.changeVolume(vol)

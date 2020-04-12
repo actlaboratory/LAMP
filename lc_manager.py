@@ -6,7 +6,7 @@ def getListCtrlPaths(lc):
 	rtn = []
 	iLst = getListCtrlSelections(lc)
 	for i in iLst:
-		rtn.append(getList(lc).getFile(i, False))
+		rtn.append(getList(lc).getFile(i, False)[0])
 	return rtn
 
 def getListCtrlItems(lc):

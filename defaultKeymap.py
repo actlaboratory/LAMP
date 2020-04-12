@@ -8,6 +8,7 @@ defaultKeymap["mainView"]={
 	"VOLUME_UP": "ctrl+up",
 	"VOLUME_DOWN": "ctrl+down",
 	"VOLUME_DEFAULT": "ctrl+shift+up",
+	"MUTE": "ctrl+shift+down",
 	"PLAY_PAUSE": "ctrl+K",
 	"STOP": "ctrl+;",
 	"NEXT_TRACK": "ctrl+shift+L",
