@@ -1,4 +1,13 @@
+import globalVars
 import wx
+
+#ファイルパスをリストで取得
+def getListCtrlPaths(lc):
+	rtn = []
+	iLst = getListCtrlSelections(lc)
+	for i in iLst:
+		rtn.append(getList(lc).getFile(i, False))
+	return rtn
 
 def getListCtrlItems(lc):
 	rtn = []
@@ -27,3 +36,11 @@ def getListCtrlSelections(lc):
 def setListCtrlSelections(lc, iLst):
 	for i in iLst:
 		lc.Select(i)
+
+def getList(lc): #リストインスタンスを返す
+	if lc == globalVars.app.hMainView.playlistView:
+		return globalVars.playlist
+	elif lc == globalVars.app.hMainView.queueView:
+		return globalVars.queue
+	else:
+		return None

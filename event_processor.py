@@ -186,9 +186,12 @@ class eventProcessor():
         val = bar.GetValue()
         globalVars.play.setChannelPosition(val)
     
-    # リストビューでアクティベートされたアイテムの処理
-    def listSelection(self, evt):
-        evtObj = evt.GetEventObject()
+    #リストビューアクティブのイベント処理
+    def listActivate(self, evt):
+        self.listSelection(evt.GetEventObject())
+    
+    # リストビューで選択されたアイテムの処理
+    def listSelection(self, evtObj):
         if evtObj == globalVars.app.hMainView.playlistView:
             lst = globalVars.playlist
         elif evtObj == globalVars.app.hMainView.queueView:
@@ -196,7 +199,7 @@ class eventProcessor():
         # 単一選択時アクティベートされた曲を再生
         iLst = lc_manager.getListCtrlSelections(evtObj)
         if len(iLst) == 1:
-            index = evt.GetIndex()
+            index = iLst[0]
             p = globalVars.eventProcess.play(lst.getFile(index, True))
             if lst == globalVars.queue:
                 lst.deleteFile(index)

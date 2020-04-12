@@ -46,6 +46,18 @@ class Events(BaseEvents):
 		"""メニュー項目が選択されたときのイベントハンドら。"""
 		selected=event.GetId()#メニュー識別しの数値が出る
 
-
-		if selected==menuItemsStore.getRef("FILE_OPEN"):
+		if selected==menuItemsStore.getRef("POPUP_PLAY"):
+			globalVars.eventProcess.listSelection(self.parent)
+		elif selected==menuItemsStore.getRef("POPUP_ADD_QUEUE_HEAD"):
 			pass
+		elif selected==menuItemsStore.getRef("POPUP_ADD_QUEUE"):
+			pass
+		elif selected==menuItemsStore.getRef("POPUP_ADD_PLAYLIST"):
+			pass
+		elif selected==menuItemsStore.getRef("POPUP_COPPY"):
+			pass
+		elif selected==menuItemsStore.getRef("POPUP_PASTE"):
+			pass
+		elif selected==menuItemsStore.getRef("POPUP_ABOUT"):
+			pass
+		

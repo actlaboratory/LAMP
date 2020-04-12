@@ -6,7 +6,7 @@ import context_menus
 def listViewSetting(lc):
 	lc.AppendColumn("")
 	lc.SetDropTarget(fileDrop(lc))
-	lc.Bind(wx.EVT_LIST_ITEM_ACTIVATED, globalVars.eventProcess.listSelection)
+	lc.Bind(wx.EVT_LIST_ITEM_ACTIVATED, globalVars.eventProcess.listActivate)
 	lc.Bind(wx.EVT_LIST_KEY_DOWN, globalVars.eventProcess.listViewKeyEvent)
 	lc.Bind(wx.EVT_CONTEXT_MENU, context_menus.contextMenuOnListView)
 
