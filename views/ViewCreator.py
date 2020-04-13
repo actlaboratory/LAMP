@@ -300,6 +300,13 @@ class ViewCreator():
 		self.AddSpace(self.space)
 		return hGauge,hStaticText
 
+	def staticText(self,label, x=0):
+		hStaticText=wx.StaticText(self.parent,-1,label=label, name=label)
+		self.sizer.Add(hStaticText,0)
+
+		self.AddSpace(self.space)
+		return hStaticText
+
 	def slider(self, label, x=0, val=0, max=1):
 		hSlider=wx.Slider(self.parent, -1, size=(x,-1),value=val,maxValue=max, style=wx.SL_BOTH)
 		self.SetFace(hSlider)
