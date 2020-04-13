@@ -11,7 +11,8 @@ from views.baseDialog import *
 class Dialog(BaseDialog):
     def Initialize(self, title,message,btnTpl):
         self.title=title
-        self.message=messageself.btnTpl=btnTpl
+        self.message=message
+        self.btnTpl=btnTpl
         self.identifier=self.title #このビューを表す文字列
         self.log=getLogger(self.identifier)
         self.log.debug("created")

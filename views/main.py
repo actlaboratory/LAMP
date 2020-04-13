@@ -19,6 +19,7 @@ import settings
 import m3uManager
 
 import view_manager
+from views import mkDialog
 
 from logging import getLogger
 from simpleDialog import dialog
@@ -207,11 +208,10 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("RL_LOOP"):
 			globalVars.eventProcess.repeatLoopCtrl(2)
 		elif selected==menuItemsStore.getRef("EXAMPLE"):
-			d=views.mkdir.Dialog()
-			d.Initialize()
-			ret=d.Show()
-			if ret==wx.ID_CANCEL: return
-			dialog(_("入力結果"),str(d.GetValue()))
+			d = mkDialog.Dialog()
+			d.Initialize("テスト", "これはテストです。", ("テ", "ス", "ト"))
+			r = d.Show()
+			print(r)
 
 	def onButtonClick(self, event):
 			if event.GetEventObject() == globalVars.app.hMainView.previousBtn:
