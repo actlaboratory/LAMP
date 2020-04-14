@@ -100,6 +100,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hFileMenu,"M3U8_SAVE",_("プレイリストを上書き保存"))
 		self.hFileMenu.Enable(menuItemsStore.getRef("M3U8_SAVE"), False)
 		self.RegisterMenuCommand(self.hFileMenu,"M3U_CLOSE",_("プレイリストを閉じる"))
+		self.hFileMenu.Enable(menuItemsStore.getRef("M3U_CLOSE"), False)
 		
 		#操作メニューの中身
 		self.RegisterMenuCommand(self.hOperationMenu, "PLAY_PAUSE", _("再生 / 一時停止"))
@@ -157,6 +158,8 @@ class Events(BaseEvents):
 				globalVars.playlist.addFiles([dialog.GetValue()])
 			elif rtnCode == dialog.QUEUE:
 				globalVars.queue.addFiles([dialog.GetValue])
+			else:
+				return
 		elif selected==menuItemsStore.getRef("DIR_OPEN"):
 			dialog= views.mkOpenDialog.Dialog()
 			dialog.Initialize(1) #1=フォルダダイアログ
@@ -165,6 +168,8 @@ class Events(BaseEvents):
 				globalVars.playlist.addFiles([dialog.GetValue()])
 			elif rtnCode == dialog.QUEUE:
 				globalVars.queue.addFiles([dialog.GetValue])
+			else:
+				return
 		elif selected==menuItemsStore.getRef("M3U_OPEN"):
 			m3uManager.loadM3u()
 		elif selected==menuItemsStore.getRef("NEW_M3U8_SAVE"):

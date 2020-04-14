@@ -99,6 +99,10 @@ class listBase():
 			return ((None, None))
 
 class playlist(listBase):
+	def __init__(self):
+		super().__init__()
+		self.playlistFile = None
+
 	def getNext(self):
 		if self.playIndex < len(self.lst)-1:
 			self.playIndex += 1
