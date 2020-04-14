@@ -99,6 +99,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hFileMenu,"NEW_M3U8_SAVE",_("名前を付けてプレイリストを保存"))
 		self.RegisterMenuCommand(self.hFileMenu,"M3U8_SAVE",_("プレイリストを上書き保存"))
 		self.hFileMenu.Enable(menuItemsStore.getRef("M3U8_SAVE"), False)
+		self.RegisterMenuCommand(self.hFileMenu,"M3U_CLOSE",_("プレイリストを閉じる"))
 		
 		#操作メニューの中身
 		self.RegisterMenuCommand(self.hOperationMenu, "PLAY_PAUSE", _("再生 / 一時停止"))
@@ -170,6 +171,8 @@ class Events(BaseEvents):
 			m3uManager.saveM3u8()
 		elif selected==menuItemsStore.getRef("M3U8_SAVE"):
 			m3uManager.saveM3u8(globalVars.playlist.playlistFile)
+		elif selected==menuItemsStore.getRef("M3U_CLOSE"):
+			m3uManager.closeM3u()
 		#操作
 		elif selected==menuItemsStore.getRef("PLAY_PAUSE"):
 			globalVars.eventProcess.playButtonControl()

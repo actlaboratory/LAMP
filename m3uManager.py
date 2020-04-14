@@ -3,6 +3,7 @@ import os
 import datetime
 import globalVars
 import menuItemsStore
+from views import mkDialog
 
 #定数
 LOAD_ONLY = 0
@@ -48,8 +49,30 @@ def autoSaveM3u8():
     t = datetime.datetime.now()
     saveM3U8("./pl_auto_save/"+t.strftime("%Y%m%d%H%M%s.m3u8"))
 
-#プレイリスト保存(保存先=参照):
-def saveM3u8(path=None):
+#プレイリストを閉じる（）
+def closeM3u():
+    if globalVars.playlist.playlistFile != None:
+        if loadM3u(globalVars.playlist.playlistFile, LOAD_ONLY) != globalVars.playlist.getAllFiles():
+            if os.path.splitext(globalVars.playlist.playlistFile)[1] == ".m3u": #変換を確認
+                d = mkDialog.Dialog()
+                d.Initialize(_("プレイリスト変換確認"), _("このプレイリストは変更されています。\nm3u8ファイルに変換して保存しますか？"), (_("保存"), _("破棄")))
+                c = d.Show()
+                if c == 0: saveM3u8(globalVars.playlist.playlistFile, False)
+            elif os.path.splitext(globalVars.playlist.playlistFile)[1] == ".m3u8": #上書きを確認
+                d = mkDialog.Dialog()
+                d.Initialize(_("プレイリスト上書き保存の確認"), _("このプレイリストは変更されています。\n上書き保存しますか？"), (_("上書き"), _("破棄")))
+                c = d.Show()
+                if c == 0: saveM3u8(globalVars.playlist.playlistFile, False)
+    else:
+        d.mkDialog.Dialog()
+        d.Initialize(_("プレイリスト保存の確認"), _("このプレイリストは変更されています。\n保存しますか？"), (_("保存"), _("破棄")))
+        c = d.Show()
+        if c == 0: saveM3u8(None, False)
+    globalVars.playlist.playlistFile = None
+    globalVars.playlist.deleteAllFiles()
+
+#プレイリスト保存(保存先=参照, リロード=はい):
+def saveM3u8(path=None, reload=True):
     bPath = path
     if path != None:
         dir = os.path.dirname(path)
@@ -59,9 +82,7 @@ def saveM3u8(path=None):
         path = fd.GetPath()
     path = os.path.splitext(path)[0]+".m3u8" #必ずm3u8ファイルを保存する
     with open(path, "w", encoding="utf-8") as f:
-        lst = []
-        for t in globalVars.playlist.lst:
-            lst.append(t[0])
+        lst = globalVars.playlist.getAllFiles()
         f.write("\n".join(lst))
-    if bPath != path: #ファイルパスが変更されたときは再読み込み
+    if bPath != path and reload == True: #ファイルパスが変更され、再読み込みが必要
         loadM3u(path)

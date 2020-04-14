@@ -54,6 +54,13 @@ class listBase():
 			self.lcObject.DeleteItem(index)
 		return rtn
 
+	#全ファイルのリストを取得
+	def getAllFiles(self):
+		rtn = []
+		for t in self.lst:
+			rtn.append(t[0])
+		return rtn
+
 	# 任意のファイルを取得（インデックス=最終getFile, 再生位置移動=しない）
 	def getFile(self, index=-2, movePos=False):
 		#削除フラグ解除
