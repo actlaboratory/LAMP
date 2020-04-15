@@ -5,6 +5,7 @@ import lc_manager
 import menuItemsStore
 import player
 import settings
+import file_manager
 
 def is64Bit():
     return sys.maxsize > 2 ** 32
@@ -23,6 +24,7 @@ class eventProcessor():
         self.repeatLoopFlag = 0 #リピート=1, ループ=2
         self.playingDataNo = None
         self.muteFlag = 0 #初期値はミュート解除
+        self.shuffleFlag = 0
 
     def freeBass(self):
         # bass.dllをフリー
@@ -131,20 +133,10 @@ class eventProcessor():
             globalVars.play.setChannelPosition(0)
 
     def previousFile(self):
-        # プレイリスト再生中であれば
-        get = globalVars.playlist.getFile()
-        if get[1] == self.playingDataNo or get[1] == None:
-            # プレイリストの1曲前を再生
-            get = globalVars.playlist.getPrevious()
-            if get[0] != None:
-                self.play(get)
-            elif self.repeatLoopFlag == 2: #ループ指定の時は末尾へ
-                get = globalVars.playlist.getFile(-1, True)
-                if get[0] != None:
-                    self.play(get)
-        elif get[0] != None:
-            # キューなどからの復帰
-            self.play(get)
+        if self.shuffleFlag == 0:
+            file_manager.previousFile()
+        elif self.shuffleFlag == 1:
+            file_manager.previousShuffleFile()
 
     def playButtonControl(self):
         # 再生中は一時停止を実行
@@ -157,22 +149,10 @@ class eventProcessor():
             self.play()
 
     def nextFile(self):
-        # キューを確認
-        get = globalVars.queue.getNext()
-        if get[0] == None:
-            # キューが空の時はプレイリストを確認
-            get = globalVars.playlist.getNext()
-            if get[0] != None:
-                self.play(get)
-            elif self.repeatLoopFlag == 2: #ﾙｰﾌﾟであれば先頭へ
-                get = globalVars.playlist.getFile(0,True)
-                if get[0] != None:
-                    self.play(get)
-            else: #再生終了後に次がなければ停止とする
-                if globalVars.play.getChannelState() == player.state.STOPED:
-                    self.stop()
-        else:
-            self.play(get)
+        if self.shuffleFlag == 0:
+            file_manager.nextFile()
+        elif self.shuffleFlag == 1:
+            file_manager.nextShuffleFile()
 
     def stop(self):
         globalVars.play.channelFree()
