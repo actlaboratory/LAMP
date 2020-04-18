@@ -83,7 +83,6 @@ def closeM3u():
 
 #プレイリスト保存(保存先=参照, リロード=はい):
 def saveM3u8(path=None, reload=True):
-    bPath = path
     if path != None:
         dir = os.path.dirname(path)
     if path == None or os.path.isdir(dir) == False:
@@ -94,5 +93,4 @@ def saveM3u8(path=None, reload=True):
     with open(path, "w", encoding="utf-8") as f:
         lst = globalVars.playlist.getAllFiles()
         f.write("\n".join(lst))
-    if bPath != path and reload == True: #ファイルパスが変更され、再読み込みが必要
-        loadM3u(path)
+    globalVars.playlist.playlistFile = path

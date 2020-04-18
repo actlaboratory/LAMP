@@ -6,6 +6,7 @@ import menuItemsStore
 import player
 import settings
 import file_manager
+import shuffle_ctrl
 
 def is64Bit():
     return sys.maxsize > 2 ** 32
@@ -24,7 +25,7 @@ class eventProcessor():
         self.repeatLoopFlag = 0 #リピート=1, ループ=2
         self.playingDataNo = None
         self.muteFlag = 0 #初期値はミュート解除
-        self.shuffleFlag = 0
+        self.shuffleCtrl = 0
 
     def freeBass(self):
         # bass.dllをフリー
@@ -133,10 +134,10 @@ class eventProcessor():
             globalVars.play.setChannelPosition(0)
 
     def previousFile(self):
-        if self.shuffleFlag == 0:
+        if self.shuffleCtrl == 0:
             file_manager.previousFile()
-        elif self.shuffleFlag == 1:
-            file_manager.previousShuffleFile()
+        else:
+            self.shuffleCtrl.previous()
 
     def playButtonControl(self):
         # 再生中は一時停止を実行
@@ -149,10 +150,10 @@ class eventProcessor():
             self.play()
 
     def nextFile(self):
-        if self.shuffleFlag == 0:
+        if self.shuffleCtrl == 0:
             file_manager.nextFile()
-        elif self.shuffleFlag == 1:
-            file_manager.nextShuffleFile()
+        else:
+            self.shuffleCtrl.next()
 
     def stop(self):
         globalVars.play.channelFree()
@@ -160,6 +161,21 @@ class eventProcessor():
         globalVars.play.handle = False
         globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
         self.playingDataNo = None
+
+    def shuffleSw(self):
+        if self.shuffleCtrl == 0:
+            self.shuffleCtrl = shuffle_ctrl.shuffle(globalVars.playlist)
+            globalVars.app.hMainView.shuffleBtn.SetLabel("ｼｬｯﾌﾙ解除")
+            globalVars.app.hMainView.menu.hOperationMenu.Check(menuItemsStore.getRef("SHUFFLE"), True)
+        else: #シャッフルを解除してプレイリストに復帰
+            idx = globalVars.playlist.getIndexFromData(self.shuffleCtrl.getNow()[1])
+            if idx != None:
+                get = globalVars.playlist.getFile(idx)
+            else:
+                globalVars.playlist.positionReset()
+            self.shuffleCtrl = 0
+            globalVars.app.hMainView.shuffleBtn.SetLabel("ｼｬｯﾌﾙ")
+            globalVars.app.hMainView.menu.hOperationMenu.Check(menuItemsStore.getRef("SHUFFLE"), False)
 
     #リピートﾙｰﾌﾟフラグを切り替え(モード=順次)
     def repeatLoopCtrl(self, mode=-1): #0=なし, 1=リピート, 2=ループ

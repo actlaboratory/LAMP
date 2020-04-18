@@ -52,6 +52,7 @@ class listBase():
 		elif index > self.playIndex and index < len(self.lst):
 			rtn = self.lst.pop(index)
 			self.lcObject.DeleteItem(index)
+			del globalVars.dataDict.dict[rtn[1]]
 		return rtn
 
 	#全ファイルのリストを取得
@@ -60,6 +61,13 @@ class listBase():
 		for t in self.lst:
 			rtn.append(t[0])
 		return rtn
+
+	#データ番号からファイルパス取得（データ, 再生位置移動=する）
+	def getIndexFromData(self, data, move=True):
+		for t in self.lst:
+			if t[1] == data:
+				return self.lst.index(t)
+		return None
 
 	# 任意のファイルを取得（インデックス=最終getFile, 再生位置移動=しない）
 	def getFile(self, index=-2, movePos=False):

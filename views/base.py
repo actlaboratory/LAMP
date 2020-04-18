@@ -85,6 +85,12 @@ class BaseMenu(object):
 		s=title if shortcut is None else "%s\t%s" % (title,shortcut)
 		menu_handle.Append(menuItemsStore.getRef(ref_id),s)
 
+	def RegisterCheckItemCommand(self,menu_handle,ref_id,title):
+		"""チェックメニューアイテム生成補助関数"""
+		shortcut=self.keymap.GetKeyString(self.keymap_identifier,ref_id)
+		s=title if shortcut is None else "%s\t%s" % (title,shortcut)
+		menu_handle.AppendCheckItem(menuItemsStore.getRef(ref_id),s)
+
 	def RegisterRadioItemCommand(self,menu_handle,ref_id,title):
 		"""ラジオメニューアイテム生成補助関数"""
 		shortcut=self.keymap.GetKeyString(self.keymap_identifier,ref_id)

@@ -55,6 +55,7 @@ class MainView(BaseView):
 		self.nextBtn = self.horizontalCreator.button(_("次"), self.events.onButtonClick)
 		self.stopBtn = self.horizontalCreator.button(_("停止"), self.events.onButtonClick)
 		self.repeatLoopBtn = self.horizontalCreator.button(_("ﾘﾋﾟｰﾄ/ﾙｰﾌﾟ"), self.events.onButtonClick)
+		self.shuffleBtn = self.horizontalCreator.button(_("ｼｬｯﾌﾙ"), self.events.onButtonClick)
 		self.volumeSlider = self.horizontalCreator.slider(_("音量"), 100,
 			val=globalVars.app.config.getint("volume","default",default=100),
 			max=globalVars.app.config.getint("volume","max",default=200))
@@ -129,6 +130,7 @@ class Menu(BaseMenu):
 		self.RegisterRadioItemCommand(self.hRepeatLoopInOperationMenu, "REPEAT_LOOP_NONE", _("解除する"))
 		self.RegisterRadioItemCommand(self.hRepeatLoopInOperationMenu, "RL_REPEAT", _("リピート"))
 		self.RegisterRadioItemCommand(self.hRepeatLoopInOperationMenu, "RL_LOOP", _("ループ"))
+		self.RegisterCheckItemCommand(self.hOperationMenu, "SHUFFLE", _("シャッフル再生"))
 
 		#ヘルプメニューの中身
 		self.RegisterMenuCommand(self.hHelpMenu,"EXAMPLE",_("テストダイアログを閲覧"))
@@ -218,6 +220,8 @@ class Events(BaseEvents):
 			globalVars.eventProcess.repeatLoopCtrl(1)
 		elif selected==menuItemsStore.getRef("RL_LOOP"):
 			globalVars.eventProcess.repeatLoopCtrl(2)
+		elif selected==menuItemsStore.getRef("SHUFFLE"):
+			globalVars.eventProcess.shuffleSw()
 		elif selected==menuItemsStore.getRef("EXAMPLE"):
 			d = mkDialog.Dialog()
 			d.Initialize("テスト", "これはテストです。", ("テ", "ス", "ト"))
@@ -235,6 +239,8 @@ class Events(BaseEvents):
 				globalVars.eventProcess.stop()
 			elif event.GetEventObject() == globalVars.app.hMainView.repeatLoopBtn:
 				globalVars.eventProcess.repeatLoopCtrl()
+			elif event.GetEventObject() == globalVars.app.hMainView.shuffleBtn:
+				globalVars.eventProcess.shuffleSw()
 			elif event.GetEventObject() == globalVars.app.hMainView.muteBtn:
 				globalVars.eventProcess.mute()
 
