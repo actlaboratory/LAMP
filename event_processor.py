@@ -19,7 +19,6 @@ else:
     from pybass import pybass
     from pybass import bass_fx
 
-
 class eventProcessor():
     def __init__(self):
         self.repeatLoopFlag = 0 #リピート=1, ループ=2
@@ -81,13 +80,21 @@ class eventProcessor():
         globalVars.app.config["volume"]["default"] = str(int(rtn))
 
 
-    def play(self, listTpl=None):
+    def play(self, list=globalVars.playlist, listTpl=None):
         if listTpl == None:
             rtn = globalVars.play.channelPlay()
+        elif listTpl == (None, None):
+            rtn = False
         else:
-            rtn = globalVars.play.inputFile(listTpl[0])
-            if rtn:
-                self.playingDataNo = listTpl[1]
+            if listTpl == (None, None):
+                rtn = False
+            else:
+                rtn = globalVars.play.inputFile(listTpl[0])
+            self.playingDataNo = listTpl[1]
+            if list == globalVars.playlist:
+                globalVars.playlist.playIndex = globalVars.playlist.getIndex(listTpl)
+            elif list == globalVars.queue:
+                globalVars.queue.deleteFile(globalVars.queue.getIndex(listTpl))
         if rtn:
             globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
         else:
@@ -96,6 +103,13 @@ class eventProcessor():
     def pause(self):
         if globalVars.play.pauseChannel():
             globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+
+    #削除（リストオブジェクト, インデックス）
+    def delete(self, lsObj, idx):
+        rtn = lsObj.deleteFile(idx)
+        if rtn != (None, None) and rtn == (globalVars.play.fileName, self.playingDataNo):
+            self.nextFile()
+            self.pause()
 
     def fileChange(self):
         #自動で次のファイルを再生
@@ -168,9 +182,10 @@ class eventProcessor():
             globalVars.app.hMainView.shuffleBtn.SetLabel("ｼｬｯﾌﾙ解除")
             globalVars.app.hMainView.menu.hOperationMenu.Check(menuItemsStore.getRef("SHUFFLE"), True)
         else: #シャッフルを解除してプレイリストに復帰
-            idx = globalVars.playlist.getIndexFromData(self.shuffleCtrl.getNow()[1])
+            idx = globalVars.playlist.getIndex(self.shuffleCtrl.getNow())
             if idx != None:
                 get = globalVars.playlist.getFile(idx)
+                self.play(globalVars.playlist, get)
             else:
                 globalVars.playlist.positionReset()
             self.shuffleCtrl = 0
@@ -214,9 +229,7 @@ class eventProcessor():
         iLst = lc_manager.getListCtrlSelections(evtObj)
         if len(iLst) == 1:
             index = iLst[0]
-            p = globalVars.eventProcess.play(lst.getFile(index, True))
-            if lst == globalVars.queue:
-                lst.deleteFile(index)
+            p = globalVars.eventProcess.play(lst, lst.getFile(index))
 
     def listViewKeyEvent(self, evt):
         evtObj = evt.GetEventObject()
@@ -232,5 +245,5 @@ class eventProcessor():
             cnt = 0
             for i in index:
                 i = i-cnt
-                lst.deleteFile(i)
+                self.delete(lst,i)
                 cnt += 1

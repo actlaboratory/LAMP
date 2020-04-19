@@ -33,22 +33,18 @@ class listBase():
 
 	# 全消去
 	def deleteAllFiles(self):
-		if self.deleteFile(0) != None:
+		if self.deleteFile(0) != (None, None):
 			self.deleteAllFiles()
 		self.playIndex = -1
 
 	def deleteFile(self, index):
-		rtn = None #戻り値の初期化
-		if index >= 0 and index < self.playIndex:
+		rtn = (None, None) #戻り値の初期化
+		if index >= 0 and index <= self.playIndex:
+			#再生中ファイルの再生完了処理は呼び出し元が行う。
 			self.playIndex -= 1
 			rtn = self.lst.pop(index)
 			self.lcObject.DeleteItem(index)
-		# 再生中のファイルを削除したときのフラグ処理
-		elif index == self.playIndex and len(self.lst) != 0:
-			self.playIndex -= 1
-			isDeletePlayingFile =1
-			rtn = self.lst.pop(index)
-			self.lcObject.DeleteItem(index)
+			del globalVars.dataDict.dict[rtn[1]]
 		elif index > self.playIndex and index < len(self.lst):
 			rtn = self.lst.pop(index)
 			self.lcObject.DeleteItem(index)
@@ -62,65 +58,45 @@ class listBase():
 			rtn.append(t[0])
 		return rtn
 
-	#データ番号からファイルパス取得（データ, 再生位置移動=する）
-	def getIndexFromData(self, data, move=True):
-		for t in self.lst:
-			if t[1] == data:
-				return self.lst.index(t)
-		return None
+	#（ファイル, 固有値）からファイルパス取得（データ, 再生位置移動=する）
+	def getIndex(self, tpl):
+		try:
+			return self.lst.index(tpl)
+		except ValueError:
+			return None
 
-	# 任意のファイルを取得（インデックス=最終getFile, 再生位置移動=しない）
-	def getFile(self, index=-2, movePos=False):
-		#削除フラグ解除
-		self. isDeletePlayingFile = 0
-		if index >= 0 and index < len(self.lst):
-			rtn = self.lst[index]
-		elif index == -1 and len(self.lst) != 0:
-			index = len(self.lst)-1
-			rtn = self.lst[index]
-		# 第2引数なし（-2）で、再生中のファイルを返す
+	# インデックスから（ファイル,固有値）を取得（インデックス=現在ファイル）
+	def getFile(self, index=-2):
+		if index >= -1 and index < len(self.lst) and len(self.lst) != 0:
+			return self.lst[index]
+		#引数なし（-2）で、再生中のファイルを返す
 		elif index == -2 and self.playIndex >= 0 and self.playIndex < len(self.lst):
-			rtn = self.lst[self.playIndex]
-		# 再生位置リセット状態では None を返す
-		else:
-			rtn = ((None, None))
-		if rtn[0] != None and index >= 0 and movePos == True:
-			self.playIndex = index
-			return rtn
-		else:
-			return rtn
-
-	def getPrevious(self):
-		# 前回再生中ファイルが削除されているときは自ファイル
-		if self.isDeletePlayingFile == 1:
-			return self.getFile()
-		if self.playIndex >= 0:
-			self.playIndex -= 1
-			# 戻る操作では再生位置のリセットは行わない
-			if self.playIndex == -1:
-				self.playIndex = 0
-				return ((None, None))
 			return self.lst[self.playIndex]
-		elif self.playIndex == -1 and len(self.lst) != 0:
-			return self.lst[0]
+		# その他、None を返す
 		else:
-			return ((None, None))
+			return (None, None)
 
 class playlist(listBase):
 	def __init__(self):
 		super().__init__()
 		self.playlistFile = None
 
-	def getNext(self):
-		if self.playIndex < len(self.lst)-1:
-			self.playIndex += 1
-			return self.lst[self.playIndex]
+	def getPrevious(self):
+		if self.playIndex > 0 and self.playIndex < len(self.lst):
+			return self.lst[self.playIndex-1]
 		else:
 			return ((None, None))
 
+
+	def getNext(self):
+		if self.playIndex < len(self.lst)-1:
+			return self.lst[self.playIndex+1]
+		else:
+			return (None, None)
+
 class queue(listBase):
 	def getNext(self):
-		if len(self.lst) > 0:
-			return self.deleteFile(0)
+		if len(self.lst) != 0:
+			return self.lst[0]
 		else:
-			return ((None, None))
+			return (None, None)
