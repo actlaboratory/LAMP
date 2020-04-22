@@ -118,7 +118,7 @@ class ViewCreator():
 		self.SetFace(hCombo)
 		self.sizer.Add(hCombo,0,wx.ALL,5)
 		self.AddSpace(self.space)
-		return hCombo
+		return hStaticText, hCombo
 
 	def checkbox(self,text,event,state=False):
 		hPanel=wx.Panel(self.parent,wx.ID_ANY,)

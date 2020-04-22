@@ -18,6 +18,8 @@ import menuItemsStore
 import settings
 import m3uManager
 
+from views import sleepTimerDialog
+
 import view_manager
 from views import mkDialog
 
@@ -90,6 +92,7 @@ class Menu(BaseMenu):
 
 		#メニューの大項目を作る
 		self.hFileMenu=wx.Menu()
+		self.hFunctionMenu = wx.Menu()
 		self.hOperationMenu=wx.Menu()
 		self.hHelpMenu=wx.Menu()
 
@@ -103,7 +106,8 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hFileMenu,"M3U_ADD",_("プレイリストから読み込む"))
 		self.RegisterMenuCommand(self.hFileMenu,"M3U_CLOSE",_("プレイリストを閉じる"))
 		self.hFileMenu.Enable(menuItemsStore.getRef("M3U_CLOSE"), False)
-		
+		#機能メニューの中身
+		self.RegisterMenuCommand(self.hFunctionMenu, "SET_SLEEPTIMER", _("スリープタイマーを設定"))
 		#操作メニューの中身
 		self.RegisterMenuCommand(self.hOperationMenu, "PLAY_PAUSE", _("再生 / 一時停止"))
 		self.RegisterMenuCommand(self.hOperationMenu, "STOP", _("停止"))
@@ -138,6 +142,7 @@ class Menu(BaseMenu):
 		#メニューバーの生成
 		self.hMenuBar=wx.MenuBar()
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル"))
+		self.hMenuBar.Append(self.hFunctionMenu, _("機能"))
 		self.hMenuBar.Append(self.hOperationMenu,_("操作"))
 		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ"))
 		target.SetMenuBar(self.hMenuBar)
@@ -183,7 +188,12 @@ class Events(BaseEvents):
 			m3uManager.loadM3u(None, m3uManager.ADD)
 		elif selected==menuItemsStore.getRef("M3U_CLOSE"):
 			m3uManager.closeM3u()
-		#操作
+		#機能メニューのイベント
+		elif selected == menuItemsStore.getRef("SET_SLEEPTIMER"):
+			d = sleepTimerDialog.Dialog()
+			d.Initialize()
+			d.Show()
+		# 操作メニューのイベント
 		elif selected==menuItemsStore.getRef("PLAY_PAUSE"):
 			globalVars.eventProcess.playButtonControl()
 		elif selected==menuItemsStore.getRef("STOP"):
