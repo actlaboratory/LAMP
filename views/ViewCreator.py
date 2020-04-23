@@ -307,6 +307,15 @@ class ViewCreator():
 		self.AddSpace(self.space)
 		return hStaticText
 
+	def SpinCtrl(self, min, max, val, event):
+		hSpinCtrl = wx.SpinCtrl(self.parent, wx.ID_ANY, min=min, max=max, initial=val)
+		hSpinCtrl.Bind(wx.EVT_TEXT,event)
+		self.SetFace(hSpinCtrl)
+		self.sizer.Add(hSpinCtrl,0,wx.ALL,5)
+		self.AddSpace(self.space)
+		return hSpinCtrl
+
+
 	def slider(self, label, x=0, val=0, max=1):
 		hSlider=wx.Slider(self.parent, -1, size=(x,-1),value=val,maxValue=max, style=wx.SL_BOTH)
 		self.SetFace(hSlider)
