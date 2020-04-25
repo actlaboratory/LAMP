@@ -68,7 +68,12 @@ class Dialog(BaseDialog):
 
 
     def GetData(self):
-        return "テスト"
+        if self.conditionCombo.GetValue() == _("次の時間が経過した"):
+            return (self.conditionCombo.GetValue(), self.motionCombo.GetValue(), self.value1Spin.GetValue(), self.value2Spin.GetValue())
+        elif self.conditionCombo.GetValue() == _("次の曲数を再生した"):
+            return (self.conditionCombo.GetValue(), self.motionCombo.GetValue(), self.value1Spin.GetValue())
+        else:
+            return (self.conditionCombo.GetValue(), self.motionCombo.GetValue())
 
     def onSpin(self, evt):
         return None

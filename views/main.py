@@ -18,8 +18,6 @@ import menuItemsStore
 import settings
 import m3uManager
 
-from views import sleepTimerDialog
-
 import view_manager
 from views import mkDialog
 
@@ -84,7 +82,7 @@ class MainView(BaseView):
 		# タイマーの呼び出し
 		self.timer = wx.Timer(self.hFrame)
 		self.timer.Start(10)
-		self.hFrame.Bind(wx.EVT_TIMER, self.events.timerEvent)
+		self.hFrame.Bind(wx.EVT_TIMER, self.events.timerEvent, self.timer)
 
 class Menu(BaseMenu):
 	def Apply(self,target):
@@ -175,7 +173,7 @@ class Events(BaseEvents):
 			if rtnCode == dialog.PLAYLIST:
 				globalVars.playlist.addFiles([dialog.GetValue()])
 			elif rtnCode == dialog.QUEUE:
-				globalVars.queue.addFiles([dialog.GetValue])
+				globalVars.queue.addFiles([dialog.GetValue()])
 			else:
 				return
 		elif selected==menuItemsStore.getRef("M3U_OPEN"):
@@ -190,9 +188,7 @@ class Events(BaseEvents):
 			m3uManager.closeM3u()
 		#機能メニューのイベント
 		elif selected == menuItemsStore.getRef("SET_SLEEPTIMER"):
-			d = sleepTimerDialog.Dialog()
-			d.Initialize()
-			d.Show()
+			globalVars.sleepTimer.set()
 		# 操作メニューのイベント
 		elif selected==menuItemsStore.getRef("PLAY_PAUSE"):
 			globalVars.eventProcess.playButtonControl()

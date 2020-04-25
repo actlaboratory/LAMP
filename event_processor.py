@@ -6,7 +6,6 @@ import menuItemsStore
 import player
 import settings
 import file_manager
-import shuffle_ctrl
 
 def is64Bit():
     return sys.maxsize > 2 ** 32
@@ -44,6 +43,7 @@ class eventProcessor():
             globalVars.app.hMainView.trackBar.SetMax(0)
             globalVars.app.hMainView.trackBar.SetValue(0)
             if globalVars.play.getChannelState() == player.state.STOPED:
+                globalVars.sleepTimer.call() #スリープタイマー動作確認
                 self.fileChange()
 
         # リスト幅更新
@@ -80,29 +80,32 @@ class eventProcessor():
         globalVars.app.config["volume"]["default"] = str(int(rtn))
 
 
-    def play(self, list=globalVars.playlist, listTpl=None):
-        if listTpl == None:
-            rtn = globalVars.play.channelPlay()
-        elif listTpl == (None, None):
+    def play(self, list=globalVars.playlist, listTpl=(None, None)):
+        if listTpl == (None, None):
             rtn = False
         else:
-            if listTpl == (None, None):
-                rtn = False
-            else:
-                rtn = globalVars.play.inputFile(listTpl[0])
-            self.playingDataNo = listTpl[1]
-            if list == globalVars.playlist:
-                globalVars.playlist.playIndex = globalVars.playlist.getIndex(listTpl)
-            elif list == globalVars.queue:
-                globalVars.queue.deleteFile(globalVars.queue.getIndex(listTpl))
-        if rtn:
-            globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
-        else:
+            rtn = globalVars.play.inputFile(listTpl[0])
+        self.playingDataNo = listTpl[1]
+        if list == globalVars.playlist:
+            if rtn:
+                globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
+                globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
+            globalVars.playlist.playIndex = globalVars.playlist.getIndex(listTpl)
+        elif list == globalVars.queue:
+            if rtn:
+                globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
+                globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
+            globalVars.queue.deleteFile(globalVars.queue.getIndex(listTpl))
+        if rtn == False:
             globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
 
-    def pause(self):
-        if globalVars.play.pauseChannel():
-            globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+    def pause(self, pause=True):
+        if pause == True: #一時停止
+            if globalVars.play.pauseChannel():
+                globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+        else: #一時停止解除
+            if globalVars.play.channelPlay():
+                globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
 
     #削除（リストオブジェクト, インデックス）
     def delete(self, lsObj, idx):
@@ -154,9 +157,11 @@ class eventProcessor():
             self.shuffleCtrl.previous()
 
     def playButtonControl(self):
-        # 再生中は一時停止を実行
+        # 再生・一時停止を実行
         if globalVars.play.getChannelState() == player.state.PLAYING:
             self.pause()
+        elif globalVars.play.getChannelState() == player.state.PAUSED:
+            self.pause(False)
         # 停止中であればファイルを再生
         elif globalVars.play.getChannelState() == player.state.COLD:
             self.nextFile()

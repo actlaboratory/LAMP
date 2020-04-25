@@ -28,15 +28,19 @@ class Dialog(BaseDialog):
         self.creator.staticText(self.message)
         self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT)
         for s in self.btnTpl:
-            if s == _("キャンセル"): self.bCancel = self.creator.cancelbutton(s, self.onButtonClick)
+            if s == _("キャンセル"):
+                self.bCancel = self.creator.cancelbutton(s, self.onButtonClick)
+                self.cancelButton = True
             else: self.btnList.append(self.creator.button(s,self.onButtonClick))
 
     def GetData(self):
         return self.message
 
     def onButtonClick(self, evt):
-        if evt.GetEventObject() == self.bCancel: self.wnd.EndModal(wx.ID_CANCEL)
+        
         for o in self.btnList:
             if evt.GetEventObject()==o:
                 self.wnd.EndModal(self.btnList.index(o))
+            if self.cancelButton == True:
+                if evt.GetEventObject() == self.bCancel: self.wnd.EndModal(wx.ID_CANCEL)
         

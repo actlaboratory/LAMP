@@ -15,6 +15,7 @@ import datetime
 import globalVars
 from logging import getLogger, FileHandler, Formatter
 from simpleDialog import *
+import sleep_timer
 
 import constants
 import DefaultSettings
@@ -107,3 +108,4 @@ class Main(wx.App):
 		globalVars.queue = lists.queue()
 		globalVars.eventProcess = event_processor.eventProcessor()
 		globalVars.dataDict = data_dict.dataDict()
+		globalVars.sleepTimer = sleep_timer.sleepTimer()

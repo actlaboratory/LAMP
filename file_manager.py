@@ -28,8 +28,9 @@ def nextFile():
         elif globalVars.eventProcess.repeatLoopFlag == 2: #ﾙｰﾌﾟであれば先頭へ
             get = globalVars.playlist.getFile(0)
             globalVars.eventProcess.play(globalVars.playlist, get)
-        else: #再生終了後に次がなければ停止とする
+        else: #再生終了後に次がなければ停止し、全消費スリープタイマーに通知
             if globalVars.play.getChannelState() == player.state.STOPED:
                 globalVars.eventProcess.stop()
+                globalVars.sleepTimer.call(True)
     else: #キューを再生
         globalVars.eventProcess.play(globalVars.queue, get)

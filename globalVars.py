@@ -13,3 +13,4 @@ playlist = None
 queue = None
 eventProcess = None
 dataDict = None
+sleepTimer = None
