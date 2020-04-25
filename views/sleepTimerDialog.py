@@ -33,7 +33,7 @@ class Dialog(BaseDialog):
         self.value1Spin = self.valueCreator.SpinCtrl(0, 24, 0, self.onSpin)
         self.value1Label = self.valueCreator.staticText(" : ")
         self.value2Spin = self.valueCreator.SpinCtrl(0, 59, 0, self.onSpin)
-        self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT)
+        self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"", wx.ALIGN_RIGHT)
         self.bStart = self.creator.button(_("開始"),self.onButtonClick)
         self.bCancel = self.creator.cancelbutton(_("キャンセル"), self.onButtonClick)
 
