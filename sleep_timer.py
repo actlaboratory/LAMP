@@ -81,4 +81,3 @@ class sleepTimer():
 
     def destroy(self): #タイマー破棄
         self.__init__()
-        self.timer.Stop()

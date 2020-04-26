@@ -6,6 +6,7 @@ import menuItemsStore
 import player
 import settings
 import file_manager
+import shuffle_ctrl
 
 def is64Bit():
     return sys.maxsize > 2 ** 32

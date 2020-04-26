@@ -18,6 +18,7 @@ class Dialog(BaseDialog):
         self.log.debug("created")
         super().Initialize(self.app.hMainView.hFrame,self.title)
         self.btnList = [] #okとキャンセる以外のボタンハンドル
+        self.cancelButton = False #キャンセルを設置するときは後でTrue
         self.InstallControls()
 
         return True
@@ -26,7 +27,7 @@ class Dialog(BaseDialog):
         """いろんなwidgetを設置する。"""
         self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.VERTICAL,20)
         self.creator.staticText(self.message)
-        self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT)
+        self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
         for s in self.btnTpl:
             if s == _("キャンセル"):
                 self.bCancel = self.creator.cancelbutton(s, self.onButtonClick)
