@@ -2,6 +2,7 @@
 # sample dialog
 
 import wx
+import re
 import os
 import globalVars
 import views.ViewCreator
@@ -18,6 +19,8 @@ class Dialog(BaseDialog):
             super().Initialize(self.app.hMainView.hFrame,_("ファイルを開く"))
         elif type==1:
             super().Initialize(self.app.hMainView.hFrame,_("フォルダを開く"))
+        elif type==2:
+            super().Initialize(self.app.hMainView.hFrame,_("URLを開く"))
         self.InstallControls()
 
         #定数
@@ -35,6 +38,8 @@ class Dialog(BaseDialog):
         elif self.type==1:
             self.iText,self.static=self.creator.inputbox(_("フォルダの場所を指定"),400)
             self.browse=self.creator.button(_("参照"),self.onBrowseBtn)
+        elif self.type==2:
+            self.iText,self.static=self.creator.inputbox(_("URLを指定"),400)
 
         self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
         self.playlistBtn=self.creator.button(_("プレイリストに追加"),self.onButtonClick)
@@ -54,7 +59,11 @@ class Dialog(BaseDialog):
         self.iText.SetLabel(d.GetPath())
 
     def onButtonClick(self, evt):
-        if os.path.exists(self.iText.GetLabel())==False:
+        if os.path.exists(self.iText.GetLabel())==False and self.type != 2: #URI以外のファイルパスエラー
+            print("Not File")
+            return None
+        elif re.search("https?://.+\..+", self.iText.GetLabel()) == "" and self.type == 2: #URLエラー
+            print("Not URL")
             return None
         if evt.GetEventObject()==self.playlistBtn:
             code = self.PLAYLIST

@@ -97,6 +97,7 @@ class Menu(BaseMenu):
 		#ファイルメニューの中身
 		self.RegisterMenuCommand(self.hFileMenu,"FILE_OPEN",_("ファイルを開く"))
 		self.RegisterMenuCommand(self.hFileMenu,"DIR_OPEN",_("フォルダを開く"))
+		self.RegisterMenuCommand(self.hFileMenu,"URL_OPEN",_("URLを開く"))
 		self.RegisterMenuCommand(self.hFileMenu,"M3U_OPEN",_("プレイリストを開く"))
 		self.RegisterMenuCommand(self.hFileMenu,"NEW_M3U8_SAVE",_("名前を付けてプレイリストを保存"))
 		self.RegisterMenuCommand(self.hFileMenu,"M3U8_SAVE",_("プレイリストを上書き保存"))
@@ -169,6 +170,16 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("DIR_OPEN"):
 			dialog= views.mkOpenDialog.Dialog()
 			dialog.Initialize(1) #1=フォルダダイアログ
+			rtnCode = dialog.Show()
+			if rtnCode == dialog.PLAYLIST:
+				globalVars.playlist.addFiles([dialog.GetValue()])
+			elif rtnCode == dialog.QUEUE:
+				globalVars.queue.addFiles([dialog.GetValue()])
+			else:
+				return
+		elif selected==menuItemsStore.getRef("URL_OPEN"):
+			dialog= views.mkOpenDialog.Dialog()
+			dialog.Initialize(2) #2=URLダイアログ
 			rtnCode = dialog.Show()
 			if rtnCode == dialog.PLAYLIST:
 				globalVars.playlist.addFiles([dialog.GetValue()])

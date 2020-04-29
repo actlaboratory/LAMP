@@ -44,8 +44,9 @@ class eventProcessor():
             globalVars.app.hMainView.trackBar.SetMax(0)
             globalVars.app.hMainView.trackBar.SetValue(0)
             if globalVars.play.getChannelState() == player.state.STOPED:
-                globalVars.sleepTimer.call() #スリープタイマー動作確認
-                self.fileChange()
+                #globalVars.sleepTimer.call() #スリープタイマー動作確認
+                #self.fileChange()
+                print("ファイルの入れ替えが無効")
 
         # リスト幅更新
         globalVars.app.hMainView.playlistView.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)

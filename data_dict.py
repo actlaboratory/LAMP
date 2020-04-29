@@ -1,4 +1,4 @@
-import sys, os, wx, time, winsound
+import sys, os, wx, time, winsound, re
 import threading
 import globalVars
 from views import mkProgress
@@ -39,7 +39,7 @@ class dataDict():
 		t2.start() # プログレスダイアログ表示
 		# リストで受け取ってフォルダとファイルに分ける
 		for s in flst:
-			if os.path.isfile(s) == True:
+			if os.path.isfile(s) == True or re.search("https?://.+\..+", s)!="":
 				pathList.append(s)
 			else:
 				self.appendDirList(pathList, s)
@@ -66,11 +66,17 @@ class dataDict():
 		for path in paths:
 			handle = pybass.BASS_StreamCreateFile(False, path, 0, 0, pybass.BASS_UNICODE)
 			if handle == 0:
-				itemCount -= 1
-				continue
+				handle = pybass.BASS_StreamCreateURL(path.encode(), 0, 0, 0, 0)
+				if handle == 0:
+					print("not supported")
+					itemCount -= 1
+					continue
 			# ファイル情報取得
 			fName = os.path.basename(path)
-			size = os.path.getsize(path)
+			if os.path.isfile(path):
+				size = os.path.getsize(path)
+			else:
+				size = 0
 			title = pytags.TAGS_Read(handle, b"%TITL").decode("utf-8")
 			lengthb = pybass.BASS_ChannelGetLength(handle, pybass.BASS_POS_BYTE)
 			length = pybass.BASS_ChannelBytes2Seconds(handle, lengthb)

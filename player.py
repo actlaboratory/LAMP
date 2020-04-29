@@ -1,4 +1,4 @@
-import sys, platform, globalVars
+import sys, platform, globalVars, os, re
 
 def is64Bit():
     return sys.maxsize > 2 ** 32
@@ -10,6 +10,7 @@ if is64Bit():
 else:
     from pybass import pybass
     from pybass import bass_fx
+    from pybass import basshls
 
 
 class player():
@@ -25,14 +26,16 @@ class player():
         self.changeVolume(globalVars.app.config.getint("volume", "default", default=100)) #音量読み込み
         #bass.dllの初期化
         pybass.BASS_Init(-1, 44100, 0, 0, 0)
-        pybass.BASS_SetConfig(pybass.BASS_CONFIG_BUFFER, 150)
+        pybass.BASS_SetConfig(pybass.BASS_CONFIG_BUFFER,150)
+        #必要なプラグインを適用
+        pybass.BASS_PluginLoad(b"basshls.dll", 0)
 
     def inputFile(self, fileName):
         # 以前のストリームがあればフリー
         if not(self.handle == 0 and self.reverseHandle == 0):
             self.channelFree()
 
-        # ファイルが渡されたファイルを登録してストリームを生成
+        # ファイルが渡されたらファイルを登録してストリームを生成
         self.fileName = fileName
         self.handle, self.reverseHandle = self.createChannel()
 
@@ -43,21 +46,26 @@ class player():
 
     def createChannel(self):
         #ファイルを読み込み、ストリームを生成
-        handle = pybass.BASS_StreamCreateFile(False,self.fileName, 0, 0, pybass.BASS_UNICODE | pybass.BASS_STREAM_PRESCAN | pybass.BASS_STREAM_DECODE)
-
-        #逆再生用のストリームを生成。さっきのhandleはこれと同時にfreeする
-        reverseHandle = bass_fx.BASS_FX_ReverseCreate(handle,0.3,bass_fx.BASS_FX_FREESOURCE | pybass.BASS_STREAM_DECODE)
-
-        #再生速度をコントロールするストリームを生成。
-        handle = bass_fx.BASS_FX_TempoCreate(reverseHandle,0)        #bass_fx.BASS_FX_FREESOURCEしない
-
-        #再生の向きを元の方向に設定
-        pybass.BASS_ChannelSetAttribute(reverseHandle,bass_fx.BASS_ATTRIB_REVERSE_DIR,bass_fx.BASS_FX_RVS_FORWARD)
+        if os.path.isfile(self.fileName):
+            handle = pybass.BASS_StreamCreateFile(False,self.fileName, 0, 0, pybass.BASS_UNICODE | pybass.BASS_STREAM_PRESCAN | pybass.BASS_STREAM_DECODE)
+            #逆再生用のストリームを生成。さっきのhandleはこれと同時にfreeする
+            reverseHandle = bass_fx.BASS_FX_ReverseCreate(handle,0.3,bass_fx.BASS_FX_FREESOURCE | pybass.BASS_STREAM_DECODE)
+            #再生速度をコントロールするストリームを生成。
+            handle = bass_fx.BASS_FX_TempoCreate(reverseHandle,0)        #bass_fx.BASS_FX_FREESOURCEしない
+            #再生の向きを元の方向に設定
+            pybass.BASS_ChannelSetAttribute(reverseHandle,bass_fx.BASS_ATTRIB_REVERSE_DIR,bass_fx.BASS_FX_RVS_FORWARD)
+        elif re.search("https?://.+\..+", self.fileName) != "":
+            handle = pybass.BASS_StreamCreateURL(self.fileName.encode(), 0, 0, 0, 0)
+            reverseHandle = 0
+        else:
+            handle = 0
+            reverseHandle = 0
 
         #再生ボリュームを初期設定
         pybass.BASS_ChannelSetAttribute(handle, pybass.BASS_ATTRIB_VOL, self.handleVolume)
 
         #2つのhandleを返す
+
         return handle,reverseHandle
 
     def channelPlay(self):
@@ -104,19 +112,21 @@ class player():
 
     def rewind(self):
         if self.fastForwardFlag == 0 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
-            pybass.BASS_ChannelSetAttribute(self.reverseHandle,bass_fx.BASS_ATTRIB_REVERSE_DIR,bass_fx.BASS_FX_RVS_REVERSE)
-            self.rewindFlag=1
-            if self.moveTempo < 500.0:
-                self.moveTempo += 50.0
-                pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.moveTempo)
+            if pybass.BASS_ChannelSetAttribute(self.reverseHandle,bass_fx.BASS_ATTRIB_REVERSE_DIR,bass_fx.BASS_FX_RVS_REVERSE):
+                self.rewindFlag=1
+                if self.moveTempo < 500.0:
+                    self.moveTempo += 50.0
+                    if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.moveTempo) == False:
+                        self.moveTempo = 0.0
         elif self.fastForwardFlag == 1 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
             self.fastMoveReset()
-            
     def fastForward(self):
         if self.rewindFlag == 0 and self.moveTempo < 500.0 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
             self.moveTempo += 50.0
-            pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.moveTempo)
-            self.fastForwardFlag = 1
+            if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.moveTempo):
+                self.fastForwardFlag = 1
+            else:
+                self.moveTempo = 0.0
         elif self.rewindFlag == 1 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
             self.fastMoveReset()
 
