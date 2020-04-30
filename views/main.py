@@ -67,6 +67,7 @@ class MainView(BaseView):
 		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
 		self.trackBar = self.horizontalCreator.slider(_("トラック"), 1000)
 		self.trackBar.Bind(wx.EVT_COMMAND_SCROLL, self.events.onSlider)
+		self.nowTime = self.horizontalCreator.staticText("0:00:00 / 0:00:00")
 
 
 

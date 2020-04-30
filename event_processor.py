@@ -21,6 +21,7 @@ else:
 
 class eventProcessor():
     def __init__(self):
+        self.timeoutTimer = None #読み込みタイムアウトタイマー
         self.repeatLoopFlag = 0 #リピート=1, ループ=2
         self.playingDataNo = None
         self.muteFlag = 0 #初期値はミュート解除
@@ -38,19 +39,39 @@ class eventProcessor():
             globalVars.app.hMainView.trackBar.SetMax(max)
             if val == False:
                 globalVars.app.hMainView.trackBar.SetValue(0)
+                self.setNowTimeLabel(0, 0)
             else:
                 globalVars.app.hMainView.trackBar.SetValue(val)
+                self.setNowTimeLabel(val, max)
         else:
             globalVars.app.hMainView.trackBar.SetMax(0)
             globalVars.app.hMainView.trackBar.SetValue(0)
+            self.setNowTimeLabel(0, 0)
             if globalVars.play.getChannelState() == player.state.STOPED:
-                #globalVars.sleepTimer.call() #スリープタイマー動作確認
-                #self.fileChange()
-                print("ファイルの入れ替えが無効")
+                if self.timeoutTimer == None:
+                    self.timeoutTimer = wx.Timer(globalVars.app.hMainView.hFrame)
+                if self.timeoutTimer.IsRunning() == False: #タイムアウト処理
+                    self.timeoutTimer.Start(1000)
+                    globalVars.app.hMainView.hFrame.Bind(wx.EVT_TIMER, self.fileChange, self.timeoutTimer)
 
         # リスト幅更新
         globalVars.app.hMainView.playlistView.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
         globalVars.app.hMainView.queueView.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
+
+    #経過時間表示を更新
+    def setNowTimeLabel(self, now, max):
+        time = []
+        for f in (now, max):
+            i = int(f)
+            hour = 0
+            min = 0
+            sec = 0
+            if i > 0: hour = i // 3600
+            if i-(hour*3600) > 0: min = (i - hour) // 60
+            if i-(hour*3600)-(min*60) > 0: sec = i - (hour*3600) - (min*60)
+            time.append(f"{hour:01}:{min:02}:{sec:02}")
+        if globalVars.app.hMainView.nowTime.GetLabel() != time[0]+" / "+time[1]:
+            globalVars.app.hMainView.nowTime.SetLabel(time[0] + " / " + time[1])
 
     def mute(self):
         if self.muteFlag == 0: #ミュート処理
@@ -116,12 +137,15 @@ class eventProcessor():
             self.nextFile()
             self.pause()
 
-    def fileChange(self):
+    def fileChange(self, evt=None):
+        globalVars.sleepTimer.call() #スリープタイマー問い合わせ
         #自動で次のファイルを再生
         if self.repeatLoopFlag == 1: #リピート
             self.play((globalVars.play.fileName, self.playingDataNo))
         else: #それ以外（nextFileがループ処理）
             self.nextFile()
+        if self.timeoutTimer != None: #タイムアウト終了
+            self.timeoutTimer.Stop()
 
     #スキップ間隔設定(増加=はい, 秒数直接指定=なし)
     def setSkipInterval(self, increase=True, sec=None):
