@@ -48,11 +48,14 @@ class eventProcessor():
             globalVars.app.hMainView.trackBar.SetValue(0)
             self.setNowTimeLabel(0, 0)
             if globalVars.play.getChannelState() == player.state.STOPED:
-                if self.timeoutTimer == None:
-                    self.timeoutTimer = wx.Timer(globalVars.app.hMainView.hFrame)
-                if self.timeoutTimer.IsRunning() == False: #タイムアウト処理
-                    self.timeoutTimer.Start(1000)
-                    globalVars.app.hMainView.hFrame.Bind(wx.EVT_TIMER, self.fileChange, self.timeoutTimer)
+                if val == 0: #読み込みタイムアウトまでは進めない
+                    if self.timeoutTimer == None:
+                        self.timeoutTimer = wx.Timer(globalVars.app.hMainView.hFrame)
+                    if self.timeoutTimer.IsRunning() == False: #タイムアウト処理
+                        self.timeoutTimer.Start(10000)
+                        globalVars.app.hMainView.hFrame.Bind(wx.EVT_TIMER, self.fileChange, self.timeoutTimer)
+                else:
+                    self.fileChange()
 
         # リスト幅更新
         globalVars.app.hMainView.playlistView.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)

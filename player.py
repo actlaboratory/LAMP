@@ -54,7 +54,7 @@ class player():
             handle = bass_fx.BASS_FX_TempoCreate(reverseHandle,0)        #bass_fx.BASS_FX_FREESOURCEしない
             #再生の向きを元の方向に設定
             pybass.BASS_ChannelSetAttribute(reverseHandle,bass_fx.BASS_ATTRIB_REVERSE_DIR,bass_fx.BASS_FX_RVS_FORWARD)
-        elif re.search("https?://.+\..+", self.fileName) != "":
+        elif re.search("https?://.+\..+", self.fileName) != None:
             handle = pybass.BASS_StreamCreateURL(self.fileName.encode(), 0, 0, 0, 0)
             reverseHandle = 0
         else:

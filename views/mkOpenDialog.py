@@ -59,11 +59,9 @@ class Dialog(BaseDialog):
         self.iText.SetLabel(d.GetPath())
 
     def onButtonClick(self, evt):
-        if os.path.exists(self.iText.GetLabel())==False and self.type != 2: #URI以外のファイルパスエラー
-            print("Not File")
+        if os.path.exists(self.GetData())==False and self.type != 2: #URI以外のファイルパスエラー
             return None
-        elif re.search("https?://.+\..+", self.iText.GetLabel()) == "" and self.type == 2: #URLエラー
-            print("Not URL")
+        elif re.search("https?://.+\..+", self.GetData()) == None and self.type == 2: #URLエラー
             return None
         if evt.GetEventObject()==self.playlistBtn:
             code = self.PLAYLIST

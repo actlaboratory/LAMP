@@ -39,13 +39,13 @@ class dataDict():
 		t2.start() # プログレスダイアログ表示
 		# リストで受け取ってフォルダとファイルに分ける
 		for s in flst:
-			if os.path.isfile(s) == True or re.search("https?://.+\..+", s)!="":
+			if os.path.isfile(s) == True or re.search("^https?://.+\..+", s)!=None:
 				pathList.append(s)
 			else:
 				self.appendDirList(pathList, s)
 		# 作成したファイルパスのリストから辞書に追加
 		self.appendDict(pathList, lst, lcObj, progress, id)
-		winsound.Beep(4000, 1000)
+		winsound.Beep(3000, 500)
 
 
 	# ディレクトリパスからファイルリストを取得（ファイルパスリスト, ディレクトリパス）
