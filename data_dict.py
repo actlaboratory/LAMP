@@ -28,16 +28,16 @@ class dataDict():
 		#プログレスダイアログ作成
 		progress=mkProgress.Dialog()
 		progress.Initialize(_("ファイルを集めています..."), _("読み込み中..."))
-		t1 = threading.Thread(target=self.addFilesThread,args=(flst,lst,lcObj,progress,id))
-		t1.start()
+		progress.wnd.Show()
+#		t1 = threading.Thread(target=self.addFilesThread,args=(flst,lst,lcObj,progress,id))
+#		t1.start()
+		print("処理確認")
+		self.addFilesThread(flst,lst,lcObj,progress,id)
 
 	#ファイル追加スレッド（ファイルパスリスト, 追加先リスト, リストビュー, プログレスダイアログ）
 	def addFilesThread(self, flst, lst, lcObj, progress, id=-1):
 		# 作業するファイルのリスト（ファイルパス）
 		pathList = []
-		wx.CallAfter(progress.Show)
-		#t2 = threading.Thread(target=progress.Show)
-		#t2.start() # プログレスダイアログ表示
 		# リストで受け取ってフォルダとファイルに分ける
 		for s in flst:
 			if os.path.isfile(s) == True or re.search("^https?://.+\..+", s)!=None:
