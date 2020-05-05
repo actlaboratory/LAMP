@@ -57,10 +57,6 @@ class eventProcessor():
                 else:
                     self.fileChange()
 
-        # リスト幅更新
-        globalVars.app.hMainView.playlistView.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
-        globalVars.app.hMainView.queueView.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
-
     #経過時間表示を更新
     def setNowTimeLabel(self, now, max):
         time = []
