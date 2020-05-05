@@ -92,6 +92,7 @@ class Main(wx.App):
 	def say(self,s):
 		"""スクリーンリーダーでしゃべらせる。"""
 		self.speech.speak(s)
+		self.speech.braille(s)
 
 	def OnExit(self):
 		return wx.App.OnExit(self)
