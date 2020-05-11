@@ -32,11 +32,21 @@ class eventProcessor():
         pybass.BASS_Free()
 
     def refreshView(self):
+        #デバイス変更
+        if globalVars.play.getChannelState() == player.state.PAUSED_DEVICE:
+            globalVars.play.restartDevice()
+            if globalVars.app.hMainView.playPauseBtn.GetLabel() == _("一時停止"): self.pause(False)
+
         #トラックバー更新
         max = globalVars.play.getChannelLength()
         val = globalVars.play.getChannelPosition()
         if max != False and (globalVars.play.getChannelState() == player.state.PLAYING or globalVars.play.getChannelState() == player.state.PAUSED):
-            globalVars.app.hMainView.trackBar.SetMax(max)
+            if max < 0:
+                globalVars.app.hMainView.trackBar.SetMax(0)
+                globalVars.app.hMainView.trackBar.Disable()
+            else:
+                globalVars.app.hMainView.trackBar.SetMax(max)
+                globalVars.app.hMainView.trackBar.Enable()
             if val == False:
                 globalVars.app.hMainView.trackBar.SetValue(0)
                 self.setNowTimeLabel(0, 0)
@@ -44,11 +54,12 @@ class eventProcessor():
                 globalVars.app.hMainView.trackBar.SetValue(val)
                 self.setNowTimeLabel(val, max)
         else:
+            globalVars.app.hMainView.trackBar.Disable()
             globalVars.app.hMainView.trackBar.SetMax(0)
             globalVars.app.hMainView.trackBar.SetValue(0)
             self.setNowTimeLabel(0, 0)
             if globalVars.play.getChannelState() == player.state.STOPED:
-                if val == 0: #読み込みタイムアウトまでは進めない
+                if not(val != 0 and val == max): #読み込みタイムアウトまでは進めない
                     if self.timeoutTimer == None:
                         self.timeoutTimer = wx.Timer(globalVars.app.hMainView.hFrame)
                     if self.timeoutTimer.IsRunning() == False: #タイムアウト処理
@@ -110,12 +121,12 @@ class eventProcessor():
         self.playingDataNo = listTpl[1]
         if list == globalVars.playlist:
             if rtn:
-                globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
+                globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
                 globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
             globalVars.playlist.playIndex = globalVars.playlist.getIndex(listTpl)
         elif list == globalVars.queue:
             if rtn:
-                globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
+                globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
                 globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
             globalVars.queue.deleteFile(globalVars.queue.getIndex(listTpl))
         if rtn == False:
@@ -127,7 +138,7 @@ class eventProcessor():
                 globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
         else: #一時停止解除
             if globalVars.play.channelPlay():
-                globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
+                globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
 
     #削除（リストオブジェクト, インデックス）
     def delete(self, lsObj, idx):
@@ -202,7 +213,7 @@ class eventProcessor():
     def stop(self):
         globalVars.play.channelFree()
         globalVars.playlist.positionReset()
-        globalVars.play.handle = False
+        globalVars.play.handle = 0
         globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
         self.playingDataNo = None
 
