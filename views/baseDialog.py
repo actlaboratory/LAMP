@@ -22,14 +22,17 @@ class BaseDialog(object):
 		self.sizer = wx.BoxSizer(wx.VERTICAL)
 		self.panel.SetSizer(self.sizer)
 
-	def Show(self):
+	def Show(self, modal=True):
 		self.panel.Layout()
 		self.sizer.Fit(self.wnd)
 		self.wnd.Centre()
-		result=self.wnd.ShowModal()
-		if result!=wx.ID_CANCEL:
-			self.value=self.GetData()
-		self.Destroy()
+		if modal == True:
+			result=self.wnd.ShowModal()
+			if result!=wx.ID_CANCEL:
+				self.value=self.GetData()
+			self.Destroy()
+		else:
+			result=self.wnd.Show()
 		return result
 
 	def Destroy(self):

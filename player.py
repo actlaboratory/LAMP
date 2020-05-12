@@ -16,8 +16,8 @@ else:
 class player():
     def __init__ (self):
         # 必要な変数を生成
-        self.fileName = None
-        self.handle = False
+        self.fileName = 0
+        self.handle = 0
         self.reverseHandle = 0
         self.moveTempo = -100.0
         self.rewindFlag = 0
@@ -25,7 +25,7 @@ class player():
         self.handleVolume = 1.0
         self.changeVolume(globalVars.app.config.getint("volume", "default", default=100)) #音量読み込み
         #bass.dllの初期化
-        pybass.BASS_Init(-1, 44100, 0, 0, 0)
+        pybass.BASS_Init(-1, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0)
         pybass.BASS_SetConfig(pybass.BASS_CONFIG_BUFFER,150)
         #必要なプラグインを適用
         pybass.BASS_PluginLoad(b"basshls.dll", 0)
@@ -79,7 +79,7 @@ class player():
         pybass.BASS_StreamFree(self.handle)
         self.handle = 0
         self.fastMoveReset()
-        self.fileName = None
+        self.fileName = 0
 
     def pauseChannel(self):
         return pybass.BASS_ChannelPause(self.handle)
@@ -91,8 +91,10 @@ class player():
             return 0
         elif bassCode == pybass.BASS_ACTIVE_PAUSED:
             return 1
+        elif bassCode == pybass.BASS_ACTIVE_PAUSED_DEVICE:
+            return 4
         else:
-            if self.handle == False:
+            if self.handle == 0:
                 return 3
             else:
                 return 2
@@ -101,6 +103,23 @@ class player():
         byte = pybass.BASS_ChannelGetLength(self.handle,pybass.BASS_POS_BYTE)
         return pybass.BASS_ChannelBytes2Seconds(self.handle, byte)
     
+    def restartDevice(self, device=-1): #オーディオデバイスを設定して再起動
+        pos = self.getChannelPosition()
+        pybass.BASS_Stop()
+        c = 0
+        for i in range(1, 100):
+            if pybass.BASS_Init(i, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0):
+                c = i
+                break
+        pybass.BASS_SetDevice(c)
+        self.inputFile(self.fileName)
+        self.pauseChannel()
+        self.setChannelPosition(pos)
+        
+
+        
+
+
     def getChannelPosition(self):
         channelPositionByte = pybass.BASS_ChannelGetPosition(self.handle, pybass.BASS_POS_BYTE)
         channelPositionSec = pybass.BASS_ChannelBytes2Seconds(self.handle, channelPositionByte)
@@ -154,3 +173,4 @@ class state():
     PAUSED = 1
     STOPED = 2
     COLD = 3
+    PAUSED_DEVICE = 4

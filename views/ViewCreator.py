@@ -287,8 +287,9 @@ class ViewCreator():
 		_winxptheme.SetWindowTheme(target.GetHandle(),"","")
 		target.SetFont(self.font.GetFont())
 
-	def gauge(self,label, x=0):
-		hStaticText=wx.StaticText(self.parent,-1,label=label)
+	def gauge(self,text, x=0):
+		hStaticText=wx.StaticText(self.parent,-1,label=text,name=text)
+		self.SetFace(hStaticText)
 		self.sizer.Add(hStaticText,0)
 
 		hGauge=wx.Gauge(self.parent, -1,size=(x,-1))

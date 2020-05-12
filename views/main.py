@@ -82,7 +82,7 @@ class MainView(BaseView):
 
 		# タイマーの呼び出し
 		self.timer = wx.Timer(self.hFrame)
-		self.timer.Start(10)
+		self.timer.Start(100)
 		self.hFrame.Bind(wx.EVT_TIMER, self.events.timerEvent, self.timer)
 
 class Menu(BaseMenu):

@@ -10,6 +10,15 @@ def listViewSetting(lc):
 	lc.Bind(wx.EVT_LIST_KEY_DOWN, globalVars.eventProcess.listViewKeyEvent)
 	lc.Bind(wx.EVT_CONTEXT_MENU, context_menus.contextMenuOnListView)
 
+	#自動リサイズ
+	lc.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
+	lc.Bind(wx.EVT_SIZE, resizeEvent)
+
+def resizeEvent(evt): #リサイズイベント処理
+	evt.GetEventObject().SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
+
+
+
 # ドラッグアンドドロップクラス
 class fileDrop(wx.FileDropTarget):
 	def __init__(self, window):

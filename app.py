@@ -52,6 +52,15 @@ class Main(wx.App):
 		elif(reader=="AUTO"):
 			self.log.info("use reader 'AUTO'")
 			self.speech=accessible_output2.outputs.auto.Auto()
+		elif(reader=="JAWS"):
+			self.log.info("use reader 'JAWS'")
+			self.speech=accessible_output2.outputs.jaws.Jaws()
+		elif(reader=="CLIPBOARD"):
+			self.log.info("use reader 'CLIPBOARD'")
+			self.speech=accessible_output2.outputs.clipboard.Clipboard()
+		elif(reader=="NOSPEECH"):
+			self.log.info("use reader 'NOSPEECH'")
+			self.speech=accessible_output2.outputs.nospeech.NoSpeech()
 		else:
 			self.config.set("speech","reader","AUTO")
 			self.log.warning("Setting missed! speech.reader reset to 'AUTO'")
@@ -92,6 +101,7 @@ class Main(wx.App):
 	def say(self,s):
 		"""スクリーンリーダーでしゃべらせる。"""
 		self.speech.speak(s)
+		self.speech.braille(s)
 
 	def OnExit(self):
 		return wx.App.OnExit(self)
