@@ -33,9 +33,8 @@ class eventProcessor():
 
     def refreshView(self):
         #デバイス変更
-        if globalVars.play.getChannelState() == player.state.PAUSED_DEVICE:
+        if pybass.BASS_ErrorGetCode() == pybass.BASS_ERROR_START or globalVars.play.getChannelState() == player.state.PAUSED_DEVICE:
             globalVars.play.restartDevice()
-            if globalVars.app.hMainView.playPauseBtn.GetLabel() == _("一時停止"): self.pause(False)
 
         #トラックバー更新
         max = globalVars.play.getChannelLength()
@@ -138,6 +137,7 @@ class eventProcessor():
                 globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
         else: #一時停止解除
             if globalVars.play.channelPlay():
+
                 globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
 
     #削除（リストオブジェクト, インデックス）
