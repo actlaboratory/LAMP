@@ -58,7 +58,9 @@ class shuffle():
         elif self.playIndex == len(self.history)-1:
             rtn = random.choice(self.list.lst)
             self.history.append(rtn)
+            self.playIndex += 1
         else:
             self.playIndex += 1
             rtn = self.history[self.playIndex]
+        if rtn == (None, None) and self.playIndex == -1: self.playIndex = 0
         return rtn

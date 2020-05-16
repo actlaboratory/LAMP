@@ -220,17 +220,16 @@ class eventProcessor():
     def shuffleSw(self):
         if self.shuffleCtrl == 0:
             self.shuffleCtrl = shuffle_ctrl.shuffle(globalVars.playlist)
-            globalVars.app.hMainView.shuffleBtn.SetLabel("ｼｬｯﾌﾙ解除")
+            globalVars.app.hMainView.shuffleBtn.SetLabel(_("ｼｬｯﾌﾙ解除"))
             globalVars.app.hMainView.menu.hOperationMenu.Check(menuItemsStore.getRef("SHUFFLE"), True)
         else: #シャッフルを解除してプレイリストに復帰
             idx = globalVars.playlist.getIndex(self.shuffleCtrl.getNow())
             if idx != None:
-                get = globalVars.playlist.getFile(idx)
-                self.play(globalVars.playlist, get)
+                globalVars.playlist.playIndex = idx
             else:
                 globalVars.playlist.positionReset()
             self.shuffleCtrl = 0
-            globalVars.app.hMainView.shuffleBtn.SetLabel("ｼｬｯﾌﾙ")
+            globalVars.app.hMainView.shuffleBtn.SetLabel(_("ｼｬｯﾌﾙ"))
             globalVars.app.hMainView.menu.hOperationMenu.Check(menuItemsStore.getRef("SHUFFLE"), False)
 
     #リピートﾙｰﾌﾟフラグを切り替え(モード=順次)
