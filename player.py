@@ -61,7 +61,6 @@ class player():
             handle = 0
             reverseHandle = 0
 
-        print(pybass.BASS_ErrorGetCode())
         #再生ボリュームを初期設定
         pybass.BASS_ChannelSetAttribute(handle, pybass.BASS_ATTRIB_VOL, self.handleVolume)
 
@@ -105,7 +104,6 @@ class player():
         return pybass.BASS_ChannelBytes2Seconds(self.handle, byte)
     
     def restartDevice(self, device=-1): #オーディオデバイスを設定して再起動
-        print(device)
         pos = self.getChannelPosition()
         pybass.BASS_Stop()
         # デバイスの再設定
@@ -119,7 +117,7 @@ class player():
         else:
             pybass.BASS_SetDevice(device)
         self.inputFile(self.fileName)
-        self.setChannelPosition(pos)
+        return self.setChannelPosition(pos)
 
     def getChannelPosition(self):
         channelPositionByte = pybass.BASS_ChannelGetPosition(self.handle, pybass.BASS_POS_BYTE)
