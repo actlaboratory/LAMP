@@ -24,6 +24,7 @@ class player():
         self.fastForwardFlag = 0
         self.handleVolume = 1.0
         self.changeVolume(globalVars.app.config.getint("volume", "default", default=100)) #音量読み込み
+        self.channelTempo = 0.0
         #bass.dllの初期化
         pybass.BASS_Init(-1, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0)
         pybass.BASS_SetConfig(pybass.BASS_CONFIG_BUFFER,150)
@@ -134,8 +135,7 @@ class player():
                 self.rewindFlag=1
                 if self.moveTempo < 500.0:
                     self.moveTempo += 50.0
-                    if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.moveTempo) == False:
-                        self.moveTempo = 0.0
+                    pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.moveTempo)
         elif self.fastForwardFlag == 1 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
             self.fastMoveReset()
     def fastForward(self):
@@ -149,12 +149,21 @@ class player():
             self.fastMoveReset()
 
     def fastMoveReset(self):
-        self.moveTempo = -100.0    
+        self.moveTempo = 100.0    
         self.rewindFlag = 0
         self.fastForwardFlag = 0
-        pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,0.0)
+        pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.channelTempo)
         pybass.BASS_ChannelSetAttribute(self.reverseHandle,bass_fx.BASS_ATTRIB_REVERSE_DIR, bass_fx.BASS_FX_RVS_FORWARD)
         pybass.BASS_ChannelUpdate(self.handle, 0)
+
+    # 再生速度変更（速度%）
+    def setTempo(self, tempo):
+        rtn = False
+        if tempo >= -95 and tempo <= 5000:
+            if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.tempo):
+                self.channelTempo = tempo
+                rtn = True
+        return rtn
 
     # 音量変更（整数%）
     def changeVolume(self, num):
