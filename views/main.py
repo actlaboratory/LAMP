@@ -17,6 +17,7 @@ import globalVars
 import menuItemsStore
 import settings
 import m3uManager
+import effector
 
 import view_manager
 from views import mkDialog
@@ -108,6 +109,7 @@ class Menu(BaseMenu):
 		self.hFileMenu.Enable(menuItemsStore.getRef("M3U_CLOSE"), False)
 		#機能メニューの中身
 		self.RegisterMenuCommand(self.hFunctionMenu, "SET_SLEEPTIMER", _("スリープタイマーを設定"))
+		self.RegisterMenuCommand(self.hFunctionMenu, "SET_EFFECTOR", _("エフェクター"))
 		#操作メニューの中身
 		self.RegisterMenuCommand(self.hOperationMenu, "PLAY_PAUSE", _("再生 / 一時停止"))
 		self.RegisterMenuCommand(self.hOperationMenu, "STOP", _("停止"))
@@ -201,6 +203,8 @@ class Events(BaseEvents):
 		#機能メニューのイベント
 		elif selected == menuItemsStore.getRef("SET_SLEEPTIMER"):
 			globalVars.sleepTimer.set()
+		elif selected == menuItemsStore.getRef("SET_EFFECTOR"):
+			effector.effector()
 		# 操作メニューのイベント
 		elif selected==menuItemsStore.getRef("PLAY_PAUSE"):
 			globalVars.eventProcess.playButtonControl()

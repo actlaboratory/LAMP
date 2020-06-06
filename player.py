@@ -159,7 +159,7 @@ class player():
     # 再生速度変更（速度%）
     def setTempo(self, tempo):
         rtn = False
-        if tempo >= -95 and tempo <= 5000:
+        if tempo >= 5 and tempo <= 5000:
             if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.tempo):
                 self.channelTempo = tempo
                 rtn = True
