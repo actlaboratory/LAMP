@@ -6,6 +6,8 @@ import os
 #BASS_ChannelSetAttribute
 BASS_ATTRIB_REVERSE_DIR = 0x11000
 BASS_ATTRIB_TEMPO = 0x10000
+BASS_ATTRIB_TEMPO_PITCH = 0x10001
+BASS_ATTRIB_TEMPO_FREQ = 0x10002
 
 
 #Flags of CreateStream
@@ -13,7 +15,7 @@ BASS_FX_FREESOURCE = 0x10000
 
 # BASS_ATTRIB_REVERSE_DIR��Playback direction�Ŏg���ݒ�l
 BASS_FX_RVS_REVERSE = -1.0
-BASS_FX_RVS_FORWARD	= 1.0
+BASS_FX_RVS_FORWARD = 1.0
 
 func_type = ctypes.WINFUNCTYPE
 bass_module = ctypes.WinDLL(os.path.split(__file__)[0]+'\\bass_fx')

@@ -25,6 +25,7 @@ class player():
         self.handleVolume = 1.0
         self.changeVolume(globalVars.app.config.getint("volume", "default", default=100)) #音量読み込み
         self.channelTempo = 0.0
+        self.channelPitch = 0
         #bass.dllの初期化
         pybass.BASS_Init(-1, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0)
         pybass.BASS_SetConfig(pybass.BASS_CONFIG_BUFFER,150)
@@ -159,9 +160,18 @@ class player():
     # 再生速度変更（速度%）
     def setTempo(self, tempo):
         rtn = False
-        if tempo >= 5 and tempo <= 5000:
-            if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.tempo):
+        if tempo >= -95 and tempo <= 5000:
+            if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,tempo):
                 self.channelTempo = tempo
+                rtn = True
+        return rtn
+
+    # 再生ピッチ変更（ピッチ-60..60）
+    def setPitch(self, pitch):
+        rtn = False
+        if pitch >= -60 and pitch <= 60:
+            if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO_PITCH,pitch):
+                self.channelPitch = pitch
                 rtn = True
         return rtn
 

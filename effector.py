@@ -9,7 +9,9 @@ def effector():
     if r == wx.ID_CANCEL:
         return
     else:
-        self.setEffect(d.GetData())
+        setEffect(d)
 
-def setEffect(val):
-    globalVars.play.setTempo(val)
+def setEffect(d):
+    t = d.GetData()
+    globalVars.play.setTempo(t[d.TEMPO])
+    globalVars.play.setPitch(t[d.PITCH])
