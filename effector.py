@@ -15,3 +15,4 @@ def setEffect(d):
     t = d.GetData()
     globalVars.play.setTempo(t[d.TEMPO])
     globalVars.play.setPitch(t[d.PITCH])
+    globalVars.play.setFreq(t[d.FREQ])

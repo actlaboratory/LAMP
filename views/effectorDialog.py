@@ -20,6 +20,7 @@ class Dialog(BaseDialog):
         # 定数
         self.TEMPO = 0
         self.PITCH = 1
+        self.FREQ = 2
 
         super().Initialize(self.app.hMainView.hFrame,_("エフェクト設定"))
         self.InstallControls()
@@ -40,12 +41,18 @@ class Dialog(BaseDialog):
         self.pitchSlider = self.creator.slider(_("キー"),150, globalVars.play.channelPitch, 60, -60)
         self.pitchSlider.Bind(wx.EVT_COMMAND_SCROLL, self.onSlider)
         self.pitchSpin = self.creator.SpinCtrl(-60, 60, globalVars.play.channelPitch, self.onSpin)
+        # 周波数変更
+        self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",)
+        self.freqLabel = self.creator.staticText(_("周波数"),0)
+        self.freqSlider = self.creator.slider(_("周波数"),150, globalVars.play.channelFreq, 400, 5)
+        self.freqSlider.Bind(wx.EVT_COMMAND_SCROLL, self.onSlider)
+        self.freqSpin = self.creator.SpinCtrl(5, 400, globalVars.play.channelFreq, self.onSpin)
         self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"", wx.ALIGN_RIGHT)
         self.bConfirm = self.creator.button(_("決定"),self.onButtonClick)
         self.bCancel = self.creator.cancelbutton(_("キャンセル"), self.onButtonClick)
 
     def GetData(self):
-        return (self.tempoSlider.GetValue(), self.pitchSlider.GetValue())
+        return (self.tempoSlider.GetValue(), self.pitchSlider.GetValue(), self.freqSlider.GetValue())
 
     def onSpin(self, evt):
         obj = evt.GetEventObject()
@@ -53,13 +60,18 @@ class Dialog(BaseDialog):
             self.tempoSlider.SetValue(obj.GetValue())
         elif obj == self.pitchSpin:
             self.pitchSlider.SetValue(obj.GetValue())
+        elif obj == self.freqSpin:
+            self.freqSlider.SetValue(obj.GetValue())
+
 
     def onSlider(self, evt):
         obj = evt.GetEventObject()
         if obj == self.tempoSlider:
             self.tempoSpin.SetValue(obj.GetValue())
-        if obj == self.pitchSlider:
+        elif obj == self.pitchSlider:
             self.pitchSpin.SetValue(obj.GetValue())
+        elif obj == self.freqSlider:
+            self.freqSpin.SetValue(obj.GetValue())
 
     def onButtonClick(self, evt):
         if evt.GetEventObject() == self.bCancel: self.wnd.EndModal(wx.ID_CANCEL)
