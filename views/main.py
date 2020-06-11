@@ -107,6 +107,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hFileMenu,"M3U_ADD",_("プレイリストから読み込む"))
 		self.RegisterMenuCommand(self.hFileMenu,"M3U_CLOSE",_("プレイリストを閉じる"))
 		self.hFileMenu.Enable(menuItemsStore.getRef("M3U_CLOSE"), False)
+		self.RegisterMenuCommand(self.hFileMenu,"EXIT",_("終了"))
 		#機能メニューの中身
 		self.RegisterMenuCommand(self.hFunctionMenu, "SET_SLEEPTIMER", _("スリープタイマーを設定"))
 		self.RegisterMenuCommand(self.hFunctionMenu, "SET_EFFECTOR", _("エフェクター"))
@@ -200,6 +201,8 @@ class Events(BaseEvents):
 			m3uManager.loadM3u(None, m3uManager.ADD)
 		elif selected==menuItemsStore.getRef("M3U_CLOSE"):
 			m3uManager.closeM3u()
+		elif selected == menuItemsStore.getRef("EXIT"):
+			self.Exit()
 		#機能メニューのイベント
 		elif selected == menuItemsStore.getRef("SET_SLEEPTIMER"):
 			globalVars.sleepTimer.set()
