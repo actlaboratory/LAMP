@@ -109,13 +109,14 @@ class dataDict():
 def getFileInfoProcess(paths):
 	pybass.BASS_Init(0, 44100, 0, 0, 0)
 	pytags.TAGS_SetUTF8(True)
+	#必要なプラグインを適用
+	pybass.BASS_PluginLoad(b"basshls.dll", 0)
 	rtn = []
 	for path in paths:
 		handle = pybass.BASS_StreamCreateFile(False, path, 0, 0, pybass.BASS_UNICODE)
 		if handle == 0:
 			handle = pybass.BASS_StreamCreateURL(path.encode(), 0, 0, 0, 0)
 			if handle == 0:
-				print("not supported")
 				continue
 		# ファイル情報取得
 		fName = os.path.basename(path)

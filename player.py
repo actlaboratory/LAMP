@@ -26,7 +26,7 @@ class player():
         self.changeVolume(globalVars.app.config.getint("volume", "default", default=100)) #音量読み込み
         self.channelTempo = 0.0
         self.channelPitch = 0
-        self.channelFreq = 0
+        self.channelFreq = 100
         #bass.dllの初期化
         pybass.BASS_Init(-1, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0)
         pybass.BASS_SetConfig(pybass.BASS_CONFIG_BUFFER,150)
