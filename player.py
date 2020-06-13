@@ -42,7 +42,8 @@ class player():
         self.fileName = fileName
         self.handle, self.reverseHandle = self.createChannel()
 
-        #早送りとかの設定をリセットして再生
+        #早送りとかの設定をリフレッシュして再生
+        self.refreshEffect()
         self.fastMoveReset()
         rtn = self.channelPlay()
         return rtn
@@ -160,30 +161,34 @@ class player():
 
     # 再生速度変更（速度%）
     def setTempo(self, tempo):
+        self.channelTempo = tempo
         rtn = False
         if tempo >= -95 and tempo <= 5000:
-            if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,tempo):
-                self.channelTempo = tempo
-                rtn = True
+            if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,tempo): rtn = True
         return rtn
 
     # 再生ピッチ変更（ピッチ-60..60）
     def setPitch(self, pitch):
+        self.channelPitch = pitch
         rtn = False
         if pitch >= -60 and pitch <= 60:
-            if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO_PITCH,pitch):
-                self.channelPitch = pitch
-                rtn = True
+            if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO_PITCH,pitch): rtn = True
         return rtn
 
             # 再生周波数変更（周波数5..5000(%)）
     def setFreq(self, freq):
+        self.channelFreq = freq
         rtn = False
         if freq >= 5 and freq <= 5000:
-            if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO_FREQ,freq):
-                self.channelFreq = freq
-                rtn = True
+            # パーセントから周波数に変換
+            freqHz = 44100*(freq/100)
+            if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO_FREQ,freqHz): rtn = True
         return rtn
+
+    def refreshEffect(self): # エフェクトリフレッシュ
+        self.setTempo(self.channelTempo)
+        self.setPitch(self.channelPitch)
+        self.setFreq(self.channelFreq)
 
     # 音量変更（整数%）
     def changeVolume(self, num):

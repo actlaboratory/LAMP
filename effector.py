@@ -16,4 +16,3 @@ def setEffect(d):
     globalVars.play.setTempo(t[d.TEMPO])
     globalVars.play.setPitch(t[d.PITCH])
     globalVars.play.setFreq(t[d.FREQ])
-    print(t[d.FREQ])
