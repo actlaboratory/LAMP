@@ -21,6 +21,7 @@ class Dialog(BaseDialog):
         self.TEMPO = 0
         self.PITCH = 1
         self.FREQ = 2
+        self.RESET = 11
 
         super().Initialize(self.app.hMainView.hFrame,_("エフェクト設定"))
         self.InstallControls()
@@ -50,6 +51,7 @@ class Dialog(BaseDialog):
         self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"", wx.ALIGN_RIGHT)
         self.bConfirm = self.creator.button(_("決定"),self.onButtonClick)
         self.bCancel = self.creator.cancelbutton(_("キャンセル"), self.onButtonClick)
+        self.bReset = self.creator.button(_("リセット"), self.onButtonClick)
 
     def GetData(self):
         return (self.tempoSlider.GetValue(), self.pitchSlider.GetValue(), self.freqSlider.GetValue())
@@ -77,3 +79,5 @@ class Dialog(BaseDialog):
         if evt.GetEventObject() == self.bCancel: self.wnd.EndModal(wx.ID_CANCEL)
         elif evt.GetEventObject()==self.bConfirm:
             self.wnd.EndModal(1)
+        elif evt.GetEventObject()==self.bReset:
+            self.wnd.EndModal(self.RESET)
