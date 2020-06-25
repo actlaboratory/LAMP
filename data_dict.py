@@ -20,9 +20,6 @@ class dataDict():
 		# dataNo:（ファイルパス, ファイル名, サイズ, タイトル, 長さ, アーティスト, アルバム, アルバムアーティスト）
 		self.dict = {}
 		self.dataNo = 0
-		# 表示する項目（タプルのインデックス）
-		self.showValue = 3
-
 	# 複数ファイルを追加（ファイルパスリスト, 追加先リスト, 対応するリストビュー, 追加先インデックス=末尾）
 	def addFiles(self, flst, lst, lcObj, id=-1):
 		wx.CallAfter(self.addFilesCall, flst,lst,lcObj,id)
@@ -90,7 +87,8 @@ class dataDict():
 					itemCount -= 1
 					continue
 				self.dict[self.dataNo] = copy.deepcopy(info)
-				label = self.dict[self.dataNo][self.showValue]
+				label = self.dict[self.dataNo][3]
+				if label == "": label = self.dict[self.dataNo][1]
 				if id == -1:
 					lst.appendF((self.dict[self.dataNo][0], self.dataNo))
 					index = lcObj.Append([label])

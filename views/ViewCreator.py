@@ -93,7 +93,7 @@ class ViewCreator():
 		hButton=wx.Button(self.parent, wx.ID_OK,label=text, name=text,style=wx.BORDER_SUNKEN)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self.SetFace(hButton,mode=BUTTON_COLOUR)
-		self.sizer.Add(hButton,1,wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT | wx.ALL,5)
+		self.sizer.Add(hButton,1,wx.ALIGN_BOTTOM | wx.ALL,5)
 		hButton.SetDefault()
 		self.AddSpace(self.space)
 		return hButton
@@ -224,14 +224,14 @@ class ViewCreator():
 		self.sizer.Layout()
 		return htab
 
-	def inputbox(self,text,x=0,defaultValue=""):
+	def inputbox(self,text,x=0,defaultValue="", textY=0, tcY=1, style=0):
 		hStaticText=wx.StaticText(self.parent,-1,label=text,name=text)
-		self.sizer.Add(hStaticText,0)
+		self.sizer.Add(hStaticText,textY)
 
-		hTextCtrl=wx.TextCtrl(self.parent, -1,size=(x,-1),name=text,value=defaultValue)
+		hTextCtrl=wx.TextCtrl(self.parent, -1,size=(x,-1),name=text,value=defaultValue, style=style)
 		self.SetFace(hTextCtrl)
 		if x==-1:	#幅を拡張
-			self.sizer.Add(hTextCtrl,1)
+			self.sizer.Add(hTextCtrl,tcY)
 		else:
 			self.sizer.Add(hTextCtrl)
 		self.AddSpace(self.space)

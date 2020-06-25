@@ -3,6 +3,7 @@ import globalVars
 import menuItemsStore
 import lc_manager
 from views.base import BaseMenu, BaseEvents
+from views import objectDetail
 
 def contextMenuOnListView(evt):
     events = Events(evt.GetEventObject(), "listView")
@@ -69,5 +70,18 @@ class Events(BaseEvents):
                 lc_manager.getList(self.parent).deleteFile(i)
                 cnt += 1
         elif selected==menuItemsStore.getRef("POPUP_ABOUT"):
-            pass
+            item = self.parent.GetItemData(lc_manager.getListCtrlSelections(self.parent)[0])
+            ft = globalVars.dataDict.dict[item]
+            dict = {_("ァイルの場所"): ft[0],
+                _("ファイル名"): ft[1],
+                _( "ファイルサイズ"): ft[2],
+                _("タイトル"): ft[3],
+                _("長さ"): ft[4],
+                _("アーティスト"): ft[5],
+                _("アルバム"): ft[6],
+                _("アルバムアーティスト"): ft[7]
+            }
+            d = objectDetail.Dialog()
+            d.Initialize(dict)
+            d.Show()
         
