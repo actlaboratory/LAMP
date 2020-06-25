@@ -72,11 +72,18 @@ class Events(BaseEvents):
         elif selected==menuItemsStore.getRef("POPUP_ABOUT"):
             item = self.parent.GetItemData(lc_manager.getListCtrlSelections(self.parent)[0])
             ft = globalVars.dataDict.dict[item]
+            if ft[2] < 10**6:
+                size = str(round(ft[2] / 1000, 1)) + "KB"
+            elif ft[2] < 10**9:
+                size = str(round(ft[2] / 10**6, 2)) + "MB"
+            else:
+                size = str(round(ft[2] / 10**9, 2)) + "GB"
+            length = str(int(ft[4] // 60)) + ":" + format(int(ft[4]) // 60, "02")
             dict = {_("ァイルの場所"): ft[0],
                 _("ファイル名"): ft[1],
-                _( "ファイルサイズ"): ft[2],
+                _( "ファイルサイズ"): size,
                 _("タイトル"): ft[3],
-                _("長さ"): ft[4],
+                _("長さ"): length,
                 _("アーティスト"): ft[5],
                 _("アルバム"): ft[6],
                 _("アルバムアーティスト"): ft[7]
