@@ -1,4 +1,4 @@
-import sys, platform, globalVars, os, re
+import sys, ctypes, platform, globalVars, os, re
 
 def is64Bit():
     return sys.maxsize > 2 ** 32
@@ -19,13 +19,14 @@ class player():
         self.fileName = 0
         self.handle = 0
         self.reverseHandle = 0
-        self.moveTempo = -100.0
+        self.moveTempo = -30.0
         self.rewindFlag = 0
         self.fastForwardFlag = 0
         self.handleVolume = 1.0
         self.changeVolume(globalVars.app.config.getint("volume", "default", default=100)) #音量読み込み
         self.channelTempo = 0.0
         self.channelPitch = 0
+        self.channelSourceFreq = 44100.0
         self.channelFreq = 100
         #bass.dllの初期化
         pybass.BASS_Init(-1, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0)
@@ -42,7 +43,7 @@ class player():
         self.fileName = fileName
         self.handle, self.reverseHandle = self.createChannel()
 
-        #早送りとかの設定をリフレッシュして再生
+        #一部設定を引き継いで再生
         self.refreshEffect()
         self.fastMoveReset()
         rtn = self.channelPlay()
@@ -58,6 +59,10 @@ class player():
             handle = bass_fx.BASS_FX_TempoCreate(reverseHandle,0)        #bass_fx.BASS_FX_FREESOURCEしない
             #再生の向きを元の方向に設定
             pybass.BASS_ChannelSetAttribute(reverseHandle,bass_fx.BASS_ATTRIB_REVERSE_DIR,bass_fx.BASS_FX_RVS_FORWARD)
+            # サンプリングレートを読み込み
+            cFreq = ctypes.c_float()
+            pybass.BASS_ChannelGetAttribute(handle, pybass.BASS_ATTRIB_FREQ, cFreq)
+            self.channelSourceFreq = round(cFreq.value)
         elif re.search("https?://.+\..+", self.fileName) != None:
             handle = pybass.BASS_StreamCreateURL(self.fileName.encode(), 0, 0, 0, 0)
             reverseHandle = 0
@@ -133,26 +138,28 @@ class player():
         return pybass.BASS_ChannelSetPosition(self.handle, channelPositionByte, pybass.BASS_POS_BYTE)
 
     def rewind(self):
-        if self.fastForwardFlag == 0 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
-            if pybass.BASS_ChannelSetAttribute(self.reverseHandle,bass_fx.BASS_ATTRIB_REVERSE_DIR,bass_fx.BASS_FX_RVS_REVERSE):
-                self.rewindFlag=1
-                if self.moveTempo < 500.0:
-                    self.moveTempo += 50.0
-                    pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.moveTempo)
+        if self.fastForwardFlag == 0 and self.moveTempo < 2000.0 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
+            pybass.BASS_ChannelSetAttribute(self.reverseHandle,bass_fx.BASS_ATTRIB_REVERSE_DIR,bass_fx.BASS_FX_RVS_REVERSE)
+            if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.moveTempo):
+                self.moveTempo += 50.0
+                self.rewindFlag = 1
+            else:
+                self.fastMoveReset()
         elif self.fastForwardFlag == 1 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
             self.fastMoveReset()
+
     def fastForward(self):
-        if self.rewindFlag == 0 and self.moveTempo < 500.0 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
-            self.moveTempo += 50.0
+        if self.rewindFlag == 0 and self.moveTempo < 2000.0 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
             if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.moveTempo):
+                self.moveTempo += 50.0
                 self.fastForwardFlag = 1
             else:
-                self.moveTempo = 0.0
+                self.fastMoveReset()
         elif self.rewindFlag == 1 and pybass.BASS_ChannelIsActive(self.handle) == pybass.BASS_ACTIVE_PLAYING:
             self.fastMoveReset()
 
     def fastMoveReset(self):
-        self.moveTempo = 100.0    
+        self.moveTempo = -30.0
         self.rewindFlag = 0
         self.fastForwardFlag = 0
         pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO,self.channelTempo)
@@ -180,8 +187,9 @@ class player():
         self.channelFreq = freq
         rtn = False
         if freq >= 5 and freq <= 5000:
+            #pass
             # パーセントから周波数に変換
-            freqHz = 44100*(freq/100)
+            freqHz = self.channelSourceFreq * (freq/100)
             if pybass.BASS_ChannelSetAttribute(self.handle,bass_fx.BASS_ATTRIB_TEMPO_FREQ,freqHz): rtn = True
         return rtn
 

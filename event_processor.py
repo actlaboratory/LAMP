@@ -1,4 +1,4 @@
-import sys, platform, wx
+import os, sys, platform, wx
 import winsound
 import globalVars
 import lc_manager
@@ -62,7 +62,11 @@ class eventProcessor():
                     if self.timeoutTimer == None:
                         self.timeoutTimer = wx.Timer(globalVars.app.hMainView.hFrame)
                     if self.timeoutTimer.IsRunning() == False: #タイムアウト処理
-                        self.timeoutTimer.Start(10000)
+                        if os.path.isfile(globalVars.play.fileName):
+                            t = 1000
+                        else:
+                            t = 10000
+                        self.timeoutTimer.Start(t)
                         globalVars.app.hMainView.hFrame.Bind(wx.EVT_TIMER, self.fileChange, self.timeoutTimer)
                 else:
                     self.fileChange()
@@ -119,11 +123,13 @@ class eventProcessor():
             rtn = globalVars.play.inputFile(listTpl[0])
         self.playingDataNo = listTpl[1]
         if list == globalVars.playlist:
+            self.finalList = globalVars.playlist
             if rtn:
                 globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
                 globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
             globalVars.playlist.playIndex = globalVars.playlist.getIndex(listTpl)
         elif list == globalVars.queue:
+            self.finalList = globalVars.queue
             if rtn:
                 globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
                 globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
@@ -148,10 +154,19 @@ class eventProcessor():
             self.pause()
 
     def fileChange(self, evt=None):
+        # 再生が継続できた場合
+        if evt != None:
+            if globalVars.play.getChannelState() == player.state.PLAYING:
+                self.timeoutTimer.Stop()
+                return None
+        if globalVars.play.rewindFlag == 1: # 巻き戻し中に先頭になった場合
+            self.timeoutTimer.Stop()
+            self.play(self.finalList, (globalVars.play.fileName, self.playingDataNo))
+            return None
         globalVars.sleepTimer.call() #スリープタイマー問い合わせ
         #自動で次のファイルを再生
         if self.repeatLoopFlag == 1: #リピート
-            self.play((globalVars.play.fileName, self.playingDataNo))
+            self.play(self.finalList, (globalVars.play.fileName, self.playingDataNo))
         else: #それ以外（nextFileがループ処理）
             self.nextFile()
         if self.timeoutTimer != None: #タイムアウト終了
