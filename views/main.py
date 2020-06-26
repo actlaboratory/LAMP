@@ -10,6 +10,7 @@ import wx
 import re
 import ctypes
 import pywintypes
+import win32com.client
 
 import constants
 import errorCodes
@@ -111,6 +112,7 @@ class Menu(BaseMenu):
 		#機能メニューの中身
 		self.RegisterMenuCommand(self.hFunctionMenu, "SET_SLEEPTIMER", _("スリープタイマーを設定"))
 		self.RegisterMenuCommand(self.hFunctionMenu, "SET_EFFECTOR", _("エフェクター"))
+		self.RegisterMenuCommand(self.hFunctionMenu, "SEND_REGIST", _("送るメニューに登録"))
 		#操作メニューの中身
 		self.RegisterMenuCommand(self.hOperationMenu, "PLAY_PAUSE", _("再生 / 一時停止"))
 		self.RegisterMenuCommand(self.hOperationMenu, "STOP", _("停止"))
@@ -208,6 +210,13 @@ class Events(BaseEvents):
 			globalVars.sleepTimer.set()
 		elif selected == menuItemsStore.getRef("SET_EFFECTOR"):
 			effector.effector()
+		elif selected == menuItemsStore.getRef("SEND_REGIST"):
+			shortCut = os.environ["APPDATA"]+"\\Microsoft\\Windows\\SendTo\\"+_("lampへ送る.lnk")
+			ws = win32com.client.Dispatch("wscript.shell")
+			scut=ws.CreateShortcut(shortCut)
+			scut.TargetPath=sys.argv[0]
+			scut.Save()
+			dialog(_("送るメニューの登録が完了しました。送るメニューから「SOCで文字認識を開始」で実行できます。"), _("完了"))
 		# 操作メニューのイベント
 		elif selected==menuItemsStore.getRef("PLAY_PAUSE"):
 			globalVars.eventProcess.playButtonControl()
@@ -251,8 +260,6 @@ class Events(BaseEvents):
 			d = mkDialog.Dialog()
 			d.Initialize("テスト", "これはテストです。", ("テ", "ス", "ト"))
 			r = d.Show()
-			print(r)
-
 	def onButtonClick(self, event):
 			if event.GetEventObject() == globalVars.app.hMainView.previousBtn:
 				globalVars.eventProcess.previousBtn()
