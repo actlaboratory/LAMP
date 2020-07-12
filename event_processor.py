@@ -7,7 +7,7 @@ import player
 import settings
 import file_manager
 import shuffle_ctrl
-import clipboard
+import lampClipBoardCtrl
 
 def is64Bit():
     return sys.maxsize > 2 ** 32
@@ -303,15 +303,5 @@ class eventProcessor():
                 i = i-cnt
                 self.delete(lst,i)
                 cnt += 1
-
-    def paste(self, type):
-        """typeに0を指定するとプレイリストに、1を指定するとqに貼り付けが行われる。"""
-        # clipBoardモジュールを使って貼り付けるファイルリストを取得
-        c = clipboard.ClipboardFile()
-        pasteList = c.GetFileList()
-        # ファイルの追加
-        if type == 0:
-            globalVars.playlist.addFiles(pasteList)
-        if type == 1:
-            globalVars.queue.addFiles(pasteList)
-        return
+        if kc == 86:
+            lampClipBoardCtrl.paste(lst)
