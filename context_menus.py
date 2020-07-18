@@ -2,6 +2,7 @@ import wx
 import globalVars
 import menuItemsStore
 import lc_manager
+import lampClipBoardCtrl
 from views.base import BaseMenu, BaseEvents
 from views import objectDetail
 
@@ -62,7 +63,7 @@ class Events(BaseEvents):
         elif selected==menuItemsStore.getRef("POPUP_COPPY"):
             pass
         elif selected==menuItemsStore.getRef("POPUP_PASTE"):
-            pass
+            lampClipBoardCtrl.paste(lc_manager.getList(self.parent))
         elif selected==menuItemsStore.getRef("POPUP_DELETE"):
             cnt = 0
             for i in lc_manager.getListCtrlSelections(self.parent):

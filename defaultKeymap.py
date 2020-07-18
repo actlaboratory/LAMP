@@ -22,3 +22,11 @@ defaultKeymap["mainView"]={
 	"REPEAT_LOOP": "ctrl+R",
 	"EXAMPLE": "ctrl+F12/shift+delete/ctrl+c/INSERT/ctrl+BACK",
 }
+
+defaultKeymap["playlist"]={
+	"POPUP_PASTE": "ctrl+V"
+}
+
+defaultKeymap["queue"]={
+	"POPUP_PASTE": "ctrl+v"
+}
