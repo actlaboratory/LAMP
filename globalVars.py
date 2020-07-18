@@ -14,3 +14,4 @@ queue = None
 eventProcess = None
 dataDict = None
 sleepTimer = None
+popupMenu4listView = None

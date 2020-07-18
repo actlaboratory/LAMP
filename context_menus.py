@@ -1,20 +1,29 @@
 import wx
 import globalVars
+import globalVars
 import menuItemsStore
 import lc_manager
 import lampClipBoardCtrl
 from views.base import BaseMenu, BaseEvents
 from views import objectDetail
 
-def contextMenuOnListView(evt):
-    events = Events(evt.GetEventObject(), "listView")
+def setContextMenu(listCtrl, identifire):
+    events = Events(listCtrl, "listView")
     menu=Menu("mainView")
-    menu.Apply(evt.GetEventObject())
-    evt.GetEventObject().Bind(wx.EVT_MENU, events.OnMenuSelect)
-    evt.GetEventObject().PopupMenu(menu.hPopupMenu)
+    menu.Apply(listCtrl, identifire)
+    listCtrl.Bind(wx.EVT_MENU, events.OnMenuSelect)
+    return menu
+
+def contextMenuOnListView(evt):
+    if evt.GetEventObject() == globalVars.app.hMainView.playlistView:
+        identifire = "playlist"
+    elif evt.GetEventObject() == globalVars.app.hMainView.queueView:
+        identifire = "queue"
+    globalVars.popupMenu4listView.Apply(evt.GetEventObject(), identifire)
+    evt.GetEventObject().PopupMenu(globalVars.popupMenu4listView.hPopupMenu)
 
 class Menu(BaseMenu):
-    def Apply(self,target):
+    def Apply(self,target, identifire):
         """指定されたウィンドウに、メニューを適用する。"""
 
         #メニューの大項目を作る
@@ -24,13 +33,13 @@ class Menu(BaseMenu):
         self.RegisterMenuCommand(self.hPopupMenu,"POPUP_PLAY",_("再生"))
         if target.GetSelectedItemCount() != 1:
             self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_PLAY"), False)
-        if target == globalVars.app.hMainView.playlistView:
+        if identifire == "playlist":
             self.RegisterMenuCommand(self.hPopupMenu,"POPUP_ADD_QUEUE_HEAD",_("キューの先頭に割り込み"))
             self.RegisterMenuCommand(self.hPopupMenu,"POPUP_ADD_QUEUE",_("キューに追加"))
             if target.GetSelectedItemCount() == 0:
                 self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_ADD_QUEUE_HEAD"), False)
                 self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_ADD_QUEUE"), False)
-        if target == globalVars.app.hMainView.queueView:
+        if identifire == "queue":
             self.RegisterMenuCommand(self.hPopupMenu,"POPUP_ADD_PLAYLIST",_("プレイリストに追加"))
             if target.GetSelectedItemCount() == 0:
                 self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_ADD_PLAYLIST"), False)
@@ -65,10 +74,12 @@ class Events(BaseEvents):
         elif selected==menuItemsStore.getRef("POPUP_PASTE"):
             lampClipBoardCtrl.paste(lc_manager.getList(self.parent))
         elif selected==menuItemsStore.getRef("POPUP_DELETE"):
+            lst = lc_manager.getList(self.parent)
+            index = lc_manager.getListCtrlSelections(self.parent)
             cnt = 0
-            for i in lc_manager.getListCtrlSelections(self.parent):
+            for i in index:
                 i = i-cnt
-                lc_manager.getList(self.parent).deleteFile(i)
+                globalVars.eventProcess.delete(lst,i)
                 cnt += 1
         elif selected==menuItemsStore.getRef("POPUP_ABOUT"):
             item = self.parent.GetItemData(lc_manager.getListCtrlSelections(self.parent)[0])

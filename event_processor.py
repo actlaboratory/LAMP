@@ -286,22 +286,3 @@ class eventProcessor():
         if len(iLst) == 1:
             index = iLst[0]
             p = globalVars.eventProcess.play(lst, lst.getFile(index))
-
-    def listViewKeyEvent(self, evt):
-        evtObj = evt.GetEventObject()
-        # 発生元とpythonリストの対応付け
-        if evtObj == globalVars.app.hMainView.playlistView:
-            lst = globalVars.playlist
-        elif evtObj == globalVars.app.hMainView.queueView:
-            lst = globalVars.queue
-        kc = evt.GetKeyCode()
-        # deleteで削除
-        if kc == wx.WXK_DELETE:
-            index = lc_manager.getListCtrlSelections(evtObj)
-            cnt = 0
-            for i in index:
-                i = i-cnt
-                self.delete(lst,i)
-                cnt += 1
-        if kc == 86:
-            lampClipBoardCtrl.paste(lst)
