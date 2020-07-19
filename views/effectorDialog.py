@@ -21,7 +21,6 @@ class Dialog(BaseDialog):
         self.TEMPO = 0
         self.PITCH = 1
         self.FREQ = 2
-        self.RESET = 11
 
         super().Initialize(self.app.hMainView.hFrame,_("エフェクト設定"))
         self.InstallControls()
@@ -50,7 +49,6 @@ class Dialog(BaseDialog):
         self.freqSpin = self.creator.SpinCtrl(5, 400, globalVars.play.channelFreq, self.onSpin)
         self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"", wx.ALIGN_RIGHT)
         self.bConfirm = self.creator.button(_("決定"),self.onButtonClick)
-        self.bCancel = self.creator.cancelbutton(_("キャンセル"), self.onButtonClick)
         self.bReset = self.creator.button(_("リセット"), self.onButtonClick)
 
     def GetData(self):
@@ -60,24 +58,37 @@ class Dialog(BaseDialog):
         obj = evt.GetEventObject()
         if obj == self.tempoSpin:
             self.tempoSlider.SetValue(obj.GetValue())
+            globalVars.play.setTempo(obj.GetValue())
         elif obj == self.pitchSpin:
             self.pitchSlider.SetValue(obj.GetValue())
+            globalVars.play.setPitch(obj.GetValue())
         elif obj == self.freqSpin:
             self.freqSlider.SetValue(obj.GetValue())
+            globalVars.play.setFreq(obj.GetValue())
 
 
     def onSlider(self, evt):
         obj = evt.GetEventObject()
         if obj == self.tempoSlider:
             self.tempoSpin.SetValue(obj.GetValue())
+            globalVars.play.setTempo(obj.GetValue())
         elif obj == self.pitchSlider:
             self.pitchSpin.SetValue(obj.GetValue())
+            globalVars.play.setPitch(obj.GetValue())
         elif obj == self.freqSlider:
             self.freqSpin.SetValue(obj.GetValue())
+            globalVars.play.setFreq(obj.GetValue())
 
     def onButtonClick(self, evt):
-        if evt.GetEventObject() == self.bCancel: self.wnd.EndModal(wx.ID_CANCEL)
-        elif evt.GetEventObject()==self.bConfirm:
+        if evt.GetEventObject()==self.bConfirm:
             self.wnd.EndModal(1)
         elif evt.GetEventObject()==self.bReset:
-            self.wnd.EndModal(self.RESET)
+            self.tempoSlider.SetValue(0)
+            self.tempoSpin.SetValue(0)
+            globalVars.play.setTempo(0)
+            self.pitchSlider.SetValue(0)
+            self.pitchSpin.SetValue(0)
+            globalVars.play.setPitch(0)
+            self.freqSlider.SetValue(100)
+            self.freqSpin.SetValue(100)
+            globalVars.play.setFreq(100)
