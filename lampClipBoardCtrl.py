@@ -8,3 +8,10 @@ def paste(type):
     # ファイルの追加
     type.addFiles(pasteList)
     return
+
+def copy(fileList):
+    c = clipboard.ClipboardFile()
+    # ファイルの追加
+    c.SetFileList(fileList)
+    c.SendToClipboard()
+    return

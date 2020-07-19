@@ -43,12 +43,12 @@ class Menu(BaseMenu):
             self.RegisterMenuCommand(self.hPopupMenu,"POPUP_ADD_PLAYLIST",_("プレイリストに追加"))
             if target.GetSelectedItemCount() == 0:
                 self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_ADD_PLAYLIST"), False)
-        self.RegisterMenuCommand(self.hPopupMenu,"POPUP_COPPY",_("コピー"))
+        self.RegisterMenuCommand(self.hPopupMenu,"POPUP_COPY",_("コピー"))
         self.RegisterMenuCommand(self.hPopupMenu,"POPUP_PASTE",_("貼り付け"))
         self.RegisterMenuCommand(self.hPopupMenu,"POPUP_DELETE",_("削除"))
         self.RegisterMenuCommand(self.hPopupMenu,"POPUP_ABOUT",_("このファイルについて"))
         if target.GetSelectedItemCount() == 0:
-            self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_COPPY"), False)
+            self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_COPY"), False)
             self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_DELETE"), False)
             self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_ABOUT"), False)
 
@@ -69,8 +69,9 @@ class Events(BaseEvents):
         elif selected==menuItemsStore.getRef("POPUP_ADD_PLAYLIST"):
             ls = lc_manager.getListCtrlPaths(self.parent)
             globalVars.playlist.addFiles(ls)
-        elif selected==menuItemsStore.getRef("POPUP_COPPY"):
-            pass
+        elif selected==menuItemsStore.getRef("POPUP_COPY"):
+            fList = lc_manager.getListCtrlPaths(self.parent)
+            lampClipBoardCtrl.copy(fList)
         elif selected==menuItemsStore.getRef("POPUP_PASTE"):
             lampClipBoardCtrl.paste(lc_manager.getList(self.parent))
         elif selected==menuItemsStore.getRef("POPUP_DELETE"):
