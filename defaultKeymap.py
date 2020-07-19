@@ -26,11 +26,13 @@ defaultKeymap["mainView"]={
 defaultKeymap["playlist"]={
 	"POPUP_COPY": "ctrl+C",
 	"POPUP_PASTE": "ctrl+V",
-	"POPUP_DELETE": "delete"
+	"POPUP_DELETE": "delete",
+	"POPUP_SELECT_ALL": "ctrl+A"
 }
 
 defaultKeymap["queue"]={
 	"POPUP_COPY": "ctrl+C",
 	"POPUP_PASTE": "ctrl+v",
-	"POPUP_DELETE": "delete"
+	"POPUP_DELETE": "delete",
+	"POPUP_SELECT_ALL": "ctrl+A"
 }

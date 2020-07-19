@@ -46,6 +46,7 @@ class Menu(BaseMenu):
         self.RegisterMenuCommand(self.hPopupMenu,"POPUP_COPY",_("コピー"))
         self.RegisterMenuCommand(self.hPopupMenu,"POPUP_PASTE",_("貼り付け"))
         self.RegisterMenuCommand(self.hPopupMenu,"POPUP_DELETE",_("削除"))
+        self.RegisterMenuCommand(self.hPopupMenu,"POPUP_SELECT_ALL",_("すべてを選択"))
         self.RegisterMenuCommand(self.hPopupMenu,"POPUP_ABOUT",_("このファイルについて"))
         if target.GetSelectedItemCount() == 0:
             self.hPopupMenu.Enable(menuItemsStore.getRef("POPUP_COPY"), False)
@@ -82,6 +83,9 @@ class Events(BaseEvents):
                 i = i-cnt
                 globalVars.eventProcess.delete(lst,i)
                 cnt += 1
+        elif selected==menuItemsStore.getRef("POPUP_SELECT_ALL"):
+            for i in range(self.parent.GetItemCount()):
+                self.parent.Select(i - 1)
         elif selected==menuItemsStore.getRef("POPUP_ABOUT"):
             item = self.parent.GetItemData(lc_manager.getListCtrlSelections(self.parent)[0])
             ft = globalVars.dataDict.dict[item]
