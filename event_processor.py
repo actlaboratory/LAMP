@@ -227,6 +227,8 @@ class eventProcessor():
             self.shuffleCtrl.next()
 
     def stop(self):
+        if self.timeoutTimer != None:
+            self.timeoutTimer.Stop()
         globalVars.play.channelFree()
         globalVars.playlist.positionReset()
         globalVars.play.handle = 0

@@ -278,3 +278,8 @@ class Events(BaseEvents):
 	
 	def timerEvent(self, evt):
 		globalVars.eventProcess.refreshView()
+
+	def Exit(self, evt=None):
+		globalVars.app.hMainView.timer.Stop()
+		globalVars.eventProcess.stop()
+		super().Exit()
