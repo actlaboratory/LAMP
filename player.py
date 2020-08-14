@@ -112,21 +112,37 @@ class player():
         byte = pybass.BASS_ChannelGetLength(self.handle,pybass.BASS_POS_BYTE)
         return pybass.BASS_ChannelBytes2Seconds(self.handle, byte)
     
+    # サウンドデバイス一覧取得 => [(int インデックス, str デバイス名)]
+    def getDeviceList(self):
+        ret = []
+        p = pybass.BASS_DEVICEINFO()
+        index = 0
+        while pybass.BASS_GetDeviceInfo(index, p):
+            if p.flags and pybass.BASS_DEVICE_ENABLED:
+                ret.append((index, p.name.decode("shift-jis")))
+            index += 1
+        return ret
+    
+    def setDevice(self, deviceIndex):
+        return self.restartDevice(deviceIndex)
+    
     def restartDevice(self, device=-1): #オーディオデバイスを設定して再起動
         pos = self.getChannelPosition()
-        pybass.BASS_Stop()
+        pybass.BASS_Free()
         # デバイスの再設定
-        if pybass.BASS_Init(device, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0) == False:
-            c = 0
-            for i in range(1, 100):
-                if pybass.BASS_Init(i, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0):
-                    c = i
-                    break
-            pybass.BASS_SetDevice(c)
+        ret = False
+        if device == -1:
+            if pybass.BASS_Init(device, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0) == False:
+                for i in range(1, 100):
+                    if pybass.BASS_Init(i, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0):
+                        ret = True
+                        break
         else:
-            pybass.BASS_SetDevice(device)
+            ret = pybass.BASS_Init(device, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0)
         self.inputFile(self.fileName)
-        return self.setChannelPosition(pos)
+        if self.setChannelPosition(pos):
+            return True
+        return ret
 
     def getChannelPosition(self):
         channelPositionByte = pybass.BASS_ChannelGetPosition(self.handle, pybass.BASS_POS_BYTE)
