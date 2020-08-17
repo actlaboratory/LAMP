@@ -7,6 +7,7 @@ class player():
         self.__id = bassController.connectPlayer(self)
         self.__device = PLAYER_NO_SPEAKER
         self.__source = None
+        self.__speed = 0
 
     def startDevice(self, device):
         """ デバイススタート(int デバイス) """
@@ -23,7 +24,8 @@ class player():
             if os.path.isfile(self.__source): return PLAYER_SOURCETYPE_FILE
             if re.search("https?://.+\..+", self.__source) != None: return PLAYER_SOURCETYPE_URL
             self.__source = None
-            return None
+            return PLAYER_SOURCETYPE_NUL
+        if config == PLAYER_CONFIG_SPEED: return self.__speed
 
     def setDevice(self, device):
         """ インデックス、または定数から再生デバイスをセット(int インデックス) => None """
@@ -42,19 +44,37 @@ class player():
             return False
 
     def setSource(self, source):
-        """ 音源読み込み（str 音源） """
+        """ 音源読み込み（str 音源） => bool """
+        sourceTmp = self.__source
         self.__source = source
-        self.sendSource()
+        if self.sendSource(): return True
+        else:
+            self.__source = sourceTmp
+            return False
     
     def sendSource(self):
-        """bassにファイルを送信"""
-        if os.path.isfile(self.__source): bassController.setFile(self.__id)
-        elif re.search("https?://.+\..+", self.__source) != None: bassController.setURL(self.__id)
+        """bassにファイルを送信 => bool"""
+
+        if os.path.isfile(self.__source): return bassController.setFile(self.__id)
+        elif re.search("https?://.+\..+", self.__source) != None: return bassController.setURL(self.__id)
 
     def play(self):
-        """再生"""
-        bassController.play(self.__id)
+        """再生 => bool"""
+        return bassController.play(self.__id)
 
     def pause(self):
-        """再生"""
-        bassController.pause(self.__id)
+        """再生 => bool"""
+        return bassController.pause(self.__id)
+
+    def setSpeed(self, speed):
+        """速度設定（int -95..0..5000） => bool"""
+        speedTmp = self.__speed
+        self.__speed = speed
+        if bassController.setSpeed(self.__id): return True
+        else:
+            self.__speed = speedTmp
+            return False
+
+    def changeSpeed(self, speed):
+        """ 差分指定で速度を設定（int +-速度） => bool """
+        return self.setSpeed(self.__speed + speed)
