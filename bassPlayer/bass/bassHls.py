@@ -4,14 +4,14 @@ Copyright (c) 2015-2019 Un4seen Developments Ltd.
 See the BASSHLS.CHM file for more detailed documentation
 """
 
-import sys, ctypes, platform
-from pybass.pybass import *
+import sys, ctypes, platform, os
+from . import *
 
 if sys.hexversion < 0x02060000:
 	ctypes.c_bool = ctypes.c_byte
 
 if platform.system().lower() == 'windows':
-	bass_hls_module = ctypes.WinDLL('pybass/basshls')
+	bass_hls_module = ctypes.WinDLL(os.path.split(__file__)[0]+'\\basshls')
 	func_type = ctypes.WINFUNCTYPE
 else:
 	# correct by Wasylews (sabov.97@mail.ru), thank him

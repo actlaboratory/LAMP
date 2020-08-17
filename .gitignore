@@ -12,4 +12,6 @@ dist/
 *.lib
 *.spec
 pl_auto_save
+/test.mp3
+/test.py
 /.vscode
