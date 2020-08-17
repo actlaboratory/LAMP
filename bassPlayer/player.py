@@ -107,3 +107,11 @@ class player():
     def changeFreq(self, freq):
         """ 差分指定で周波数を設定（int +-速度） => bool """
         return self.setFreq(self.__freq + freq)
+    
+    def getPosition(self):
+        """ 再生位置取得 => int 秒数 """
+        return bassController.getPosition(self.__id)
+
+    def setPosition(self, second):
+        """ 再生位置設定（int 秒数） => bool """
+        return bassController.setPosition(self.__id, second)

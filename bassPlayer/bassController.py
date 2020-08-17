@@ -89,6 +89,18 @@ def setFreq(playerID):
     _memory[playerID][M_STATOUS] = PLAYER_SEND_FREQ
     return _waitReturn(playerID)
 
+def getPosition(playerID):
+    """ 再生位置取得要求（playerID） => int 秒数 """
+    _memory[playerID][M_STATOUS] = PLAYER_SEND_GETPOSITION
+    if _waitReturn(playerID): return _memory[playerID][M_VALUE]
+    else: return 0
+
+def setPosition(playerID, second):
+    """ 再生位置設定要求（playerID, int 秒数） => bool """
+    _memory[playerID][M_VALUE] = second
+    _memory[playerID][M_STATOUS] = PLAYER_SEND_SETPOSITION
+    return _waitReturn(playerID)
+
 def _waitReturn(playerID):
     """ 処理が終わるまで待機（playerID） => bool """
     while True:
@@ -132,6 +144,12 @@ class bassThread(threading.Thread):
                 else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
             elif s == PLAYER_SEND_FREQ:
                 if self.setFreq(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
+                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+            elif s == PLAYER_SEND_GETPOSITION:
+                if self.getPosition(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
+                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+            elif s == PLAYER_SEND_SETPOSITION:
+                if self.setPosition(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
                 else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
             errorTmp = errorCode
             errorCode = pybass.BASS_ErrorGetCode()
@@ -206,3 +224,18 @@ class bassThread(threading.Thread):
         freqArg = _playerList[self.__id].getConfig(PLAYER_CONFIG_FREQ)
         freq = round((freqArg * self.__freq) / 100)
         return pybass.BASS_ChannelSetAttribute(self.__handle,bassFx.BASS_ATTRIB_TEMPO_FREQ, freq)
+
+    def getPosition(self):
+        """  再生位置秒数取得 => bool (value)"""
+        byte = pybass.BASS_ChannelGetPosition(self.__handle, pybass.BASS_POS_BYTE)
+        if byte != -1:
+            sec = pybass.BASS_ChannelBytes2Seconds(self.__handle, byte)
+            _memory[self.__id][M_VALUE] = sec
+            return True
+        else: return False
+
+    def setPosition(self):
+        """ 秒数で再生位置を設定 => bool """
+        sec = _memory[self.__id][M_VALUE]
+        byte = pybass.BASS_ChannelSeconds2Bytes(self.__handle, sec)
+        return pybass.BASS_ChannelSetPosition(self.__handle, byte, pybass.BASS_POS_BYTE)
