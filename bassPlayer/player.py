@@ -8,6 +8,8 @@ class player():
         self.__device = PLAYER_NO_SPEAKER
         self.__source = None
         self.__speed = 0
+        self.__key = 0
+        self.__freq = 100
 
     def startDevice(self, device):
         """ デバイススタート(int デバイス) """
@@ -26,7 +28,8 @@ class player():
             self.__source = None
             return PLAYER_SOURCETYPE_NUL
         if config == PLAYER_CONFIG_SPEED: return self.__speed
-
+        if config == PLAYER_CONFIG_KEY: return self.__key
+        if config == PLAYER_CONFIG_FREQ: return self.__freq
     def setDevice(self, device):
         """ インデックス、または定数から再生デバイスをセット(int インデックス) => None """
         if device < len(bassController.getDeviceList()) and device > 0: self.__device = device
@@ -78,3 +81,29 @@ class player():
     def changeSpeed(self, speed):
         """ 差分指定で速度を設定（int +-速度） => bool """
         return self.setSpeed(self.__speed + speed)
+
+    def setKey(self, key):
+        """再生キー(高さ)設定（int -60..0..60） => bool"""
+        keyTmp = self.__key
+        self.__key = key
+        if bassController.setKey(self.__id): return True
+        else:
+            self.__key = keyTmp
+            return False
+
+    def changeKey(self, key):
+        """ 差分指定で再生キーを設定（int +-速度） => bool """
+        return self.setKey(self.__key + key)
+
+    def setFreq(self, freq):
+        """周波数設定（int 5..100..5000） => bool"""
+        freqTmp = self.__freq
+        self.__freq = freq
+        if bassController.setFreq(self.__id): return True
+        else:
+            self.__freq = freqTmp
+            return False
+
+    def changeFreq(self, freq):
+        """ 差分指定で周波数を設定（int +-速度） => bool """
+        return self.setFreq(self.__freq + freq)

@@ -79,6 +79,16 @@ def setSpeed(playerID):
     _memory[playerID][M_STATOUS] = PLAYER_SEND_SPEED
     return _waitReturn(playerID)
 
+def setKey(playerID):
+    """ 再生キー変更要求（playerID） => bool """
+    _memory[playerID][M_STATOUS] = PLAYER_SEND_KEY
+    return _waitReturn(playerID)
+
+def setFreq(playerID):
+    """ 再生周波数変更要求（playerID） => bool """
+    _memory[playerID][M_STATOUS] = PLAYER_SEND_FREQ
+    return _waitReturn(playerID)
+
 def _waitReturn(playerID):
     """ 処理が終わるまで待機（playerID） => bool """
     while True:
@@ -116,6 +126,12 @@ class bassThread(threading.Thread):
                 else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
             elif s == PLAYER_SEND_SPEED:
                 if self.setSpeed(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
+                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+            elif s == PLAYER_SEND_KEY:
+                if self.setKey(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
+                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+            elif s == PLAYER_SEND_FREQ:
+                if self.setFreq(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
                 else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
             errorTmp = errorCode
             errorCode = pybass.BASS_ErrorGetCode()
@@ -179,3 +195,14 @@ class bassThread(threading.Thread):
         """ 再生速度設定 => bool"""
         speed = _playerList[self.__id].getConfig(PLAYER_CONFIG_SPEED)
         return pybass.BASS_ChannelSetAttribute(self.__handle,bassFx.BASS_ATTRIB_TEMPO, speed)
+
+    def setKey(self):
+        """ 再生キー設定 => bool"""
+        key = _playerList[self.__id].getConfig(PLAYER_CONFIG_KEY)
+        return pybass.BASS_ChannelSetAttribute(self.__handle,bassFx.BASS_ATTRIB_TEMPO_PITCH, key)
+
+    def setFreq(self):
+        """ 再生周波数設定 => bool"""
+        freqArg = _playerList[self.__id].getConfig(PLAYER_CONFIG_FREQ)
+        freq = round((freqArg * self.__freq) / 100)
+        return pybass.BASS_ChannelSetAttribute(self.__handle,bassFx.BASS_ATTRIB_TEMPO_FREQ, freq)
