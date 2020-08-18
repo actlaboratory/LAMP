@@ -1,4 +1,4 @@
-import sys, ctypes, os, threading
+import sys, ctypes, os, threading, winsound, time
 from .bass import pybass
 from .bass import bassFx
 from .bass import bassHls
@@ -103,13 +103,24 @@ def setPosition(playerID, second):
 
 def _waitReturn(playerID):
     """ 処理が終わるまで待機（playerID） => bool """
+    print(_memory[playerID][M_STATOUS])
     while True:
-        if _memory[playerID][M_STATOUS] == PLAYER_STATOUS_OK: return True
-        elif _memory[playerID][M_STATOUS] == PLAYER_STATOUS_FAILD: return False
+        time.sleep(0.01)
+        if _memory[playerID][M_STATOUS] == PLAYER_STATOUS_OK:
+            print("TRUE")
+            return True
+        elif _memory[playerID][M_STATOUS] == PLAYER_STATOUS_FAILD:
+            print("FALSE")
+            return False
 
 class bassThread(threading.Thread):
     def __init__(self, playerID):
         super().__init__()
+        # プラグイン適用
+        pybass.BASS_PluginLoad(b"basshls.dll", 0)
+        pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY,10)
+
+        # 初期化
         self.__id = playerID
         self.__sourceType = PLAYER_SOURCETYPE_NUL
         self.__handle = 0
@@ -118,7 +129,10 @@ class bassThread(threading.Thread):
 
     def run(self):
         errorCode = 0
+        state = 0
         while True:
+            time.sleep(1)
+
             # 通信
             s = _memory[self.__id][M_STATOUS]
             if s == PLAYER_SEND_INIT:
@@ -151,9 +165,27 @@ class bassThread(threading.Thread):
             elif s == PLAYER_SEND_SETPOSITION:
                 if self.setPosition(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
                 else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+            
+            # 再生継続処理
+            a = pybass.BASS_ChannelIsActive(self.__handle)
+            if a == pybass.BASS_ACTIVE_STALLED: self.play()
+            if a == pybass.BASS_ACTIVE_STOPPED: self.play()
+            
+            #DEBUG ----------
             errorTmp = errorCode
             errorCode = pybass.BASS_ErrorGetCode()
-            if errorTmp != errorCode: print(errorCode)
+            if errorTmp != errorCode:
+                print("error: " + str(errorCode))
+                winsound.Beep(1300, 500)
+            stateTmp = state
+            state = pybass.BASS_ChannelIsActive(self.__handle)
+            if stateTmp != state:
+                if state == pybass.BASS_ACTIVE_STOPPED: print("state: STOP")
+                elif state == pybass.BASS_ACTIVE_STALLED: print("state: STALLED")
+                elif state == pybass.BASS_ACTIVE_PLAYING: print("state: PLAYING")
+                elif state == pybass.BASS_ACTIVE_PAUSED: print("state: PAUSED")
+                elif state == pybass.BASS_ACTIVE_PAUSED_DEVICE: print("state: PAUSED_DEVICE")
+                winsound.Beep(1500, 500)
         return super().run()
 
     def bassInit(self):
@@ -198,6 +230,7 @@ class bassThread(threading.Thread):
             self.__reverseHandle = 0
             self.__freq = 0
             self.__sourceType = PLAYER_SOURCETYPE_URL
+            self.__handle
             return True
         else: return False
 
