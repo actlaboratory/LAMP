@@ -1,4 +1,4 @@
-import re, os
+import re, os, threading, time
 from .constants import *
 from . import bassController
 
@@ -10,6 +10,7 @@ class player():
         self.__speed = 0
         self.__key = 0
         self.__freq = 100
+        self.__fastMoveFlag = False
 
     def startDevice(self, device):
         """ デバイススタート(int デバイス) """
@@ -115,3 +116,51 @@ class player():
     def setPosition(self, second):
         """ 再生位置設定（int 秒数） => bool """
         return bassController.setPosition(self.__id, second)
+
+    def fastForward(self):
+        """ 早送り 0.1秒未満連続呼び出し中有効 """
+        self.__fastMove(1)
+
+    def rewind(self):
+        """ 巻き戻し 0.1秒未満連続呼び出しで有効 """
+        self.__fastMove(-1)
+
+    def __fastMove(self, direction):
+        """
+        高速移動（int 方向）
+        1 = 早送り, -1 = 巻き戻し
+        """
+        if self.__fastMoveFlag == False:
+            threading.Thread(target=self.__fastMover, args=(direction,)).start()
+
+    def __fastMover(self, direction):
+        """ スレッド呼び出し用高速移動（int 方向） """
+        self.__fastMoveFlag = True
+        counter = 1
+        timeTmp = time.time()
+        while True:
+            #実経過時間
+            time.sleep(0.5)
+            newTime = time.time()
+            gTime = newTime - timeTmp
+            timeTmp = newTime
+            #フラグ処理
+            if self.__fastMoveFlag == False: break
+            self.__fastMoveFlag = False
+            #現在位置取得と加速
+            new = self.getPosition()
+            if counter < 20: pos = new + direction * gTime * 2
+            elif counter < 40: pos = new + direction * gTime * 4
+            elif counter < 60: pos = new + direction * gTime * 8
+            elif counter < 80: pos = new + direction * gTime * 16
+            else: new + direction * gTime * 32
+            #ポジション適用
+            if new == 0: break
+            if self.setPosition(pos):
+                self.play()
+            else:
+                if direction == -1 and self.setPosition(0): self.pause()
+                else: break
+            if counter < 4000: counter += 1
+        self.__fastMoveFlag = False
+        return
