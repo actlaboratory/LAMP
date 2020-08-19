@@ -60,7 +60,7 @@ class player():
         """bassにファイルを送信 => bool"""
 
         if os.path.isfile(self.__source): return bassController.setFile(self.__id)
-        elif re.search("https?://.+\..+", self.__source) != None: return bassController.setURL(self.__id)
+        elif re.search("^https?://.+\..+", self.__source) != None: return bassController.setURL(self.__id)
 
     def play(self):
         """再生 => bool"""
@@ -79,7 +79,7 @@ class player():
             self.__speed = speedTmp
             return False
 
-    def changeSpeed(self, speed):
+    def calcSpeed(self, speed):
         """ 差分指定で速度を設定（int +-速度） => bool """
         return self.setSpeed(self.__speed + speed)
 
@@ -92,7 +92,7 @@ class player():
             self.__key = keyTmp
             return False
 
-    def changeKey(self, key):
+    def calcKey(self, key):
         """ 差分指定で再生キーを設定（int +-速度） => bool """
         return self.setKey(self.__key + key)
 
@@ -105,7 +105,7 @@ class player():
             self.__freq = freqTmp
             return False
 
-    def changeFreq(self, freq):
+    def calcFreq(self, freq):
         """ 差分指定で周波数を設定（int +-速度） => bool """
         return self.setFreq(self.__freq + freq)
     
@@ -164,3 +164,10 @@ class player():
             if counter < 4000: counter += 1
         self.__fastMoveFlag = False
         return
+
+    def exit(self):
+        """ プレイヤー破棄"""
+        self.__del__()
+
+    def __del__(self):
+        bassController.kill(self.__id)

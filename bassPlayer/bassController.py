@@ -54,6 +54,10 @@ def bassInit(playerID):
     _memory[playerID][M_STATOUS] = PLAYER_SEND_INIT
     return _waitReturn(playerID)
 
+def kill(playerID):
+    """bassスレッド終了（playerID）"""
+    if  _playerList[playerID] != None: _memory[playerID][M_STATOUS] = PLAYER_SEND_KILL
+
 def setFile(playerID):
     """ ファイルストリームの生成要求（playerID） => bool """
     _memory[playerID][M_STATOUS] = PLAYER_SEND_FILE
@@ -62,7 +66,7 @@ def setFile(playerID):
 def setURL(playerID):
     """ ファイルストリームの生成要求（playerID） => bool """
     _memory[playerID][M_STATOUS] = PLAYER_SEND_URL
-    return _waitReturn
+    return _waitReturn(playerID)
 
 def play(playerID):
     """ 再生(playerID) => bool """
@@ -105,7 +109,7 @@ def _waitReturn(playerID):
     """ 処理が終わるまで待機（playerID） => bool """
     print(_memory[playerID][M_STATOUS])
     while True:
-        time.sleep(0.01)
+        time.sleep(0.02)
         if _memory[playerID][M_STATOUS] == PLAYER_STATOUS_OK:
             print("TRUE")
             return True
@@ -123,6 +127,7 @@ class bassThread(threading.Thread):
         # 初期化
         self.__id = playerID
         self.__sourceType = PLAYER_SOURCETYPE_NUL
+        self.__playingFlag = False
         self.__handle = 0
         self.__reverseHandle = 0
         self.__freq = 0
@@ -131,45 +136,42 @@ class bassThread(threading.Thread):
         errorCode = 0
         state = 0
         while True:
-            time.sleep(1)
+            time.sleep(0.02)
 
             # 通信
+            sRet = -1
             s = _memory[self.__id][M_STATOUS]
             if s == PLAYER_SEND_INIT:
-                if self.bassInit(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
-                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+                if self.bassInit():sRet = 1
+            elif s == PLAYER_SEND_KILL:
+                self.__del__()
+                break
             elif s == PLAYER_SEND_FILE:
-                if self.createHandle(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
-                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+                if self.createHandle(): sRet = 1
             elif s == PLAYER_SEND_URL:
-                if self.createHandleFromURL(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
-                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+                if self.createHandleFromURL(): sRet = 1
             elif s == PLAYER_SEND_PLAY:
-                if self.play(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
-                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+                if self.play(): sRet = 1
             elif s == PLAYER_SEND_PAUSE:
-                if self.pause(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
-                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+                if self.pause(): sRet = 1
             elif s == PLAYER_SEND_SPEED:
-                if self.setSpeed(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
-                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+                if self.setSpeed(): sRet = 1
             elif s == PLAYER_SEND_KEY:
-                if self.setKey(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
-                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+                if self.setKey(): sRet = 1
             elif s == PLAYER_SEND_FREQ:
-                if self.setFreq(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
-                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+                if self.setFreq(): sRet = 1
             elif s == PLAYER_SEND_GETPOSITION:
-                if self.getPosition(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
-                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+                if self.getPosition(): sRet = 1
             elif s == PLAYER_SEND_SETPOSITION:
-                if self.setPosition(): _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
-                else: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
-            
+                if self.setPosition(): sRet = 1
+            else: sRet = 0
+            if sRet == 1: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_OK
+            elif sRet == -1: _memory[self.__id][M_STATOUS] = PLAYER_STATOUS_FAILD
+
             # 再生継続処理
             a = pybass.BASS_ChannelIsActive(self.__handle)
-            if a == pybass.BASS_ACTIVE_STALLED: self.play()
-            if a == pybass.BASS_ACTIVE_STOPPED: self.play()
+            if a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_URL):
+                if not self.play(): self.__playingFlag = False
             
             #DEBUG ----------
             errorTmp = errorCode
@@ -203,6 +205,12 @@ class bassThread(threading.Thread):
             return pybass.BASS_Init(device, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0)
         return False
 
+    def __del__(self):
+        if _playerList[self.__id] == None: return
+        pybass.BASS_Free()
+        _playerList[self.__id] = None
+        _memory[self.__id] = None
+    
     def createHandle(self):
         """ ハンドル作成 => bool """
         source = _playerList[self.__id].getConfig(PLAYER_CONFIG_SOURCE)
@@ -236,7 +244,10 @@ class bassThread(threading.Thread):
 
     def play(self):
         """ 再生 """
-        return pybass.BASS_ChannelPlay(self.__handle, False)
+        ret = pybass.BASS_ChannelPlay(self.__handle, False)
+        if ret: self.__playingFlag = True
+        else: self.__playingFlag = False
+        return ret
 
     def pause(self):
         """ 一時停止 => bool """
