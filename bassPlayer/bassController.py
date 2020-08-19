@@ -110,6 +110,11 @@ def setPosition(playerID, second):
     _memory[playerID][M_STATUS] = PLAYER_SEND_SETPOSITION
     return _waitReturn(playerID)
 
+def getLength(playerID):
+    """ 合計時間取得要求（playerID）=> int 秒数 """
+    _memory[playerID][M_STATUS] = PLAYER_SEND_GETLENGTH
+    if _waitReturn(playerID): return _memory[playerID][M_VALUE]
+
 def _waitReturn(playerID):
     """ 処理が終わるまで待機（playerID） => bool """
     print(_memory[playerID][M_STATUS])
@@ -172,6 +177,8 @@ class bassThread(threading.Thread):
                 if self.getPosition(): sRet = 1
             elif s == PLAYER_SEND_SETPOSITION:
                 if self.setPosition(): sRet = 1
+            elif s == PLAYER_SEND_GETLENGTH:
+                if self.getLength(): sRet = 1
             else: sRet = 0
             if sRet == 1: _memory[self.__id][M_STATUS] = PLAYERSTATUS_STATUS_OK
             elif sRet == -1: _memory[self.__id][M_STATUS] = PLAYERSTATUS_STATUS_FAILD
@@ -308,3 +315,12 @@ class bassThread(threading.Thread):
         sec = _memory[self.__id][M_VALUE]
         byte = pybass.BASS_ChannelSeconds2Bytes(self.__handle, sec)
         return pybass.BASS_ChannelSetPosition(self.__handle, byte, pybass.BASS_POS_BYTE)
+
+    def getLength(self):
+        """  合計時間秒数取得 => bool (value)"""
+        byte = pybass.BASS_ChannelGetLength(self.__handle, pybass.BASS_POS_BYTE)
+        if byte != -1:
+            sec = pybass.BASS_ChannelBytes2Seconds(self.__handle, byte)
+            _memory[self.__id][M_VALUE] = sec
+        else: _memory[self.__id][M_VALUE] = -1
+        return True

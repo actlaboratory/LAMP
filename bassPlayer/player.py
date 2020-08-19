@@ -121,6 +121,13 @@ class player():
         """ 再生位置設定（int 秒数） => bool """
         return bassController.setPosition(self.__id, second)
 
+    def getLength(self):
+        """
+        合計時間取得 => int 秒数
+        失敗した場合は -1
+        """
+        return bassController.getLength(self.__id)
+
     def fastForward(self):
         """ 早送り 0.1秒未満連続呼び出し中有効 """
         self.__fastMove(1)
