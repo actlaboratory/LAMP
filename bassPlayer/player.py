@@ -70,6 +70,10 @@ class player():
         """再生 => bool"""
         return bassController.pause(self.__id)
 
+    def getStatus(self):
+        """ ステータス取得 => int ステータス定数 => True"""
+        return bassController.getStatus(self.__id)
+    
     def setSpeed(self, speed):
         """速度設定（int -95..0..5000） => bool"""
         speedTmp = self.__speed
