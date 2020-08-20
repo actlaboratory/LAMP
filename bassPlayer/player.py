@@ -10,6 +10,8 @@ class player():
         self.__speed = 0
         self.__key = 0
         self.__freq = 100
+        self.__amp = 1.0
+        self.__volume = 100
         self.__fastMoveFlag = False
 
     def startDevice(self, device):
@@ -31,6 +33,9 @@ class player():
         if config == PLAYER_CONFIG_SPEED: return self.__speed
         if config == PLAYER_CONFIG_KEY: return self.__key
         if config == PLAYER_CONFIG_FREQ: return self.__freq
+        if config == PLAYER_CONFIG_AMPVOL: return self.__volume * self.__amp
+        if config == PLAYER_CONFIG_VOLUME: return self.__volume
+        if config == PLAYER_CONFIG_AMP: return self.__amp
 
     def setDevice(self, device):
         """ インデックス、または定数から再生デバイスをセット(int インデックス) => None """
@@ -122,6 +127,28 @@ class player():
         """ 差分指定で周波数を設定（int +-速度） => bool """
         return self.setFreq(self.__freq + freq)
     
+    def setAmp(self, amp):
+        """増幅設定（float 0..4） => bool"""
+        if amp <= 4 and amp >= 0:
+            self.__amp = amp
+            bassController.setVolume(self.__id)
+            return True
+        else:
+            return False
+
+    def setVolume(self, vol):
+        """音量設定（int 0..100） => bool"""
+        if vol <= 100 and vol >= 0:
+            self.__volume = vol / 100
+            bassController.setVolume(self.__id)
+            return True
+        else:
+            return False
+
+    def calcVolume(self, vol):
+        """ 音量増減値設定（float +-差分） => bool """
+        return self.setVolume(self.__volume * 100 + vol)
+
     def getPosition(self):
         """ 再生位置取得 => int 秒数 """
         return bassController.getPosition(self.__id)

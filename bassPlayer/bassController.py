@@ -110,6 +110,11 @@ def setFreq(playerID):
     _memory[playerID][M_STATUS] = PLAYER_SEND_FREQ
     return _waitReturn(playerID)
 
+def setVolume(playerID):
+    """ 再生音量変更要求（playerID） => bool """
+    _memory[playerID][M_STATUS] = PLAYER_SEND_VOLUME
+    return _waitReturn(playerID)
+
 def getPosition(playerID):
     """ 再生位置取得要求（playerID） => int 秒数 """
     _memory[playerID][M_STATUS] = PLAYER_SEND_GETPOSITION
@@ -189,6 +194,8 @@ class bassThread(threading.Thread):
                 if self.setKey(): sRet = 1
             elif s == PLAYER_SEND_FREQ:
                 if self.setFreq(): sRet = 1
+            elif s == PLAYER_SEND_VOLUME:
+                if self.setVolume(): sRet = 1
             elif s == PLAYER_SEND_GETPOSITION:
                 if self.getPosition(): sRet = 1
             elif s == PLAYER_SEND_SETPOSITION:
@@ -326,6 +333,11 @@ class bassThread(threading.Thread):
         freqArg = _playerList[self.__id].getConfig(PLAYER_CONFIG_FREQ)
         freq = round((freqArg * self.__freq) / 100)
         return pybass.BASS_ChannelSetAttribute(self.__handle,bassFx.BASS_ATTRIB_TEMPO_FREQ, freq)
+
+    def setVolume(self):
+        """ 再生音量設定 => bool"""
+        vol = _playerList[self.__id].getConfig(PLAYER_CONFIG_AMPVOL)
+        return pybass.BASS_ChannelSetAttribute(self.__handle, pybass.BASS_ATTRIB_VOL, vol)
 
     def getPosition(self):
         """  再生位置秒数取得 => bool (value)"""
