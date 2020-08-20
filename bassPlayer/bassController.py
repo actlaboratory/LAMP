@@ -58,6 +58,12 @@ def kill(playerID):
     """bassスレッド終了（playerID）"""
     if  _playerList[playerID] != None: _memory[playerID][M_STATUS] = PLAYER_SEND_KILL
 
+def setAutoChangeDevice(playerID, bool):
+    """ デバイス自動切り替え（bool） """
+    _memory[playerID][M_VALUE] = bool
+    _memory[playerID][M_STATUS] = PLAYER_SEND_AUTOCHANGE
+    _waitReturn()
+
 def setNetTimeout(playerID, miliSec):
     """ ネットワークタイムアウトを設定（playerID, int ミリ秒） => bool """
     _memory[playerID][M_VALUE] = miliSec
@@ -163,6 +169,8 @@ class bassThread(threading.Thread):
         self.__handle = 0
         self.__reverseHandle = 0
         self.__freq = 0
+        self.__autoChange = True
+        self.__positionTmp = 0
 
     def run(self):
         errorCode = 0
@@ -209,14 +217,19 @@ class bassThread(threading.Thread):
                 sRet = 1
             elif s == PLAYER_SEND_SETHLSDELAY:
                 if pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY, _memory[self.__id][M_VALUE]): sRet = 1
+            elif s == PLAYER_SEND_AUTOCHANGE:
+                self.__autoChange = _memory[self.__id][M_VALUE]
+                sRet = 1
             else: sRet = 0
             
             if sRet == 1: _memory[self.__id][M_STATUS] = PLAYERSTATUS_STATUS_OK
             elif sRet == -1: _memory[self.__id][M_STATUS] = PLAYERSTATUS_STATUS_FAILD
 
-            # 再生継続処理
+            # 再生監視
             a = pybass.BASS_ChannelIsActive(self.__handle)
-            if a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_STREAM):
+            if a == pybass.BASS_ACTIVE_PAUSED_DEVICE: 
+                self.autoChangeDevice()
+            elif a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_STREAM):
                 if not self.play(): self.__playingFlag = False
             elif a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_FILE:
                 self.__eofFlag = True
@@ -238,9 +251,10 @@ class bassThread(threading.Thread):
                 winsound.Beep(1500, 500)
         return super().run()
 
-    def bassInit(self):
+    def bassInit(self, selfCall=False):
         """ bass.dll初期化() => bool """
-        device = _playerList[self.__id].getConfig(PLAYER_CONFIG_DEVICE)
+        if selfCall: device = PLAYER_DEFAULT_SPEAKER
+        else: device = _playerList[self.__id].getConfig(PLAYER_CONFIG_DEVICE)
         if device == PLAYER_DEFAULT_SPEAKER:
             return pybass.BASS_Init(-1, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0)
         elif device == PLAYER_ANY_SPEAKER:
@@ -259,6 +273,22 @@ class bassThread(threading.Thread):
         _playerList[self.__id] = None
         _memory[self.__id] = None
     
+    
+    def autoChangeDevice(self):
+        posBTmp = pybass.BASS_ChannelGetPosition(self.__handle, pybass.BASS_POS_BYTE)
+        if posBTmp != -1:
+            self.__positionTmp = pybass.BASS_ChannelBytes2Seconds(self.__handle, posBTmp)
+            self.bassInit(True)
+        if self.__autoChange:
+            if _playerList[self.__id].getConfig(PLAYER_CONFIG_SOURCETYPE) == PLAYER_SOURCETYPE_PATH:
+                self.createHandle()
+            elif _playerList[self.__id].getConfig(PLAYER_CONFIG_SOURCETYPE) == PLAYER_SOURCETYPE_URL:
+                self.createHandleFromURL()
+            if posBTmp != -1:
+                posB = pybass.BASS_ChannelSeconds2Bytes(self.__handle, self.__positionTmp)
+                pybass.BASS_ChannelSetPosition(self.__handle, posB, pybass.BASS_POS_BYTE)
+            self.play()
+
     
     def createHandle(self):
         """ ハンドル作成 => bool """
@@ -309,6 +339,9 @@ class bassThread(threading.Thread):
 
     def getStatus(self):
         """ ステータス取得 => True"""
+        if pybass.BASS_GetDevice() == 4294967295:
+            _memory[self.__id][M_VALUE] = PLAYER_STATUS_DEVICEERROR
+            return True
         if self.__playingFlag and pybass.BASS_ChannelIsActive(self.__handle) == pybass.BASS_ACTIVE_PLAYING:
             _memory[self.__id][M_VALUE] = PLAYER_STATUS_PLAYING
         elif self.__eofFlag: _memory[self.__id][M_VALUE] = PLAYER_STATUS_EOF

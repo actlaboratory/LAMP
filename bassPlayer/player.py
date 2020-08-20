@@ -26,7 +26,7 @@ class player():
         if config == PLAYER_CONFIG_ID: return self.__bassAccountID
         if config == PLAYER_CONFIG_SOURCE: return self.__source
         if config == PLAYER_CONFIG_SOURCETYPE:
-            if os.path.isfile(self.__source): return PLAYER_SOURCETYPE_FILE
+            if os.path.isfile(self.__source): return PLAYER_SOURCETYPE_PATH
             if re.search("https?://.+\..+", self.__source) != None: return PLAYER_SOURCETYPE_URL
             self.__source = None
             return PLAYER_SOURCETYPE_NUL
