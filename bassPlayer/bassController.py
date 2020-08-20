@@ -58,6 +58,18 @@ def kill(playerID):
     """bassスレッド終了（playerID）"""
     if  _playerList[playerID] != None: _memory[playerID][M_STATUS] = PLAYER_SEND_KILL
 
+def setNetTimeout(playerID, miliSec):
+    """ ネットワークタイムアウトを設定（playerID, int ミリ秒） => bool """
+    _memory[playerID][M_VALUE] = miliSec
+    _memory[playerID][M_STATUS] = PLAYER_SEND_SETNETTIMEOUT
+    return _waitReturn(playerID)
+
+def setHlsDelay(playerID, sec):
+    """ HLS遅延設定要求（playerID, int 秒） => bool """
+    _memory[playerID][M_VALUE] = sec
+    _memory[playerID][M_STATUS] = PLAYER_SEND_SETHLSDELAY
+    return _waitReturn(playerID)
+
 def setFile(playerID):
     """ ファイルストリームの生成要求（playerID） => bool """
     _memory[playerID][M_STATUS] = PLAYER_SEND_FILE
@@ -133,6 +145,10 @@ class bassThread(threading.Thread):
         # プラグイン適用
         pybass.BASS_PluginLoad(b"basshls.dll", 0)
         pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY,10)
+        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_BUFFER, 200000)
+        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_PREBUF, 1)
+        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_READTIMEOUT, 10000)
+        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_TIMEOUT, 10000)
 
         # 初期化
         self.__id = playerID
@@ -179,13 +195,21 @@ class bassThread(threading.Thread):
                 if self.setPosition(): sRet = 1
             elif s == PLAYER_SEND_GETLENGTH:
                 if self.getLength(): sRet = 1
+            # 設定
+            elif s == PLAYER_SEND_SETNETTIMEOUT:
+                pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_TIMEOUT, _memory[self.__id][M_VALUE])
+                pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_READTIMEOUT, _memory[self.__id][M_VALUE])
+                sRet = 1
+            elif s == PLAYER_SEND_SETHLSDELAY:
+                if pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY, _memory[self.__id][M_VALUE]): sRet = 1
             else: sRet = 0
+            
             if sRet == 1: _memory[self.__id][M_STATUS] = PLAYERSTATUS_STATUS_OK
             elif sRet == -1: _memory[self.__id][M_STATUS] = PLAYERSTATUS_STATUS_FAILD
 
             # 再生継続処理
             a = pybass.BASS_ChannelIsActive(self.__handle)
-            if a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_URL):
+            if a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_STREAM):
                 if not self.play(): self.__playingFlag = False
             elif a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_FILE:
                 self.__eofFlag = True
@@ -228,6 +252,7 @@ class bassThread(threading.Thread):
         _playerList[self.__id] = None
         _memory[self.__id] = None
     
+    
     def createHandle(self):
         """ ハンドル作成 => bool """
         self.__eofFlag = False
@@ -258,7 +283,8 @@ class bassThread(threading.Thread):
             self.__handle = handle
             self.__reverseHandle = 0
             self.__freq = 0
-            self.__sourceType = PLAYER_SOURCETYPE_URL
+            if self.getLength() == -1: self.__sourceType = PLAYER_SOURCETYPE_STREAM
+            else: self.__sourceType = PLAYER_SOURCETYPE_FILE
             self.__handle
             return True
         else: return False
@@ -314,7 +340,8 @@ class bassThread(threading.Thread):
         """ 秒数で再生位置を設定 => bool """
         sec = _memory[self.__id][M_VALUE]
         byte = pybass.BASS_ChannelSeconds2Bytes(self.__handle, sec)
-        return pybass.BASS_ChannelSetPosition(self.__handle, byte, pybass.BASS_POS_BYTE)
+        if self.__sourceType == PLAYER_SOURCETYPE_FILE: return pybass.BASS_ChannelSetPosition(self.__handle, byte, pybass.BASS_POS_BYTE)
+        else: return False
 
     def getLength(self):
         """  合計時間秒数取得 => bool (value)"""

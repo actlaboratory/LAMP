@@ -31,6 +31,7 @@ class player():
         if config == PLAYER_CONFIG_SPEED: return self.__speed
         if config == PLAYER_CONFIG_KEY: return self.__key
         if config == PLAYER_CONFIG_FREQ: return self.__freq
+
     def setDevice(self, device):
         """ インデックス、または定数から再生デバイスをセット(int インデックス) => None """
         if device < len(bassController.getDeviceList()) and device > 0: self.__device = device
@@ -46,6 +47,14 @@ class player():
             return True
         except ValueError as e:
             return False
+
+    def setNetTimeout(self, miliSec):
+        """ ネットワークタイムアウトを設定（int ミリ秒） => bool """
+        return bassController.setNetTimeout(self.__id, miliSec)
+
+    def setNetTimeout(self, sec):
+        """ HLS遅延を設定（int 秒） => bool """
+        return bassController.setHlsDelay(self.__id, sec)
 
     def setSource(self, source):
         """ 音源読み込み（str 音源） => bool """
