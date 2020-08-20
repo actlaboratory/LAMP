@@ -43,6 +43,8 @@ class player():
         elif device == PLAYER_NO_SPEAKER: self.__device = PLAYER_NO_SPEAKER
         elif device == PLAYER_DEFAULT_SPEAKER and len(bassController.getDeviceList()) > 1: self.__device = PLAYER_DEFAULT_SPEAKER
         else: return False
+        bassController.bassFree(self.__id)
+        bassController.bassInit(self.__id)
         return True
 
     def setDeviceByName(self, deviceName):
