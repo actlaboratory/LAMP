@@ -72,6 +72,10 @@ class player():
             self.__source = sourceTmp
             return False
     
+    def setRepeat(self, boolVal):
+        """ リピート（bool）"""
+        bassController.setRepeat(self.__id, boolVal)
+    
     def sendSource(self):
         """bassにファイルを送信 => bool"""
 

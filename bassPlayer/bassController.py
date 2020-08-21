@@ -91,6 +91,12 @@ def setURL(playerID):
     _memory[playerID][M_STATUS] = PLAYER_SEND_URL
     return _waitReturn(playerID)
 
+def setRepeat(playerID, boolVal):
+    """ リピート（bool） """
+    _memory[playerID][M_VALUE] = boolVal
+    _memory[playerID][M_STATUS] = PLAYER_SEND_REPEAT
+    _waitReturn(playerID)
+
 def play(playerID):
     """ 再生(playerID) => bool """
     _memory[playerID][M_STATUS] = PLAYER_SEND_PLAY
@@ -175,6 +181,7 @@ class bassThread(threading.Thread):
         # 初期化
             self.__autoChange = True
             self.__eofFlag = False
+            self.__repeat = False
         self.__id = playerID
         self.__sourceType = PLAYER_SOURCETYPE_NUL
         self.__playingFlag = False
@@ -230,6 +237,9 @@ class bassThread(threading.Thread):
                 pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_TIMEOUT, _memory[self.__id][M_VALUE])
                 pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_READTIMEOUT, _memory[self.__id][M_VALUE])
                 sRet = 1
+            elif s == PLAYER_SEND_REPEAT:
+                sRet = 1
+                self.__repeat = _memory[self.__id][M_VALUE]
             elif s == PLAYER_SEND_SETHLSDELAY:
                 if pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY, _memory[self.__id][M_VALUE]): sRet = 1
             elif s == PLAYER_SEND_AUTOCHANGE:
@@ -248,9 +258,10 @@ class bassThread(threading.Thread):
                 if not self.play(): self.stop()
             elif a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_FILE:
                 if pybass.BASS_ChannelGetPosition(self.__handle, pybass.BASS_POS_BYTE) == pybass.BASS_ChannelGetLength(self.__handle, pybass.BASS_POS_BYTE) != -1:
-                    winsound.Beep(2000, 1000)
-                    self.__eofFlag = True
-                    self.stop()
+                    if self.__repeat: self.play()
+                    else:
+                        self.__eofFlag = True
+                        self.stop()
             
             #DEBUG ----------
             errorTmp = errorCode
