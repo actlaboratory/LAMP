@@ -101,6 +101,11 @@ def pause(playerID):
     _memory[playerID][M_STATUS] = PLAYER_SEND_PAUSE
     return _waitReturn(playerID)
 
+def stop(playerID):
+    """ 停止(playerID) => bool """
+    _memory[playerID][M_STATUS] = PLAYER_SEND_STOP
+    return _waitReturn(playerID)
+
 def getStatus(playerID):
     """ ステータス取得要求(playerID) => ステータス定数 """
     _memory[playerID][M_STATUS] = PLAYER_SEND_GETSTATUS
@@ -156,26 +161,27 @@ def _waitReturn(playerID):
             return False
 
 class bassThread(threading.Thread):
-    def __init__(self, playerID):
-        super().__init__()
+    def __init__(self, playerID, streamFree=False):
+        if not streamFree:
+            super().__init__()
         # プラグイン適用
-        pybass.BASS_PluginLoad(b"basshls.dll", 0)
-        pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY,10)
-        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_BUFFER, 200000)
-        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_PREBUF, 1)
-        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_READTIMEOUT, 10000)
-        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_TIMEOUT, 10000)
+            pybass.BASS_PluginLoad(b"basshls.dll", 0)
+            pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY,10)
+            pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_BUFFER, 200000)
+            pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_PREBUF, 1)
+            pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_READTIMEOUT, 10000)
+            pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_TIMEOUT, 10000)
 
         # 初期化
+            self.__autoChange = True
+            self.__eofFlag = False
         self.__id = playerID
         self.__sourceType = PLAYER_SOURCETYPE_NUL
         self.__playingFlag = False
-        self.__eofFlag = False
         self.__handle = 0
         self.__reverseHandle = 0
         self.__freq = 0
-        self.__autoChange = True
-        self.__positionTmp = 0
+        self.__positionTmp = -1
 
     def run(self):
         errorCode = 0
@@ -217,6 +223,8 @@ class bassThread(threading.Thread):
                 if self.setPosition(): sRet = 1
             elif s == PLAYER_SEND_GETLENGTH:
                 if self.getLength(): sRet = 1
+            elif s == PLAYER_SEND_STOP:
+                if self.stop(): sRet = 1
             # 設定
             elif s == PLAYER_SEND_SETNETTIMEOUT:
                 pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_TIMEOUT, _memory[self.__id][M_VALUE])
@@ -237,9 +245,12 @@ class bassThread(threading.Thread):
             if a == pybass.BASS_ACTIVE_PAUSED_DEVICE: 
                 self.__autoChangeDevice()
             elif a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_STREAM):
-                if not self.play(): self.__playingFlag = False
+                if not self.play(): self.stop()
             elif a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_FILE:
-                self.__eofFlag = True
+                if pybass.BASS_ChannelGetPosition(self.__handle, pybass.BASS_POS_BYTE) == pybass.BASS_ChannelGetLength(self.__handle, pybass.BASS_POS_BYTE) != -1:
+                    winsound.Beep(2000, 1000)
+                    self.__eofFlag = True
+                    self.stop()
             
             #DEBUG ----------
             errorTmp = errorCode
@@ -353,6 +364,12 @@ class bassThread(threading.Thread):
     def pause(self):
         """ 一時停止 => bool """
         return pybass.BASS_ChannelPause(self.__handle)
+
+    def stop(self):
+        """ 停止 => bool """
+        pybass.BASS_StreamFree(self.__handle)
+        self.__init__(self.__id, True)
+        return True
 
     def getStatus(self):
         """ ステータス取得 => True"""

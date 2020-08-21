@@ -83,8 +83,12 @@ class player():
         return bassController.play(self.__id)
 
     def pause(self):
-        """再生 => bool"""
+        """一時停止 => bool"""
         return bassController.pause(self.__id)
+
+    def stop(self):
+        """停止 => bool"""
+        return bassController.stop(self.__id)
 
     def getStatus(self):
         """ ステータス取得 => int ステータス定数 => True"""
