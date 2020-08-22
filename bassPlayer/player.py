@@ -13,12 +13,12 @@ class player():
         self.__amp = 1.0
         self.__volume = 100
         self.__fastMoveFlag = False
+        self.__fastMoveThread = threading.Thread()
 
     def startDevice(self, device):
         """ デバイススタート(int デバイス) """
         if not self.setDevice(device): self.__device = PLAYER_NO_SPEAKER
         bassController.bassInit(self.__id)
-        print(self.__device)
     
     def getConfig(self, config):
         """ 設定読み出し(設定読み出し定数) =>　mixed """
@@ -192,7 +192,10 @@ class player():
         1 = 早送り, -1 = 巻き戻し
         """
         if self.__fastMoveFlag == False:
-            threading.Thread(target=self.__fastMover, args=(direction,)).start()
+            self.__fastMoveFlag = True
+            if self.__fastMoveThread.isAlive() == False:
+                self.__fastMoveThread = threading.Thread(target=self.__fastMover, args=(direction,))
+                self.__fastMoveThread.start()
 
     def __fastMover(self, direction):
         """ スレッド呼び出し用高速移動（int 方向） """
@@ -210,13 +213,14 @@ class player():
             self.__fastMoveFlag = False
             #現在位置取得と加速
             new = self.getPosition()
-            if counter < 20: pos = new + direction * gTime * 2
-            elif counter < 40: pos = new + direction * gTime * 4
+            if counter < 20: pos = new + direction * gTime * 3
+            elif counter < 40: pos = new + direction * gTime * 5
             elif counter < 60: pos = new + direction * gTime * 8
             elif counter < 80: pos = new + direction * gTime * 16
             else: new + direction * gTime * 32
             #ポジション適用
-            if new == 0: break
+            if direction == 1: pos -= gTime
+            if new == -1: break
             if self.setPosition(pos):
                 self.play()
             else:
