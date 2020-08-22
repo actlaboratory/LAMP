@@ -42,7 +42,7 @@ def getDeviceList():
     index = 0
     while pybass.BASS_GetDeviceInfo(index, p):
         if p.flags and pybass.BASS_DEVICE_ENABLED: newList.append(p.name.decode("shift-jis"))
-        else: newList.append("")
+        else: newList.append(None)
         index += 1
     for i in range(len(_deviceList), len(newList)):
         _deviceList.append(newList[i])
@@ -61,7 +61,9 @@ def bassFree(playerID):
 
 def kill(playerID):
     """bassスレッド終了（playerID）"""
-    if  _playerList[playerID] != None: _memory[playerID][M_STATUS] = PLAYER_SEND_KILL
+    if  _playerList[playerID] != None:
+        _memory[playerID][M_STATUS] = PLAYER_SEND_KILL
+        _playerList[playerID] = None
 
 def setAutoChangeDevice(playerID, bool):
     """ デバイス自動切り替え（bool） """
@@ -113,7 +115,7 @@ def stop(playerID):
     return _waitReturn(playerID)
 
 def getStatus(playerID):
-    """ ステータス取得要求(playerID) => ステータス定数 """
+    """ ステータス取得要求(playerID) => ステータス定数 または None """
     _memory[playerID][M_STATUS] = PLAYER_SEND_GETSTATUS
     if _waitReturn(playerID): return _memory[playerID][M_VALUE]
 
@@ -138,10 +140,13 @@ def setVolume(playerID):
     return _waitReturn(playerID)
 
 def getPosition(playerID):
-    """ 再生位置取得要求（playerID） => int 秒数 """
+    """
+    再生位置取得要求（playerID） => int 秒数
+    失敗した場合は-1を返却
+    """
     _memory[playerID][M_STATUS] = PLAYER_SEND_GETPOSITION
     if _waitReturn(playerID): return _memory[playerID][M_VALUE]
-    else: return 0
+    else: return -1
 
 def setPosition(playerID, second):
     """ 再生位置設定要求（playerID, int 秒数） => bool """
@@ -238,8 +243,8 @@ class bassThread(threading.Thread):
                 pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_READTIMEOUT, _memory[self.__id][M_VALUE])
                 sRet = 1
             elif s == PLAYER_SEND_REPEAT:
-                sRet = 1
                 self.__repeat = _memory[self.__id][M_VALUE]
+                sRet = 1
             elif s == PLAYER_SEND_SETHLSDELAY:
                 if pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY, _memory[self.__id][M_VALUE]): sRet = 1
             elif s == PLAYER_SEND_AUTOCHANGE:
@@ -288,7 +293,7 @@ class bassThread(threading.Thread):
         if device == PLAYER_DEFAULT_SPEAKER:
             ret = pybass.BASS_Init(-1, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0)
         elif device == PLAYER_ANY_SPEAKER:
-            for i in range(len(getDeviceList()) - 2):
+            for i in range(len(getDeviceList()) - 1):
                 if pybass.BASS_Init(i + 1, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0):
                     ret = True
                     break

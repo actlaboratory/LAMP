@@ -21,7 +21,7 @@ class player():
         print(self.__device)
     
     def getConfig(self, config):
-        """ 設定読み出し(設定読み出し定数) """
+        """ 設定読み出し(設定読み出し定数) =>　mixed """
         if config == PLAYER_CONFIG_DEVICE: return self.__device
         if config == PLAYER_CONFIG_ID: return self.__bassAccountID
         if config == PLAYER_CONFIG_SOURCE: return self.__source
@@ -47,6 +47,10 @@ class player():
         bassController.bassInit(self.__id)
         return True
 
+    def getDeviceList(self):
+        """ デバイス一覧取得 => list """
+        return bassController.getDeviceList()
+    
     def setDeviceByName(self, deviceName):
         """ デバイス名から再生デバイスをセット(str デバイス名) => bool """
         try:
@@ -78,9 +82,9 @@ class player():
     
     def sendSource(self):
         """bassにファイルを送信 => bool"""
-
         if os.path.isfile(self.__source): return bassController.setFile(self.__id)
         elif re.search("^https?://.+\..+", self.__source) != None: return bassController.setURL(self.__id)
+        else: return False
 
     def play(self):
         """再生 => bool"""
