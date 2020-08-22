@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 #Application Main
 
-import player, lists, event_processor, data_dict
+import lists, event_processor, data_dict
 import accessible_output2.outputs.auto
 import sys
 import ConfigManager
@@ -16,6 +16,8 @@ import globalVars
 from logging import getLogger, FileHandler, Formatter
 from simpleDialog import *
 import sleep_timer
+from bassPlayer import player
+from bassPlayer.constants import *
 
 import constants
 import DefaultSettings
@@ -116,6 +118,7 @@ class Main(wx.App):
 
 	def SetGlobalVars(self):
 		globalVars.play = player.player()
+		globalVars.play.startDevice(PLAYER_DEFAULT_SPEAKER)
 		globalVars.playlist = lists.playlist()
 		globalVars.queue = lists.queue()
 		globalVars.eventProcess = event_processor.eventProcessor()

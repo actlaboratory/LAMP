@@ -1,5 +1,4 @@
 import globalVars
-import player
 import event_processor
 
 def previousFile():
