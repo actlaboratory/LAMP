@@ -49,19 +49,23 @@ class dataDict():
 		if id == -1: index = lcObj.GetItemCount() - 1
 		addedItemCount = 0
 		itemCount = len(paths)
+		progPerTmp = 0
 		for path in paths:
 			# 辞書とリストに書き込んでdataNoに+1
 			fName = os.path.splitext(os.path.basename(path))[0]
 			self.dict[self.dataNo] = (path, fName)
 			if id == -1:
-				lst.appendF((self.dict[self.dataNo][0], self.dataNo))
+				lst.appendF((path, self.dataNo))
 				index = lcObj.Append([fName])
 			else:
 				index = id+addedItemCount
-				lst.addF(index, (self.dict[self.dataNo][0], self.dataNo))
+				lst.addF(index, (path, self.dataNo))
 				lcObj.InsertItem(index, fName)
 			lcObj.SetItemData(index, self.dataNo)
 			addedItemCount += 1
-			if addedItemCount%10 == 0:	progress.update(addedItemCount,_("読み込み中")+"  "+str(addedItemCount)+"/"+str(itemCount),itemCount)
+			progPer = round(addedItemCount/(itemCount/50))
+			if progPer != progPerTmp:
+				progress.update(addedItemCount,_("読み込み中")+"  "+str(addedItemCount)+"/"+str(itemCount),itemCount)
+				globalVars.app.Yield(True) #プログレスダイアログを強制更新
+			progPerTmp = progPer
 			self.dataNo += 1
-		#globalVars.app.Yield(True) #プログレスダイアログを強制更新
