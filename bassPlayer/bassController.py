@@ -317,6 +317,7 @@ class bassThread(threading.Thread):
     
     def createHandle(self):
         """ ハンドル作成 => bool """
+        self.stop()
         self.__eofFlag = False
         self.__playingFlag = False
         source = _playerList[self.__id].getConfig(PLAYER_CONFIG_SOURCE)
@@ -337,6 +338,7 @@ class bassThread(threading.Thread):
 
     def createHandleFromURL(self):
         """ URLからハンドル作成 => bool """
+        self.stop()
         self.__eofFlag = False
         self.__playingFlag = False
         source = _playerList[self.__id].getConfig(PLAYER_CONFIG_SOURCE)

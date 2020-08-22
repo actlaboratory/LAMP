@@ -91,7 +91,7 @@ class eventProcessor():
         if listTpl == (None, None):
             rtn = False
         else:
-            if globalVars.play.setSourse(listTpl[0]):
+            if globalVars.play.setSource(listTpl[0]):
                 rtn = globalVars.play.play()
         self.playingDataNo = listTpl[1]
         if list == globalVars.playlist:
@@ -164,12 +164,12 @@ class eventProcessor():
 
     def playButtonControl(self):
         # 再生・一時停止を実行
-        if globalVars.play.getState() == PLAYER_STATUS_PLAYING:
+        if globalVars.play.getStatus() == PLAYER_STATUS_PLAYING:
             self.pause()
-        elif globalVars.play.getState() == PLAYER_STATUS_PAUSED:
+        elif globalVars.play.getStatus() == PLAYER_STATUS_PAUSED:
             self.pause(False)
         # 停止中であればファイルを再生
-        elif globalVars.play.getState() == PLAYER_STATUS_STOPPED:
+        elif globalVars.play.getStatus() == PLAYER_STATUS_STOPPED:
             self.nextFile()
         else:
             self.play()

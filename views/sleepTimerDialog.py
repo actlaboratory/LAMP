@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # sleepTimer
 
+from bassPlayer.constants import *
 import wx
 import os
-import player
 from views import mkDialog
 
 import views.ViewCreator
@@ -95,7 +95,7 @@ class Dialog(BaseDialog):
             self.errorDialog(_("キューにアイテムがないため、このタイマーを設定できません。"))
             return False
         #再生するアイテムがなければ設定できない
-        elif self.GetData()[0] == _("すべての再生が完了した") and len(globalVars.playlist.lst) == 0 and len(globalVars.queue.lst) == 0 and globalVars.play.getChannelState() == player.state.COLD:
+        elif self.GetData()[0] == _("すべての再生が完了した") and len(globalVars.playlist.lst) == 0 and len(globalVars.queue.lst) == 0 and globalVars.play.getStatus() == PLAYER_STATUS_STOPPED:
             self.errorDialog(_("再生する曲がないため、このタイマーを設定できません。"))
             return False
         worning = [] #警告の処理
