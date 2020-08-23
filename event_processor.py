@@ -37,6 +37,7 @@ class eventProcessor():
                 self.setNowTimeLabel(0, max)
             else:
                 globalVars.app.hMainView.trackBar.SetValue(val)
+                self.setNowTimeLabel(val, max)
 
         #ファイル送り
         if globalVars.play.getStatus != PLAYER_STATUS_STOPPED:

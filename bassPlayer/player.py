@@ -218,7 +218,7 @@ class player():
             elif counter < 40: pos = new + direction * gTime * 4
             elif counter < 60: pos = new + direction * gTime * 6
             elif counter < 80: pos = new + direction * gTime * 8
-            else: new + direction * gTime * 10
+            else: pos = new + direction * gTime * 10
             #ポジション適用
             if direction == -1: pos -= gTime
             if new != -1: self.setPosition(pos)
