@@ -158,6 +158,7 @@ def getLength(playerID):
     """ 合計時間取得要求（playerID）=> int 秒数 """
     _memory[playerID][M_STATUS] = PLAYER_SEND_GETLENGTH
     if _waitReturn(playerID): return _memory[playerID][M_VALUE]
+    else: return -1
 
 def _waitReturn(playerID):
     """ 処理が終わるまで待機（playerID） => bool """

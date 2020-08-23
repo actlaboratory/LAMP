@@ -81,7 +81,7 @@ class eventProcessor():
         elif change == 0 and vol == -1:
             globalVars.play.setVolume(100)
         elif change == 0 and vol <= 100 and vol >= 0:
-            globalVars.play.changeVolume(vol)
+            globalVars.play.setVolume(vol)
         rtn = globalVars.play.getConfig(PLAYER_CONFIG_VOLUME)
         globalVars.app.hMainView.volumeSlider.SetValue(rtn)
         globalVars.app.config["volume"]["default"] = str(int(rtn))

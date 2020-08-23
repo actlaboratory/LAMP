@@ -1,4 +1,4 @@
-import re, os, threading, time
+import re, os, threading, time, winsound
 from .constants import *
 from . import bassController
 
@@ -11,7 +11,7 @@ class player():
         self.__key = 0
         self.__freq = 100
         self.__amp = 1.0
-        self.__volume = 100
+        self.__volume = 1
         self.__fastMoveFlag = False
         self.__fastMoveThread = threading.Thread()
 
@@ -34,7 +34,7 @@ class player():
         if config == PLAYER_CONFIG_KEY: return self.__key
         if config == PLAYER_CONFIG_FREQ: return self.__freq
         if config == PLAYER_CONFIG_AMPVOL: return self.__volume * self.__amp
-        if config == PLAYER_CONFIG_VOLUME: return self.__volume
+        if config == PLAYER_CONFIG_VOLUME: return self.__volume * 100
         if config == PLAYER_CONFIG_AMP: return self.__amp
 
     def setDevice(self, device):
@@ -164,7 +164,7 @@ class player():
         return self.setVolume(self.__volume * 100 + vol)
 
     def getPosition(self):
-        """ 再生位置取得 => int 秒数 """
+        """ 再生位置取得 => int 秒数 or -1"""
         return bassController.getPosition(self.__id)
 
     def setPosition(self, second):
@@ -202,9 +202,10 @@ class player():
         self.__fastMoveFlag = True
         counter = 1
         timeTmp = time.time()
+        winsound.Beep(1500, 100)
         while True:
             #実経過時間
-            time.sleep(0.5)
+            time.sleep(0.1)
             newTime = time.time()
             gTime = newTime - timeTmp
             timeTmp = newTime
@@ -213,18 +214,19 @@ class player():
             self.__fastMoveFlag = False
             #現在位置取得と加速
             new = self.getPosition()
-            if counter < 20: pos = new + direction * gTime * 3
-            elif counter < 40: pos = new + direction * gTime * 5
-            elif counter < 60: pos = new + direction * gTime * 8
-            elif counter < 80: pos = new + direction * gTime * 16
-            else: new + direction * gTime * 32
+            if counter < 20: pos = new + direction * gTime * 2
+            elif counter < 40: pos = new + direction * gTime * 4
+            elif counter < 60: pos = new + direction * gTime * 6
+            elif counter < 80: pos = new + direction * gTime * 8
+            else: new + direction * gTime * 10
             #ポジション適用
-            if direction == 1: pos -= gTime
-            if new == -1: break
-            if self.setPosition(pos):
-                self.play()
+            if direction == -1: pos -= gTime
+            if new != -1: self.setPosition(pos)
             else:
-                if direction == -1 and self.setPosition(0): self.pause()
+                if direction == -1 and self.setPosition(0):
+                    winsound.Beep(1200, 100)
+                    self.pause()
+                    break
                 else: break
             if counter < 4000: counter += 1
         self.__fastMoveFlag = False
