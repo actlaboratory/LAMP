@@ -40,9 +40,9 @@ class eventProcessor():
                 self.setNowTimeLabel(val, max)
 
         #ファイル送り
-        if globalVars.play.getStatus != PLAYER_STATUS_STOPPED:
-            if globalVars.play.getStatus() == PLAYER_STATUS_STREAMEND or globalVars.play.getStatus() == PLAYER_STATUS_EOF:
-                self.fileChange()
+        if globalVars.play.getStatus() == PLAYER_STATUS_STREAMEND or globalVars.play.getStatus() == PLAYER_STATUS_EOF:
+            winsound.Beep(1000, 100)
+            self.fileChange()
 
     #経過時間表示を更新
     def setNowTimeLabel(self, now, max):
@@ -155,7 +155,7 @@ class eventProcessor():
         if globalVars.play.getPosition() <= 5:
             self.previousFile()
         else:
-            globalVars.play.setChannelPosition(0)
+            globalVars.play.setPosition(0)
 
     def previousFile(self):
         if self.shuffleCtrl == 0:
