@@ -28,7 +28,6 @@ class DefaultSettings:
 		}
 		config["volume"]={
 			"default": "100",
-			"max": "200",
 		}
 
 		return config

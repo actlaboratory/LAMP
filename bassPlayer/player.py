@@ -161,7 +161,10 @@ class player():
 
     def calcVolume(self, vol):
         """ 音量増減値設定（float +-差分） => bool """
-        return self.setVolume(self.__volume * 100 + vol)
+        val = self.__volume * 100 + vol
+        if val > 100: return self.setVolume(100)
+        elif val < 0: return self.setVolume(0)
+        else: return self.setVolume(val)
 
     def getPosition(self):
         """ 再生位置取得 => int 秒数 or -1"""

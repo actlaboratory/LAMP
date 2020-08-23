@@ -334,6 +334,7 @@ class bassThread(threading.Thread):
             self.__reverseHandle = reverseHandle
             self.__freq = round(cFreq.value)
             self.__sourceType = PLAYER_SOURCETYPE_FILE
+            self.__setChannelConfig()
             return True
         else: return False
 
@@ -351,9 +352,17 @@ class bassThread(threading.Thread):
             if self.getLength() == -1: self.__sourceType = PLAYER_SOURCETYPE_STREAM
             else: self.__sourceType = PLAYER_SOURCETYPE_FILE
             self.__handle
+            self.__setChannelConfig()
             return True
         else: return False
 
+    def __setChannelConfig(self):
+        """ チャネル固有設定適用 """
+        self.setVolume()
+        self.setSpeed()
+        self.setKey()
+        self.setFreq()
+    
     def play(self):
         """ 再生 """
         ret = pybass.BASS_ChannelPlay(self.__handle, False)

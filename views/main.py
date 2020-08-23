@@ -58,8 +58,8 @@ class MainView(BaseView):
 		self.repeatLoopBtn = self.horizontalCreator.button(_("ﾘﾋﾟｰﾄ/ﾙｰﾌﾟ"), self.events.onButtonClick)
 		self.shuffleBtn = self.horizontalCreator.button(_("ｼｬｯﾌﾙ"), self.events.onButtonClick)
 		self.volumeSlider = self.horizontalCreator.slider(_("音量"), 100,
-			val=globalVars.app.config.getint("volume","default",default=100),
-			max=globalVars.app.config.getint("volume","max",default=100))
+			val=globalVars.app.config.getint("volume","default",default=100, min=0, max=100),
+			max=100)
 		self.volumeSlider.Bind(wx.EVT_COMMAND_SCROLL, self.events.onSlider)
 		self.muteBtn = self.horizontalCreator.button(_("ﾐｭｰﾄ"), self.events.onButtonClick)
 		#self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
