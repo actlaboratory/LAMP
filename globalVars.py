@@ -8,6 +8,7 @@
 
 
 app=None
+bass = None
 play = None
 playlist = None
 queue = None

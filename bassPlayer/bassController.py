@@ -14,9 +14,6 @@ _deviceList = []
 # プレイヤーオブジェクトのリスト
 _playerList = []
 
-# スレッド
-__threadList = []
-
 # ハンドルの辞書
 _memory = []
 M_STATUS = 0
@@ -31,8 +28,7 @@ def connectPlayer(playerObject):
     _playerList.append(playerObject)
     index = len(_playerList) - 1
     _memory.append([PLAYERSTATUS_STATUS_OK, 0])
-    __threadList.append(bassThread(index))
-    __threadList[index].start()
+    _send(index, PLAYER_SEND_NEWPLAYER)
     return index
 
 def getDeviceList():
@@ -152,108 +148,130 @@ def _send(playerID, status, value=None, returnValue=False, falseToInt=False):
                 else: return False
 
 class bassThread(threading.Thread):
-    def __init__(self, playerID, streamFree=False):
-        if not streamFree:
-            super().__init__()
+    def __init__(self):
+        super().__init__()
         # プラグイン適用
-            pybass.BASS_PluginLoad(b"basshls.dll", 0)
-            pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY,10)
-            pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_BUFFER, 200000)
-            pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_PREBUF, 1)
-            pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_READTIMEOUT, 10000)
-            pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_TIMEOUT, 10000)
+        pybass.BASS_PluginLoad(b"basshls.dll", 0)
+        pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY,10)
+        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_BUFFER, 200000)
+        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_PREBUF, 1)
+        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_READTIMEOUT, 10000)
+        pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_TIMEOUT, 10000)
 
         # 初期化
-            self.__autoChange = True
-            self.__eofFlag = False
-            self.__repeat = False
-        self.__id = playerID
-        self.__sourceType = PLAYER_SOURCETYPE_NUL
-        self.__playingFlag = False
-        self.__handle = 0
-        self.__reverseHandle = 0
-        self.__freq = 0
-        self.__positionTmp = -1
+        self.__autoChange = []
+        self.__positionTmp = []
+        self.__eofFlag = []
+        self.__repeat = []
+        self.__sourceType = []
+        self.__playingFlag = []
+        self.__handle = []
+        self.__reverseHandle = []
+        self.__freq = []
+        self.__device = []
 
+    def setNewPlayer(self):
+        self.__autoChange.append(True)
+        self.__positionTmp.append(-1)
+        self.__eofFlag.append(False)
+        self.__repeat.append(False)
+        self.__sourceType.append(PLAYER_SOURCETYPE_NUL)
+        self.__playingFlag.append(False)
+        self.__handle.append(0)
+        self.__reverseHandle.append(0)
+        self.__freq.append(0)
+        self.__device.append(0)
+
+    def __reset(self, id):
+        self.__playingFlag[id] = False
+        self.__handle[id] = 0
+        self.__reverseHandle[id] = 0
+        self.__freq[id] = 0
+    
     def run(self):
         while True:
             time.sleep(0.02)
+            for id in range(len(_playerList)):
+                # 通信
+                sRet = -1
+                s = _memory[id][M_STATUS]
+                if s == PLAYER_SEND_INIT:
+                    if self.bassInit(id):sRet = 1
+                elif s == PLAYER_SEND_NEWPLAYER:
+                    self.setNewPlayer()
+                    sRet = 1
+                elif s == PLAYER_SEND_FREE:
+                    if self.bassFree(id):sRet = 1
+                elif s == PLAYER_SEND_KILL:
+                    self.__del__()
+                    break
+                elif s == PLAYER_SEND_FILE:
+                    if self.createHandle(id): sRet = 1
+                elif s == PLAYER_SEND_URL:
+                    if self.createHandleFromURL(id): sRet = 1
+                elif s == PLAYER_SEND_PLAY:
+                    if self.play(id): sRet = 1
+                elif s == PLAYER_SEND_PAUSE:
+                    if self.pause(id): sRet = 1
+                elif s == PLAYER_SEND_GETSTATUS:
+                    if self.getStatus(id): sRet = 1
+                elif s == PLAYER_SEND_SPEED:
+                    if self.setSpeed(id): sRet = 1
+                elif s == PLAYER_SEND_KEY:
+                    if self.setKey(id): sRet = 1
+                elif s == PLAYER_SEND_FREQ:
+                    if self.setFreq(id): sRet = 1
+                elif s == PLAYER_SEND_VOLUME:
+                    if self.setVolume(id): sRet = 1
+                elif s == PLAYER_SEND_GETPOSITION:
+                    if self.getPosition(id): sRet = 1
+                elif s == PLAYER_SEND_SETPOSITION:
+                    if self.setPosition(id): sRet = 1
+                elif s == PLAYER_SEND_GETLENGTH:
+                    if self.getLength(id): sRet = 1
+                elif s == PLAYER_SEND_STOP:
+                    if self.stop(id): sRet = 1
+                # 設定
+                elif s == PLAYER_SEND_SETNETTIMEOUT:
+                    pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_TIMEOUT, _memory[id][M_VALUE])
+                    pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_READTIMEOUT, _memory[id][M_VALUE])
+                    sRet = 1
+                elif s == PLAYER_SEND_REPEAT:
+                    self.__repeat[id] = _memory[id][M_VALUE]
+                    sRet = 1
+                elif s == PLAYER_SEND_SETHLSDELAY:
+                    if pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY, _memory[id][M_VALUE]): sRet = 1
+                elif s == PLAYER_SEND_AUTOCHANGE:
+                    self.__autoChange[id] = _memory[id][M_VALUE]
+                    sRet = 1
+                else: sRet = 0
+                
+                if sRet == 1: _memory[id][M_STATUS] = PLAYERSTATUS_STATUS_OK
+                elif sRet == -1: _memory[id][M_STATUS] = PLAYERSTATUS_STATUS_FAILD
 
-            # 通信
-            sRet = -1
-            s = _memory[self.__id][M_STATUS]
-            if s == PLAYER_SEND_INIT:
-                if self.bassInit():sRet = 1
-            elif s == PLAYER_SEND_FREE:
-                if self.bassFree():sRet = 1
-            elif s == PLAYER_SEND_KILL:
-                self.__del__()
-                break
-            elif s == PLAYER_SEND_FILE:
-                if self.createHandle(): sRet = 1
-            elif s == PLAYER_SEND_URL:
-                if self.createHandleFromURL(): sRet = 1
-            elif s == PLAYER_SEND_PLAY:
-                if self.play(): sRet = 1
-            elif s == PLAYER_SEND_PAUSE:
-                if self.pause(): sRet = 1
-            elif s == PLAYER_SEND_GETSTATUS:
-                if self.getStatus(): sRet = 1
-            elif s == PLAYER_SEND_SPEED:
-                if self.setSpeed(): sRet = 1
-            elif s == PLAYER_SEND_KEY:
-                if self.setKey(): sRet = 1
-            elif s == PLAYER_SEND_FREQ:
-                if self.setFreq(): sRet = 1
-            elif s == PLAYER_SEND_VOLUME:
-                if self.setVolume(): sRet = 1
-            elif s == PLAYER_SEND_GETPOSITION:
-                if self.getPosition(): sRet = 1
-            elif s == PLAYER_SEND_SETPOSITION:
-                if self.setPosition(): sRet = 1
-            elif s == PLAYER_SEND_GETLENGTH:
-                if self.getLength(): sRet = 1
-            elif s == PLAYER_SEND_STOP:
-                if self.stop(): sRet = 1
-            # 設定
-            elif s == PLAYER_SEND_SETNETTIMEOUT:
-                pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_TIMEOUT, _memory[self.__id][M_VALUE])
-                pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_READTIMEOUT, _memory[self.__id][M_VALUE])
-                sRet = 1
-            elif s == PLAYER_SEND_REPEAT:
-                self.__repeat = _memory[self.__id][M_VALUE]
-                sRet = 1
-            elif s == PLAYER_SEND_SETHLSDELAY:
-                if pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY, _memory[self.__id][M_VALUE]): sRet = 1
-            elif s == PLAYER_SEND_AUTOCHANGE:
-                self.__autoChange = _memory[self.__id][M_VALUE]
-                sRet = 1
-            else: sRet = 0
-            
-            if sRet == 1: _memory[self.__id][M_STATUS] = PLAYERSTATUS_STATUS_OK
-            elif sRet == -1: _memory[self.__id][M_STATUS] = PLAYERSTATUS_STATUS_FAILD
-
-            # 再生監視
-            a = pybass.BASS_ChannelIsActive(self.__handle)
-            if a == pybass.BASS_ACTIVE_PAUSED_DEVICE: 
-                self.__autoChangeDevice()
-            elif a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_STREAM):
-                if not self.play():
-                    self.stop()
-                    self.__eofFlag == True
-            elif a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_FILE:
-                if pybass.BASS_ChannelGetPosition(self.__handle, pybass.BASS_POS_BYTE) == pybass.BASS_ChannelGetLength(self.__handle, pybass.BASS_POS_BYTE) != -1:
-                    if self.__repeat: self.play()
-                    else:
-                        self.stop()
-                        self.__eofFlag = True
+                # 再生監視
+                a = pybass.BASS_ChannelIsActive(self.__handle[id])
+                if a == pybass.BASS_ACTIVE_PAUSED_DEVICE: 
+                    self.__autoChangeDevice(id)
+                elif a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag[id] and self.__sourceType[id] == PLAYER_SOURCETYPE_STREAM):
+                    if not self.play(id):
+                        self.stop(id)
+                        self.__eofFlag[id] == True
+                elif a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag[id] and self.__sourceType[id] == PLAYER_SOURCETYPE_FILE:
+                    if pybass.BASS_ChannelGetPosition(self.__handle[id], pybass.BASS_POS_BYTE) == pybass.BASS_ChannelGetLength(self.__handle[id], pybass.BASS_POS_BYTE) != -1:
+                        if self.__repeat[id]: self.play(id)
+                        else:
+                            self.stop(id)
+                            self.__eofFlag[id] = True
         return
 
-    def bassInit(self, selfCall=False):
-        """ bass.dll初期化() => bool """
+    def bassInit(self, id, selfCall=False):
+        """ bass.dll初期化(id, bool 内部呼び出し) => bool """
+        pybass.BASS_SetDevice(id)
+        pybass.BASS_Free()
         ret = False
         if selfCall: device = PLAYER_DEFAULT_SPEAKER
-        else: device = _playerList[self.__id].getConfig(PLAYER_CONFIG_DEVICE)
+        else: device = _playerList[id].getConfig(PLAYER_CONFIG_DEVICE)
         if device == PLAYER_DEFAULT_SPEAKER:
             ret = pybass.BASS_Init(-1, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0)
         elif device == PLAYER_ANY_SPEAKER:
@@ -265,45 +283,47 @@ class bassThread(threading.Thread):
             ret = pybass.BASS_Init(0, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0)
         else:
             ret = pybass.BASS_Init(device, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0)
-        if ret and self.__playingFlag: self.reStartPlay()
+        if ret and self.__playingFlag[id]: self.reStartPlay()
+        if ret: self.__device[id] = pybass.BASS_GetDevice()
         return ret
 
-    def __del__(self):
-        if _playerList[self.__id] == None: return
-        pybass.BASS_Free()
-        _playerList[self.__id] = None
-        _memory[self.__id] = None
+    def __del__(self, id):
+        for d in self.__device:
+            pybass.BASS_SetDevice(d)
+            pybass.BASS_Free()
     
     
-    def __autoChangeDevice(self):
-        self.bassFree()
-        if self.__autoChange:self.bassInit(True)
+    def __autoChangeDevice(self, id):
+        self.bassFree(id)
+        if self.__autoChange: self.__reset(id)
         
-    def bassFree(self):
-        """ 再生位置を保存してデバイスをFree """
-        posBTmp = pybass.BASS_ChannelGetPosition(self.__handle, pybass.BASS_POS_BYTE)
-        if posBTmp != -1: self.__positionTmp = pybass.BASS_ChannelBytes2Seconds(self.__handle, posBTmp)
-        else: self.__positionTmp = -1
+    def bassFree(self, id):
+        """ 再生位置を保存してデバイスをFree（id） """
+        pybass.BASS_SetDevice(self.__device[id])
+        posBTmp = pybass.BASS_ChannelGetPosition(self.__handle[id], pybass.BASS_POS_BYTE)
+        if posBTmp != -1: self.__positionTmp[id] = pybass.BASS_ChannelBytes2Seconds(self.__handle[id], posBTmp)
+        else: self.__positionTmp[id] = -1
         pybass.BASS_Free()
         
-    def reStartPlay(self):
-        """ 再生復旧 => bool """
-        if _playerList[self.__id].getConfig(PLAYER_CONFIG_SOURCETYPE) == PLAYER_SOURCETYPE_PATH:
-            self.createHandle()
-        elif _playerList[self.__id].getConfig(PLAYER_CONFIG_SOURCETYPE) == PLAYER_SOURCETYPE_URL:
-            self.createHandleFromURL()
-        if self.__positionTmp != -1:
-            posB = pybass.BASS_ChannelSeconds2Bytes(self.__handle, self.__positionTmp)
-            pybass.BASS_ChannelSetPosition(self.__handle, posB, pybass.BASS_POS_BYTE)
-        return self.play()
+    def reStartPlay(self, id):
+        """ 再生復旧（id） => bool """
+        if _playerList[id].getConfig(PLAYER_CONFIG_SOURCETYPE) == PLAYER_SOURCETYPE_PATH:
+            self.createHandle(id)
+        elif _playerList[id].getConfig(PLAYER_CONFIG_SOURCETYPE) == PLAYER_SOURCETYPE_URL:
+            self.createHandleFromURL(id)
+        if self.__positionTmp[id] != -1:
+            posB = pybass.BASS_ChannelSeconds2Bytes(self.__handle[id], self.__positionTmp)
+            pybass.BASS_ChannelSetPosition(self.__handle[id], posB, pybass.BASS_POS_BYTE)
+        return self.play(id)
 
     
-    def createHandle(self):
-        """ ハンドル作成 => bool """
-        self.stop()
-        self.__eofFlag = False
-        self.__playingFlag = False
-        source = _playerList[self.__id].getConfig(PLAYER_CONFIG_SOURCE)
+    def createHandle(self, id):
+        """ ハンドル作成（id） => bool """
+        pybass.BASS_SetDevice(self.__device[id])
+        self.stop(id)
+        self.__eofFlag[id] = False
+        self.__playingFlag[id] = False
+        source = _playerList[id].getConfig(PLAYER_CONFIG_SOURCE)
         handle = pybass.BASS_StreamCreateFile(False,source, 0, 0, pybass.BASS_UNICODE | pybass.BASS_STREAM_PRESCAN | pybass.BASS_STREAM_DECODE)
         reverseHandle = bassFx.BASS_FX_ReverseCreate(handle,0.3,bassFx.BASS_FX_FREESOURCE | pybass.BASS_STREAM_DECODE)
         handle = bassFx.BASS_FX_TempoCreate(handle,0)
@@ -312,112 +332,112 @@ class bassThread(threading.Thread):
             # サンプリングレートを読み込み
             cFreq = ctypes.c_float()
             pybass.BASS_ChannelGetAttribute(handle, pybass.BASS_ATTRIB_FREQ, cFreq)
-            self.__handle = handle
-            self.__reverseHandle = reverseHandle
-            self.__freq = round(cFreq.value)
-            self.__sourceType = PLAYER_SOURCETYPE_FILE
-            self.__setChannelConfig()
+            self.__handle[id] = handle
+            self.__reverseHandle[id] = reverseHandle
+            self.__freq[id] = round(cFreq.value)
+            self.__sourceType[id] = PLAYER_SOURCETYPE_FILE
+            self.__setChannelConfig(id)
             return True
         else: return False
 
-    def createHandleFromURL(self):
-        """ URLからハンドル作成 => bool """
-        self.stop()
-        self.__eofFlag = False
-        self.__playingFlag = False
-        source = _playerList[self.__id].getConfig(PLAYER_CONFIG_SOURCE)
+    def createHandleFromURL(self, id):
+        """ URLからハンドル作成（id） => bool """
+        pybass.BASS_SetDevice(self.__device[id])
+        self.stop(id)
+        self.__eofFlag[id] = False
+        self.__playingFlag[id] = False
+        source = _playerList[id].getConfig(PLAYER_CONFIG_SOURCE)
         handle = pybass.BASS_StreamCreateURL(source.encode(), 0, 0, 0, 0)
         if handle:
-            self.__handle = handle
-            self.__reverseHandle = 0
-            self.__freq = 0
-            if self.getLength() == -1: self.__sourceType = PLAYER_SOURCETYPE_STREAM
-            else: self.__sourceType = PLAYER_SOURCETYPE_FILE
-            self.__handle
-            self.__setChannelConfig()
+            self.__handle[id] = handle
+            self.__reverseHandle[id] = 0
+            self.__freq[id] = 0
+            if self.getLength() == -1: self.__sourceType[id] = PLAYER_SOURCETYPE_STREAM
+            else: self.__sourceType[id] = PLAYER_SOURCETYPE_FILE
+            self.__setChannelConfig(id)
             return True
         else: return False
 
-    def __setChannelConfig(self):
+    def __setChannelConfig(self, id):
         """ チャネル固有設定適用 """
-        self.setVolume()
-        self.setSpeed()
-        self.setKey()
-        self.setFreq()
+        self.setVolume(id)
+        self.setSpeed(id)
+        self.setKey(id)
+        self.setFreq(id)
     
-    def play(self):
-        """ 再生 """
-        ret = pybass.BASS_ChannelPlay(self.__handle, False)
-        if ret: self.__playingFlag = True
-        else: self.__playingFlag = False
+    def play(self, id):
+        """ 再生（id）=> bool  """
+        ret = pybass.BASS_ChannelPlay(self.__handle[id], False)
+        if ret: self.__playingFlag[id] = True
+        else: self.__playingFlag[id] = False
         return ret
 
-    def pause(self):
-        """ 一時停止 => bool """
-        return pybass.BASS_ChannelPause(self.__handle)
+    def pause(self, id):
+        """ 一時停止（id） => bool """
+        return pybass.BASS_ChannelPause(self.__handle[id])
 
-    def stop(self):
-        """ 停止 => bool """
-        pybass.BASS_StreamFree(self.__handle)
-        self.__init__(self.__id, True)
+    def stop(self, id):
+        """ 停止（id） => bool """
+        pybass.BASS_StreamFree(self.__handle[id])
+        self.__reset(id)
         return True
 
-    def getStatus(self):
-        """ ステータス取得 => True"""
+    def getStatus(self, id):
+        """ ステータス取得（id） => True"""
         if pybass.BASS_GetDevice() == 4294967295: # -1のこと
-            _memory[self.__id][M_VALUE] = PLAYER_STATUS_DEVICEERROR
+            _memory[id][M_VALUE] = PLAYER_STATUS_DEVICEERROR
             return True
-        elif self.__playingFlag and pybass.BASS_ChannelIsActive(self.__handle) == pybass.BASS_ACTIVE_PLAYING:
-            _memory[self.__id][M_VALUE] = PLAYER_STATUS_PLAYING
-        elif self.__eofFlag: _memory[self.__id][M_VALUE] = PLAYER_STATUS_END
-        elif pybass.BASS_ChannelIsActive(self.__handle) == pybass.BASS_ACTIVE_PAUSED: _memory[self.__id][M_VALUE] = PLAYER_STATUS_PAUSED
-        elif self.__playingFlag: _memory[self.__id][M_VALUE] = PLAYER_STATUS_LOADING
-        else: _memory[self.__id][M_VALUE] = PLAYER_STATUS_STOPPED
+        elif self.__playingFlag[id] and pybass.BASS_ChannelIsActive(self.__handle[id]) == pybass.BASS_ACTIVE_PLAYING:
+            _memory[id][M_VALUE] = PLAYER_STATUS_PLAYING
+        elif self.__eofFlag[id]: _memory[id][M_VALUE] = PLAYER_STATUS_END
+        elif pybass.BASS_ChannelIsActive(self.__handle[id]) == pybass.BASS_ACTIVE_PAUSED: _memory[id][M_VALUE] = PLAYER_STATUS_PAUSED
+        elif self.__playingFlag[id]: _memory[id][M_VALUE] = PLAYER_STATUS_LOADING
+        else: _memory[id][M_VALUE] = PLAYER_STATUS_STOPPED
         return True
 
 
-    def setSpeed(self):
-        """ 再生速度設定 => bool"""
-        speed = _playerList[self.__id].getConfig(PLAYER_CONFIG_SPEED)
-        return pybass.BASS_ChannelSetAttribute(self.__handle,bassFx.BASS_ATTRIB_TEMPO, speed)
+    def setSpeed(self, id):
+        """ 再生速度設定（id） => bool"""
+        speed = _playerList[id].getConfig(PLAYER_CONFIG_SPEED)
+        return pybass.BASS_ChannelSetAttribute(self.__handle[id],bassFx.BASS_ATTRIB_TEMPO, speed)
 
-    def setKey(self):
-        """ 再生キー設定 => bool"""
-        key = _playerList[self.__id].getConfig(PLAYER_CONFIG_KEY)
-        return pybass.BASS_ChannelSetAttribute(self.__handle,bassFx.BASS_ATTRIB_TEMPO_PITCH, key)
+    def setKey(self, id):
+        """ 再生キー設定（id） => bool"""
+        key = _playerList[id].getConfig(PLAYER_CONFIG_KEY)
+        return pybass.BASS_ChannelSetAttribute(self.__handle[id],bassFx.BASS_ATTRIB_TEMPO_PITCH, key)
 
-    def setFreq(self):
-        """ 再生周波数設定 => bool"""
-        freqArg = _playerList[self.__id].getConfig(PLAYER_CONFIG_FREQ)
-        freq = round((freqArg * self.__freq) / 100)
-        return pybass.BASS_ChannelSetAttribute(self.__handle,bassFx.BASS_ATTRIB_TEMPO_FREQ, freq)
+    def setFreq(self, id):
+        """ 再生周波数設定（id） => bool"""
+        freqArg = _playerList[id].getConfig(PLAYER_CONFIG_FREQ)
+        freq = round((freqArg * self.__freq[id]) / 100)
+        return pybass.BASS_ChannelSetAttribute(self.__handle[id],bassFx.BASS_ATTRIB_TEMPO_FREQ, freq)
 
-    def setVolume(self):
-        """ 再生音量設定 => bool"""
-        vol = _playerList[self.__id].getConfig(PLAYER_CONFIG_AMPVOL)
-        return pybass.BASS_ChannelSetAttribute(self.__handle, pybass.BASS_ATTRIB_VOL, vol)
+    def setVolume(self, id):
+        """ 再生音量設定（id） => bool"""
+        vol = _playerList[id].getConfig(PLAYER_CONFIG_AMPVOL)
+        return pybass.BASS_ChannelSetAttribute(self.__handle[id], pybass.BASS_ATTRIB_VOL, vol)
 
-    def getPosition(self):
-        """  再生位置秒数取得 => bool (value)"""
-        byte = pybass.BASS_ChannelGetPosition(self.__handle, pybass.BASS_POS_BYTE)
+    def getPosition(self, id):
+        """  再生位置秒数取得（id） => bool (value)"""
+        byte = pybass.BASS_ChannelGetPosition(self.__handle[id], pybass.BASS_POS_BYTE)
         if byte != -1:
-            sec = pybass.BASS_ChannelBytes2Seconds(self.__handle, byte)
-            _memory[self.__id][M_VALUE] = sec
+            sec = pybass.BASS_ChannelBytes2Seconds(self.__handle[id], byte)
+            _memory[id][M_VALUE] = sec
             return True
         else: return False
 
-    def setPosition(self):
-        """ 秒数で再生位置を設定 => bool """
-        sec = _memory[self.__id][M_VALUE]
-        byte = pybass.BASS_ChannelSeconds2Bytes(self.__handle, sec)
-        if self.__sourceType == PLAYER_SOURCETYPE_FILE: return pybass.BASS_ChannelSetPosition(self.__handle, byte, pybass.BASS_POS_BYTE)
+    def setPosition(self, id):
+        """ 秒数で再生位置を設定（id） => bool """
+        sec = _memory[id][M_VALUE]
+        byte = pybass.BASS_ChannelSeconds2Bytes(self.__handle[id], sec)
+        if self.__sourceType[id] == PLAYER_SOURCETYPE_FILE: return pybass.BASS_ChannelSetPosition(self.__handle[id], byte, pybass.BASS_POS_BYTE)
         else: return False
 
-    def getLength(self):
-        """  合計時間秒数取得 => bool (value)"""
-        byte = pybass.BASS_ChannelGetLength(self.__handle, pybass.BASS_POS_BYTE)
+    def getLength(self, id):
+        """  合計時間秒数取得（id）=> bool (value)"""
+        byte = pybass.BASS_ChannelGetLength(self.__handle[id], pybass.BASS_POS_BYTE)
         if byte != -1:
-            sec = pybass.BASS_ChannelBytes2Seconds(self.__handle, byte)
-            _memory[self.__id][M_VALUE] = sec
-        else: _memory[self.__id][M_VALUE] = -1
+            sec = pybass.BASS_ChannelBytes2Seconds(self.__handle[id], byte)
+            _memory[id][M_VALUE] = sec
+        else: _memory[id][M_VALUE] = -1
         return True

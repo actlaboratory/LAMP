@@ -41,7 +41,6 @@ class eventProcessor():
 
         #ファイル送り
         if globalVars.play.getStatus() == PLAYER_STATUS_END or globalVars.play.getStatus() == PLAYER_STATUS_END:
-            winsound.Beep(1000, 100)
             self.fileChange()
 
     #経過時間表示を更新
