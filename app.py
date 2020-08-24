@@ -117,8 +117,6 @@ class Main(wx.App):
 		self.timezone=datetime.timezone(datetime.timedelta(hours=hours,minutes=minutes))
 
 	def SetGlobalVars(self):
-		globalVars.bass = bassController.bassThread()
-		globalVars.bass.start()
 		globalVars.play = player.player()
 		globalVars.play.startDevice(PLAYER_DEFAULT_SPEAKER)
 		globalVars.play.setVolume(globalVars.app.config.getint("volume","default",default=100, min=0, max=100))

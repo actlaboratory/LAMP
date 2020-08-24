@@ -17,6 +17,7 @@ def main():
 	globalVars.app=app
 	app.initialize()
 	app.MainLoop()
+	globalVars.play.exit()
 	app.config.write()
 
 #global schope

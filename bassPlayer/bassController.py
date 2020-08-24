@@ -204,7 +204,7 @@ class bassThread(threading.Thread):
                     if self.bassFree(id):sRet = 1
                 elif s == PLAYER_SEND_KILL:
                     self.__del__()
-                    break
+                    return
                 elif s == PLAYER_SEND_FILE:
                     if self.createHandle(id): sRet = 1
                 elif s == PLAYER_SEND_URL:
@@ -287,7 +287,7 @@ class bassThread(threading.Thread):
         if ret: self.__device[id] = pybass.BASS_GetDevice()
         return ret
 
-    def __del__(self, id):
+    def __del__(self):
         for d in self.__device:
             pybass.BASS_SetDevice(d)
             pybass.BASS_Free()
@@ -443,3 +443,7 @@ class bassThread(threading.Thread):
             _memory[id][M_VALUE] = sec
         else: _memory[id][M_VALUE] = -1
         return True
+
+# bassスレッド生成
+player = bassThread()
+player.start()
