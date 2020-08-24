@@ -212,10 +212,13 @@ class player():
             #現在位置取得と加速
             new = self.getPosition()
             if counter < 20: pos = new + direction * gap * 2
-            elif counter < 40: pos = new + direction * gap * 4
-            elif counter < 60: pos = new + direction * gap * 7
-            elif counter < 80: pos = new + direction * gap * 11
-            else: pos = new + direction * gap * 16
+            elif counter < 30: pos = new + direction * gap * 4
+            elif counter < 40: pos = new + direction * gap * 7
+            elif counter < 50: pos = new + direction * gap * 11
+            elif counter < 60: pos = new + direction * gap * 116
+            elif counter < 70: pos = new + direction * gap * 22
+            elif counter < 80: pos = new + direction * gap * 29
+            else: pos = new + direction * gap * 37
             #ポジション適用
             if direction == -1 and counter > 1: pos -= gap
             if new != -1:

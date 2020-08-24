@@ -239,14 +239,14 @@ class bassThread(threading.Thread):
                 self.__autoChangeDevice()
             elif a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_STREAM):
                 if not self.play():
-                    self.__eofFlag == True
                     self.stop()
+                    self.__eofFlag == True
             elif a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag and self.__sourceType == PLAYER_SOURCETYPE_FILE:
                 if pybass.BASS_ChannelGetPosition(self.__handle, pybass.BASS_POS_BYTE) == pybass.BASS_ChannelGetLength(self.__handle, pybass.BASS_POS_BYTE) != -1:
                     if self.__repeat: self.play()
                     else:
-                        self.__eofFlag = True
                         self.stop()
+                        self.__eofFlag = True
         return
 
     def bassInit(self, selfCall=False):
@@ -364,13 +364,12 @@ class bassThread(threading.Thread):
 
     def getStatus(self):
         """ ステータス取得 => True"""
-        if pybass.BASS_GetDevice() == 4294967295:
+        if pybass.BASS_GetDevice() == 4294967295: # -1のこと
             _memory[self.__id][M_VALUE] = PLAYER_STATUS_DEVICEERROR
             return True
-        if self.__playingFlag and pybass.BASS_ChannelIsActive(self.__handle) == pybass.BASS_ACTIVE_PLAYING:
+        elif self.__playingFlag and pybass.BASS_ChannelIsActive(self.__handle) == pybass.BASS_ACTIVE_PLAYING:
             _memory[self.__id][M_VALUE] = PLAYER_STATUS_PLAYING
-        elif self.__eofFlag and self.__sourceType == PLAYER_SOURCETYPE_FILE: _memory[self.__id][M_VALUE] = PLAYER_STATUS_EOF
-        elif self.__eofFlag and self.__sourceType == PLAYER_SOURCETYPE_STREAM: _memory[self.__id][M_VALUE] = PLAYER_STATUS_STREAMEND
+        elif self.__eofFlag: _memory[self.__id][M_VALUE] = PLAYER_STATUS_END
         elif pybass.BASS_ChannelIsActive(self.__handle) == pybass.BASS_ACTIVE_PAUSED: _memory[self.__id][M_VALUE] = PLAYER_STATUS_PAUSED
         elif self.__playingFlag: _memory[self.__id][M_VALUE] = PLAYER_STATUS_LOADING
         else: _memory[self.__id][M_VALUE] = PLAYER_STATUS_STOPPED

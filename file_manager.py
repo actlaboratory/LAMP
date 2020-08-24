@@ -29,7 +29,7 @@ def nextFile():
             get = globalVars.playlist.getFile(0)
             globalVars.eventProcess.play(globalVars.playlist, get)
         else: #再生終了後に次がなければ停止し、全消費スリープタイマーに通知
-            if globalVars.play.getStatus() == PLAYER_STATUS_EOF or globalVars.play.getStatus() == PLAYER_STATUS_STREAMEND:
+            if globalVars.play.getStatus() == PLAYER_STATUS_END or globalVars.play.getStatus() == PLAYER_STATUS_END:
                 globalVars.eventProcess.stop()
                 globalVars.sleepTimer.call(True)
     else: #キューを再生
