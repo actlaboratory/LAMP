@@ -40,6 +40,7 @@ class eventProcessor():
                 self.setNowTimeLabel(val, max)
 
         #ファイル送り
+        print(globalVars.play.getStatus())
         if globalVars.play.getStatus() == PLAYER_STATUS_STREAMEND or globalVars.play.getStatus() == PLAYER_STATUS_EOF:
             winsound.Beep(1000, 100)
             self.fileChange()

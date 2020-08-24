@@ -5,6 +5,9 @@ from .bass import bassHls
 from .bass import pytags
 from .constants import *
 
+# ロックオブジェクト
+lock = threading.Lock()
+
 # デバイスリスト
 _deviceList = []
 
@@ -51,13 +54,11 @@ getDeviceList()
 
 def bassInit(playerID):
     """BASS初期化要求（playerID） => bool """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_INIT
-    return _waitReturn(playerID)
+    return _send(playerID, PLAYER_SEND_INIT)
 
 def bassFree(playerID):
     """デバイスのフリーと再生情報一時保存要求（playerID） """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_FREE
-    _waitReturn(playerID)
+    _send(playerID, PLAYER_SEND_FREE)
 
 def kill(playerID):
     """bassスレッド終了（playerID）"""
@@ -67,107 +68,88 @@ def kill(playerID):
 
 def setAutoChangeDevice(playerID, bool):
     """ デバイス自動切り替え（bool） """
-    _memory[playerID][M_VALUE] = bool
-    _memory[playerID][M_STATUS] = PLAYER_SEND_AUTOCHANGE
-    _waitReturn(playerID)
+    _send(playerID, PLAYER_SEND_AUTOCHANGE, bool)
 
 def setNetTimeout(playerID, miliSec):
     """ ネットワークタイムアウトを設定（playerID, int ミリ秒） => bool """
-    _memory[playerID][M_VALUE] = miliSec
-    _memory[playerID][M_STATUS] = PLAYER_SEND_SETNETTIMEOUT
-    return _waitReturn(playerID)
+    return _send(playerID, PLAYER_SEND_SETNETTIMEOUT, miliSec)
 
 def setHlsDelay(playerID, sec):
     """ HLS遅延設定要求（playerID, int 秒） => bool """
-    _memory[playerID][M_VALUE] = sec
-    _memory[playerID][M_STATUS] = PLAYER_SEND_SETHLSDELAY
-    return _waitReturn(playerID)
+    return _send(playerID, PLAYER_SEND_SETHLSDELAY, sec)
 
 def setFile(playerID):
     """ ファイルストリームの生成要求（playerID） => bool """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_FILE
-    return _waitReturn(playerID)
+    return _send(playerID, PLAYER_SEND_FILE)
 
 def setURL(playerID):
     """ ファイルストリームの生成要求（playerID） => bool """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_URL
-    return _waitReturn(playerID)
+    return _waitReturn(playerID, PLAYER_SEND_URL)
 
 def setRepeat(playerID, boolVal):
     """ リピート（bool） """
-    _memory[playerID][M_VALUE] = boolVal
-    _memory[playerID][M_STATUS] = PLAYER_SEND_REPEAT
-    _waitReturn(playerID)
+    _send(playerID, PLAYER_SEND_REPEAT, boolVal)
 
 def play(playerID):
     """ 再生(playerID) => bool """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_PLAY
-    return _waitReturn(playerID)
+    return _send(playerID, PLAYER_SEND_PLAY)
 
 def pause(playerID):
     """ 一時停止(playerID) => bool """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_PAUSE
-    return _waitReturn(playerID)
+    return _send(playerID, PLAYER_SEND_PAUSE)
 
 def stop(playerID):
     """ 停止(playerID) => bool """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_STOP
-    return _waitReturn(playerID)
+    return _send(playerID, PLAYER_SEND_STOP)
 
 def getStatus(playerID):
     """ ステータス取得要求(playerID) => ステータス定数 または None """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_GETSTATUS
-    if _waitReturn(playerID): return _memory[playerID][M_VALUE]
+    return _send(playerID, PLAYER_SEND_GETSTATUS, None, True)
 
 def setSpeed(playerID):
     """ 再生速度変更要求（playerID） => bool """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_SPEED
-    return _waitReturn(playerID)
+    return _send(playerID, PLAYER_SEND_SPEED)
 
 def setKey(playerID):
     """ 再生キー変更要求（playerID） => bool """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_KEY
-    return _waitReturn(playerID)
+    return _send(playerID, PLAYER_SEND_KEY)
 
 def setFreq(playerID):
     """ 再生周波数変更要求（playerID） => bool """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_FREQ
-    return _waitReturn(playerID)
+    return _send(playerID, PLAYER_SEND_FREQ)
 
 def setVolume(playerID):
     """ 再生音量変更要求（playerID） => bool """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_VOLUME
-    return _waitReturn(playerID)
+    return _send(playerID, PLAYER_SEND_VOLUME)
 
 def getPosition(playerID):
     """
     再生位置取得要求（playerID） => int 秒数
     失敗した場合は-1を返却
     """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_GETPOSITION
-    if _waitReturn(playerID): return _memory[playerID][M_VALUE]
-    else: return -1
+    return _send(playerID, PLAYER_SEND_GETPOSITION, None, True, True)
 
 def setPosition(playerID, second):
     """ 再生位置設定要求（playerID, int 秒数） => bool """
-    _memory[playerID][M_VALUE] = second
-    _memory[playerID][M_STATUS] = PLAYER_SEND_SETPOSITION
-    return _waitReturn(playerID)
+    return _send(playerID, PLAYER_SEND_SETPOSITION, second)
 
 def getLength(playerID):
     """ 合計時間取得要求（playerID）=> int 秒数 """
-    _memory[playerID][M_STATUS] = PLAYER_SEND_GETLENGTH
-    if _waitReturn(playerID): return _memory[playerID][M_VALUE]
-    else: return -1
+    return _send(playerID, PLAYER_SEND_GETLENGTH, None, True, True)
 
-def _waitReturn(playerID):
-    """ 処理が終わるまで待機（playerID） => bool """
-    while True:
-        time.sleep(0.02)
-        if _memory[playerID][M_STATUS] == PLAYERSTATUS_STATUS_OK:
-            return True
-        elif _memory[playerID][M_STATUS] == PLAYERSTATUS_STATUS_FAILD:
-            return False
+def _send(playerID, status, value=None, returnValue=False, falseToInt=False):
+    """ 要求を受け付けて処理が終わるまで待機（playerID, ステータス, バリュー, バリューを返却?, Falseを-1で返却?） => 結果 """
+    with lock:
+        if value != None: _memory[playerID][M_VALUE] = value
+        _memory[playerID][M_STATUS] = status
+        while True:
+            time.sleep(0.02)
+            if _memory[playerID][M_STATUS] == PLAYERSTATUS_STATUS_OK:
+                if returnValue: return _memory[playerID][M_VALUE]
+                else: return True
+            elif _memory[playerID][M_STATUS] == PLAYERSTATUS_STATUS_FAILD:
+                if falseToInt: return -1
+                else: return False
 
 class bassThread(threading.Thread):
     def __init__(self, playerID, streamFree=False):

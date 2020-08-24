@@ -194,45 +194,39 @@ class player():
         高速移動（int 方向）
         1 = 早送り, -1 = 巻き戻し
         """
-        if self.__fastMoveFlag == False:
-            self.__fastMoveFlag = True
-            if self.__fastMoveThread.isAlive() == False:
-                self.__fastMoveThread = threading.Thread(target=self.__fastMover, args=(direction,))
-                self.__fastMoveThread.start()
+        # フラグ = -2 巻き戻し - 待機処理 - 終了 - 待機処理 - 早送り +2
+        if self.__fastMoveFlag == 0 and not self.__fastMoveThread.isAlive():
+            self.__fastMoveThread = threading.Thread(target=self.__fastMover, args=(direction,))
+            self.__fastMoveThread.start()
+        elif self.__fastMoveFlag == direction: self.__fastMoveFlag = direction * 2
 
     def __fastMover(self, direction):
         """ スレッド呼び出し用高速移動（int 方向） """
-        self.__fastMoveFlag = True
+        self.__fastMoveFlag = direction * 2
         counter = 1
-        timeTmp = time.time()
-        winsound.Beep(1500, 100)
+        gap = 0.5
         while True:
-            #実経過時間
-            time.sleep(0.1)
-            newTime = time.time()
-            gTime = newTime - timeTmp
-            timeTmp = newTime
             #フラグ処理
-            if self.__fastMoveFlag == False: break
-            self.__fastMoveFlag = False
+            if self.__fastMoveFlag != direction * 2: break
+            self.__fastMoveFlag = direction
             #現在位置取得と加速
             new = self.getPosition()
-            if counter < 20: pos = new + direction * gTime * 2
-            elif counter < 40: pos = new + direction * gTime * 4
-            elif counter < 60: pos = new + direction * gTime * 6
-            elif counter < 80: pos = new + direction * gTime * 8
-            else: pos = new + direction * gTime * 10
+            if counter < 20: pos = new + direction * gap * 2
+            elif counter < 40: pos = new + direction * gap * 4
+            elif counter < 60: pos = new + direction * gap * 7
+            elif counter < 80: pos = new + direction * gap * 11
+            else: pos = new + direction * gap * 16
             #ポジション適用
-            if direction == -1: pos -= gTime
-            if new != -1: self.setPosition(pos)
-            else:
-                if direction == -1 and self.setPosition(0):
-                    winsound.Beep(1200, 100)
+            if direction == -1 and counter > 1: pos -= gap
+            if new != -1:
+                if not self.setPosition(pos) and direction == -1:
+                    self.setPosition(0)
                     self.pause()
-                    break
-                else: break
+            else: break
             if counter < 4000: counter += 1
-        self.__fastMoveFlag = False
+            time.sleep(gap)
+        self.__fastMoveFlag = 0
+        if direction == -1: self.play()
         return
 
     def exit(self):
