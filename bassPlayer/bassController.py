@@ -80,7 +80,7 @@ def setFile(playerID):
 
 def setURL(playerID):
     """ ファイルストリームの生成要求（playerID） => bool """
-    return _waitReturn(playerID, PLAYER_SEND_URL)
+    return _send(playerID, PLAYER_SEND_URL)
 
 def setRepeat(playerID, boolVal):
     """ リピート（bool） """
@@ -352,7 +352,7 @@ class bassThread(threading.Thread):
             self.__handle[id] = handle
             self.__reverseHandle[id] = 0
             self.__freq[id] = 0
-            if self.getLength() == -1: self.__sourceType[id] = PLAYER_SOURCETYPE_STREAM
+            if pybass.BASS_ChannelGetPosition(self.__handle[id], pybass.BASS_POS_BYTE) <= 0: self.__sourceType[id] = PLAYER_SOURCETYPE_STREAM
             else: self.__sourceType[id] = PLAYER_SOURCETYPE_FILE
             self.__setChannelConfig(id)
             return True
@@ -374,6 +374,7 @@ class bassThread(threading.Thread):
 
     def pause(self, id):
         """ 一時停止（id） => bool """
+        if self.__sourceType[id] != PLAYER_SOURCETYPE_FILE: return False
         return pybass.BASS_ChannelPause(self.__handle[id])
 
     def stop(self, id):
@@ -428,6 +429,7 @@ class bassThread(threading.Thread):
 
     def setPosition(self, id):
         """ 秒数で再生位置を設定（id） => bool """
+        if self.__sourceType[id] != PLAYER_SOURCETYPE_FILE: return False
         sec = _memory[id][M_VALUE]
         byte = pybass.BASS_ChannelSeconds2Bytes(self.__handle[id], sec)
         if self.__sourceType[id] == PLAYER_SOURCETYPE_FILE: return pybass.BASS_ChannelSetPosition(self.__handle[id], byte, pybass.BASS_POS_BYTE)
