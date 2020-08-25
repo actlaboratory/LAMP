@@ -25,6 +25,12 @@ class Dialog(BaseDialog):
 
     def InstallControls(self):
         """いろんなwidgetを設置する。"""
+        # 増幅設定
+        self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",)
+        self.ampLabel = self.creator.staticText(_("増幅"),0)
+        self.ampSlider = self.creator.slider(_("増幅"),150, globalVars.play.getConfig(PLAYER_CONFIG_AMP), 400, 0)
+        self.ampSlider.Bind(wx.EVT_COMMAND_SCROLL, self.onSlider)
+        self.ampSpin = self.creator.SpinCtrl(0, 400, globalVars.play.getConfig(PLAYER_CONFIG_AMP), self.onSpin)
         # 速さ設定
         self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",)
         self.tempoLabel = self.creator.staticText(_("速さ"),0)
@@ -48,11 +54,14 @@ class Dialog(BaseDialog):
         self.bReset = self.creator.button(_("リセット"), self.onButtonClick)
 
     def GetData(self):
-        return (self.tempoSlider.GetValue(), self.pitchSlider.GetValue(), self.freqSlider.GetValue())
+        return (self.ampSlider.GetValidator(), self.tempoSlider.GetValue(), self.pitchSlider.GetValue(), self.freqSlider.GetValue())
 
     def onSpin(self, evt):
         obj = evt.GetEventObject()
-        if obj == self.tempoSpin:
+        if obj == self.ampSpin:
+            self.ampSlider.SetValue(obj.GetValue())
+            globalVars.play.setAmp(obj.GetValue())
+        elif obj == self.tempoSpin:
             self.tempoSlider.SetValue(obj.GetValue())
             globalVars.play.setSpeed(obj.GetValue())
         elif obj == self.pitchSpin:
@@ -65,7 +74,10 @@ class Dialog(BaseDialog):
 
     def onSlider(self, evt):
         obj = evt.GetEventObject()
-        if obj == self.tempoSlider:
+        if obj == self.ampSlider:
+            self.ampSpin.SetValue(obj.GetValue())
+            globalVars.play.setAmp(obj.GetValue())
+        elif obj == self.tempoSlider:
             self.tempoSpin.SetValue(obj.GetValue())
             globalVars.play.setSpeed(obj.GetValue())
         elif obj == self.pitchSlider:
@@ -79,6 +91,10 @@ class Dialog(BaseDialog):
         if evt.GetEventObject()==self.bClose:
             self.wnd.EndModal(1)
         elif evt.GetEventObject()==self.bReset:
+            
+            self.ampSlider.SetValue(0)
+            self.ampSpin.SetValue(0)
+            globalVars.play.setAmp(100)
             self.tempoSlider.SetValue(0)
             self.tempoSpin.SetValue(0)
             globalVars.play.setSpeed(0)

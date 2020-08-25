@@ -35,7 +35,7 @@ class player():
         if config == PLAYER_CONFIG_FREQ: return self.__freq
         if config == PLAYER_CONFIG_AMPVOL: return self.__volume * self.__amp
         if config == PLAYER_CONFIG_VOLUME: return self.__volume * 100
-        if config == PLAYER_CONFIG_AMP: return self.__amp
+        if config == PLAYER_CONFIG_AMP: return self.__amp * 100
 
     def setDevice(self, device):
         """ インデックス、または定数から再生デバイスをセット(int インデックス) => None """
@@ -133,7 +133,8 @@ class player():
         return self.setFreq(self.__freq + freq)
     
     def setAmp(self, amp):
-        """増幅設定（float 0..4） => bool"""
+        """増幅設定（float 0..100..400） => bool"""
+        amp = amp / 100
         if amp <= 4 and amp >= 0:
             self.__amp = amp
             bassController.setVolume(self.__id)
