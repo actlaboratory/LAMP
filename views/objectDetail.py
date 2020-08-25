@@ -30,14 +30,5 @@ class Dialog(BaseDialog):
 		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.buttonArea,wx.HORIZONTAL,20)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
 
-	def Show(self):
-		result=self.ShowModal()
-		self.Destroy()
-		return result
-
-	def Destroy(self):
-		self.log.debug("destroy")
-		self.wnd.Destroy()
-
 	def GetValue(self):
 		return None

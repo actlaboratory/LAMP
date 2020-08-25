@@ -137,13 +137,12 @@ class Menu(BaseMenu):
 		self.RegisterRadioItemCommand(self.hRepeatLoopInOperationMenu, "REPEAT_LOOP_NONE", _("解除する"))
 		self.RegisterRadioItemCommand(self.hRepeatLoopInOperationMenu, "RL_REPEAT", _("リピート"))
 		self.RegisterRadioItemCommand(self.hRepeatLoopInOperationMenu, "RL_LOOP", _("ループ"))
-		self.RegisterCheckItemCommand(self.hOperationMenu, "SHUFFLE", _("シャッフル再生"))
+		self.RegisterCheckMenuCommand(self.hOperationMenu, "SHUFFLE", _("シャッフル再生"))
 
 		#ヘルプメニューの中身
 		self.RegisterMenuCommand(self.hHelpMenu,"EXAMPLE",_("テストダイアログを閲覧"))
 
 		#メニューバーの生成
-		self.hMenuBar=wx.MenuBar()
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル"))
 		self.hMenuBar.Append(self.hFunctionMenu, _("機能"))
 		self.hMenuBar.Append(self.hOperationMenu,_("操作"))
