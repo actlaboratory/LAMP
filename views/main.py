@@ -134,9 +134,9 @@ class Menu(BaseMenu):
 		#リピート・ループ
 		self.hRepeatLoopInOperationMenu=wx.Menu()
 		self.hOperationMenu.AppendSubMenu(self.hRepeatLoopInOperationMenu, _("リピート・ループ")+"\tCtrl+R")
-		self.RegisterRadioItemCommand(self.hRepeatLoopInOperationMenu, "REPEAT_LOOP_NONE", _("解除する"))
-		self.RegisterRadioItemCommand(self.hRepeatLoopInOperationMenu, "RL_REPEAT", _("リピート"))
-		self.RegisterRadioItemCommand(self.hRepeatLoopInOperationMenu, "RL_LOOP", _("ループ"))
+		self.RegisterRadioMenuCommand(self.hRepeatLoopInOperationMenu, "REPEAT_LOOP_NONE", _("解除する"))
+		self.RegisterRadioMenuCommand(self.hRepeatLoopInOperationMenu, "RL_REPEAT", _("リピート"))
+		self.RegisterRadioMenuCommand(self.hRepeatLoopInOperationMenu, "RL_LOOP", _("ループ"))
 		self.RegisterCheckMenuCommand(self.hOperationMenu, "SHUFFLE", _("シャッフル再生"))
 
 		#ヘルプメニューの中身
