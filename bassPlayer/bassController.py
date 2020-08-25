@@ -399,6 +399,7 @@ class bassThread(threading.Thread):
 
     def setSpeed(self, id):
         """ 再生速度設定（id） => bool"""
+        if self.__sourceType[id] != PLAYER_SOURCETYPE_FILE: return False
         speed = _playerList[id].getConfig(PLAYER_CONFIG_SPEED)
         return pybass.BASS_ChannelSetAttribute(self.__handle[id],bassFx.BASS_ATTRIB_TEMPO, speed)
 
@@ -409,6 +410,7 @@ class bassThread(threading.Thread):
 
     def setFreq(self, id):
         """ 再生周波数設定（id） => bool"""
+        if self.__sourceType[id] != PLAYER_SOURCETYPE_FILE: return False
         freqArg = _playerList[id].getConfig(PLAYER_CONFIG_FREQ)
         freq = round((freqArg * self.__freq[id]) / 100)
         return pybass.BASS_ChannelSetAttribute(self.__handle[id],bassFx.BASS_ATTRIB_TEMPO_FREQ, freq)

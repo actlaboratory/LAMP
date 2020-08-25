@@ -104,12 +104,9 @@ class player():
     
     def setSpeed(self, speed):
         """速度設定（int -95..0..5000） => bool"""
-        speedTmp = self.__speed
+        if speed < -95 or speed > 5000: return False
         self.__speed = speed
-        if bassController.setSpeed(self.__id): return True
-        else:
-            self.__speed = speedTmp
-            return False
+        return bassController.setSpeed(self.__id)
 
     def calcSpeed(self, speed):
         """ 差分指定で速度を設定（int +-速度） => bool """
@@ -117,25 +114,19 @@ class player():
 
     def setKey(self, key):
         """再生キー(高さ)設定（int -60..0..60） => bool"""
-        keyTmp = self.__key
+        if key < -60 or key > 60: return False
         self.__key = key
-        if bassController.setKey(self.__id): return True
-        else:
-            self.__key = keyTmp
-            return False
+        return bassController.setKey(self.__id)
 
     def calcKey(self, key):
         """ 差分指定で再生キーを設定（int +-速度） => bool """
         return self.setKey(self.__key + key)
 
     def setFreq(self, freq):
-        """周波数設定（int 5..100..5000） => bool"""
-        freqTmp = self.__freq
+        """周波数設定（int 6..100..5000） => bool"""
+        if freq < 6 or freq > 5000: return False
         self.__freq = freq
-        if bassController.setFreq(self.__id): return True
-        else:
-            self.__freq = freqTmp
-            return False
+        return bassController.setFreq(self.__id)
 
     def calcFreq(self, freq):
         """ 差分指定で周波数を設定（int +-速度） => bool """
