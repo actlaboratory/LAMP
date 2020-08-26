@@ -14,6 +14,7 @@ class player():
         self.__fastMoveFlag = False
         self.__fastMoveThread = threading.Thread()
         self.__id = bassController.connectPlayer(self)
+        self.__isDeleted = False
 
     def startDevice(self, device):
         """ デバイススタート(int デバイス) """
@@ -231,4 +232,6 @@ class player():
         self.__del__()
 
     def __del__(self):
-        bassController.kill(self.__id)
+        if not self.__isDeleted:
+            self.__isDeleted = True
+            bassController.exitPlayer(self.__id)

@@ -76,11 +76,9 @@ def bassFree(playerID):
     """デバイスのフリーと再生情報一時保存要求（playerID） """
     _send(playerID, PLAYER_SEND_FREE)
 
-def kill(playerID):
-    """bassスレッド終了（playerID）"""
-    if  _playerList[playerID] != None:
-        _memory[playerID][M_STATUS] = PLAYER_SEND_KILL
-        _playerList[playerID] = None
+def exitPlayer(playerID):
+    """プレイヤー終了（playerID）"""
+    _send(playerID, PLAYER_SEND_EXIT)
 
 def setAutoChangeDevice(playerID, bool):
     """ デバイス自動切り替え（bool） """
@@ -193,6 +191,7 @@ class bassThread(threading.Thread):
         self.__device = []
 
     def setNewPlayer(self):
+        """新しいプレイヤーをセット"""
         self.__autoChange.append(True)
         self.__positionTmp.append(-1)
         self.__eofFlag.append(False)
@@ -205,6 +204,22 @@ class bassThread(threading.Thread):
         self.__device.append(0)
         self.__defaultDevice.append(False)
 
+    def exitPlayer(self, id):
+        """プレイヤー終了（id）"""
+        self.stop(id)
+        self.__autoChange[id] = None
+        self.__positionTmp[id] = None
+        self.__eofFlag[id] = None
+        self.__repeat[id] = None
+        self.__sourceType[id] = None
+        self.__playingFlag[id] = None
+        self.__handle[id] = None
+        self.__reverseHandle[id] = None
+        self.__freq[id] = None
+        self.__device[id] = None
+        self.__defaultDevice[id] = None
+        _playerList[id] = None
+
     def __reset(self, id):
         self.__handle[id] = 0
         self.__reverseHandle[id] = 0
@@ -213,7 +228,20 @@ class bassThread(threading.Thread):
     def run(self):
         while True:
             time.sleep(0.02)
+            # スレッドの自動終了
+            threadEnd = False
+            for o in _playerList:
+                if o == None: threadEnd = True
+                else:
+                    threadEnd = False
+                    break
+            if threadEnd:
+                return
+            
             for id in range(len(_playerList)):
+                # 終了プレイヤースキップ
+                if _playerList[id] == None: continue
+                
                 # 通信
                 sRet = -1
                 s = _memory[id][M_STATUS]
@@ -227,9 +255,8 @@ class bassThread(threading.Thread):
                     sRet = 1
                 elif s == PLAYER_SEND_FREE:
                     if self.bassFree(id):sRet = 1
-                elif s == PLAYER_SEND_KILL:
-                    self.__del__()
-                    return
+                elif s == PLAYER_SEND_EXIT:
+                    self.exitPlayer(id)
                 elif s == PLAYER_SEND_FILE:
                     if self.createHandle(id): sRet = 1
                 elif s == PLAYER_SEND_URL:
@@ -274,6 +301,9 @@ class bassThread(threading.Thread):
                 if sRet == 1: _memory[id][M_STATUS] = PLAYERSTATUS_STATUS_OK
                 elif sRet == -1: _memory[id][M_STATUS] = PLAYERSTATUS_STATUS_FAILD
 
+                # プレイヤー終了検知
+                if _playerList[id] == None: continue
+                
                 # 再生監視
                 if self.__defaultDevice[id] and (self.__device[id] != getDefaultDevice()):
                     self.__changeDevice(id, True)
@@ -323,8 +353,9 @@ class bassThread(threading.Thread):
 
     def __del__(self):
         for d in self.__device:
-            pybass.BASS_SetDevice(d)
-            pybass.BASS_Free()
+            if d != None:
+                pybass.BASS_SetDevice(d)
+                pybass.BASS_Free()
     
     
     def __changeDevice(self, id, forChannel=False):
