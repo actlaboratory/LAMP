@@ -4,7 +4,6 @@ from . import bassController
 
 class player():
     def __init__(self):
-        self.__id = bassController.connectPlayer(self)
         self.__device = PLAYER_NO_SPEAKER
         self.__source = None
         self.__speed = 0
@@ -14,10 +13,11 @@ class player():
         self.__volume = 1
         self.__fastMoveFlag = False
         self.__fastMoveThread = threading.Thread()
+        self.__id = bassController.connectPlayer(self)
 
     def startDevice(self, device):
         """ デバイススタート(int デバイス) """
-        if not self.setDevice(device): self.__device = PLAYER_NO_SPEAKER
+        if not self.setDevice(device, False): self.__device = PLAYER_NO_SPEAKER
         bassController.bassInit(self.__id)
     
     def getConfig(self, config):
@@ -37,14 +37,16 @@ class player():
         if config == PLAYER_CONFIG_VOLUME: return self.__volume * 100
         if config == PLAYER_CONFIG_AMP: return self.__amp * 100
 
-    def setDevice(self, device):
-        """ インデックス、または定数から再生デバイスをセット(int インデックス) => None """
+    def setDevice(self, device, change=True):
+        """ インデックス、または定数から再生デバイスをセット(int インデックス, 変更扱い=True) => None """
         if device < len(bassController.getDeviceList()) and device > 0: self.__device = device
         elif device == PLAYER_NO_SPEAKER: self.__device = PLAYER_NO_SPEAKER
         elif device == PLAYER_DEFAULT_SPEAKER and len(bassController.getDeviceList()) > 1: self.__device = PLAYER_DEFAULT_SPEAKER
         else: return False
-        bassController.bassFree(self.__id)
-        bassController.bassInit(self.__id)
+        if change: bassController.changeDevice(self.__id)
+        else:
+            bassController.bassFree(self.__id)
+            bassController.bassInit(self.__id)
         return True
 
     def getDeviceList(self):
