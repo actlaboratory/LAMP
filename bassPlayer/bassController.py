@@ -8,6 +8,9 @@ from .constants import *
 # ロックオブジェクト
 lock = threading.Lock()
 
+# プレイヤースレッド
+_playerThread = []
+
 # デバイスリスト
 _deviceList = []
 
@@ -25,9 +28,18 @@ def connectPlayer(playerObject):
     プレイヤーと接続(playerオブジェクト) => int PlayerID
     プレイヤーオブジェクトに対して固有のIDを発行し、設定情報を連携する、
     """
-    _playerList.append(playerObject)
-    index = len(_playerList) - 1
-    _memory.append([PLAYERSTATUS_STATUS_OK, 0])
+    if _playerThread == None or _playerThread.isAlive() == False: # bassスレッド再生成
+        _playerThread = bassThread()
+        _playerThread.start()
+
+    try:
+        index = _playerList.index(None)
+        _playerList[index] = playerObject
+        _memory[index] = [PLAYERSTATUS_STATUS_OK, 0]
+    except ValueError:
+        _playerList.append(playerObject)
+        index = len(_playerList) - 1
+        _memory.append([PLAYERSTATUS_STATUS_OK, 0])
     _send(index, PLAYER_SEND_NEWPLAYER)
     return index
 
@@ -190,19 +202,32 @@ class bassThread(threading.Thread):
         self.__freq = []
         self.__device = []
 
-    def setNewPlayer(self):
+    def setNewPlayer(self, id):
         """新しいプレイヤーをセット"""
-        self.__autoChange.append(True)
-        self.__positionTmp.append(-1)
-        self.__eofFlag.append(False)
-        self.__repeat.append(False)
-        self.__sourceType.append(PLAYER_SOURCETYPE_NUL)
-        self.__playingFlag.append(False)
-        self.__handle.append(0)
-        self.__reverseHandle.append(0)
-        self.__freq.append(0)
-        self.__device.append(0)
-        self.__defaultDevice.append(False)
+        if id == len(_playerList) - 1:
+            self.__autoChange.append(True)
+            self.__positionTmp.append(-1)
+            self.__eofFlag.append(False)
+            self.__repeat.append(False)
+            self.__sourceType.append(PLAYER_SOURCETYPE_NUL)
+            self.__playingFlag.append(False)
+            self.__handle.append(0)
+            self.__reverseHandle.append(0)
+            self.__freq.append(0)
+            self.__device.append(0)
+            self.__defaultDevice.append(False)
+        else:
+            self.__autoChange[id] = True
+            self.__positionTmp[id] = -1
+            self.__eofFlag[id] = False
+            self.__repeat[id] = False
+            self.__sourceType[id] = PLAYER_SOURCETYPE_NUL
+            self.__playingFlag[id] = False
+            self.__handle[id] = 0
+            self.__reverseHandle[id] = 0
+            self.__freq[id] = 0
+            self.__device[id] = 0
+            self.__defaultDevice[id] = False
 
     def exitPlayer(self, id):
         """プレイヤー終了（id）"""
@@ -245,13 +270,13 @@ class bassThread(threading.Thread):
                 # 通信
                 sRet = -1
                 s = _memory[id][M_STATUS]
-                if s == PLAYER_SEND_INIT:
+                if s == PLAYER_SEND_NEWPLAYER:
+                    self.setNewPlayer(id)
+                    sRet = 1
+                elif s == PLAYER_SEND_INIT:
                     if self.bassInit(id):sRet = 1
                 elif s == PLAYER_SEND_DEVICE:
                     self.__changeDevice(id, True)
-                    sRet = 1
-                elif s == PLAYER_SEND_NEWPLAYER:
-                    self.setNewPlayer()
                     sRet = 1
                 elif s == PLAYER_SEND_FREE:
                     if self.bassFree(id):sRet = 1
@@ -526,6 +551,3 @@ class bassThread(threading.Thread):
         else: _memory[id][M_VALUE] = -1
         return True
 
-# bassスレッド生成
-player = bassThread()
-player.start()
