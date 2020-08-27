@@ -9,7 +9,7 @@ from .constants import *
 lock = threading.Lock()
 
 # プレイヤースレッド
-_playerThread = []
+_playerThread = None
 
 # デバイスリスト
 _deviceList = []
@@ -28,10 +28,14 @@ def connectPlayer(playerObject):
     プレイヤーと接続(playerオブジェクト) => int PlayerID
     プレイヤーオブジェクトに対して固有のIDを発行し、設定情報を連携する、
     """
+    global _playerThread
+    global _playerList
+    global _memory
     if _playerThread == None or _playerThread.isAlive() == False: # bassスレッド再生成
+        _playerList = []
+        _memory = []
         _playerThread = bassThread()
         _playerThread.start()
-
     try:
         index = _playerList.index(None)
         _playerList[index] = playerObject
