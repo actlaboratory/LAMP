@@ -40,8 +40,16 @@ class eventProcessor():
                 self.setNowTimeLabel(val, max)
 
         #ファイル送り
-        if globalVars.play.getStatus() == PLAYER_STATUS_END or globalVars.play.getStatus() == PLAYER_STATUS_END:
+        if globalVars.play.getStatus() == PLAYER_STATUS_END:
             self.fileChange()
+
+        #ファイル戻し（巻き戻し用）
+        if globalVars.play.getStatus() == PLAYER_STATUS_OVERREWIND:
+            globalVars.play.overRewindOk()
+            dataNoTmp = self.playingDataNo
+            self.previousFile()
+            if dataNoTmp != self.playingDataNo: globalVars.play.setPosition(globalVars.play.getLength() - 1)
+            else: globalVars.play.stopOverRewind()
 
     #経過時間表示を更新
     def setNowTimeLabel(self, now, max):
@@ -77,7 +85,7 @@ class eventProcessor():
     def changeVolume(self, change=0, vol=-2): #vol=-1でデフォルト
         if self.muteFlag == 1: return None
         if change >= -100 and change <= 100 and change != 0:
-            rtn = globalVars.play.calcVolume(change)
+            rtn = globalVars.play.setVolumeByDiff(change)
         elif change == 0 and vol == -1:
             globalVars.play.setVolume(100)
         elif change == 0 and vol <= 100 and vol >= 0:

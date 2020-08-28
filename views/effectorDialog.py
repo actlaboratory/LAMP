@@ -34,9 +34,9 @@ class Dialog(BaseDialog):
         # 速さ設定
         self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",)
         self.tempoLabel = self.creator.staticText(_("速さ"),0)
-        self.tempoSlider = self.creator.slider(_("速さ"),150, globalVars.play.getConfig(PLAYER_CONFIG_SPEED), 500, -85)
+        self.tempoSlider = self.creator.slider(_("速さ"),150, globalVars.play.getConfig(PLAYER_CONFIG_SPEED), 500, 15)
         self.tempoSlider.Bind(wx.EVT_COMMAND_SCROLL, self.onSlider)
-        self.tempoSpin = self.creator.SpinCtrl(-85, 500, globalVars.play.getConfig(PLAYER_CONFIG_SPEED), self.onSpin)
+        self.tempoSpin = self.creator.SpinCtrl(15, 500, globalVars.play.getConfig(PLAYER_CONFIG_SPEED), self.onSpin)
         # ピッチ変更
         self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",)
         self.pitchLabel = self.creator.staticText(_("キー"),0)
@@ -92,12 +92,12 @@ class Dialog(BaseDialog):
             self.wnd.EndModal(1)
         elif evt.GetEventObject()==self.bReset:
             
-            self.ampSlider.SetValue(0)
-            self.ampSpin.SetValue(0)
+            self.ampSlider.SetValue(100)
+            self.ampSpin.SetValue(100)
             globalVars.play.setAmp(100)
-            self.tempoSlider.SetValue(0)
-            self.tempoSpin.SetValue(0)
-            globalVars.play.setSpeed(0)
+            self.tempoSlider.SetValue(100)
+            self.tempoSpin.SetValue(100)
+            globalVars.play.setSpeed(100)
             self.pitchSlider.SetValue(0)
             self.pitchSpin.SetValue(0)
             globalVars.play.setKey(0)

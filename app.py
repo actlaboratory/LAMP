@@ -117,8 +117,7 @@ class Main(wx.App):
 		self.timezone=datetime.timezone(datetime.timedelta(hours=hours,minutes=minutes))
 
 	def SetGlobalVars(self):
-		globalVars.play = player.player()
-		globalVars.play.startDevice(PLAYER_DEFAULT_SPEAKER)
+		globalVars.play = player.player(PLAYER_DEFAULT_SPEAKER)
 		globalVars.play.setVolume(globalVars.app.config.getint("volume","default",default=100, min=0, max=100))
 		globalVars.playlist = lists.playlist()
 		globalVars.queue = lists.queue()

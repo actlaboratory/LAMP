@@ -490,6 +490,7 @@ class bassThread(threading.Thread):
         pybass.BASS_StreamFree(self.__handle[id])
         self.__reset(id)
         self.__playingFlag[id] = False
+        self.__eofFlag[id] = False
         return True
 
     def getStatus(self, id):
@@ -510,7 +511,7 @@ class bassThread(threading.Thread):
         """ 再生速度設定（id） => bool"""
         if self.__sourceType[id] != PLAYER_SOURCETYPE_FILE: return False
         speed = _playerList[id].getConfig(PLAYER_CONFIG_SPEED)
-        return pybass.BASS_ChannelSetAttribute(self.__handle[id],bassFx.BASS_ATTRIB_TEMPO, speed)
+        return pybass.BASS_ChannelSetAttribute(self.__handle[id],bassFx.BASS_ATTRIB_TEMPO, speed - 100)
 
     def setKey(self, id):
         """ 再生キー設定（id） => bool"""
@@ -527,7 +528,7 @@ class bassThread(threading.Thread):
     def setVolume(self, id):
         """ 再生音量設定（id） => bool"""
         vol = _playerList[id].getConfig(PLAYER_CONFIG_AMPVOL)
-        return pybass.BASS_ChannelSetAttribute(self.__handle[id], pybass.BASS_ATTRIB_VOL, vol)
+        return pybass.BASS_ChannelSetAttribute(self.__handle[id], pybass.BASS_ATTRIB_VOL, vol / 100)
 
     def getPosition(self, id):
         """  再生位置秒数取得（id） => bool (value)"""
