@@ -80,7 +80,11 @@ class player():
     def setRepeat(self, boolVal):
         """ リピート（bool）"""
         bassController.setRepeat(self.__id, boolVal)
-    
+
+    def getRepeat(self):
+        """ リピート状態取得 => bool"""
+        bassController.getRepeat(self.__id)
+
     def __sendSource(self):
         """bassにファイルを送信 => bool"""
         if os.path.isfile(self.__source): return bassController.setFile(self.__id)
@@ -100,7 +104,7 @@ class player():
         return bassController.stop(self.__id)
 
     def getStatus(self):
-        """ ステータス取得 => int ステータス定数 => True"""
+        """ ステータス取得 => int ステータス定数"""
         if self.__overRewind: return PLAYER_STATUS_OVERREWIND
         return bassController.getStatus(self.__id)
     

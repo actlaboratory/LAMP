@@ -118,7 +118,11 @@ def setURL(playerID):
 
 def setRepeat(playerID, boolVal):
     """ リピート（bool） """
-    _send(playerID, PLAYER_SEND_REPEAT, boolVal)
+    _send(playerID, PLAYER_SEND_SETREPEAT, boolVal)
+
+def getRepeat(playerID):
+    """ リピート取得（id） """
+    return _send(playerID, PLAYER_SEND_GETREPEAT)
 
 def play(playerID):
     """ 再生(playerID) => bool """
@@ -317,9 +321,10 @@ class bassThread(threading.Thread):
                     pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_TIMEOUT, _memory[id][M_VALUE])
                     pybass.BASS_SetConfig(pybass.BASS_CONFIG_NET_READTIMEOUT, _memory[id][M_VALUE])
                     sRet = 1
-                elif s == PLAYER_SEND_REPEAT:
+                elif s == PLAYER_SEND_SETREPEAT:
                     self.__repeat[id] = _memory[id][M_VALUE]
-                    sRet = 1
+                elif s == PLAYER_SEND_GETREPEAT:
+                    if repeat[id]: sRet = 1
                 elif s == PLAYER_SEND_SETHLSDELAY:
                     if pybass.BASS_SetConfig(bassHls.BASS_CONFIG_HLS_DELAY, _memory[id][M_VALUE]): sRet = 1
                 elif s == PLAYER_SEND_AUTOCHANGE:
