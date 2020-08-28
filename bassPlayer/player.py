@@ -23,7 +23,7 @@ class player():
     def getConfig(self, config):
         """ 設定読み出し(設定読み出し定数) =>　mixed """
         if config == PLAYER_CONFIG_DEVICE: return self.__device
-        if config == PLAYER_CONFIG_ID: return self.__bassAccountID
+        if config == PLAYER_CONFIG_ID: return self.__id
         if config == PLAYER_CONFIG_SOURCE: return self.__source
         if config == PLAYER_CONFIG_SOURCETYPE:
             if os.path.isfile(self.__source): return PLAYER_SOURCETYPE_PATH
