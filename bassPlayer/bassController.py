@@ -130,7 +130,6 @@ def play(playerID):
 
 def pause(playerID):
     """ 一時停止(playerID) => bool """
-
     return _send(playerID, PLAYER_SEND_PAUSE)
 
 def stop(playerID):
@@ -290,6 +289,7 @@ class bassThread(threading.Thread):
                     if self.bassFree(id):sRet = 1
                 elif s == PLAYER_SEND_EXIT:
                     self.exitPlayer(id)
+                    sRet = 1
                 elif s == PLAYER_SEND_FILE:
                     if self.createHandle(id): sRet = 1
                 elif s == PLAYER_SEND_URL:
@@ -323,6 +323,7 @@ class bassThread(threading.Thread):
                     sRet = 1
                 elif s == PLAYER_SEND_SETREPEAT:
                     self.__repeat[id] = _memory[id][M_VALUE]
+                    sRet = 1
                 elif s == PLAYER_SEND_GETREPEAT:
                     if repeat[id]: sRet = 1
                 elif s == PLAYER_SEND_SETHLSDELAY:
@@ -369,9 +370,11 @@ class bassThread(threading.Thread):
                 if isInitialized(i):
                     self.__device[id] = i + 1
                     ret = pybass.BASS_SetDevice(i + 1)
+                    break
                 elif pybass.BASS_Init(i + 1, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0):
                     self.__device[id] = pybass.BASS_GetDevice()
                     ret = True
+                    break
         elif device == PLAYER_NO_SPEAKER:
             self.__device[id] = 0
             ret = pybass.BASS_Init(0, 44100, pybass.BASS_DEVICE_CPSPEAKERS | pybass.BASS_DEVICE_NOSPEAKER, 0, 0)
@@ -394,7 +397,7 @@ class bassThread(threading.Thread):
     
     def __changeDevice(self, id, forChannel=False):
         """ デバイス変更（ID, チャネル単体?）"""
-        self.backup(id)
+        self.backup()
         if not forChannel: self.bassFree(id)
         else: pybass.BASS_StreamFree(self.__handle[id])
         self.__reset(id)
@@ -414,14 +417,14 @@ class bassThread(threading.Thread):
         if not pybass.BASS_SetDevice(self.__device[id]): return False
         return pybass.BASS_Free()
 
-    def backup(self, id):
-        """ 再生位置を保存（id） """
+    def backup(self):
+        """ 再生位置を保存 """
         for i in range(len(_playerList)):
             posBTmp = pybass.BASS_ChannelGetPosition(self.__handle[i], pybass.BASS_POS_BYTE)
             if posBTmp != -1: self.__positionTmp[i] = pybass.BASS_ChannelBytes2Seconds(self.__handle[i], posBTmp)
             else: self.__positionTmp[i] = -1
         
-    def reStartPlay(self, id, forChannel=False):
+    def reStartPlay(self, id):
         """ 再生復旧（id）"""
         if _playerList[id].getConfig(PLAYER_CONFIG_SOURCETYPE) == PLAYER_SOURCETYPE_PATH: self.createHandle(id)
         elif _playerList[id].getConfig(PLAYER_CONFIG_SOURCETYPE) == PLAYER_SOURCETYPE_URL: self.createHandleFromURL(id)
