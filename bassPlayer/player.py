@@ -232,14 +232,16 @@ class player():
             #ポジション適用
             if direction == -1 and counter > 1: pos -= gap
             if new != -1:
-                if not self.setPosition(pos) and direction == -1:
-                    self.setPosition(0)
-                    self.__overRewind = True
-                elif not self.setPosition(pos) and direction == 1:
-                    self.setPosition(self.getLength())
-                else: self.__overRewind = False
+                if self.setPosition(pos):
+                    self.__overRewind = False
+                    if counter < 4000: counter += 1
+                else:
+                    if direction == -1and not self.setPosition(pos):
+                        self.setPosition(0)
+                        self.__overRewind = True
+                    elif direction == 1:
+                        self.setPosition(self.getLength())
             else: break
-            if counter < 4000: counter += 1
             time.sleep(gap)
         self.__overRewind = False
         self.__rsvOverRewind = False
