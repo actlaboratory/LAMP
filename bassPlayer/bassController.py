@@ -246,8 +246,8 @@ class bassThread(threading.Thread):
         self.__repeat[id] = None
         self.__sourceType[id] = None
         self.__playingFlag[id] = None
-        self.__handle[id] = None
-        self.__reverseHandle[id] = None
+        self.__handle[id] = 0
+        self.__reverseHandle[id] = 0
         self.__freq[id] = None
         self.__device[id] = None
         self.__defaultDevice[id] = None
