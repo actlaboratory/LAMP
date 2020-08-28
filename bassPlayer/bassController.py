@@ -77,7 +77,7 @@ def isInitialized(device):
     """ init済みならTrue => bool """
     p = pybass.BASS_DEVICEINFO()
     pybass.BASS_GetDeviceInfo(device, p)
-    return p.flags & pybass.BASS_DEVICE_INIT
+    return p.flags & pybass.BASS_DEVICE_INIT > 0
 
 def bassInit(playerID):
     """BASS初期化要求（playerID） => bool """

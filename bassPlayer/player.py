@@ -2,6 +2,10 @@ import re, os, threading, time, winsound
 from .constants import *
 from . import bassController
 
+def getDeviceList(self):
+    """ デバイス一覧取得 => list """
+    return bassController.getDeviceList()
+
 class player():
     def __init__(self, device=PLAYER_DEFAULT_SPEAKER):
         # init（初期再生デバイス=デフォルト）
@@ -47,10 +51,6 @@ class player():
 
         return True
 
-    def getDeviceList(self):
-        """ デバイス一覧取得 => list """
-        return bassController.getDeviceList()
-    
     def setDeviceByName(self, deviceName):
         """ デバイス名から再生デバイスをセット(str デバイス名) => bool """
         try:
