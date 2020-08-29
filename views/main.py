@@ -18,6 +18,8 @@ import menuItemsStore
 import settings
 import m3uManager
 import effector
+from bassPlayer import player
+from bassPlayer.constants import *
 
 import view_manager
 from views import mkDialog
@@ -47,7 +49,7 @@ class MainView(BaseView):
 			self.app.config.getint(self.identifier,"positionX"),
 			self.app.config.getint(self.identifier,"positionY")
 		)
-		self.InstallMenuEvent(Menu(self.identifier),self.events.OnMenuSelect)
+		self.InstallMenuEvent(Menu(self.identifier, self.events),self.events.OnMenuSelect)
 		
 		# ボタン・音量スライダエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
@@ -87,6 +89,10 @@ class MainView(BaseView):
 		self.hFrame.Bind(wx.EVT_TIMER, self.events.timerEvent, self.timer)
 
 class Menu(BaseMenu):
+	def __init__(self, identifier, event):
+		super().__init__(identifier)
+		self.event = event
+	
 	def Apply(self,target):
 		"""指定されたウィンドウに、メニューを適用する。"""
 
@@ -94,6 +100,7 @@ class Menu(BaseMenu):
 		self.hFileMenu=wx.Menu()
 		self.hFunctionMenu = wx.Menu()
 		self.hOperationMenu=wx.Menu()
+		self.hSettingsMenu=wx.Menu()
 		self.hHelpMenu=wx.Menu()
 
 		#ファイルメニューの中身
@@ -138,6 +145,9 @@ class Menu(BaseMenu):
 		self.RegisterRadioMenuCommand(self.hRepeatLoopInOperationMenu, "RL_REPEAT", _("リピート"))
 		self.RegisterRadioMenuCommand(self.hRepeatLoopInOperationMenu, "RL_LOOP", _("ループ"))
 		self.RegisterCheckMenuCommand(self.hOperationMenu, "SHUFFLE", _("シャッフル再生"))
+		# 設定メニューの中身
+		self.hDeviceChangeInSettingsMenu = wx.Menu()
+		self.hSettingsMenu.AppendSubMenu(self.hDeviceChangeInSettingsMenu, _("再生出力先の変更"))
 
 		#ヘルプメニューの中身
 		self.RegisterMenuCommand(self.hHelpMenu,"EXAMPLE",_("テストダイアログを閲覧"))
@@ -146,8 +156,12 @@ class Menu(BaseMenu):
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル"))
 		self.hMenuBar.Append(self.hFunctionMenu, _("機能"))
 		self.hMenuBar.Append(self.hOperationMenu,_("操作"))
+		self.hMenuBar.Append(self.hSettingsMenu,_("設定"))
 		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ"))
 		target.SetMenuBar(self.hMenuBar)
+
+		# イベント
+		target.Bind(wx.EVT_MENU_OPEN, self.event.OnMenuOpen)
 
 class Events(BaseEvents):
 	def OnMenuSelect(self,event):
@@ -252,6 +266,24 @@ class Events(BaseEvents):
 			r = d.Show()
 			print(r)
 
+	def OnMenuOpen(self, event):
+		if event.GetMenu()==self.parent.menu.hDeviceChangeInSettingsMenu:
+			menu = self.parent.menu.hDeviceChangeInSettingsMenu
+			# 内容クリア
+			for i in range(menu.GetMenuItemCount()):
+				menu.DestroyItem(menu.FindItemByPosition(0))
+			# デバイスリスト追加
+			deviceList = player.getDeviceList()
+			deviceIndex = 0
+			for d in deviceList:
+				if deviceIndex == 0: menu.AppendRadioItem(menuItemsStore.getRef("DEVICE_CHANGE_DEFAULT"), _("規定の出力先"))
+				elif d != None: menu.AppendRadioItem(menuItemsStore.getRef("DEVICE_CHANGE_" + str(deviceIndex)), d)
+				deviceIndex += 1
+			# 現在の設定にチェック
+			deviceNow = globalVars.play.getConfig(PLAYER_CONFIG_DEVICE)
+			if deviceNow == PLAYER_DEFAULT_SPEAKER: menu.Enable(menuItemsStore.getRef("DEVICE_CHANGE_DEFAULT"), True)
+			elif deviceNow > 0 and deviceNow < len(deviceList): menu.Enable(menuItemsStore.getRef("DEVICE_CHANGE_" + str(deviceNow)), True)
+	
 	def onButtonClick(self, event):
 			if event.GetEventObject() == globalVars.app.hMainView.previousBtn:
 				globalVars.eventProcess.previousBtn()
