@@ -260,6 +260,9 @@ class Events(BaseEvents):
 			globalVars.eventProcess.repeatLoopCtrl(2)
 		elif selected==menuItemsStore.getRef("SHUFFLE"):
 			globalVars.eventProcess.shuffleSw()
+		elif selected >= constants.DEVICE_LIST_MENU and selected < constants.DEVICE_LIST_MENU + 500:
+			if selected == constants.DEVICE_LIST_MENU: globalVars.play.setDevice(PLAYER_DEFAULT_SPEAKER)
+			else: globalVars.play.setDevice(selected - constants.DEVICE_LIST_MENU)
 		elif selected==menuItemsStore.getRef("EXAMPLE"):
 			d = mkDialog.Dialog()
 			d.Initialize("テスト", "これはテストです。", ("テ", "ス", "ト"))
@@ -276,13 +279,13 @@ class Events(BaseEvents):
 			deviceList = player.getDeviceList()
 			deviceIndex = 0
 			for d in deviceList:
-				if deviceIndex == 0: menu.AppendRadioItem(menuItemsStore.getRef("DEVICE_CHANGE_DEFAULT"), _("規定の出力先"))
-				elif d != None: menu.AppendRadioItem(menuItemsStore.getRef("DEVICE_CHANGE_" + str(deviceIndex)), d)
+				if deviceIndex == 0: menu.AppendCheckItem(constants.DEVICE_LIST_MENU, _("規定の出力先"))
+				elif d != None: menu.AppendCheckItem(constants.DEVICE_LIST_MENU + deviceIndex, d)
 				deviceIndex += 1
 			# 現在の設定にチェック
 			deviceNow = globalVars.play.getConfig(PLAYER_CONFIG_DEVICE)
-			if deviceNow == PLAYER_DEFAULT_SPEAKER: menu.Enable(menuItemsStore.getRef("DEVICE_CHANGE_DEFAULT"), True)
-			elif deviceNow > 0 and deviceNow < len(deviceList): menu.Enable(menuItemsStore.getRef("DEVICE_CHANGE_" + str(deviceNow)), True)
+			if deviceNow == PLAYER_DEFAULT_SPEAKER: menu.Check(constants.DEVICE_LIST_MENU, True)
+			elif deviceNow > 0 and deviceNow < len(deviceList) and deviceList[deviceNow] != None: menu.Check(constants.DEVICE_LIST_MENU + deviceNow, True)
 	
 	def onButtonClick(self, event):
 			if event.GetEventObject() == globalVars.app.hMainView.previousBtn:

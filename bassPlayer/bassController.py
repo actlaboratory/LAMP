@@ -399,21 +399,28 @@ class bassThread(threading.Thread):
     
     
     def __changeDevice(self, id, forChannel=False):
-        """ デバイス変更（ID, チャネル単体?）"""
+        """ デバイス変更（ID, チャネル単体?）=> bool """
         self.backup()
         if not forChannel: self.bassFree(id)
         else: pybass.BASS_StreamFree(self.__handle[id])
         self.__reset(id)
         deviceTmp = self.__device[id]
         if forChannel:
-            self.bassInit(id)
-            if self.__playingFlag[id] > 0: self.reStartPlay(id)
+            if self.bassInit(id):
+                ret = True
+                if self.__playingFlag[id] > 0: self.reStartPlay(id)
+            else:
+                self.bassInit(deviceTmp)
+                ret = False
+                if self.__playingFlag[id] > 0: self.reStartPlay(id)
         else:
             for i in range(len(_playerList)):
                 if deviceTmp == self.__device[i]:
                     self.bassInit(i)
                     if self.__playingFlag[i] > 0:
                         self.reStartPlay(i)
+                ret = True
+        return ret
         
     def bassFree(self, id):
         """ BASS Free（id） => bool """
