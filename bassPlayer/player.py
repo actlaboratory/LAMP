@@ -2,7 +2,7 @@ import re, os, threading, time, winsound
 from .constants import *
 from . import bassController
 
-def getDeviceList(self):
+def getDeviceList():
     """ デバイス一覧取得 => list """
     return bassController.getDeviceList()
 
