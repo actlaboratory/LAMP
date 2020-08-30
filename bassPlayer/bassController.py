@@ -423,7 +423,7 @@ class bassThread(threading.Thread):
             for i in range(len(_playerList)):
                 if deviceTmp == self.__device[i]:
                     self.bassInit(i)
-                    if self.__playingFlag[i] == True:
+                    if self.__playingFlag[i] > self.PLAYINGF_STOP:
                         self.reStartPlay(i)
                 ret = True
         return ret
