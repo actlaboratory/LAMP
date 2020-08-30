@@ -22,7 +22,7 @@ class dataDict():
 		pathList = []
 		# リストで受け取ってフォルダとファイルに分ける
 		for s in flst:
-			if (os.path.isfile(s) and os.path.splitext(s) == ".mp3") or re.search("^https?://.+\..+", s)!=None:
+			if (os.path.isfile(s) and os.path.splitext(s)[1] == ".mp3") or re.search("^https?://.+\..+", s)!=None:
 				pathList.append(s)
 			else:
 				self.appendDirList(pathList, s)
