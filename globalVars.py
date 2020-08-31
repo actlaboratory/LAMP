@@ -15,4 +15,5 @@ queue = None
 eventProcess = None
 dataDict = None
 sleepTimer = None
+m3uHistory = None
 popupMenu4listView = None

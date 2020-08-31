@@ -2,6 +2,7 @@
 #Application startup file
 
 import win32timezone#ダミー
+import m3uManager
 def _(string): pass#dummy
 
 #dllを相対パスで指定した時のため、カレントディレクトリを変更
@@ -18,6 +19,7 @@ def main():
 	app.initialize()
 	app.MainLoop()
 	globalVars.play.exit()
+	m3uManager.dumpHistory()
 	app.config.write()
 
 #global schope

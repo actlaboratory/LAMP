@@ -99,6 +99,7 @@ class Menu(BaseMenu):
 		#メニューの大項目を作る
 		self.hFileMenu=wx.Menu()
 		self.hFunctionMenu = wx.Menu()
+		self.hPlaylistMenu=wx.Menu()
 		self.hOperationMenu=wx.Menu()
 		self.hSettingsMenu=wx.Menu()
 		self.hHelpMenu=wx.Menu()
@@ -118,6 +119,9 @@ class Menu(BaseMenu):
 		#機能メニューの中身
 		self.RegisterMenuCommand(self.hFunctionMenu, "SET_SLEEPTIMER", _("スリープタイマーを設定"))
 		self.RegisterMenuCommand(self.hFunctionMenu, "SET_EFFECTOR", _("エフェクター"))
+		# プレイリストメニューの中身
+		self.RegisterMenuCommand(self.hPlaylistMenu,"PLAYLIST_HISTORY_LABEL",_("履歴（20件まで）"))
+		self.hPlaylistMenu.Enable(menuItemsStore.getRef("PLAYLIST_HISTORY_LABEL"), False)
 		#操作メニューの中身
 		self.RegisterMenuCommand(self.hOperationMenu, "PLAY_PAUSE", _("再生 / 一時停止"))
 		self.RegisterMenuCommand(self.hOperationMenu, "STOP", _("停止"))
@@ -155,6 +159,7 @@ class Menu(BaseMenu):
 		#メニューバーの生成
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル"))
 		self.hMenuBar.Append(self.hFunctionMenu, _("機能"))
+		self.hMenuBar.Append(self.hPlaylistMenu,_("プレイリスト"))
 		self.hMenuBar.Append(self.hOperationMenu,_("操作"))
 		self.hMenuBar.Append(self.hSettingsMenu,_("設定"))
 		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ"))
@@ -263,6 +268,8 @@ class Events(BaseEvents):
 		elif selected >= constants.DEVICE_LIST_MENU and selected < constants.DEVICE_LIST_MENU + 500:
 			if selected == constants.DEVICE_LIST_MENU: globalVars.play.setDevice(PLAYER_DEFAULT_SPEAKER)
 			else: globalVars.play.setDevice(selected - constants.DEVICE_LIST_MENU)
+		elif selected >= constants.PLAYLIST_HISTORY and selected < constants.PLAYLIST_HISTORY+ 20:
+			m3uManager.loadM3u(globalVars.m3uHistory.getList()[selected - constants.PLAYLIST_HISTORY])
 		elif selected==menuItemsStore.getRef("EXAMPLE"):
 			d = mkDialog.Dialog()
 			d.Initialize("テスト", "これはテストです。", ("テ", "ス", "ト"))
@@ -286,6 +293,16 @@ class Events(BaseEvents):
 			deviceNow = globalVars.play.getConfig(PLAYER_CONFIG_DEVICE)
 			if deviceNow == PLAYER_DEFAULT_SPEAKER: menu.Check(constants.DEVICE_LIST_MENU, True)
 			elif deviceNow > 0 and deviceNow < len(deviceList) and deviceList[deviceNow] != None: menu.Check(constants.DEVICE_LIST_MENU + deviceNow, True)
+		elif event.GetEventObject() == self.parent.menu.hPlaylistMenu:
+			menu = self.parent.menu.hPlaylistMenu
+			# 履歴部分を削除
+			for i in range(menu.GetMenuItemCount() - 1):
+				menu.DestroyItem(menu.FindItemByPosition(1))
+			# 履歴部分を作成
+			index = 0
+			for path in globalVars.m3uHistory.getList():
+				menu.Insert(1, constants.PLAYLIST_HISTORY + index, path)
+				index += 1
 	
 	def onButtonClick(self, event):
 			if event.GetEventObject() == globalVars.app.hMainView.previousBtn:

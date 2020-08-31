@@ -13,6 +13,7 @@ import locale
 import win32api
 import datetime
 import globalVars
+import m3uManager
 from logging import getLogger, FileHandler, Formatter
 from simpleDialog import *
 import sleep_timer
@@ -124,3 +125,4 @@ class Main(wx.App):
 		globalVars.eventProcess = event_processor.eventProcessor()
 		globalVars.dataDict = data_dict.dataDict()
 		globalVars.sleepTimer = sleep_timer.sleepTimer()
+		globalVars.m3uHistory = m3uManager.loadHistory()

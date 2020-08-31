@@ -1,5 +1,7 @@
 import wx
 import os
+import pickle
+import history
 import datetime
 import globalVars
 import menuItemsStore
@@ -35,14 +37,20 @@ def loadM3u(path=None, playlist=2):
             if os.path.isfile(s):
                 rtn.append(s)
         f.close()
+    else:
+        ed = mkDialog.Dialog()
+        ed.Initialize(_("読み込みエラー"), _("プレイリストファイルの読み込みに失敗しました。"), (_("了解"),))
+        return ed.Show()
     if playlist == 2: #REPLACE
         if closeM3u() == False: return rtn #closeがキャンセルされたら中止
         globalVars.playlist.addFiles(rtn)
         globalVars.playlist.playlistFile = path
+        globalVars.m3uHistory.add(path)
         globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U_OPEN"), True)
     elif playlist == 1: #ADD
         globalVars.playlist.addFiles(rtn)
         globalVars.playlist.playlistFile = path
+        globalVars.m3uHistory.add(path)
     return rtn
 
 #プレイリスト自動保存
@@ -94,3 +102,21 @@ def saveM3u8(path=None, reload=True):
         lst = globalVars.playlist.getAllFiles()
         f.write("\n".join(lst))
     globalVars.playlist.playlistFile = path
+    globalVars.m3uHistory.add(path)
+
+def loadHistory():
+    ret = history.History(20, False)
+    if os.path.isfile("m3u_history.dat"):
+        f = open("m3u_history.dat", "rb")
+        hList = pickle.load(f)
+        if type(hList) is list:
+            ret.lst = hList
+            ret.cursor = len(hList) - 1
+        f.close()
+    return ret
+
+def dumpHistory():
+    f = open("m3u_history.dat", "wb")
+    pickle.dump(globalVars.m3uHistory.getList(), f)
+    f.close()
+
