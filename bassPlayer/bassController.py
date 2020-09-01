@@ -250,7 +250,7 @@ class bassThread(threading.Thread):
         self.__eofFlag[id] = None
         self.__repeat[id] = None
         self.__sourceType[id] = None
-        self.__playingFlag[id] = None
+        self.__playingFlag[id] = self.PLAYINGF_STOP
         self.__handle[id] = 0
         self.__reverseHandle[id] = 0
         self.__freq[id] = None

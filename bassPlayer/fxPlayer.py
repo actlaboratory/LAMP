@@ -39,10 +39,6 @@ class _fxPlayerObject():
         else: return False
         bassController.changeDevice(self.__id)
     
-    def play(self):
-        """ 再生 """
-        return bassController.play(self.__id)
-
     def __autoStopper(self):
         """ 単発再生用自動停止 （スレッド呼び出し必須）"""
         counter = 0
@@ -85,3 +81,7 @@ def playFx(source, device=PLAYER_DEFAULT_SPEAKER, volume=100):
 def fxObject(source, repeat=True, device=PLAYER_DEFAULT_SPEAKER, volume=100, system=False):
     """ 効果音オブジェクト（音源, リピート=True, 再生デバイス=デフォルト, 音量=100） => fxPlayerObject """
     return _fxPlayerObject(source, repeat, device, volume, False)
+
+def getDeviceList():
+    """ 再生デバイス一覧取得 => リスト """
+    return bassController.getDeviceList()
