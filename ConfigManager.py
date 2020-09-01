@@ -83,7 +83,7 @@ class ConfigManager(configparser.ConfigParser):
 			return int(default)
 
 	def getstring(self,section,key,default="",selection=None,*, raw=False, vars=None,fallback=None):
-		if type(selection) not in (set,tuple,list):
+		if selection!=None and type(selection) not in (set,tuple,list):
 			raise TypeError("selection must be set or tuple")
 		ret=self.__getitem__(section)[key]
 		if ret=="":
@@ -96,7 +96,7 @@ class ConfigManager(configparser.ConfigParser):
 				ret=default
 				if selection==None:return ret
 
-		if ret not in selection:
+		if selection!=None and ret not in selection:
 			self.log.debug("value "+ret+" not in selection.  at section "+section+", key "+key)
 			self[section][key]=default
 			ret=default
@@ -119,3 +119,4 @@ class ConfigSection(configparser.SectionProxy):
 
 	def __setitem__(self,key,value):
 		return super().__setitem__(key,str(value))
+
