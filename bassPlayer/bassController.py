@@ -218,7 +218,7 @@ class bassThread(threading.Thread):
     def setNewPlayer(self, id):
         """新しいプレイヤーをセット"""
         if id == len(_playerList) - 1:
-            self.__autoChange.append(True)
+            self.__autoChange.append(False)
             self.__positionTmp.append(-1)
             self.__eofFlag.append(False)
             self.__repeat.append(False)
@@ -230,7 +230,7 @@ class bassThread(threading.Thread):
             self.__device.append(0)
             self.__defaultDevice.append(False)
         else:
-            self.__autoChange[id] = True
+            self.__autoChange[id] = False
             self.__positionTmp[id] = -1
             self.__eofFlag[id] = False
             self.__repeat[id] = False
@@ -350,7 +350,8 @@ class bassThread(threading.Thread):
                     self.__changeDevice(id, True)
                 a = pybass.BASS_ChannelIsActive(self.__handle[id])
                 if a == pybass.BASS_ACTIVE_PAUSED_DEVICE: 
-                    if self.__autoChange[id]: self.__changeDevice(id)
+                    self.__changeDevice(id)
+                    self.__device[id] = 0
                 elif a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag[id] == self.PLAYINGF_PLAY and self.__sourceType[id] == PLAYER_SOURCETYPE_STREAM):
                     if not self.play(id):
                         self.stop(id)
@@ -371,19 +372,6 @@ class bassThread(threading.Thread):
         if device == PLAYER_DEFAULT_SPEAKER:
             device = getDefaultDevice()
             self.__defaultDevice[id] = True
-        elif device == PLAYER_ANY_SPEAKER:
-            for i in range(len(getDeviceList()) - 1):
-                if isInitialized(i):
-                    self.__device[id] = i + 1
-                    ret = pybass.BASS_SetDevice(i + 1)
-                    break
-                elif pybass.BASS_Init(i + 1, 44100, pybass.BASS_DEVICE_CPSPEAKERS, 0, 0):
-                    self.__device[id] = pybass.BASS_GetDevice()
-                    ret = True
-                    break
-        elif device == PLAYER_NO_SPEAKER:
-            self.__device[id] = 0
-            ret = pybass.BASS_Init(0, 44100, pybass.BASS_DEVICE_CPSPEAKERS | pybass.BASS_DEVICE_NOSPEAKER, 0, 0)
         if device > 0:
             if isInitialized(device):
                 ret = pybass.BASS_SetDevice(device)
@@ -394,7 +382,8 @@ class bassThread(threading.Thread):
                 ret = True
         if not ret:
             self.__device[id] = 0
-            pybass.BASS_Init(0, 44100, pybass.BASS_DEVICE_CPSPEAKERS | pybass.BASS_DEVICE_NOSPEAKER, 0, 0)
+            winsound.Beep(1500, 500)
+            winsound.Beep(1500, 500)
         return ret
 
     def __del__(self):
@@ -416,14 +405,14 @@ class bassThread(threading.Thread):
                 ret = True
                 if self.__playingFlag[id] > self.PLAYINGF_STOP: self.reStartPlay(id)
             else:
-                self.bassInit(deviceTmp)
                 ret = False
-                if self.__playingFlag[id] > self.PLAYINGF_STOP: self.reStartPlay(id)
         else:
+            ret = False
             for i in range(len(_playerList)):
+                if not self.__autoChange[id] and not self.__defaultDevice[id]: continue
                 if deviceTmp == self.__device[i]:
                     self.bassInit(i)
-                    if self.__playingFlag[i] > self.PLAYINGF_STOP:
+                    if self.__playingFlag[id] > self.PLAYINGF_STOP:
                         self.reStartPlay(i)
                 ret = True
         return ret
@@ -438,7 +427,6 @@ class bassThread(threading.Thread):
         for i in range(len(_playerList)):
             posBTmp = pybass.BASS_ChannelGetPosition(self.__handle[i], pybass.BASS_POS_BYTE)
             if posBTmp != -1: self.__positionTmp[i] = pybass.BASS_ChannelBytes2Seconds(self.__handle[i], posBTmp)
-            else: self.__positionTmp[i] = -1
         
     def reStartPlay(self, id):
         """ 再生復旧（id）"""
@@ -501,6 +489,7 @@ class bassThread(threading.Thread):
     
     def play(self, id):
         """ 再生（id）=> bool  """
+        if self.__device[id] == 0: return False
         ret = pybass.BASS_ChannelPlay(self.__handle[id], False)
         if ret: self.__playingFlag[id] = self.PLAYINGF_PLAY
         else: self.__playingFlag[id] = self.PLAYINGF_STOP
@@ -523,7 +512,8 @@ class bassThread(threading.Thread):
 
     def getStatus(self, id):
         """ ステータス取得（id） => True"""
-        if pybass.BASS_GetDevice() == 4294967295: # -1のこと
+        if pybass.BASS_GetDevice() == 4294967295 or self.__device[id] == 0:
+        # 4294967295 => -1のこと
             _memory[id][M_VALUE] = PLAYER_STATUS_DEVICEERROR
             return True
         elif self.__playingFlag[id] > self.PLAYINGF_STOP and pybass.BASS_ChannelIsActive(self.__handle[id]) == pybass.BASS_ACTIVE_PLAYING:
