@@ -382,8 +382,6 @@ class bassThread(threading.Thread):
                 ret = True
         if not ret:
             self.__device[id] = 0
-            winsound.Beep(1500, 500)
-            winsound.Beep(1500, 500)
         return ret
 
     def __del__(self):
@@ -489,10 +487,11 @@ class bassThread(threading.Thread):
     
     def play(self, id):
         """ 再生（id）=> bool  """
-        if self.__device[id] == 0: return False
         ret = pybass.BASS_ChannelPlay(self.__handle[id], False)
         if ret: self.__playingFlag[id] = self.PLAYINGF_PLAY
-        else: self.__playingFlag[id] = self.PLAYINGF_STOP
+        else:
+            if pybass.BASS_ErrorGetCode() == pybass.BASS_ERROR_START: self.__device[id] = 0
+            else: self.__playingFlag[id] = self.PLAYINGF_STOP
         return ret
 
     def pause(self, id):
@@ -574,4 +573,3 @@ class bassThread(threading.Thread):
             _memory[id][M_VALUE] = sec
         else: _memory[id][M_VALUE] = -1
         return True
-
