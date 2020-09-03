@@ -351,7 +351,6 @@ class bassThread(threading.Thread):
                 a = pybass.BASS_ChannelIsActive(self.__handle[id])
                 if a == pybass.BASS_ACTIVE_PAUSED_DEVICE: 
                     self.__changeDevice(id)
-                    self.__device[id] = 0
                 elif a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag[id] == self.PLAYINGF_PLAY and self.__sourceType[id] == PLAYER_SOURCETYPE_STREAM):
                     if not self.play(id):
                         self.stop(id)
@@ -364,11 +363,12 @@ class bassThread(threading.Thread):
                             self.__eofFlag[id] = True
         return
 
-    def bassInit(self, id):
+    def bassInit(self, id, forceDefault=False):
         """ bass.dll初期化(id) => bool """
         ret = False
         device = _playerList[id].getConfig(PLAYER_CONFIG_DEVICE)
         self.__defaultDevice[id] = False
+        if forceDefault: device = PLAYER_DEFAULT_SPEAKER
         if device == PLAYER_DEFAULT_SPEAKER:
             device = getDefaultDevice()
             self.__defaultDevice[id] = True
@@ -407,9 +407,12 @@ class bassThread(threading.Thread):
         else:
             ret = False
             for i in range(len(_playerList)):
-                if not self.__autoChange[id] and not self.__defaultDevice[id]: continue
+                if not self.__autoChange[i] and not self.__defaultDevice[i]:
+                    self.__device[i] = 0
+                    continue
                 if deviceTmp == self.__device[i]:
-                    self.bassInit(i)
+                    if self.__autoChange[i]: self.bassInit(i, True)
+                    else: self.bassInit(i)
                     if self.__playingFlag[id] > self.PLAYINGF_STOP:
                         self.reStartPlay(i)
                 ret = True
@@ -428,6 +431,7 @@ class bassThread(threading.Thread):
         
     def reStartPlay(self, id):
         """ 再生復旧（id）"""
+        if self.__device[id] == 0: return False
         pause = False
         if self.__playingFlag[id] == self.PLAYINGF_PAUSE: pause = True
         if _playerList[id].getConfig(PLAYER_CONFIG_SOURCETYPE) == PLAYER_SOURCETYPE_PATH: self.createHandle(id)
@@ -439,6 +443,7 @@ class bassThread(threading.Thread):
 
     def createHandle(self, id):
         """ ハンドル作成（id） => bool """
+        winsound.Beep(1500, 300)
         pybass.BASS_SetDevice(self.__device[id])
         self.stop(id)
         self.__eofFlag[id] = False
