@@ -353,8 +353,9 @@ class bassThread(threading.Thread):
                     self.__changeDevice(id)
                 elif a == pybass.BASS_ACTIVE_STALLED or (a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag[id] == self.PLAYINGF_PLAY and self.__sourceType[id] == PLAYER_SOURCETYPE_STREAM):
                     if not self.play(id):
-                        self.stop(id)
-                        self.__eofFlag[id] == True
+                        if pybass.BASS_ErrorGetCode() != pybass.BASS_ERROR_HANDLE: #ハンドルが姿を消しているのでデバイスエラー
+                            self.stop(id)
+                            self.__eofFlag[id] == True
                 elif a == pybass.BASS_ACTIVE_STOPPED and self.__playingFlag[id] > self.PLAYINGF_STOP and self.__sourceType[id] == PLAYER_SOURCETYPE_FILE:
                     if pybass.BASS_ChannelGetPosition(self.__handle[id], pybass.BASS_POS_BYTE) == pybass.BASS_ChannelGetLength(self.__handle[id], pybass.BASS_POS_BYTE) != -1:
                         if self.__repeat[id]: self.play(id)
@@ -439,7 +440,9 @@ class bassThread(threading.Thread):
         if self.__positionTmp[id] != -1:
             posB = pybass.BASS_ChannelSeconds2Bytes(self.__handle[id], self.__positionTmp[id])
             pybass.BASS_ChannelSetPosition(self.__handle[id], posB, pybass.BASS_POS_BYTE)
-            if not pause: self.play(id)
+            if not pause:
+                winsound.Beep(2000, 300)
+                self.play(id)
 
     def createHandle(self, id):
         """ ハンドル作成（id） => bool """
@@ -467,6 +470,8 @@ class bassThread(threading.Thread):
 
     def createHandleFromURL(self, id):
         """ URLからハンドル作成（id） => bool """
+        winsound.Beep(1500, 300)
+        winsound.Beep(1500, 300)
         pybass.BASS_SetDevice(self.__device[id])
         self.stop(id)
         self.__eofFlag[id] = False
@@ -474,6 +479,8 @@ class bassThread(threading.Thread):
         source = _playerList[id].getConfig(PLAYER_CONFIG_SOURCE)
         handle = pybass.BASS_StreamCreateURL(source.encode(), 0, 0, 0, 0)
         if handle:
+            winsound.Beep(1000, 120)
+            winsound.Beep(1800, 120)
             self.__handle[id] = handle
             self.__reverseHandle[id] = 0
             self.__freq[id] = 0
@@ -496,7 +503,7 @@ class bassThread(threading.Thread):
         if ret: self.__playingFlag[id] = self.PLAYINGF_PLAY
         else:
             if pybass.BASS_ErrorGetCode() == pybass.BASS_ERROR_START: self.__device[id] = 0
-            else: self.__playingFlag[id] = self.PLAYINGF_STOP
+            elif self.__sourceType[id] != PLAYER_SOURCETYPE_STREAM: self.__playingFlag[id] = self.PLAYINGF_STOP
         return ret
 
     def pause(self, id):
