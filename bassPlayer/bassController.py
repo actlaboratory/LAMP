@@ -412,7 +412,7 @@ class bassThread(threading.Thread):
                     self.__device[i] = 0
                     continue
                 if deviceTmp == self.__device[i]:
-                    if self.__autoChange[i]: self.bassInit(i, True)
+                    if self.__autoChange[i]: self.bassInit(i, True) #強制的にデフォルトを適用
                     else: self.bassInit(i)
                     if self.__playingFlag[id] > self.PLAYINGF_STOP:
                         self.reStartPlay(i)
