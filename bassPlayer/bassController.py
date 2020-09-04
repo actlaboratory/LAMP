@@ -441,12 +441,10 @@ class bassThread(threading.Thread):
             posB = pybass.BASS_ChannelSeconds2Bytes(self.__handle[id], self.__positionTmp[id])
             pybass.BASS_ChannelSetPosition(self.__handle[id], posB, pybass.BASS_POS_BYTE)
             if not pause:
-                winsound.Beep(2000, 300)
                 self.play(id)
 
     def createHandle(self, id):
         """ ハンドル作成（id） => bool """
-        winsound.Beep(1500, 300)
         pybass.BASS_SetDevice(self.__device[id])
         self.stop(id)
         self.__eofFlag[id] = False
