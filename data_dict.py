@@ -1,6 +1,7 @@
-import sys, os, wx, time, winsound, re
+import sys, os, wx, time, winsound, re, multiprocessing
 import globalVars
 from views import mkProgress
+from bassPlayer.bass import pybass, pytags
 
 class dataDict():
 	def __init__ (self):
@@ -53,7 +54,7 @@ class dataDict():
 		for path in paths:
 			# 辞書とリストに書き込んでdataNoに+1
 			fName = os.path.splitext(os.path.basename(path))[0]
-			self.dict[self.dataNo] = (path, fName)
+			self.dict[self.dataNo] = [path, fName]
 			if id == -1:
 				lst.appendF((path, self.dataNo))
 				index = lcObj.Append([fName])
@@ -69,3 +70,52 @@ class dataDict():
 				globalVars.app.Yield(True) #プログレスダイアログを強制更新
 			progPerTmp = progPer
 			self.dataNo += 1
+
+	def getTags(self, dataNoList):
+		pathList = []
+		for i in range(len(dataNoList)):
+			try:
+				while len(self.dict[dataNoList[i]]) > 2: dataNoList.pop(i)
+			except IndexError as e:
+				break
+		if len(dataNoList) == 0: return
+		for num in dataNoList:
+			pathList.append(self.dict[num][0])
+		pl = multiprocessing.Pool()
+		result = pl.apply_async(getFileInfoProcess, (pathList,))
+		while result.ready() == False: time.sleep(0.1)
+		info = result.get()
+		i = 0
+		for num in dataNoList:
+			if len(self.dict[num]) == 2: self.dict[num] += info[i]
+			i += 1
+
+def getFileInfoProcess(paths):
+	pybass.BASS_Init(0, 44100, 0, 0, 0)
+	pytags.TAGS_SetUTF8(True)
+	#必要なプラグインを適用
+	pybass.BASS_PluginLoad(b"basshls.dll", 0)
+	rtn = []
+	for path in paths:
+		handle = pybass.BASS_StreamCreateFile(False, path, 0, 0, pybass.BASS_UNICODE)
+		if handle == 0:
+			handle = pybass.BASS_StreamCreateURL(path.encode(), 0, 0, 0, 0)
+		# ファイル情報取得
+		fName = os.path.basename(path)
+		if handle == 0:
+			rtn.append([None, "", None, "", "", ""])
+			continue
+		if os.path.isfile(path):
+			size = os.path.getsize(path)
+		else:
+			size = 0
+		title = pytags.TAGS_Read(handle, b"%TITL").decode("utf-8")
+		lengthb = pybass.BASS_ChannelGetLength(handle, pybass.BASS_POS_BYTE)
+		length = pybass.BASS_ChannelBytes2Seconds(handle, lengthb)
+		artist = pytags.TAGS_Read(handle, b"%ARTI").decode("utf-8")
+		album = pytags.TAGS_Read(handle, b"%ALBM").decode("utf-8")
+		albumArtist = pytags.TAGS_Read(handle, b"%AART").decode("utf-8")
+		pybass.BASS_StreamFree(handle)
+		rtn.append([size, title, length, artist, album, albumArtist])
+	pybass.BASS_Free()
+	return tuple(rtn)
