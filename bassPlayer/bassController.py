@@ -468,8 +468,6 @@ class bassThread(threading.Thread):
 
     def createHandleFromURL(self, id):
         """ URLからハンドル作成（id） => bool """
-        winsound.Beep(1500, 300)
-        winsound.Beep(1500, 300)
         pybass.BASS_SetDevice(self.__device[id])
         self.stop(id)
         self.__eofFlag[id] = False
@@ -477,8 +475,6 @@ class bassThread(threading.Thread):
         source = _playerList[id].getConfig(PLAYER_CONFIG_SOURCE)
         handle = pybass.BASS_StreamCreateURL(source.encode(), 0, 0, 0, 0)
         if handle:
-            winsound.Beep(1000, 120)
-            winsound.Beep(1800, 120)
             self.__handle[id] = handle
             self.__reverseHandle[id] = 0
             self.__freq[id] = 0
