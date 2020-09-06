@@ -96,11 +96,14 @@ class eventProcessor():
 
 
     def play(self, list=globalVars.playlist, listTpl=(None, None)):
+        if globalVars.play.getStatus() == PLAYER_STATUS_DEVICEERROR:
+            return False
         if listTpl == (None, None):
             rtn = False
         else:
             if globalVars.play.setSource(listTpl[0]):
                 rtn = globalVars.play.play()
+            else: rtn = False
         self.playingDataNo = listTpl[1]
         if list == globalVars.playlist:
             self.finalList = globalVars.playlist
