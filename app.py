@@ -2,7 +2,7 @@
 #Application Main
 
 import AppBase
-import lists, event_processor, data_dict
+import lists, event_processor, data_dict, lampPipe
 import accessible_output2.outputs.auto
 import sys
 import ConfigManager
@@ -11,7 +11,9 @@ import logging
 import os
 import wx
 import locale
+import win32event
 import win32api
+import winerror
 import datetime
 import globalVars
 import m3uManager
@@ -29,8 +31,18 @@ from views import main
 class Main(AppBase.MainBase):
 	def __init__(self):
 		super().__init__()
+		self.mutex = 0
 
 	def initialize(self):
+		# 多重起動処理8
+		self.mutex = win32event.CreateMutex(None, 1, constants.PIPE_NAME)
+		if win32api.GetLastError() == winerror.ERROR_ALREADY_EXISTS:
+			lampPipe.sendPipe()
+			self.mutex = 0
+			exit()
+		else:
+			lampPipe.startPipeServer()
+		
 		self.SetGlobalVars()
 		# メインビューを表示
 		self.hMainView=main.MainView()
@@ -56,3 +68,8 @@ class Main(AppBase.MainBase):
 		globalVars.dataDict = data_dict.dataDict()
 		globalVars.sleepTimer = sleep_timer.sleepTimer()
 		globalVars.m3uHistory = m3uManager.loadHistory()
+
+	def __del__(self):
+		if self.mutex != 0:
+			win32event.ReleaseMutex(self.mutex)
+			self.mutex = 0

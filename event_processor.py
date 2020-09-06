@@ -120,6 +120,14 @@ class eventProcessor():
         if rtn == False:
             globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
 
+    def forcePlay(self, source):
+        if globalVars.play.setSource(source):
+            rtn = globalVars.play.play()
+        else: rtn = False
+        if rtn: globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
+        else: globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+
+    
     def pause(self, pause=True):
         if pause == True: #一時停止
             if globalVars.play.pause(): globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
