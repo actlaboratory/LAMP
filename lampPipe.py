@@ -1,4 +1,4 @@
-import namedPipe, globalVars, constants, sys
+import wx, namedPipe, globalVars, constants, sys, os, m3uManager
 
 
 def sendPipe():
@@ -16,5 +16,8 @@ def startPipeServer():
     pipeServer.start()
 
 def onReceive(msg):
-    globalVars.eventProcess.forcePlay(msg)
-    print(msg)
+    if os.path.isfile(msg):
+        if os.path.splitext(msg)[1] == ".mp3":
+            wx.CallAfter(globalVars.eventProcess.forcePlay, msg)
+        elif os.path.splitext(msg)[1] == ".m3u" or os.path.splitext(msg)[1] == ".m3u8":
+            wx.CallAfter(m3uManager.loadM3u, msg, m3uManager.REPLACE)
