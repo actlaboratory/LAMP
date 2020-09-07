@@ -123,6 +123,7 @@ class eventProcessor():
     def forcePlay(self, source):
         if globalVars.play.setSource(source):
             rtn = globalVars.play.play()
+            self.playingDataNo = -1 #再生中のデータ番号を割り込み用に更新
         else: rtn = False
         if rtn: globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
         else: globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
