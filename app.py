@@ -20,8 +20,8 @@ import m3uManager
 from logging import getLogger, FileHandler, Formatter
 from simpleDialog import *
 import sleep_timer
-from bassPlayer import player, bassController
-from bassPlayer.constants import *
+from soundPlayer import player, bassController
+from soundPlayer.constants import *
 
 import constants
 import DefaultSettings

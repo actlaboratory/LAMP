@@ -19,6 +19,6 @@ if os.path.isdir("dist\\application"):
 	shutil.rmtree("dist\\")
 
 print("Building...")
-runcmd("pyinstaller --windowed --log-level=ERROR application.py")
+runcmd("pyinstaller --debug all application.py") #--windowed --log-level=ERROR
 shutil.copytree("locale\\","dist\\application\\locale", ignore=shutil.ignore_patterns("*.po", "*.pot", "*.po~"))
 print("Done!")

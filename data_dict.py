@@ -1,7 +1,7 @@
 import sys, os, wx, time, winsound, re, multiprocessing
 import globalVars
 from views import mkProgress
-from bassPlayer.bass import pybass, pytags
+from soundPlayer.bass import pybass, pytags
 
 class dataDict():
 	def __init__ (self):
