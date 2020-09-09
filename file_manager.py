@@ -1,6 +1,6 @@
 import globalVars
 import event_processor
-from bassPlayer.constants import *
+from soundPlayer.constants import *
 
 def previousFile():
     # プレイリスト再生中であれば

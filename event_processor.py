@@ -7,7 +7,7 @@ import settings
 import file_manager
 import shuffle_ctrl
 import lampClipBoardCtrl
-from bassPlayer.constants import *
+from soundPlayer.constants import *
 
 class eventProcessor():
     def __init__(self):

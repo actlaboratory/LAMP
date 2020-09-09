@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # sleepTimer
 
-from bassPlayer.constants import *
+from soundPlayer.constants import *
 import wx
 import os
 from views import mkDialog

@@ -18,8 +18,8 @@ import menuItemsStore
 import settings
 import m3uManager
 import effector
-from bassPlayer import player
-from bassPlayer.constants import *
+from soundPlayer import player
+from soundPlayer.constants import *
 
 import view_manager
 from views import mkDialog

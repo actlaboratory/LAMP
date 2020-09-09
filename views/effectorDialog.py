@@ -6,7 +6,7 @@ import os
 import globalVars
 import views.ViewCreator
 from views import mkDialog
-from bassPlayer.constants import *
+from soundPlayer.constants import *
 
 import views.ViewCreator
 from logging import getLogger
