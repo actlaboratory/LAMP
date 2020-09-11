@@ -15,6 +15,7 @@ import win32event
 import win32api
 import winerror
 import datetime
+import multiprocessing
 import globalVars
 import m3uManager
 import data_dict
@@ -33,14 +34,18 @@ class Main(AppBase.MainBase):
 	def __init__(self):
 		super().__init__()
 		self.mutex = 0
+		multiprocessing.freeze_support() #これがないとマルチプロセスでおかしなことになる
+
 
 	def initialize(self):
 		# 多重起動処理8
-		self.mutex = win32event.CreateMutex(None, 1, constants.PIPE_NAME)
+		try: self.mutex = win32event.CreateMutex(None, 1, constants.PIPE_NAME)
+		except: pass
 		if win32api.GetLastError() == winerror.ERROR_ALREADY_EXISTS:
-			lampPipe.sendPipe()
+			try: lampPipe.sendPipe()
+			except: pass
 			self.mutex = 0
-			exit()
+			sys.exit()
 		else:
 			lampPipe.startPipeServer()
 		
@@ -76,5 +81,6 @@ class Main(AppBase.MainBase):
 
 	def __del__(self):
 		if self.mutex != 0:
-			win32event.ReleaseMutex(self.mutex)
+			try: win32event.ReleaseMutex(self.mutex)
+			except: pass
 			self.mutex = 0

@@ -11,6 +11,7 @@ dist/
 *.exp
 *.lib
 *.spec
+*.pyo
 pl_auto_save
 /test.mp3
 /test.py
