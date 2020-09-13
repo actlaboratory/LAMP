@@ -4,6 +4,7 @@ import globalVars
 import lc_manager
 import menuItemsStore
 import settings
+import data_dict
 import file_manager
 import shuffle_ctrl
 import lampClipBoardCtrl
@@ -104,29 +105,43 @@ class eventProcessor():
             if globalVars.play.setSource(listTpl[0]):
                 rtn = globalVars.play.play()
             else: rtn = False
-        self.playingDataNo = listTpl[1]
         if list == globalVars.playlist:
             self.finalList = globalVars.playlist
             if rtn:
                 globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
                 globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
-            globalVars.playlist.playIndex = globalVars.playlist.getIndex(listTpl)
+                self.playingDataNo = listTpl[1]
+                globalVars.dataDict.getTags([self.playingDataNo])
+                globalVars.playlist.playIndex = globalVars.playlist.getIndex(listTpl)
+                globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
         elif list == globalVars.queue:
             self.finalList = globalVars.queue
             if rtn:
                 globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
                 globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
+                self.playingDataNo = listTpl[1]
+                globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
             globalVars.queue.deleteFile(globalVars.queue.getIndex(listTpl))
         if rtn == False:
             globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+            globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
 
     def forcePlay(self, source):
         if globalVars.play.setSource(source):
-            rtn = globalVars.play.play()
-            self.playingDataNo = -1 #再生中のデータ番号を割り込み用に更新
+            if globalVars.play.play():
+                rtn = True
+                self.playingDataNo = -1 #再生中のデータ番号を割り込み用に更新
+                data_dict.dataDict[-1] = (source, os.path.basename(sorted))
+                globalVars.dataDict.getTags([-1])
+                globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
+            else: rtn = False
         else: rtn = False
-        if rtn: globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
-        else: globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+        if rtn:
+            globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
+            globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
+        else:
+            globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+            globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
 
     
     def pause(self, pause=True):
@@ -204,6 +219,7 @@ class eventProcessor():
         globalVars.play.stop()
         globalVars.playlist.positionReset()
         globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+        globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
         self.playingDataNo = None
 
     def shuffleSw(self):

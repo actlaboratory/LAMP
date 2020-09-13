@@ -12,6 +12,7 @@ import ctypes
 import pywintypes
 
 import constants
+import data_dict
 import errorCodes
 import globalVars
 import menuItemsStore
@@ -119,6 +120,8 @@ class Menu(BaseMenu):
 		#機能メニューの中身
 		self.RegisterMenuCommand(self.hFunctionMenu, "SET_SLEEPTIMER", _("スリープタイマーを設定"))
 		self.RegisterMenuCommand(self.hFunctionMenu, "SET_EFFECTOR", _("エフェクター"))
+		self.RegisterMenuCommand(self.hFunctionMenu, "ABOUT_PLAYING", _("再生中のファイルについて"))
+		self.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
 		# プレイリストメニューの中身
 		self.RegisterMenuCommand(self.hPlaylistMenu,"PLAYLIST_HISTORY_LABEL",_("履歴（20件まで）"))
 		self.hPlaylistMenu.Enable(menuItemsStore.getRef("PLAYLIST_HISTORY_LABEL"), False)
@@ -226,6 +229,9 @@ class Events(BaseEvents):
 			globalVars.sleepTimer.set()
 		elif selected == menuItemsStore.getRef("SET_EFFECTOR"):
 			effector.effector()
+		elif selected == menuItemsStore.getRef("ABOUT_PLAYING"):
+			playingDataNo = globalVars.eventProcess.playingDataNo
+			if playingDataNo != None: data_dict.infoDialog(playingDataNo)
 		# 操作メニューのイベント
 		elif selected==menuItemsStore.getRef("PLAY_PAUSE"):
 			globalVars.eventProcess.playButtonControl()

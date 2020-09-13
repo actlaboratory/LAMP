@@ -2,6 +2,7 @@ import sys, os, wx, time, winsound, re, multiprocessing
 import globalVars
 from views import mkProgress
 from soundPlayer.bass import pybass, pytags
+from views import objectDetail
 
 class dataDict():
 	def __init__ (self):
@@ -119,3 +120,29 @@ def getFileInfoProcess(paths):
 		rtn.append([size, title, length, artist, album, albumArtist])
 	pybass.BASS_Free()
 	return tuple(rtn)
+
+def infoDialog(dataNo):
+	ft = globalVars.dataDict.dict[dataNo]
+	if ft[2] == None or ft[2] < 0:
+		size = ""
+	elif ft[2] < 10**6:
+		size = str(round(ft[2] / 1000, 1)) + "KB"
+	elif ft[2] < 10**9:
+		size = str(round(ft[2] / 10**6, 2)) + "MB"
+	else:
+		size = str(round(ft[2] / 10**9, 2)) + "GB"
+	if ft[4] == None or ft[2] < 0: length = ""
+	else: length = str(int(ft[4] // 60)) + ":" + format(int(ft[4]) // 60, "02")
+	dict = {_("ァイルの場所"): ft[0],
+		_("ファイル名"): ft[1],
+		_( "ファイルサイズ"): size,
+		_("タイトル"): ft[3],
+		_("長さ"): length,
+		_("アーティスト"): ft[5],
+		_("アルバム"): ft[6],
+		_("アルバムアーティスト"): ft[7]
+	}
+	d = objectDetail.Dialog()
+	d.Initialize(dict)
+	d.Show()
+
