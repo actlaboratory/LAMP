@@ -344,5 +344,6 @@ class Events(BaseEvents):
 
 	def Exit(self, evt=None):
 		globalVars.app.hMainView.timer.Stop()
+		globalVars.app.hMainView.tagInfoTimer.Stop()
 		globalVars.eventProcess.stop()
 		super().Exit()
