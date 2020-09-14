@@ -13,6 +13,7 @@ from soundPlayer.constants import *
 class eventProcessor():
     def __init__(self):
         self.repeatLoopFlag = 0 #リピート=1, ループ=2
+        self.tagInfoProcess = 0 # タグ情報表示フラグ 0=アルバム, 1=アーティスト, 2=アルバムアーティスト
         self.playingDataNo = None
         self.muteFlag = 0 #初期値はミュート解除
         self.shuffleCtrl = 0
@@ -44,6 +45,36 @@ class eventProcessor():
         if globalVars.play.getStatus() == PLAYER_STATUS_END:
             self.fileChange()
 
+    # 曲情報更新
+    def refreshTagInfo(self, evt=None):
+        if evt == None: self.tagInfoProcess = 0
+        if self.playingDataNo == None:
+            globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") +  " : ")
+            globalVars.app.hMainView.viewTagInfo.SetLabel("")
+            globalV
+        else:
+            if globalVars.dataDict.dict[self.playingDataNo][3] == "": title = globalVars.dataDict.dict[self.playingDataNo][1] # ファイル名
+            else: title = globalVars.dataDict.dict[self.playingDataNo][3] # タイトル
+            if self.tagInfoProcess == 0: # アルバム名表示
+                if globalVars.dataDict.dict[self.playingDataNo][6] == "": album = _("情報なし")
+                else: album = globalVars.dataDict.dict[self.playingDataNo][6]
+                globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") +  " : " + title)
+                globalVars.app.hMainView.viewTagInfo.SetLabel(_("アルバム") + " : " + album)
+                self.tagInfoProcess = 1
+            elif self.tagInfoProcess == 1: # アーティスト情報表示
+                if globalVars.dataDict.dict[self.playingDataNo][5] == "": artist = _("情報なし")
+                else: artist = globalVars.dataDict.dict[self.playingDataNo][5]
+                globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") +  " : " + title)
+                globalVars.app.hMainView.viewTagInfo.SetLabel(_("アーティスト") + " : " + artist)
+                self.tagInfoProcess = 2
+            elif self.tagInfoProcess == 2: # アルバムアーティスト表示
+                if globalVars.dataDict.dict[self.playingDataNo][7] == "": albumArtist = _("情報なし")
+                else: albumArtist = globalVars.dataDict.dict[self.playingDataNo][6]
+                globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") +  " : " + title)
+                globalVars.app.hMainView.viewTagInfo.SetLabel(_("アルバムアーティスト") + " : " + albumArtist)
+                self.tagInfoProcess = 0
+
+        
         #ファイル戻し（巻き戻し用）
         if globalVars.play.getStatus() == PLAYER_STATUS_OVERREWIND:
             globalVars.play.overRewindOk()
@@ -114,6 +145,8 @@ class eventProcessor():
                 globalVars.dataDict.getTags([self.playingDataNo])
                 globalVars.playlist.playIndex = globalVars.playlist.getIndex(listTpl)
                 globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
+                self.refreshTagInfo()
+                globalVars.app.hMainView.tagInfoTimer.Start(10000)
         elif list == globalVars.queue:
             self.finalList = globalVars.queue
             if rtn:
@@ -121,6 +154,8 @@ class eventProcessor():
                 globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
                 self.playingDataNo = listTpl[1]
                 globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
+                self.refreshTagInfo()
+                globalVars.app.hMainView.tagInfoTimer.Start(10000)
             globalVars.queue.deleteFile(globalVars.queue.getIndex(listTpl))
         if rtn == False:
             globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
@@ -131,7 +166,7 @@ class eventProcessor():
             if globalVars.play.play():
                 rtn = True
                 self.playingDataNo = -1 #再生中のデータ番号を割り込み用に更新
-                data_dict.dataDict[-1] = (source, os.path.basename(sorted))
+                globalVars.dataDict.dict[-1] = (source, os.path.basename(sorted))
                 globalVars.dataDict.getTags([-1])
                 globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
             else: rtn = False
@@ -139,6 +174,8 @@ class eventProcessor():
         if rtn:
             globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
+            self.refreshTagInfo()
+            globalVars.app.hMainView.tagInfoTimer.Start(10000)
         else:
             globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
@@ -221,6 +258,9 @@ class eventProcessor():
         globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
         globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
         self.playingDataNo = None
+        globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") + " : ")
+        globalVars.app.hMainView.viewTagInfo.SetLabel("")
+        globalVars.app.hMainView.tagInfoTimer.Stop()
 
     def shuffleSw(self):
         if self.shuffleCtrl == 0:

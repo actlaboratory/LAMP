@@ -67,6 +67,12 @@ class MainView(BaseView):
 		self.muteBtn = self.horizontalCreator.button(_("ﾐｭｰﾄ"), self.events.onButtonClick)
 		#self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
 
+		# 曲情報表示
+		self.viewTitle = self.creator.staticText(_("タイトル") +  " : ")
+		self.viewTagInfo = self.creator.staticText("")
+		self.tagInfoTimer = wx.Timer()
+		self.tagInfoTimer.Bind(wx.EVT_TIMER, globalVars.eventProcess.refreshTagInfo)
+
 		#トラックバーエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
 		self.trackBar = self.horizontalCreator.slider(_("トラック"), 1000)
