@@ -19,7 +19,7 @@ class dataDict():
 		progress=mkProgress.Dialog()
 		progress.Initialize(_("ファイルを集めています..."), _("読み込み中..."))
 		progress.Show(False)
-		globalVars.app.Yield()
+		wx.YieldIfNeeded() #プログレスダイアログを強制更新
 		# 作業するファイルのリスト（ファイルパス）
 		pathList = []
 		# リストで受け取ってフォルダとファイルに分ける
@@ -31,9 +31,8 @@ class dataDict():
 		# 作成したファイルパスのリストから辞書に追加
 		self.appendDict(pathList, lst, lcObj, progress, id)
 		progress.Destroy()
-		winsound.Beep(3000, 100)
-		winsound.Beep(4000, 100)
-		winsound.Beep(5000, 100)
+		winsound.Beep(1000, 100)
+		winsound.Beep(2000, 100)
 
 	# ディレクトリパスからファイルリストを取得（ファイルパスリスト, ディレクトリパス）
 	def appendDirList(self, lst, dir):
@@ -68,7 +67,7 @@ class dataDict():
 			progPer = round(addedItemCount/(itemCount/50))
 			if progPer != progPerTmp:
 				progress.update(addedItemCount,_("読み込み中")+"  "+str(addedItemCount)+"/"+str(itemCount),itemCount)
-				globalVars.app.Yield(True) #プログレスダイアログを強制更新
+				wx.YieldIfNeeded() #プログレスダイアログを強制更新
 			progPerTmp = progPer
 			self.dataNo += 1
 
