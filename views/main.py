@@ -166,12 +166,12 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hHelpMenu,"EXAMPLE",_("テストダイアログを閲覧"))
 
 		#メニューバーの生成
-		self.hMenuBar.Append(self.hFileMenu,_("ファイル"))
-		self.hMenuBar.Append(self.hFunctionMenu, _("機能"))
-		self.hMenuBar.Append(self.hPlaylistMenu,_("プレイリスト"))
-		self.hMenuBar.Append(self.hOperationMenu,_("操作"))
-		self.hMenuBar.Append(self.hSettingsMenu,_("設定"))
-		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ"))
+		self.hMenuBar.Append(self.hFileMenu,_("ファイル") + " (&F)")
+		self.hMenuBar.Append(self.hFunctionMenu, _("機能") + " (&U)")
+		self.hMenuBar.Append(self.hPlaylistMenu,_("プレイリスト") + " (&P)")
+		self.hMenuBar.Append(self.hOperationMenu,_("操作") + " (&O)")
+		self.hMenuBar.Append(self.hSettingsMenu,_("設定") + "(&S)")
+		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ") + " (&H)")
 		target.SetMenuBar(self.hMenuBar)
 
 		# イベント
