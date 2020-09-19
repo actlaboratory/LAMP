@@ -1,7 +1,9 @@
-import sys, os, wx, time, winsound, re, multiprocessing
+import sys, os, wx, time, re, multiprocessing
 import globalVars
+import view_manager
 from views import mkProgress
 from soundPlayer.bass import pybass, pytags
+from soundPlayer import fxPlayer
 from views import objectDetail
 
 class dataDict():
@@ -31,8 +33,9 @@ class dataDict():
 		# 作成したファイルパスのリストから辞書に追加
 		self.appendDict(pathList, lst, lcObj, progress, id)
 		progress.Destroy()
-		winsound.Beep(1000, 100)
-		winsound.Beep(2000, 100)
+		wx.YieldIfNeeded()
+		view_manager.changeListLabel(lcObj)
+		fxPlayer.playFx("fx/load.mp3")
 
 	# ディレクトリパスからファイルリストを取得（ファイルパスリスト, ディレクトリパス）
 	def appendDirList(self, lst, dir):

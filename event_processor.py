@@ -3,6 +3,7 @@ import winsound
 import globalVars
 import lc_manager
 import menuItemsStore
+import view_manager
 import settings
 import data_dict
 import file_manager
@@ -193,6 +194,7 @@ class eventProcessor():
         if rtn != (None, None) and rtn == (globalVars.play.getConfig(PLAYER_CONFIG_SOURCE), self.playingDataNo):
             self.nextFile()
             self.pause()
+        view_manager.changeListLabel(lsObj.getListCtrl())
 
     def fileChange(self, evt=None):
         globalVars.sleepTimer.call() #スリープタイマー問い合わせ

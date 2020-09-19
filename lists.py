@@ -9,6 +9,9 @@ class listBase():
 	def setListCtrl(self, obj):
 		self.lcObject = obj
 
+	def getListCtrl(self):
+		return self.lcObject
+	
 	def positionReset(self):
 		self.playIndex = -1
 
