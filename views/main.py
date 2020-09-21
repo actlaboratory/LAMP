@@ -71,20 +71,20 @@ class MainView(BaseView):
 		self.tagInfoTimer.Bind(wx.EVT_TIMER, globalVars.eventProcess.refreshTagInfo)
 
 		#トラックバーエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
-		self.trackBar, dummy = self.horizontalCreator.slider(_("トラック"), event=self.events.onSlider, x=1000)
-		self.nowTime = self.horizontalCreator.staticText("0:00:00 / 0:00:00")
-
-
+		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,style=wx.EXPAND)
+		self.trackBar, dummy = self.horizontalCreator.slider(_("トラック"), event=self.events.onSlider, x=1000, proportion=1)
+		self.nowTime = self.horizontalCreator.staticText("0:00:00 / 0:00:00", x=(350))
 
 		# リストビューエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
-		self.playlistView, self.playlistLabel = self.horizontalCreator.listCtrl(_("プレイリスト") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, sizerFlag=wx.EXPAND, proportion=1, textLayout=wx.VERTICAL)
+		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL, 20, style=wx.EXPAND,proportion=1)
+		self.playlistView, self.playlistLabel = self.horizontalCreator.listCtrl(_("プレイリスト") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, size=(-1,3000), proportion=30,textLayout=wx.VERTICAL)
 		globalVars.playlist.setListCtrl(self.playlistView)
 		view_manager.listViewSetting(self.playlistView, "playlist")
-		self.queueView, self.queueLabel = self.horizontalCreator.listCtrl(_("キュー") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, sizerFlag=wx.EXPAND, proportion=1, textLayout=wx.VERTICAL)
+		self.queueView, self.queueLabel = self.horizontalCreator.listCtrl(_("キュー") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, size=(-1,3000), proportion=1, textLayout=wx.VERTICAL)
 		globalVars.queue.setListCtrl(self.queueView)
 		view_manager.listViewSetting(self.queueView, "queue")
+
+		self.hPanel.Layout()
 
 		# タイマーの呼び出し
 		self.timer = wx.Timer(self.hFrame)
