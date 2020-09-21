@@ -25,7 +25,7 @@ MODE_DARK=1
 class ViewCreator():
 
 	# mode=1で白黒反転。その他は白。
-	def __init__(self,mode,parent,parentSizer=None,orient=wx.HORIZONTAL,space=0,label="",style=0):
+	def __init__(self,mode,parent,parentSizer=None,orient=wx.HORIZONTAL,space=0,label="",style=0,proportion=0):
 		#表示モード
 		if mode==MODE_WHITE or mode=="white":
 			self.mode=MODE_WHITE
@@ -51,7 +51,7 @@ class ViewCreator():
 			self.sizer.SetHGap(space)
 			self.sizer.SetVGap(space)
 		else:
-			self.sizer=self.BoxSizer(parentSizer,orient,label,space,style)
+			self.sizer=self.BoxSizer(parentSizer,orient,label,space,style,proportion)
 
 		self.space=space
 		self.AddSpace(self.space)
@@ -65,7 +65,7 @@ class ViewCreator():
 
 
 	#parentで指定したsizerの下に、新たなBoxSizerを設置
-	def BoxSizer(self,parent,orient=wx.VERTICAL,label="",space=0,style=0):
+	def BoxSizer(self,parent,orient=wx.VERTICAL,label="",space=0,style=0,proportion=0):
 		if label=="":
 			sizer=wx.BoxSizer(orient)
 		else:
@@ -76,7 +76,7 @@ class ViewCreator():
 		elif (parent==None):
 			self.parent.SetSizer(sizer)
 		else:
-			Add(parent,sizer,0,wx.ALL | style,space)
+			Add(parent,sizer,proportion,wx.ALL | style,space)
 		return sizer
 
 	def GridSizer(self,parent,space=0,style=0):
@@ -260,10 +260,11 @@ class ViewCreator():
 		self._setFace(hListBox)
 		Add(sizer,hListBox,proportion,sizerFlag)
 		self.AddSpace()
+		sizer.Layout()
 		return hListBox,hStaticText
 
 	def listCtrl(self,text, event=None, style=0, size=(-1,-1), sizerFlag=wx.ALL, proportion=0,textLayout=wx.DEFAULT):
-		hStaticText,sizer=self._addDescriptionText(text,textLayout)
+		hStaticText,sizer=self._addDescriptionText(text,textLayout,sizerFlag, proportion)
 
 		hListCtrl=wx.ListCtrl(self.parent,wx.ID_ANY,style=style,size=size)
 		hListCtrl.Bind(wx.EVT_LIST_ITEM_FOCUSED,event)
@@ -372,7 +373,7 @@ class ViewCreator():
 	def GetSizer(self):
 		return self.sizer
 
-	def _addDescriptionText(self,text,textLayout):
+	def _addDescriptionText(self,text,textLayout,sizerFlag=0, proportion=0):
 		if textLayout not in (None,wx.HORIZONTAL,wx.VERTICAL,wx.DEFAULT):
 			raise ValueError("textLayout must be (None,wx.HORIZONTAL,wx.VIRTICAL,wx.DEFAULT)")
 		if textLayout!=None:
@@ -381,9 +382,9 @@ class ViewCreator():
 			hStaticText=wx.StaticText(self.parent,wx.ID_ANY,label=text,name=text,size=(0,0))
 		self._setFace(hStaticText)
 		if type(self.sizer) in (wx.BoxSizer,wx.StaticBoxSizer) and textLayout not in (None,self.sizer.GetOrientation(),wx.DEFAULT):
-			sizer=BoxSizer(self.sizer,orient=textLayout)
-			Add(sizer,hStaticText,0,wx.ALIGN_CENTER_VERTICAL)
-			Add(self.sizer,sizer)
+			sizer=self.BoxSizer(self.sizer,orient=textLayout, space=self.space)
+			Add(sizer,hStaticText, 0, wx.ALIGN_CENTER_VERTICAL)
+			Add(self.sizer,sizer, proportion, sizerFlag)
 			return hStaticText,sizer
 		else:
 			Add(self.sizer,hStaticText,0,wx.ALIGN_CENTER_VERTICAL)
