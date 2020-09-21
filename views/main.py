@@ -30,7 +30,6 @@ from simpleDialog import dialog
 from .base import *
 from simpleDialog import *
 
-import views.mkdir
 import views.mkOpenDialog
 
 
