@@ -79,10 +79,10 @@ class MainView(BaseView):
 
 		# リストビューエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
-		self.playlistView, self.playlistLabel = self.horizontalCreator.listCtrl(_("プレイリスト") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, sizerFlag=wx.EXPAND, proportion=1)
+		self.playlistView, self.playlistLabel = self.horizontalCreator.listCtrl(_("プレイリスト") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, sizerFlag=wx.EXPAND, proportion=1, textLayout=wx.VERTICAL)
 		globalVars.playlist.setListCtrl(self.playlistView)
 		view_manager.listViewSetting(self.playlistView, "playlist")
-		self.queueView, self.queueLabel = self.horizontalCreator.listCtrl(_("キュー") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, sizerFlag=wx.EXPAND, proportion=1)
+		self.queueView, self.queueLabel = self.horizontalCreator.listCtrl(_("キュー") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, sizerFlag=wx.EXPAND, proportion=1, textLayout=wx.VERTICAL)
 		globalVars.queue.setListCtrl(self.queueView)
 		view_manager.listViewSetting(self.queueView, "queue")
 

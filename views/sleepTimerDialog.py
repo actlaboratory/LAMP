@@ -25,13 +25,14 @@ class Dialog(BaseDialog):
         self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.VERTICAL)
         # スリープの条件
         choice = [_("次の時間が経過した"), _("次の曲数を再生した"), _("キューの再生を完了した"), _("すべての再生が完了した")]
-        self.conditionCombo, self.conditionLabel = self.creator.combobox(_("スリープの条件"), choice, self.onCombobox, 0)
+        self.conditionCombo, self.conditionLabel = self.creator.combobox(_("スリープの条件"), choice, self.onCombobox, 0, textLayout=wx.HORIZONTAL)
         #スリープの動作
         choice = [_("再生の停止"), _("LAMPの終了"), _("コンピュータをスリープ"),_("コンピュータの電源を切る")]
-        self.motionCombo, self.motionLabel = self.creator.combobox(_("スリープの動作"), choice, self.onCombobox, 0)
+        self.motionCombo, self.motionLabel = self.creator.combobox(_("スリープの動作"), choice, self.onCombobox, 0, textLayout=wx.HORIZONTAL)
         #値の設定
-        self.valueLabel = self.creator.staticText(_("時間と分の指定"))
+        self.creator.AddSpace()
         self.valueCreator=views.ViewCreator.ViewCreator(1,self.panel,self.creator.sizer,views.ViewCreator.wx.HORIZONTAL)
+        self.valueLabel = self.valueCreator.staticText(_("時間と分の指定"))
         self.value1Spin, dummy = self.valueCreator.spinCtrl("", 0, 24, self.onSpin, 0, textLayout=None)
         self.value1Label = self.valueCreator.staticText(" : ")
         self.value2Spin, dummy = self.valueCreator.spinCtrl("", 0, 59, self.onSpin, 0, textLayout=None)
