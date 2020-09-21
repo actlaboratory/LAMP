@@ -22,7 +22,7 @@ class Dialog(BaseDialog):
 
     def InstallControls(self):
         """いろんなwidgetを設置する。"""
-        self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,views.ViewCreator.GridSizer,2)
+        self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.VERTICAL)
         # スリープの条件
         choice = [_("次の時間が経過した"), _("次の曲数を再生した"), _("キューの再生を完了した"), _("すべての再生が完了した")]
         self.conditionCombo, self.conditionLabel = self.creator.combobox(_("スリープの条件"), choice, self.onCombobox, 0)
