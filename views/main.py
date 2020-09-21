@@ -60,10 +60,8 @@ class MainView(BaseView):
 		self.stopBtn = self.horizontalCreator.button(_("停止"), self.events.onButtonClick)
 		self.repeatLoopBtn = self.horizontalCreator.button(_("ﾘﾋﾟｰﾄ/ﾙｰﾌﾟ"), self.events.onButtonClick)
 		self.shuffleBtn = self.horizontalCreator.button(_("ｼｬｯﾌﾙ"), self.events.onButtonClick)
-		self.volumeSlider = self.horizontalCreator.slider(_("音量"), 100,
-			val=globalVars.app.config.getint("volume","default",default=100, min=0, max=100),
-			max=100)
-		self.volumeSlider.Bind(wx.EVT_COMMAND_SCROLL, self.events.onSlider)
+		self.volumeSlider, dummy = self.horizontalCreator.slider(_("音量"), 0, 100, self.events.onSlider, 
+			globalVars.app.config.getint("volume","default",default=100, min=0, max=100), textLayout=None)
 		self.muteBtn = self.horizontalCreator.button(_("ﾐｭｰﾄ"), self.events.onButtonClick)
 		#self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
 
@@ -75,22 +73,17 @@ class MainView(BaseView):
 
 		#トラックバーエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
-		self.trackBar = self.horizontalCreator.slider(_("トラック"), 1000)
-		self.trackBar.Bind(wx.EVT_COMMAND_SCROLL, self.events.onSlider)
+		self.trackBar, dummy = self.horizontalCreator.slider(_("トラック"), event=self.events.onSlider, x=1000)
 		self.nowTime = self.horizontalCreator.staticText("0:00:00 / 0:00:00")
 
 
 
 		# リストビューエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
-		self.verticalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.horizontalCreator.GetSizer(), wx.VERTICAL)
-		self.playlistLabel = self.verticalCreator.staticText(_("プレイリスト") + " (0" + _("件") + ")")
-		self.playlistView = self.verticalCreator.ListCtrl(1,wx.EXPAND,style=wx.LC_REPORT|wx.LC_NO_HEADER)
+		self.playlistView, self.playlistLabel = self.horizontalCreator.listCtrl(_("プレイリスト") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, sizerFlag=wx.EXPAND, proportion=1)
 		globalVars.playlist.setListCtrl(self.playlistView)
 		view_manager.listViewSetting(self.playlistView, "playlist")
-		self.verticalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.horizontalCreator.GetSizer(), wx.VERTICAL)
-		self.queueLabel = self.verticalCreator.staticText(_("キュー") + " (0" + _("件") + ")")
-		self.queueView = self.verticalCreator.ListCtrl(1,wx.EXPAND,style=wx.LC_REPORT|wx.LC_NO_HEADER)
+		self.queueView, self.queueLabel = self.horizontalCreator.listCtrl(_("キュー") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, sizerFlag=wx.EXPAND, proportion=1)
 		globalVars.queue.setListCtrl(self.queueView)
 		view_manager.listViewSetting(self.queueView, "queue")
 

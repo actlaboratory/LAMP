@@ -33,10 +33,10 @@ class Dialog(BaseDialog):
         """いろんなwidgetを設置する。"""
         self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.VERTICAL,20)
         if self.type==0:
-            self.iText,self.static=self.creator.inputbox(_("ファイルの場所を指定"),400)
+            self.iText,self.static=self.creator.inputbox(_("ファイルの場所を指定"), x=400)
             self.browse=self.creator.button(_("参照"),self.onBrowseBtn)
         elif self.type==1:
-            self.iText,self.static=self.creator.inputbox(_("フォルダの場所を指定"),400)
+            self.iText,self.static=self.creator.inputbox(_("フォルダの場所を指定"),x=400)
             self.browse=self.creator.button(_("参照"),self.onBrowseBtn)
         elif self.type==2:
             self.iText,self.static=self.creator.inputbox(_("URLを指定"),400)
