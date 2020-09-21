@@ -24,7 +24,7 @@ class Dialog(BaseDialog):
 		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,views.ViewCreator.FlexGridSizer,20)
 
 		for title,content in dic.items():
-			self.iName,self.static=self.creator.inputbox(title,400,str(content),style=wx.TE_READONLY)
+			self.iName,self.static=self.creator.inputbox(title,None,str(content),wx.TE_READONLY,400)
 
 		self.buttonArea=views.ViewCreator.BoxSizer(self.sizer,wx.HORIZONTAL, wx.ALIGN_RIGHT)
 		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.buttonArea,wx.HORIZONTAL,20)
