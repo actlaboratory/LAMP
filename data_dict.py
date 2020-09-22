@@ -26,7 +26,7 @@ class dataDict():
 		pathList = []
 		# リストで受け取ってフォルダとファイルに分ける
 		for s in flst:
-			if (os.path.isfile(s) and os.path.splitext(s)[1] == ".mp3") or re.search("^https?://.+\..+", s)!=None:
+			if (os.path.isfile(s) and os.path.splitext(s)[1].lower() in globalVars.fileExpansions) or re.search("^https?://.+\..+", s)!=None:
 				pathList.append(s)
 			else:
 				self.appendDirList(pathList, s)
@@ -45,7 +45,7 @@ class dataDict():
 			if len(tp[2]) != 0:
 				for file in tp[2]:
 					f = tp[0] + "\\" + file
-					if os.path.splitext(f)[1] == ".mp3": lst.append(f)
+					if os.path.splitext(f)[1].lower() in globalVars.fileExpansions: lst.append(f)
 
 	# 辞書作成
 	def appendDict(self, paths, lst, lcObj, progress, id):
