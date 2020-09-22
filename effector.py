@@ -3,6 +3,6 @@ import wx
 import globalVars
 
 def effector():
-    d = effectorDialog.Dialog()
+    d = effectorDialog.Dialog("effectorDialog")
     d.Initialize()
     d.Show()

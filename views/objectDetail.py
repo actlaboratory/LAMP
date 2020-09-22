@@ -11,8 +11,6 @@ from views.baseDialog import *
 
 class Dialog(BaseDialog):
 	def Initialize(self,dic):
-		self.identifier="objectDetailDialog"#このビューを表す文字列
-		self.log=getLogger("falcon.%s" % self.identifier)
 		self.log.debug("created")
 		self.app=globalVars.app
 		super().Initialize(self.app.hMainView.hFrame,_("このファイルについて"))
@@ -21,13 +19,13 @@ class Dialog(BaseDialog):
 
 	def InstallControls(self,dic):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,views.ViewCreator.FlexGridSizer,20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,views.ViewCreator.FlexGridSizer,20)
 
 		for title,content in dic.items():
 			self.iName,self.static=self.creator.inputbox(title,None,str(content),wx.TE_READONLY,400)
 
 		self.buttonArea=views.ViewCreator.BoxSizer(self.sizer,wx.HORIZONTAL, wx.ALIGN_RIGHT)
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.buttonArea,wx.HORIZONTAL,20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.buttonArea,wx.HORIZONTAL,20)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
 
 	def GetValue(self):

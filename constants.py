@@ -4,6 +4,15 @@
 
 import wx
 
+# 言語
+SUPPORTING_LANGUAGE={"ja-JP": "日本語","en-US": "English"}
+
+#各種ファイル名
+LOG_PREFIX="LAMP"
+LOG_FILE_NAME="lamp.log"
+SETTING_FILE_NAME="settings.ini"
+KEYMAP_FILE_NAME="keymap.ini"
+
 #アプリケーション基本情報
 APP_NAME="Test Application"
 APP_VERSION="0.01"

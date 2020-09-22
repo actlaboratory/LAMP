@@ -35,9 +35,7 @@ import views.mkOpenDialog
 
 class MainView(BaseView):
 	def __init__(self):
-		super().__init__()
-		self.identifier="mainView"#このビューを表す文字列
-		self.log=getLogger(self.identifier)
+		super().__init__("mainView")
 		self.log.debug("created")
 		self.app=globalVars.app
 		self.events=Events(self,self.identifier)
@@ -52,7 +50,7 @@ class MainView(BaseView):
 		self.InstallMenuEvent(Menu(self.identifier, self.events),self.events.OnMenuSelect)
 		
 		# ボタン・音量スライダエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
+		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
 		self.previousBtn = self.horizontalCreator.button(_("前"), self.events.onButtonClick)
 		self.playPauseBtn = self.horizontalCreator.button(_("再生"), self.events.onButtonClick)
 		self.nextBtn = self.horizontalCreator.button(_("次"), self.events.onButtonClick)
@@ -71,12 +69,12 @@ class MainView(BaseView):
 		self.tagInfoTimer.Bind(wx.EVT_TIMER, globalVars.eventProcess.refreshTagInfo)
 
 		#トラックバーエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,style=wx.EXPAND)
+		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,style=wx.EXPAND)
 		self.trackBar, dummy = self.horizontalCreator.slider(_("トラック"), event=self.events.onSlider, x=1000, proportion=1)
 		self.nowTime = self.horizontalCreator.staticText("0:00:00 / 0:00:00", x=(350))
 
 		# リストビューエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(1, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL, 20, style=wx.EXPAND,proportion=1)
+		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL, 20, style=wx.EXPAND,proportion=1)
 		self.playlistView, self.playlistLabel = self.horizontalCreator.listCtrl(_("プレイリスト") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, size=(-1,3000), proportion=30,textLayout=wx.VERTICAL)
 		globalVars.playlist.setListCtrl(self.playlistView)
 		view_manager.listViewSetting(self.playlistView, "playlist")
@@ -185,7 +183,7 @@ class Events(BaseEvents):
 
 
 		if selected==menuItemsStore.getRef("FILE_OPEN"):
-			dialog= views.mkOpenDialog.Dialog()
+			dialog= views.mkOpenDialog.Dialog("fileOpenDialog")
 			dialog.Initialize(0) #0=ファイルダイアログ
 			rtnCode = dialog.Show()
 			if rtnCode == dialog.PLAYLIST:
@@ -195,7 +193,7 @@ class Events(BaseEvents):
 			else:
 				return
 		elif selected==menuItemsStore.getRef("DIR_OPEN"):
-			dialog= views.mkOpenDialog.Dialog()
+			dialog= views.mkOpenDialog.Dialog("directoryOpenDialog")
 			dialog.Initialize(1) #1=フォルダダイアログ
 			rtnCode = dialog.Show()
 			if rtnCode == dialog.PLAYLIST:
@@ -205,7 +203,7 @@ class Events(BaseEvents):
 			else:
 				return
 		elif selected==menuItemsStore.getRef("URL_OPEN"):
-			dialog= views.mkOpenDialog.Dialog()
+			dialog= views.mkOpenDialog.Dialog(urlOpenDialog)
 			dialog.Initialize(2) #2=URLダイアログ
 			rtnCode = dialog.Show()
 			if rtnCode == dialog.PLAYLIST:
@@ -279,7 +277,7 @@ class Events(BaseEvents):
 		elif selected >= constants.PLAYLIST_HISTORY and selected < constants.PLAYLIST_HISTORY+ 20:
 			m3uManager.loadM3u(globalVars.m3uHistory.getList()[selected - constants.PLAYLIST_HISTORY])
 		elif selected==menuItemsStore.getRef("EXAMPLE"):
-			d = mkDialog.Dialog()
+			d = mkDialog.Dialog("testDialog")
 			d.Initialize("テスト", "これはテストです。", ("テ", "ス", "ト"))
 			r = d.Show()
 			print(r)

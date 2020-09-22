@@ -38,7 +38,7 @@ def loadM3u(path=None, playlist=2):
                 rtn.append(s)
         f.close()
     else:
-        ed = mkDialog.Dialog()
+        ed = mkDialog.Dialog("m3uLoadErrorDialog")
         ed.Initialize(_("読み込みエラー"), _("プレイリストファイルの読み込みに失敗しました。"), (_("了解"),))
         return ed.Show()
     if playlist == 2: #REPLACE
@@ -64,18 +64,18 @@ def closeM3u():
     if globalVars.playlist.playlistFile != None:
         if loadM3u(globalVars.playlist.playlistFile, LOAD_ONLY) != globalVars.playlist.getAllFiles():
             if os.path.splitext(globalVars.playlist.playlistFile)[1] == ".m3u": #変換を確認
-                d = mkDialog.Dialog()
+                d = mkDialog.Dialog("m3uConversionConfirmDialog")
                 d.Initialize(_("プレイリスト変換確認"), _("このプレイリストは変更されています。\nm3u8ファイルに変換して保存しますか？"), (_("保存"), _("破棄"), _("キャンセル")))
                 c = d.Show()
             elif os.path.splitext(globalVars.playlist.playlistFile)[1] == ".m3u8": #上書きを確認
-                d = mkDialog.Dialog()
+                d = mkDialog.Dialog("m3uOverwriteConfirmDialog")
                 d.Initialize(_("プレイリスト上書き保存の確認"), _("このプレイリストは変更されています。\n上書き保存しますか？"), (_("上書き"), _("破棄"), _("キャンセル")))
                 c = d.Show()
             if c == 0: saveM3u8(globalVars.playlist.playlistFile, False)
             elif c == wx.ID_CANCEL: return False
     else:
         if len(globalVars.playlist.lst) != 0:
-            d = mkDialog.Dialog()
+            d = mkDialog.Dialog("m3uSaveConfirmDialog")
             d.Initialize(_("プレイリスト保存の確認"), _("このプレイリストは変更されています。\n保存しますか？"), (_("保存"), _("破棄"), _("キャンセル")))
             c = d.Show()
             if c == 0: saveM3u8(None, False)

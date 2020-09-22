@@ -14,7 +14,7 @@ class sleepTimer():
         self.endValue = None
 
     def set(self):
-        d = sleepTimerDialog.Dialog()
+        d = sleepTimerDialog.Dialog("sleepTimerDialog")
         d.Initialize()
         r = d.Show()
         if r == wx.ID_CANCEL:

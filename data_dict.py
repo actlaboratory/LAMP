@@ -18,7 +18,7 @@ class dataDict():
 	#ファイル追加（ファイルパスリスト, 追加先リスト, リストビュー, 追加先インデックス=末尾）
 	def addFilesCall(self, flst, lst, lcObj, id=-1):
 		#プログレスダイアログ作成
-		progress=mkProgress.Dialog()
+		progress=mkProgress.Dialog("importProgressDialog")
 		progress.Initialize(_("ファイルを集めています..."), _("読み込み中..."))
 		progress.Show(False)
 		wx.YieldIfNeeded() #プログレスダイアログを強制更新
@@ -144,7 +144,7 @@ def infoDialog(dataNo):
 		_("アルバム"): ft[6],
 		_("アルバムアーティスト"): ft[7]
 	}
-	d = objectDetail.Dialog()
+	d = objectDetail.Dialog("objectDetailDialog")
 	d.Initialize(dict)
 	d.Show()
 

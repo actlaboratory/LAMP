@@ -12,8 +12,6 @@ from views.baseDialog import *
 class Dialog(BaseDialog):
     def Initialize(self, type): #0=ファイル、1=フォルダ選択ダイアログ
         self.type=type
-        self.identifier="openDialog"#このビューを表す文字列
-        self.log=getLogger(self.identifier)
         self.log.debug("created")
         if type==0:
             super().Initialize(self.app.hMainView.hFrame,_("ファイルを開く"))
@@ -31,7 +29,7 @@ class Dialog(BaseDialog):
 
     def InstallControls(self):
         """いろんなwidgetを設置する。"""
-        self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.VERTICAL,20)
+        self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
         if self.type==0:
             self.iText,self.static=self.creator.inputbox(_("ファイルの場所を指定"), x=400)
             self.browse=self.creator.button(_("参照"),self.onBrowseBtn)
@@ -41,7 +39,7 @@ class Dialog(BaseDialog):
         elif self.type==2:
             self.iText,self.static=self.creator.inputbox(_("URLを指定"),400)
 
-        self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
+        self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
         self.playlistBtn=self.creator.button(_("プレイリストに追加"),self.onButtonClick)
         self.queueBtn=self.creator.button(_("キューに追加"),self.onButtonClick)
         self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
