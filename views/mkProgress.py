@@ -18,7 +18,7 @@ class Dialog(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,style=wx.ALL,20)
 		self.gauge,self.static=self.creator.gauge(self.label,x=400)
 
 	# プログレス更新（現在値, ラベル, 最大値）

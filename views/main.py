@@ -204,7 +204,7 @@ class Events(BaseEvents):
 			else:
 				return
 		elif selected==menuItemsStore.getRef("URL_OPEN"):
-			dialog= views.mkOpenDialog.Dialog(urlOpenDialog)
+			dialog= views.mkOpenDialog.Dialog("urlOpenDialog")
 			dialog.Initialize(2) #2=URLダイアログ
 			rtnCode = dialog.Show()
 			if rtnCode == dialog.PLAYLIST:

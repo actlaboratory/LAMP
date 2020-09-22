@@ -41,13 +41,9 @@ class ViewCreator():
 
 		#サイザー作成
 		if orient==FlexGridSizer:
-			self.sizer=self.FlexGridSizer(parentSizer,margin,style)
-			self.sizer.SetHGap(space)
-			self.sizer.SetVGap(space)
+			self.sizer=self.FlexGridSizer(parentSizer,margin,style,label)
 		elif orient==GridSizer:
-			self.sizer=self.GridSizer(parentSizer,margin,style)
-			self.sizer.SetHGap(space)
-			self.sizer.SetVGap(space)
+			self.sizer=self.GridSizer(parentSizer,margin,style,label)
 		else:
 			self.sizer=self.BoxSizer(parentSizer,orient,label,margin,style,proportion)
 
@@ -75,8 +71,8 @@ class ViewCreator():
 			Add(parent,sizer, proportion, style, space)
 		return sizer
 
-	def GridSizer(self,parent,space=0,style=0):
-		sizer=wx.GridSizer(2,0,space,space)
+	def GridSizer(self,parent,space=0,style=0,x=2):
+		sizer=wx.GridSizer(x,space,space)
 		if type(parent) in (wx.Panel,wx.Window):
 			parent.SetSizer(sizer)
 		elif (parent==None):
@@ -85,8 +81,8 @@ class ViewCreator():
 			parent.Add(sizer,0,wx.ALL | style,space)
 		return sizer
 
-	def FlexGridSizer(self,parent,space=0,style=0):
-		sizer=wx.FlexGridSizer(2)
+	def FlexGridSizer(self,parent,space=0,style=0,x=2):
+		sizer=wx.FlexGridSizer(x,space,space)
 		if type(parent) in (wx.Panel,wx.Window):
 			parent.SetSizer(sizer)
 		elif (parent==None):
@@ -128,12 +124,12 @@ class ViewCreator():
 		return hStatic
 
 	def combobox(self,text, selection, event=None, state=-1, style=wx.CB_READONLY, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
-		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
 		v=""
 		if state>=0:
 			v=selection[state]
-		hCombo=wx.ComboBox(self.parent,wx.ID_ANY,value=v,choices=selection,style=wx.BORDER_RAISED | style,name=text,size=(x,-1))
+		hCombo=wx.ComboBox(parent,wx.ID_ANY,value=v,choices=selection,style=wx.BORDER_RAISED | style,name=text,size=(x,-1))
 		hCombo.Bind(wx.EVT_TEXT,event)
 		self._setFace(hCombo)
 		Add(sizer,hCombo,proportion,sizerFlag,margin)
@@ -141,9 +137,9 @@ class ViewCreator():
 		return hCombo,hStaticText
 
 	def comboEdit(self,text, selection, event=None, defaultValue="", style=wx.CB_DROPDOWN, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
-		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hCombo=wx.ComboBox(self.parent,wx.ID_ANY,value=defaultValue,choices=selection,style=wx.BORDER_RAISED | style,name=text,size=(x,-1))
+		hCombo=wx.ComboBox(parent,wx.ID_ANY,value=defaultValue,choices=selection,style=wx.BORDER_RAISED | style,name=text,size=(x,-1))
 		hCombo.Bind(wx.EVT_TEXT,event)
 		if defaultValue in selection:
 			hCombo.SetSelection(selection.index(defaultValue))
@@ -250,9 +246,9 @@ class ViewCreator():
 		return hRadioBox
 
 	def listbox(self,text, choices=[], event=None, state=-1, style=0, size=(-1,-1), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
-		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hListBox=wx.ListBox(self.parent,wx.ID_ANY,name=text,choices=choices,size=size,style=style)
+		hListBox=wx.ListBox(parent,wx.ID_ANY,name=text,choices=choices,size=size,style=style)
 		hListBox.Bind(wx.EVT_LISTBOX,event)
 		hListBox.SetSelection(state)
 		self._setFace(hListBox)
@@ -261,7 +257,7 @@ class ViewCreator():
 		return hListBox,hStaticText
 
 	def listCtrl(self,text, event=None, style=0, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
-		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion)
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
 		hListCtrl=wx.ListCtrl(parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size)
 		hListCtrl.Bind(wx.EVT_LIST_ITEM_FOCUSED,event)
@@ -281,22 +277,22 @@ class ViewCreator():
 		return htab
 
 	def inputbox(self,text, event=None, defaultValue="", style=0, x=0, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
-		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hTextCtrl=TextCtrl(self.parent, wx.ID_ANY,size=(x,-1),name=text,value=defaultValue,style=style | wx.BORDER_RAISED)
+		hTextCtrl=TextCtrl(parent, wx.ID_ANY,size=(x,-1),name=text,value=defaultValue,style=style | wx.BORDER_RAISED)
 		hTextCtrl.Bind(wx.EVT_TEXT,event)
 		self._setFace(hTextCtrl)
 		if x==-1:
-			Add(sizer,hTextCtrl,proportion,sizerFlag,expandFlag=wx.HORIZONTAL)
+			Add(sizer,hTextCtrl,proportion,sizerFlag,margin,expandFlag=wx.HORIZONTAL)
 		else:
-			Add(sizer,hTextCtrl,proportion,sizerFlag,margin=5)
+			Add(sizer,hTextCtrl,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hTextCtrl,hStaticText
 
 	def gauge(self,text,max=0,defaultValue=0,style=wx.GA_HORIZONTAL | wx.GA_SMOOTH,x=-1,sizerFlag=wx.ALL,proportion=0,margin=5,textLayout=wx.DEFAULT):
-		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hGauge=wx.Gauge(self.parent, wx.ID_ANY, size=(x,-1), style=style,name=text,)
+		hGauge=wx.Gauge(parent, wx.ID_ANY, size=(x,-1), style=style,name=text,)
 		self._setFace(hGauge)
 		if x==-1:
 			Add(sizer,hGauge,proportion,sizerFlag,expandFlag=wx.HORIZONTAL)
@@ -306,9 +302,9 @@ class ViewCreator():
 		return hGauge,hStaticText
 
 	def spinCtrl(self,text, min=0, max=100, event=None, defaultValue=0, style=wx.SP_ARROW_KEYS, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
-		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hSpinCtrl = wx.SpinCtrl(self.parent, wx.ID_ANY, min=min, max=max, initial=defaultValue, style=wx.BORDER_RAISED | style, size=(x,-1))
+		hSpinCtrl = wx.SpinCtrl(parent, wx.ID_ANY, min=min, max=max, initial=defaultValue, style=wx.BORDER_RAISED | style, size=(x,-1))
 		hSpinCtrl.Bind(wx.EVT_TEXT,event)
 		self._setFace(hSpinCtrl)
 		Add(sizer,hSpinCtrl,proportion,sizerFlag,margin)
@@ -316,9 +312,9 @@ class ViewCreator():
 		return hSpinCtrl,hStaticText
 
 	def slider(self,text, min=0, max=100, event=None, defaultValue=0, style=0, x=-1, sizerFlag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5,textLayout=wx.DEFAULT):
-		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hSlider=wx.Slider(self.parent, wx.ID_ANY, size=(x,-1),value=defaultValue, minValue=min, maxValue=max, style=style)
+		hSlider=wx.Slider(parent, wx.ID_ANY, size=(x,-1),value=defaultValue, minValue=min, maxValue=max, style=style)
 		hSlider.Bind(wx.EVT_SCROLL_CHANGED,event)
 		self._setFace(hSlider)
 		if x==-1:	#幅を拡張
@@ -370,7 +366,7 @@ class ViewCreator():
 	def GetSizer(self):
 		return self.sizer
 
-	def _addDescriptionText(self,text,textLayout,sizerFlag=0, proportion=0):
+	def _addDescriptionText(self,text,textLayout,sizerFlag=0, proportion=0,margin=0):
 		if textLayout not in (None,wx.HORIZONTAL,wx.VERTICAL,wx.DEFAULT):
 			raise ValueError("textLayout must be (None,wx.HORIZONTAL,wx.VIRTICAL,wx.DEFAULT)")
 		if type(self.sizer) in (wx.BoxSizer,wx.StaticBoxSizer) and textLayout not in (None,self.sizer.GetOrientation(),wx.DEFAULT):
@@ -380,9 +376,9 @@ class ViewCreator():
 			else:
 				hStaticText=wx.StaticText(panel,wx.ID_ANY,label=text,name=text,size=(0,0))
 			self._setFace(hStaticText)
-			sizer=self.BoxSizer(panel,orient=textLayout, space=self.space)
-			Add(sizer,hStaticText, 0, wx.ALIGN_CENTER_VERTICAL,20)
-			Add(self.sizer,panel, proportion, sizerFlag,20)
+			sizer=self.BoxSizer(panel,orient=textLayout)
+			Add(sizer,hStaticText, 0, wx.ALIGN_CENTER_VERTICAL)
+			Add(self.sizer,panel, proportion, sizerFlag,margin)
 			return hStaticText,sizer,panel
 		else:
 			if textLayout!=None:

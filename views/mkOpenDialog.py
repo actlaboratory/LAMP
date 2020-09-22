@@ -29,20 +29,19 @@ class Dialog(BaseDialog):
 
     def InstallControls(self):
         """いろんなwidgetを設置する。"""
-        self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
-        if self.type==0:
-            self.iText,self.static=self.creator.inputbox(_("ファイルの場所を指定"), x=400)
-            self.browse=self.creator.button(_("参照"),self.onBrowseBtn)
-        elif self.type==1:
-            self.iText,self.static=self.creator.inputbox(_("フォルダの場所を指定"),x=400)
-            self.browse=self.creator.button(_("参照"),self.onBrowseBtn)
-        elif self.type==2:
-            self.iText,self.static=self.creator.inputbox(_("URLを指定"),400)
+        guideTexts=[_("ファイルの場所を指定"),_("フォルダの場所を指定"),_("URLを指定")]
 
-        self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
-        self.playlistBtn=self.creator.button(_("プレイリストに追加"),self.onButtonClick)
-        self.queueBtn=self.creator.button(_("キューに追加"),self.onButtonClick)
+        self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,style=wx.ALL | wx.EXPAND,margin=20)
+        self.iText,self.static=self.creator.inputbox(guideTexts[self.type], x=-1,proportion=1,textLayout=wx.VERTICAL,margin=0)
+        if self.type<=1:
+            self.browse=self.creator.button(_("参照"),self.onBrowseBtn,sizerFlag=wx.ALIGN_BOTTOM | wx.BOTTOM,margin=3)
+
+        self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT | wx.ALL,margin=20)
+        self.playlistBtn=self.creator.button(_("プレイリストに追加"),self.onButtonClick,proportion=1)
+        self.queueBtn=self.creator.button(_("キューに追加"),self.onButtonClick,proportion=1)
         self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
+
+        self.panel.Layout()
 
     def GetData(self):
         return self.iText.GetLineText(0)
