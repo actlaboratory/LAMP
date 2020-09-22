@@ -5,7 +5,7 @@
 import wx
 
 # 言語
-SUPPORTING_LANGUAGE={"ja-JP": "日本語","en-US": "English"}
+SUPPORTING_LANGUAGE={"ja_JP": "日本語","en_US": "English"}
 
 #各種ファイル名
 LOG_PREFIX="LAMP"
@@ -18,10 +18,6 @@ APP_NAME="Test Application"
 APP_VERSION="0.01"
 APP_COPYRIGHT_YEAR="20XX"
 APP_DEVELOPERS="Ananimous"
-
-#各種ファイル名
-SETTING_FILE_NAME="settings.ini"
-KEYMAP_FILE_NAME="keymap.ini"
 
 #フォントの設定可能サイズ範囲
 FONT_MIN_SIZE=5

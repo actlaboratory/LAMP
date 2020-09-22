@@ -27,18 +27,18 @@ class BaseView(object):
 		self.app=globalVars.app
 
 
-	def Initialize(self, ttl, x, y,px,py,style=wx.DEFAULT_FRAME_STYLE):
+	def Initialize(self, ttl, x, y,px,py,style=wx.DEFAULT_FRAME_STYLE,space=0):
 		"""タイトルとウィンドウサイズとポジションを指定して、ウィンドウを初期化する。"""
 		self.hFrame=wx.Frame(None,wx.ID_ANY,ttl, size=(x,y),pos=(px,py),name=ttl,style=style)
 		_winxptheme.SetWindowTheme(self.hFrame.GetHandle(),"","")
 		self.hFrame.Bind(wx.EVT_MOVE_END,self.events.WindowMove)
 		self.hFrame.Bind(wx.EVT_SIZE,self.events.WindowResize)
 		self.hFrame.Bind(wx.EVT_CLOSE,self.events.Exit)
-		self.MakePanel()
+		self.MakePanel(space)
 
-	def MakePanel(self):
+	def MakePanel(self,space=0):
 		self.hPanel=views.ViewCreator.makePanel(self.hFrame)
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,None, wx.VERTICAL)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,None, wx.VERTICAL,style=wx.ALL,space=space)
 
 	def Clear(self):
 		self.hFrame.DestroyChildren()
@@ -155,13 +155,10 @@ class BaseMenu(object):
 			メニューに登録されたすべてのアイテムを[(表示名,ref)...]で返します。
 		"""
 		ret=[]
-		print(self.hMenuBar.GetMenus())
-		print(self.hMenuBar.GetMenuCount())
 
 		if self.hMenuBar==None:
 			return ret
 		for menu,id in self.hMenuBar.GetMenus():
-			print(menu)
 			self._addMenuItemList(menu,ret)
 		return ret
 
@@ -206,4 +203,3 @@ class BaseEvents(object):
 
 		#sizerを正しく機能させるため、Skipの呼出が必須
 		event.Skip()
-

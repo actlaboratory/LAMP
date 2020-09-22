@@ -23,9 +23,7 @@ MODE_WHITE=0
 MODE_DARK=1
 
 class ViewCreator():
-
-	# mode=1で白黒反転。その他は白。
-	def __init__(self,mode,parent,parentSizer=None,orient=wx.HORIZONTAL,space=0,label="",style=0,proportion=0):
+	def __init__(self,mode,parent,parentSizer=None,orient=wx.HORIZONTAL,space=0,label="",style=0,proportion=0,margin=20):
 		#表示モード
 		if mode==MODE_WHITE or mode=="white":
 			self.mode=MODE_WHITE
@@ -43,26 +41,24 @@ class ViewCreator():
 
 		#サイザー作成
 		if orient==FlexGridSizer:
-			self.sizer=self.FlexGridSizer(parentSizer,space,style)
+			self.sizer=self.FlexGridSizer(parentSizer,margin,style)
 			self.sizer.SetHGap(space)
 			self.sizer.SetVGap(space)
 		elif orient==GridSizer:
-			self.sizer=self.GridSizer(parentSizer,space,style)
+			self.sizer=self.GridSizer(parentSizer,margin,style)
 			self.sizer.SetHGap(space)
 			self.sizer.SetVGap(space)
 		else:
-			self.sizer=self.BoxSizer(parentSizer,orient,label,space,style,proportion)
+			self.sizer=self.BoxSizer(parentSizer,orient,label,margin,style,proportion)
 
 		self.space=space
-		self.AddSpace(self.space)
 
 	#BoxSizerの下にスペースを挿入
 	def AddSpace(self,space=-1):
 		if self.sizer.__class__==wx.BoxSizer or self.sizer.__class__==wx.StaticBoxSizer:
 			if space==-1:
-				space==self.space
+				space=self.space
 			self.sizer.AddSpacer(space)
-
 
 	#parentで指定したsizerの下に、新たなBoxSizerを設置
 	def BoxSizer(self,parent,orient=wx.VERTICAL,label="",space=0,style=0,proportion=0):
@@ -76,7 +72,7 @@ class ViewCreator():
 		elif (parent==None):
 			self.parent.SetSizer(sizer)
 		else:
-			Add(parent,sizer,proportion,wx.ALL | style,space)
+			Add(parent,sizer, proportion, style, space)
 		return sizer
 
 	def GridSizer(self,parent,space=0,style=0):
@@ -100,40 +96,39 @@ class ViewCreator():
 		return sizer
 
 
-	def button(self,text, event=None, sizerFlag=wx.ALL, proportion=0):
+	def button(self,text, event=None, sizerFlag=wx.ALL, proportion=0,margin=5):
 		hButton=wx.Button(self.parent, wx.ID_ANY,label=text, name=text, style=wx.BORDER_RAISED)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self._setFace(hButton,mode=BUTTON_COLOUR)
-		Add(self.sizer,hButton,proportion,sizerFlag)
+		Add(self.sizer,hButton,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hButton
 
-	def okbutton(self,text, event=None, sizerFlag=wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT | wx.ALL,proportion=0):
+	def okbutton(self,text, event=None, sizerFlag=wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT | wx.ALL,proportion=0,margin=5):
 		hButton=wx.Button(self.parent, wx.ID_OK,label=text, name=text,style=wx.BORDER_RAISED)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self._setFace(hButton,mode=BUTTON_COLOUR)
-		Add(self.sizer,hButton,proportion,sizerFlag,5)
+		Add(self.sizer,hButton,proportion,sizerFlag,margin)
 		hButton.SetDefault()
 		self.AddSpace()
 		return hButton
 
-	def cancelbutton(self,text, event=None, sizerFlag=wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT | wx.ALL,proportion=0):
+	def cancelbutton(self,text, event=None, sizerFlag=wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT | wx.ALL,proportion=0,margin=5):
 		hButton=wx.Button(self.parent, wx.ID_CANCEL,label=text, name=text,style=wx.BORDER_RAISED)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self._setFace(hButton,mode=BUTTON_COLOUR)
-		Add(self.sizer,hButton,proportion,sizerFlag,5)
+		Add(self.sizer,hButton,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hButton
 
-	def staticText(self, text, style=0, x=-1, sizerFlag=wx.ALIGN_CENTER_VERTICAL, proportion=0):
+	def staticText(self, text, style=0, x=-1, sizerFlag=wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5):
 		hStatic=wx.StaticText(self.parent,wx.ID_ANY,label=text,name=text,size=(x,-1),style=style)
 		self._setFace(hStatic)
-		Add(self.sizer,hStatic,proportion,sizerFlag)
-		self.AddSpace()
+		Add(self.sizer,hStatic,proportion,sizerFlag,margin)
 		return hStatic
 
-	def combobox(self,text, selection, event=None, state=-1, style=wx.CB_READONLY, x=-1, sizerFlag=wx.ALL, proportion=0,textLayout=wx.DEFAULT):
-		hStaticText,sizer=self._addDescriptionText(text,textLayout)
+	def combobox(self,text, selection, event=None, state=-1, style=wx.CB_READONLY, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
 
 		v=""
 		if state>=0:
@@ -141,12 +136,12 @@ class ViewCreator():
 		hCombo=wx.ComboBox(self.parent,wx.ID_ANY,value=v,choices=selection,style=wx.BORDER_RAISED | style,name=text,size=(x,-1))
 		hCombo.Bind(wx.EVT_TEXT,event)
 		self._setFace(hCombo)
-		Add(sizer,hCombo,proportion,sizerFlag,5)
+		Add(sizer,hCombo,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hCombo,hStaticText
 
-	def comboEdit(self,text, selection, event=None, defaultValue="", style=wx.CB_DROPDOWN, x=-1, sizerFlag=wx.ALL, proportion=0,textLayout=wx.DEFAULT):
-		hStaticText,sizer=self._addDescriptionText(text,textLayout)
+	def comboEdit(self,text, selection, event=None, defaultValue="", style=wx.CB_DROPDOWN, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
 
 		hCombo=wx.ComboBox(self.parent,wx.ID_ANY,value=defaultValue,choices=selection,style=wx.BORDER_RAISED | style,name=text,size=(x,-1))
 		hCombo.Bind(wx.EVT_TEXT,event)
@@ -154,13 +149,13 @@ class ViewCreator():
 			hCombo.SetSelection(selection.index(defaultValue))
 		self._setFace(hCombo)
 		if x==-1:	#幅を拡張
-			Add(sizer,hCombo,proportion,sizerFlag,expandFlag=wx.HORIZONTAL)
+			Add(sizer,hCombo,proportion,sizerFlag,margin,expandFlag=wx.HORIZONTAL)
 		else:
-			Add(sizer,hCombo,proportion,sizerFlag)
+			Add(sizer,hCombo,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hCombo,hStaticText
 
-	def checkbox(self,text, event=None, state=False, style=0, x=-1, sizerFlag=0, proportion=0):
+	def checkbox(self,text, event=None, state=False, style=0, x=-1, sizerFlag=0, proportion=0,margin=5):
 		hPanel=wx.Panel(self.parent,wx.ID_ANY)
 		self._setFace(hPanel)
 		hSizer=self.BoxSizer(hPanel,self.sizer.GetOrientation())
@@ -171,8 +166,9 @@ class ViewCreator():
 			hCheckBox.Bind(wx.EVT_CHECKBOX,event)
 			self._setFace(hCheckBox,mode=SKIP_COLOUR)
 			hSizer.Add(hCheckBox)
-			Add(self.sizer,hPanel,proportion,sizerFlag,self.space)
+			Add(self.sizer,hPanel,proportion,sizerFlag,margin)
 			viewHelper.ScCheckbox(hPanel.GetHandle())
+			self.AddSpace()
 			return hCheckBox
 		elif (isinstance(text,list)):	#複数同時作成
 			hCheckBoxes=[]
@@ -183,14 +179,15 @@ class ViewCreator():
 				self._setFace(hCheckBox,mode=SKIP_COLOUR)
 				hSizer.Add(hCheckBox)
 				hCheckBoxes.append(hCheckBox)
-			Add(self.sizer,hPanel,proportion,sizerFlag,self.space)
+			Add(self.sizer,hPanel,proportion,sizerFlag,margin)
 			viewHelper.ScCheckbox(hPanel.GetHandle())
+			self.AddSpace()
 			return hCheckBoxes
 		else:
 			raise ValueError("ViewCreatorはCheckboxの作成に際し正しくない型の値を受け取りました。")
 
 	# 3stateチェックボックス
-	def checkbox3(self,text, event=None, state=None, style=0, x=-1, sizerFlag=0, proportion=0):
+	def checkbox3(self,text, event=None, state=None, style=0, x=-1, sizerFlag=0, proportion=0,margin=0):
 		hPanel=wx.Panel(self.parent,wx.ID_ANY)
 		self._setFace(hPanel)
 		hSizer=self.BoxSizer(hPanel,self.sizer.GetOrientation())
@@ -206,8 +203,9 @@ class ViewCreator():
 			self._setFace(hCheckBox,mode=SKIP_COLOUR)
 			hSizer.Add(hCheckBox)
 			self.AddSpace()
-			Add(self.sizer,hPanel,proportion,sizerFlag,self.space)
+			Add(self.sizer,hPanel,proportion,sizerFlag,margin)
 			viewHelper.ScCheckbox(hPanel.GetHandle())
+			self.AddSpace()
 			return hCheckBox
 		elif (isinstance(text,list)):	#複数同時作成
 			hCheckBoxes=[]
@@ -224,14 +222,14 @@ class ViewCreator():
 				self._setFace(hCheckBox,mode=SKIP_COLOUR)
 				hSizer.Add(hCheckBox)
 				hCheckBoxes.append(hCheckBox)
-			Add(self.sizer,hPanel,proportion,sizerFlag,self.space)
+			Add(self.sizer,hPanel,proportion,sizerFlag,margin)
 			viewHelper.ScCheckbox(hPanel.GetHandle())
 			self.AddSpace()
 			return hCheckBoxes
 		else:
 			raise ValueError("ViewCreatorはCheckboxの作成に際し正しくない型の値を受け取りました。")
 
-	def radiobox(self,text, items, event=None, dimension=0, orient=wx.VERTICAL, style=0, x=-1, sizerFlag=0, proportion=0):
+	def radiobox(self,text, items, event=None, dimension=0, orient=wx.VERTICAL, style=0, x=-1, sizerFlag=0, proportion=0,margin=5):
 		if orient==wx.VERTICAL:
 			style=wx.RA_SPECIFY_COLS | style
 		else:
@@ -247,44 +245,43 @@ class ViewCreator():
 			_winxptheme.SetWindowTheme(int(elem),"","")
 		viewHelper.releasePtr(ptr)
 
-		Add(self.sizer,hRadioBox,proportion,sizerFlag)
+		Add(self.sizer,hRadioBox,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hRadioBox
 
-	def listbox(self,text, choices=[], event=None, state=-1, style=0, size=(-1,-1), sizerFlag=wx.ALL, proportion=0,textLayout=wx.DEFAULT):
-		hStaticText,sizer=self._addDescriptionText(text,textLayout)
+	def listbox(self,text, choices=[], event=None, state=-1, style=0, size=(-1,-1), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
 
 		hListBox=wx.ListBox(self.parent,wx.ID_ANY,name=text,choices=choices,size=size,style=style)
 		hListBox.Bind(wx.EVT_LISTBOX,event)
 		hListBox.SetSelection(state)
 		self._setFace(hListBox)
-		Add(sizer,hListBox,proportion,sizerFlag)
+		Add(sizer,hListBox,proportion,sizerFlag,margin)
 		self.AddSpace()
-		sizer.Layout()
 		return hListBox,hStaticText
 
-	def listCtrl(self,text, event=None, style=0, size=(-1,-1), sizerFlag=wx.ALL, proportion=0,textLayout=wx.DEFAULT):
-		hStaticText,sizer=self._addDescriptionText(text,textLayout,sizerFlag, proportion)
+	def listCtrl(self,text, event=None, style=0, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion)
 
-		hListCtrl=wx.ListCtrl(self.parent,wx.ID_ANY,style=style,size=size)
+		hListCtrl=wx.ListCtrl(parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size)
 		hListCtrl.Bind(wx.EVT_LIST_ITEM_FOCUSED,event)
 		self._setFace(hListCtrl)
 		self._setFace(hListCtrl.GetMainWindow())
-		#_winxptheme.SetWindowTheme(win32api.SendMessage(hListCtrl.GetHandle(),0x101F,0,0),"","")#ヘッダーのウィンドウテーマを引っぺがす
-		Add(sizer,hListCtrl,proportion,sizerFlag)
+		_winxptheme.SetWindowTheme(win32api.SendMessage(hListCtrl.GetHandle(),0x101F,0,0),"","")#ヘッダーのウィンドウテーマを引っぺがす
+		Add(sizer,hListCtrl,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hListCtrl,hStaticText
 
-	def tabCtrl(self,title, event=None, style=wx.NB_NOPAGETHEME | wx.NB_MULTILINE, sizerFlag=0, proportion=0):
+	def tabCtrl(self,title, event=None, style=wx.NB_NOPAGETHEME | wx.NB_MULTILINE, sizerFlag=0, proportion=0, margin=5):
 		htab=wx.Notebook(self.parent, wx.ID_ANY,name=title,style=style)
 		htab.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED,event)
 		self._setFace(htab)
-		Add(self.sizer,htab,proportion,sizerFlag,expandFlag=wx.HORIZONTAL)
+		Add(self.sizer,htab,proportion,sizerFlag,margin,expandFlag=wx.HORIZONTAL)
 		self.sizer.Layout()
 		return htab
 
-	def inputbox(self,text, event=None, defaultValue="", style=0, x=0, sizerFlag=wx.ALL, proportion=0,textLayout=wx.DEFAULT):
-		hStaticText,sizer=self._addDescriptionText(text,textLayout)
+	def inputbox(self,text, event=None, defaultValue="", style=0, x=0, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
 
 		hTextCtrl=TextCtrl(self.parent, wx.ID_ANY,size=(x,-1),name=text,value=defaultValue,style=style | wx.BORDER_RAISED)
 		hTextCtrl.Bind(wx.EVT_TEXT,event)
@@ -292,42 +289,42 @@ class ViewCreator():
 		if x==-1:
 			Add(sizer,hTextCtrl,proportion,sizerFlag,expandFlag=wx.HORIZONTAL)
 		else:
-			Add(sizer,hTextCtrl,proportion,sizerFlag)
+			Add(sizer,hTextCtrl,proportion,sizerFlag,margin=5)
 		self.AddSpace()
 		return hTextCtrl,hStaticText
 
-	def gauge(self,text,max=0,defaultValue=0,style=wx.GA_HORIZONTAL | wx.GA_SMOOTH,x=-1,sizerFlag=wx.ALL,proportion=0,textLayout=wx.DEFAULT):
-		hStaticText,sizer=self._addDescriptionText(text,textLayout)
+	def gauge(self,text,max=0,defaultValue=0,style=wx.GA_HORIZONTAL | wx.GA_SMOOTH,x=-1,sizerFlag=wx.ALL,proportion=0,margin=5,textLayout=wx.DEFAULT):
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
 
 		hGauge=wx.Gauge(self.parent, wx.ID_ANY, size=(x,-1), style=style,name=text,)
 		self._setFace(hGauge)
 		if x==-1:
 			Add(sizer,hGauge,proportion,sizerFlag,expandFlag=wx.HORIZONTAL)
 		else:
-			Add(sizer,hGauge,proportion,sizerFlag)
+			Add(sizer,hGauge,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hGauge,hStaticText
 
-	def spinCtrl(self,text, min=0, max=100, event=None, defaultValue=0, style=wx.SP_ARROW_KEYS, x=-1, sizerFlag=wx.ALL, proportion=0,textLayout=wx.DEFAULT):
-		hStaticText,sizer=self._addDescriptionText(text,textLayout)
+	def spinCtrl(self,text, min=0, max=100, event=None, defaultValue=0, style=wx.SP_ARROW_KEYS, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
 
 		hSpinCtrl = wx.SpinCtrl(self.parent, wx.ID_ANY, min=min, max=max, initial=defaultValue, style=wx.BORDER_RAISED | style, size=(x,-1))
 		hSpinCtrl.Bind(wx.EVT_TEXT,event)
 		self._setFace(hSpinCtrl)
-		Add(sizer,hSpinCtrl,proportion,sizerFlag,5)
+		Add(sizer,hSpinCtrl,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hSpinCtrl,hStaticText
 
-	def slider(self,text, min=0, max=100, event=None, defaultValue=0, style=0, x=-1, sizerFlag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, proportion=0,textLayout=wx.DEFAULT):
-		hStaticText,sizer=self._addDescriptionText(text,textLayout)
+	def slider(self,text, min=0, max=100, event=None, defaultValue=0, style=0, x=-1, sizerFlag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout)
 
 		hSlider=wx.Slider(self.parent, wx.ID_ANY, size=(x,-1),value=defaultValue, minValue=min, maxValue=max, style=style)
 		hSlider.Bind(wx.EVT_SCROLL_CHANGED,event)
 		self._setFace(hSlider)
 		if x==-1:	#幅を拡張
-			Add(sizer,hSlider,proportion,sizerFlag,expandFlag=wx.HORIZONTAL)
+			Add(sizer,hSlider,proportion,sizerFlag,margin,expandFlag=wx.HORIZONTAL)
 		else:
-			Add(sizer,hSlider,proportion,sizerFlag)
+			Add(sizer,hSlider,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hSlider,hStaticText
 
@@ -376,19 +373,25 @@ class ViewCreator():
 	def _addDescriptionText(self,text,textLayout,sizerFlag=0, proportion=0):
 		if textLayout not in (None,wx.HORIZONTAL,wx.VERTICAL,wx.DEFAULT):
 			raise ValueError("textLayout must be (None,wx.HORIZONTAL,wx.VIRTICAL,wx.DEFAULT)")
-		if textLayout!=None:
-			hStaticText=wx.StaticText(self.parent,wx.ID_ANY,label=text,name=text)
-		else:
-			hStaticText=wx.StaticText(self.parent,wx.ID_ANY,label=text,name=text,size=(0,0))
-		self._setFace(hStaticText)
 		if type(self.sizer) in (wx.BoxSizer,wx.StaticBoxSizer) and textLayout not in (None,self.sizer.GetOrientation(),wx.DEFAULT):
-			sizer=self.BoxSizer(self.sizer,orient=textLayout, space=self.space)
-			Add(sizer,hStaticText, 0, wx.ALIGN_CENTER_VERTICAL)
-			Add(self.sizer,sizer, proportion, sizerFlag)
-			return hStaticText,sizer
+			panel=makePanel(self.parent)
+			if textLayout!=None:
+				hStaticText=wx.StaticText(panel,wx.ID_ANY,label=text,name=text)
+			else:
+				hStaticText=wx.StaticText(panel,wx.ID_ANY,label=text,name=text,size=(0,0))
+			self._setFace(hStaticText)
+			sizer=self.BoxSizer(panel,orient=textLayout, space=self.space)
+			Add(sizer,hStaticText, 0, wx.ALIGN_CENTER_VERTICAL,20)
+			Add(self.sizer,panel, proportion, sizerFlag,20)
+			return hStaticText,sizer,panel
 		else:
+			if textLayout!=None:
+				hStaticText=wx.StaticText(self.parent,wx.ID_ANY,label=text,name=text)
+			else:
+				hStaticText=wx.StaticText(self.parent,wx.ID_ANY,label=text,name=text,size=(0,0))
+			self._setFace(hStaticText)
 			Add(self.sizer,hStaticText,0,wx.ALIGN_CENTER_VERTICAL)
-			return hStaticText,self.sizer
+			return hStaticText,self.sizer,self.parent
 
 	def _setFace(self,target,mode=NORMAL):
 		if mode==NORMAL:
@@ -433,7 +436,7 @@ def Add(sizer, window, proportion=0, flag=0, border=0, expandFlag=None):
 
 # parentで指定されたフレームにパネルを設置する
 def makePanel(parent):
-	hPanel=wx.Panel(parent,wx.ID_ANY)
+	hPanel=wx.Panel(parent,wx.ID_ANY,size=(-1,-1))
 	return hPanel
 
 

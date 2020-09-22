@@ -50,7 +50,7 @@ class MainView(BaseView):
 		self.InstallMenuEvent(Menu(self.identifier, self.events),self.events.OnMenuSelect)
 		
 		# ボタン・音量スライダエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL)
+		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,style=wx.ALL,space=20)
 		self.previousBtn = self.horizontalCreator.button(_("前"), self.events.onButtonClick)
 		self.playPauseBtn = self.horizontalCreator.button(_("再生"), self.events.onButtonClick)
 		self.nextBtn = self.horizontalCreator.button(_("次"), self.events.onButtonClick)
@@ -63,22 +63,23 @@ class MainView(BaseView):
 		#self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
 
 		# 曲情報表示
-		self.viewTitle = self.creator.staticText(_("タイトル") +  " : ")
+		self.viewTitle = self.creator.staticText(_("タイトル") +  " : ",sizerFlag=wx.LEFT | wx.RIGHT,margin=20)
+
 		self.viewTagInfo = self.creator.staticText("")
 		self.tagInfoTimer = wx.Timer()
 		self.tagInfoTimer.Bind(wx.EVT_TIMER, globalVars.eventProcess.refreshTagInfo)
 
 		#トラックバーエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,style=wx.EXPAND)
-		self.trackBar, dummy = self.horizontalCreator.slider(_("トラック"), event=self.events.onSlider, x=1000, proportion=1)
+		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT,margin=20)
+		self.trackBar, dummy = self.horizontalCreator.slider(_("トラック"), event=self.events.onSlider, x=1000, sizerFlag=wx.LEFT | wx.RIGHT, proportion=1, margin=10)
 		self.nowTime = self.horizontalCreator.staticText("0:00:00 / 0:00:00", x=(350))
 
 		# リストビューエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL, 20, style=wx.EXPAND,proportion=1)
-		self.playlistView, self.playlistLabel = self.horizontalCreator.listCtrl(_("プレイリスト") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, size=(-1,3000), proportion=30,textLayout=wx.VERTICAL)
+		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL, 0, style=wx.EXPAND | wx.LEFT | wx.ALL,proportion=1,margin=20)
+		self.playlistView, self.playlistLabel = self.horizontalCreator.listCtrl(_("プレイリスト") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, sizerFlag=wx.EXPAND | wx.RIGHT,proportion=2,textLayout=wx.VERTICAL)
 		globalVars.playlist.setListCtrl(self.playlistView)
 		view_manager.listViewSetting(self.playlistView, "playlist")
-		self.queueView, self.queueLabel = self.horizontalCreator.listCtrl(_("キュー") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, size=(-1,3000), proportion=1, textLayout=wx.VERTICAL)
+		self.queueView, self.queueLabel = self.horizontalCreator.listCtrl(_("キュー") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, sizerFlag=wx.EXPAND,proportion=1, textLayout=wx.VERTICAL)
 		globalVars.queue.setListCtrl(self.queueView)
 		view_manager.listViewSetting(self.queueView, "queue")
 

@@ -96,7 +96,7 @@ class MaiｎBase(wx.App):
 		"""翻訳を初期化する。"""
 		lang=self.config.getstring("general","language","",constants.SUPPORTING_LANGUAGE.keys())
 		if lang == "":
-			if locale.getdefaultlocale()[0] in constants.SUPPORTING_LANGUAGE:
+			if locale.getdefaultlocale()[0] in list(constants.SUPPORTING_LANGUAGE.keys()):
 				self.config["general"]["language"] = locale.getdefaultlocale()[0]
 			else:
 				# 言語選択を表示
