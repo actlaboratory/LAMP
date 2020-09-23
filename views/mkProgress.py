@@ -8,7 +8,8 @@ from logging import getLogger
 from views.baseDialog import *
 
 class Dialog(BaseDialog):
-	def Initialize(self, label, name):
+	def Initialize(self, label, name, comObject):
+		self.com = comObject
 		super().__init__("gaugeDialog")
 		self.label=label
 		self.log.debug("created")
@@ -20,6 +21,7 @@ class Dialog(BaseDialog):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,style=wx.ALL,space=20)
 		self.gauge,self.static=self.creator.gauge(self.label,x=400)
+		self.button = self.creator.button(_("中止") + "(&C)", self.cancel)
 
 	# プログレス更新（現在値, ラベル, 最大値）
 	def update(self, pos=None, label=None, max=None):
@@ -29,3 +31,17 @@ class Dialog(BaseDialog):
 			self.gauge.SetValue(pos)
 		if label != None:
 			self.static.SetLabel(label)
+
+	def cancel(self, evt):
+		self.com.set(wx.CANCEL)
+
+# プログレス通信オブジェクト
+class comObject():
+	def __init__(self):
+		self.value = wx.CONTROL_NONE
+
+	def set(self, value):
+		self.value = value
+
+	def get(self):
+		return self.value

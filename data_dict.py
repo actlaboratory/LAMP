@@ -8,6 +8,7 @@ from views import objectDetail
 
 class dataDict():
 	def __init__ (self):
+		self.com = mkProgress.comObject()
 		# dataNo:（ファイルパス, ファイル名, サイズ, タイトル, 長さ, アーティスト, アルバム, アルバムアーティスト）
 		self.dict = {}
 		self.dataNo = 0
@@ -19,13 +20,14 @@ class dataDict():
 	def addFilesCall(self, flst, lst, lcObj, id=-1):
 		#プログレスダイアログ作成
 		progress=mkProgress.Dialog("importProgressDialog")
-		progress.Initialize(_("ファイルを集めています..."), _("読み込み中..."))
+		progress.Initialize(_("ファイルを集めています..."), _("読み込み中..."), comObject=self.com)
 		progress.Show(False)
 		wx.YieldIfNeeded() #プログレスダイアログを強制更新
 		# 作業するファイルのリスト（ファイルパス）
 		pathList = []
 		# リストで受け取ってフォルダとファイルに分ける
 		for s in flst:
+			if self.com.get() == wx.CANCEL: break
 			if (os.path.isfile(s) and os.path.splitext(s)[1].lower() in globalVars.fileExpansions) or re.search("^https?://.+\..+", s)!=None:
 				pathList.append(s)
 			else:
@@ -33,6 +35,7 @@ class dataDict():
 		# 作成したファイルパスのリストから辞書に追加
 		self.appendDict(pathList, lst, lcObj, progress, id)
 		progress.Destroy()
+		self.com.set(wx.CONTROL_NONE)
 		wx.YieldIfNeeded()
 		view_manager.changeListLabel(lcObj)
 		fxPlayer.playFx("fx/load.mp3")
@@ -73,6 +76,7 @@ class dataDict():
 				wx.YieldIfNeeded() #プログレスダイアログを強制更新
 			progPerTmp = progPer
 			self.dataNo += 1
+			if self.com.get() == wx.CANCEL: return
 
 	def getTags(self, dataNoList):
 		pathList = []
