@@ -6,6 +6,12 @@ class listBase():
 		self.playIndex = -1
 		self.isDeletePlayingFile = 0
 
+	def setPlayIndex(self, index):
+		if index >= 0 and index < len(self.lst):
+			self.playIndex = index
+			return True
+		else: return False
+	
 	def setListCtrl(self, obj):
 		self.lcObject = obj
 

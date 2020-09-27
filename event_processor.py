@@ -10,12 +10,15 @@ import file_manager
 import shuffle_ctrl
 import lampClipBoardCtrl
 from soundPlayer.constants import *
+from soundPlayer import fxPlayer
+from views import mkDialog
 
 class eventProcessor():
     def __init__(self):
         self.repeatLoopFlag = 0 #リピート=1, ループ=2
         self.tagInfoProcess = 0 # タグ情報表示フラグ 0=アルバム, 1=アーティスト, 2=アルバムアーティスト
         self.playingDataNo = None
+        self.canFileChange = False # ファイル送りは１ファイル１回のみー
         self.muteFlag = 0 #初期値はミュート解除
         self.shuffleCtrl = 0
 
@@ -44,7 +47,9 @@ class eventProcessor():
 
         #ファイル送り
         if globalVars.play.getStatus() == PLAYER_STATUS_END:
-            self.fileChange()
+                if self.canFileChange:
+                    self.canFileChange = False
+                    self.fileChange()
 
     # 曲情報更新
     def refreshTagInfo(self, evt=None):
@@ -148,6 +153,7 @@ class eventProcessor():
                 globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
                 self.refreshTagInfo()
                 globalVars.app.hMainView.tagInfoTimer.Start(10000)
+                self.canFileChange = True # ファイル送りを許可
         elif list == globalVars.queue:
             self.finalList = globalVars.queue
             if rtn:
@@ -157,10 +163,13 @@ class eventProcessor():
                 globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
                 self.refreshTagInfo()
                 globalVars.app.hMainView.tagInfoTimer.Start(10000)
+                self.canFileChange = True # ファイル送りを許可
             globalVars.queue.deleteFile(globalVars.queue.getIndex(listTpl))
         if rtn == False:
             globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
+            self.playError()
+        return rtn
 
     def forcePlay(self, source):
         if globalVars.play.setSource(source):
@@ -180,8 +189,17 @@ class eventProcessor():
         else:
             globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
+            self.playError()
+            self.canFileChange = True # ファイル送りを許可
+        return rtn
 
-    
+    def playError(self):
+        # 再生エラーの処理
+        fxPlayer.playFx("./fx/error.mp3")
+        d = mkDialog.Dialog("playErrorDialog")
+        d.Initialize(_("再生時エラー"), _("このファイルは再生できません。"), (_("了解"),))
+        d.Show()
+
     def pause(self, pause=True):
         if pause == True: #一時停止
             if globalVars.play.pause(): globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
