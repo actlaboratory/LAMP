@@ -7,6 +7,7 @@ import win32api
 import _winxptheme
 import wx
 #import wx.adv
+from views.viewObject import *
 
 from . import fontManager
 
@@ -259,7 +260,7 @@ class ViewCreator():
 	def listCtrl(self,text, event=None, style=0, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hListCtrl=wx.ListCtrl(parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size)
+		hListCtrl=virtualListCtrl(parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size)
 		hListCtrl.Bind(wx.EVT_LIST_ITEM_FOCUSED,event)
 		self._setFace(hListCtrl)
 		self._setFace(hListCtrl.GetMainWindow())
