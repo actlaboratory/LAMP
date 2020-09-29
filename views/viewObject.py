@@ -3,8 +3,12 @@ import wx
 class virtualListCtrl(wx.ListCtrl):
     # listの機能を組み込み
     def __init__(self, *pArg, **kArg):
+        lPArg = list(pArg)
+        if len(lPArg) >= 5: lPArg[4] = lPArg[4] | wx.LC_REPORT | wx.LC_VIRTUAL
+        elif "style" in kArg: kArg["style"] = kArg["style"] | wx.LC_REPORT | wx.LC_VIRTUAL
+        else: kArg["style"] = wx.LC_REPORT | wx.LC_VIRTUAL
         self.lst = []
-        super().__init__(*pArg, **kArg)
+        super().__init__(*lPArg, **kArg)
 
     def getList(self):
         return self.copy()
@@ -16,6 +20,20 @@ class virtualListCtrl(wx.ListCtrl):
         if lstLen > 0: super().RefreshItems(0, lstLen)
 
 
+    #
+    # ビュー部分
+    # 
+    def OnGetItemText(self, item, column):
+        obj = self.lst[item]
+        if hasattr(obj, '__iter__'): return str(obj[column]) # イテレーション可能なオブジェクト
+        else: return obj.getListTuple()[column] # getListTupleを実装するオブジェクト
+
+
+
+
+    #
+    # リスト部分
+    #
     def append(self, object):
         self.lst.append(object)
         super().SetItemCount(len(self.lst))
