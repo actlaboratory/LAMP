@@ -4,12 +4,16 @@ class virtualListCtrl(wx.ListCtrl):
     # listの機能を組み込み
     def __init__(self, *pArg, **kArg):
         lPArg = list(pArg)
-        if len(lPArg) >= 5: lPArg[4] = lPArg[4] | wx.LC_REPORT | wx.LC_VIRTUAL
-        elif "style" in kArg: kArg["style"] = kArg["style"] | wx.LC_REPORT | wx.LC_VIRTUAL
+        if "style" in kArg: kArg["style"] = kArg["style"] | wx.LC_REPORT | wx.LC_VIRTUAL
+        elif len(lPArg) >= 5: lPArg[4] = lPArg[4] | wx.LC_REPORT | wx.LC_VIRTUAL
         else: kArg["style"] = wx.LC_REPORT | wx.LC_VIRTUAL
         self.lst = []
         super().__init__(*lPArg, **kArg)
 
+    def RefreshItems(self, first, end):
+        super().RefreshItems(first, end)
+        wx.YieldIfNeeded()
+    
     def getList(self):
         return self.copy()
     
@@ -39,6 +43,7 @@ class virtualListCtrl(wx.ListCtrl):
         super().SetItemCount(len(self.lst))
         super().RefreshItem(len(self.lst)-1)
 
+
     def clear(self):
         self.lst.clear()
         super().SetItemCount(0)
@@ -64,6 +69,7 @@ class virtualListCtrl(wx.ListCtrl):
 
     def pop(self, index):
         ret = self.lst.pop(index)
+        super().SetItemCount(len(self.lst))
         super().RefreshItems(index, len(self.lst)-1)
         return ret
 
@@ -125,6 +131,7 @@ class virtualListCtrl(wx.ListCtrl):
 
     def __delitem__(self, key):
         self.lst.__delitem__(key)
+        super().SetItemCount(len(self.lst))
         super().RefreshItems(key, len(self.lst)-1)
 
     def __iter__(self):
@@ -139,17 +146,20 @@ class virtualListCtrl(wx.ListCtrl):
 
     # 数値型エミュレート
     def __add__(self, value):
-        return self.lst.__add__(value)
+        self.lst.__add__(value)
+        return self
 
     def __rmul__(self, other):
-        return self.lst.__rmul__(other)
+        self.lst.__rmul__(other)
+        return self
 
     def __iadd__(self, other):
         oldLen = len(self.lst)
         self.lst.__iadd__(other)
         newLen = len(self.lst)
-        super().SetItemCount(len(newLen))
+        super().SetItemCount(newLen)
         if oldLen < newLen: super().RefreshItems(oldLen, newLen-1)
+        return self
         
     def __imul__(self, other):
         oldLen = len(self.lst)
@@ -158,3 +168,20 @@ class virtualListCtrl(wx.ListCtrl):
         super().SetItemCount(newLen)
         if oldLen < newLen: super().RefreshItems(oldLen, newLen-1)
         elif newLen == 0: super().SetItemCount(0)
+        return self
+
+if __name__ == "__main__":
+	app = wx.App()
+	frame = wx.Frame()
+	obj = virtualListCtrl(frame)
+	l = []
+	for i in range(100000):
+		l.append(i)
+	print("ok")
+	print(obj)
+	obj += l
+	print(obj)
+	print("ok")
+	obj.RefreshItems(0, 100000)
+	print("ok")	
+	print(len(obj))

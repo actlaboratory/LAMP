@@ -2,7 +2,7 @@
 #Application Main
 
 import AppBase
-import lists, event_processor, data_dict, lampPipe
+import event_processor, listManager, lampPipe
 import accessible_output2.outputs.auto
 import sys
 import ConfigManager
@@ -18,7 +18,6 @@ import datetime
 import multiprocessing
 import globalVars
 import m3uManager
-import data_dict
 from logging import getLogger, FileHandler, Formatter
 from simpleDialog import *
 import sleep_timer
@@ -72,12 +71,10 @@ class Main(AppBase.MainBase):
 	def SetGlobalVars(self):
 		globalVars.play = player.player(PLAYER_DEFAULT_SPEAKER)
 		globalVars.play.setVolume(globalVars.app.config.getint("volume","default",default=100, min=0, max=100))
-		globalVars.playlist = lists.playlist()
-		globalVars.queue = lists.queue()
 		globalVars.eventProcess = event_processor.eventProcessor()
-		globalVars.dataDict = data_dict.dataDict()
 		globalVars.sleepTimer = sleep_timer.sleepTimer()
 		globalVars.m3uHistory = m3uManager.loadHistory()
+		globalVars.listInfo = listManager.listInfo()
 
 	def __del__(self):
 		if self.mutex != 0:

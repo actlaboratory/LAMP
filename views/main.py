@@ -3,6 +3,7 @@
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 #Copyright (C) 2019-2020 yamahubuki <itiro.ishino@gmail.com>
 
+from views import lampViewObject
 import logging
 import os
 import sys
@@ -12,13 +13,13 @@ import ctypes
 import pywintypes
 
 import constants
-import data_dict
 import errorCodes
 import globalVars
 import menuItemsStore
 import settings
 import m3uManager
 import effector
+import listManager
 from soundPlayer import player
 from soundPlayer.constants import *
 
@@ -76,11 +77,9 @@ class MainView(BaseView):
 
 		# リストビューエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL, 0, style=wx.EXPAND | wx.LEFT | wx.ALL,proportion=1,margin=20)
-		self.playlistView, self.playlistLabel = self.horizontalCreator.listCtrl(_("プレイリスト") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, sizerFlag=wx.EXPAND | wx.RIGHT,proportion=2,textLayout=wx.VERTICAL)
-		globalVars.playlist.setListCtrl(self.playlistView)
+		self.playlistView, self.playlistLabel = self.horizontalCreator.customListCtrl(lampViewObject.playlist, _("プレイリスト") + " (0" + _("件") + ")", style=wx.LC_NO_HEADER, sizerFlag=wx.EXPAND | wx.RIGHT,proportion=2,textLayout=wx.VERTICAL)
 		view_manager.listViewSetting(self.playlistView, "playlist")
-		self.queueView, self.queueLabel = self.horizontalCreator.listCtrl(_("キュー") + " (0" + _("件") + ")", style=wx.LC_REPORT|wx.LC_NO_HEADER, sizerFlag=wx.EXPAND,proportion=1, textLayout=wx.VERTICAL)
-		globalVars.queue.setListCtrl(self.queueView)
+		self.queueView, self.queueLabel = self.horizontalCreator.customListCtrl(lampViewObject.queue, _("キュー") + " (0" + _("件") + ")", style=wx.LC_NO_HEADER, sizerFlag=wx.EXPAND,proportion=1, textLayout=wx.VERTICAL)
 		view_manager.listViewSetting(self.queueView, "queue")
 
 		self.hPanel.Layout()
@@ -188,9 +187,9 @@ class Events(BaseEvents):
 			dialog.Initialize(0) #0=ファイルダイアログ
 			rtnCode = dialog.Show()
 			if rtnCode == dialog.PLAYLIST:
-				globalVars.playlist.addFiles([dialog.GetValue()])
+				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.playlistView)
 			elif rtnCode == dialog.QUEUE:
-				globalVars.queue.addFiles([dialog.GetValue])
+				listManager.addItems([dialog.GetValue], globalVars.app.hMainView.queueView)
 			else:
 				return
 		elif selected==menuItemsStore.getRef("DIR_OPEN"):
@@ -198,9 +197,9 @@ class Events(BaseEvents):
 			dialog.Initialize(1) #1=フォルダダイアログ
 			rtnCode = dialog.Show()
 			if rtnCode == dialog.PLAYLIST:
-				globalVars.playlist.addFiles([dialog.GetValue()])
+				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.playlistView)
 			elif rtnCode == dialog.QUEUE:
-				globalVars.queue.addFiles([dialog.GetValue()])
+				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.queueView)
 			else:
 				return
 		elif selected==menuItemsStore.getRef("URL_OPEN"):
@@ -208,9 +207,9 @@ class Events(BaseEvents):
 			dialog.Initialize(2) #2=URLダイアログ
 			rtnCode = dialog.Show()
 			if rtnCode == dialog.PLAYLIST:
-				globalVars.playlist.addFiles([dialog.GetValue()])
+				globalVars.playlist.addFiles([dialog.GetValue()], globalVars.app.hMainView.playlistView)
 			elif rtnCode == dialog.QUEUE:
-				globalVars.queue.addFiles([dialog.GetValue()])
+				globalVars.queue.addFiles([dialog.GetValue()], globalVars.app.hMainView.queueView)
 			else:
 				return
 		elif selected==menuItemsStore.getRef("M3U_OPEN"):

@@ -269,6 +269,18 @@ class ViewCreator():
 		self.AddSpace()
 		return hListCtrl,hStaticText
 
+	def customListCtrl(self,lcObject, text, event=None, style=0, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
+
+		hListCtrl=lcObject(parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size)
+		hListCtrl.Bind(wx.EVT_LIST_ITEM_FOCUSED,event)
+		self._setFace(hListCtrl)
+		self._setFace(hListCtrl.GetMainWindow())
+		_winxptheme.SetWindowTheme(win32api.SendMessage(hListCtrl.GetHandle(),0x101F,0,0),"","")#ヘッダーのウィンドウテーマを引っぺがす
+		Add(sizer,hListCtrl,proportion,sizerFlag,margin)
+		self.AddSpace()
+		return hListCtrl,hStaticText
+
 	def tabCtrl(self,title, event=None, style=wx.NB_NOPAGETHEME | wx.NB_MULTILINE, sizerFlag=0, proportion=0, margin=5):
 		htab=wx.Notebook(self.parent, wx.ID_ANY,name=title,style=style)
 		htab.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED,event)

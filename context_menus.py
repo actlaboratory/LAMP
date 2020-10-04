@@ -1,9 +1,8 @@
 import wx
 import globalVars
 import globalVars
+import listManager
 import menuItemsStore
-import lc_manager
-import data_dict
 import lampClipBoardCtrl
 from views.base import BaseMenu, BaseEvents
 from views import objectDetail
@@ -63,31 +62,34 @@ class Events(BaseEvents):
         if selected==menuItemsStore.getRef("POPUP_PLAY"):
             globalVars.eventProcess.listSelection(self.parent)
         elif selected==menuItemsStore.getRef("POPUP_ADD_QUEUE_HEAD"):
-            ls = lc_manager.getListCtrlPaths(self.parent)
-            globalVars.queue.addFiles(ls, 0)
+            t = self.parent[self.parent.GetFirstSelected()]
+            listManager.addItems((t[0],), globalVars.app.hMainView.queueView, 0)
         elif selected==menuItemsStore.getRef("POPUP_ADD_QUEUE"):
-            ls = lc_manager.getListCtrlPaths(self.parent)
-            globalVars.queue.addFiles(ls)
+            t = self.parent[self.parent.GetFirstSelected()]
+            listManager.addItems((t[0],), globalVars.app.hMainView.queueView)
         elif selected==menuItemsStore.getRef("POPUP_ADD_PLAYLIST"):
-            ls = lc_manager.getListCtrlPaths(self.parent)
-            globalVars.playlist.addFiles(ls)
+            t = self.parent[self.parent.GetFirstSelected()]
+            listManager.addItems((t[0],), globalVars.app.hMainView.queueView)
         elif selected==menuItemsStore.getRef("POPUP_COPY"):
-            fList = lc_manager.getListCtrlPaths(self.parent)
+            fList = []
+            i = self.parent.GetFirstSelected()
+            if i >= 0:
+                fList.append(self.parent[i][0])
+                while True:
+                    i = self.parent.GetNextSelected()
+                    if i >= 0: fList.append(self.parent[i][0])
+                    else: break
             lampClipBoardCtrl.copy(fList)
         elif selected==menuItemsStore.getRef("POPUP_PASTE"):
-            lampClipBoardCtrl.paste(lc_manager.getList(self.parent))
+            lampClipBoardCtrl.paste(self.parent)
         elif selected==menuItemsStore.getRef("POPUP_DELETE"):
-            lst = lc_manager.getList(self.parent)
-            index = lc_manager.getListCtrlSelections(self.parent)
-            cnt = 0
-            for i in index:
-                i = i-cnt
-                globalVars.eventProcess.delete(lst,i)
-                cnt += 1
+            globalVars.eventProcess.delete(self.parent)
         elif selected==menuItemsStore.getRef("POPUP_SELECT_ALL"):
             for i in range(self.parent.GetItemCount()):
                 self.parent.Select(i - 1)
         elif selected==menuItemsStore.getRef("POPUP_ABOUT"):
-            item = self.parent.GetItemData(lc_manager.getListCtrlSelections(self.parent)[0])
-            globalVars.dataDict.getTags([item])
-            data_dict.infoDialog(item)            
+            index = self.parent.GetFirstSelected()
+            t = self.parent[index]
+            tag = listManager.getTags([t])
+            self.parent[index] = tag[0]
+            listManager.infoDialog(self.parent, index)

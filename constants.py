@@ -34,3 +34,19 @@ DEVICE_LIST_MENU = 10000
 
 # パイプとミューテックスオブジェクトの名前
 PIPE_NAME = "lamp_pipe_jp0000actlab"
+
+# アイテムタプルのインデックス
+ITEM_PATH = 0
+ITEM_NAME = 1
+ITEM_NUMBER = 2
+ITEM_SIZE = 3
+ITEM_TITLE = 4
+ITEM_LENGTH = 5
+ITEM_ARTIST = 6
+ITEM_ALBUM = 7
+ITEM_ALBUMARTIST = 8
+
+# リスト
+PLAYLIST = 101
+QUEUE = 102
+NOLIST = 103

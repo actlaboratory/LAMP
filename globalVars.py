@@ -10,11 +10,9 @@
 app=None
 bass = None
 play = None
-playlist = None
-queue = None
 eventProcess = None
-dataDict = None
 sleepTimer = None
 m3uHistory = None
+listInfo = None
 popupMenu4listView = None
 fileExpansions = [".wav", ".mp3", ".aac", ".m4a", ".ogg", ".opus", ".flac", ".wma"]
