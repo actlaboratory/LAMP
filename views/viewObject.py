@@ -68,15 +68,27 @@ class virtualListCtrl(wx.ListCtrl):
         super().RefreshItems(index, len(self.lst)-1)
 
     def pop(self, index):
+        l = self.GetSelectedItems()
+        previousL = self.lst[0:self.GetFirstSelected() + 1]
+        if self.GetFocusedItem() >= 0: f = self.lst[self.GetFocusedItem()]
+        else: f = None
         ret = self.lst.pop(index)
         super().SetItemCount(len(self.lst))
         super().RefreshItems(index, len(self.lst)-1)
+        self.__setFocus(f, l, previousL)
+        self.__setSelectionFromList(l)
         return ret
 
     def remove(self, value):
+        l = self.GetSelectedItems()
+        previousL = self.lst[0:self.GetFirstSelected() + 1]
+        if self.GetFocusedItem() >= 0: f = self.lst[self.GetFocusedItem()]
+        else: f = None
         index = self.lst.index(value)
         self.lst.remove(value)
         super().RefreshItems(index, len(self.lst)-1)
+        self.__setFocus(f, l, previousL)
+        self.__setSelectionFromList(l)
 
     def reverse(self):
         self.lst.reverse()
@@ -130,9 +142,15 @@ class virtualListCtrl(wx.ListCtrl):
         super().RefreshItem(key)
 
     def __delitem__(self, key):
+        l = self.GetSelectedItems()
+        previousL = self.lst[0:self.GetFirstSelected() + 1]
+        if self.GetFocusedItem() >= 0: f = self.lst[self.GetFocusedItem()]
+        else: f = None
         self.lst.__delitem__(key)
         super().RefreshItems(0, len(self.lst)-1)
         super().SetItemCount(len(self.lst))
+        self.__setFocus(f, l, previousL)
+        self.__setSelectionFromList(l)
 
     def __iter__(self):
         return self.lst.__iter__()
@@ -169,6 +187,35 @@ class virtualListCtrl(wx.ListCtrl):
         if oldLen < newLen: super().RefreshItems(oldLen, newLen-1)
         elif newLen == 0: super().SetItemCount(0)
         return self
+
+    def GetSelectedItems(self):
+        s = self.GetFirstSelected()
+        if s < 0: return None
+        else:
+            ret = [self.lst[s]]
+            while True:
+                s = self.GetNextSelected(s)
+                if s < 0: break
+                else: ret.append(self.lst[s])
+            return ret
+    def __setSelectionFromList(self, lst):
+        self.Select(-1, 0)
+        for t in lst:
+            if t in self.lst: self.Select(self.lst.index(t))
+        if self.GetSelectedItemCount() == 0: self.Select(0)
+
+    def __setFocus(self, obj, selection, previousL):
+        """ フォーカス更新（オブジェクト, 選択リスト、選択領域直前までのリスト）"""
+        self.Focus(0)
+        if obj in self.lst:
+            self.Focus(self.lst.index(obj))
+            return
+        else:
+            for o in reversed(previousL):
+                if o in self.lst:
+                    self.Focus(self.lst.index(o))
+                    return
+        self.Focus(0)
 
 if __name__ == "__main__":
 	app = wx.App()
