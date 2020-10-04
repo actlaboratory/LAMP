@@ -9,7 +9,7 @@ class playlist(viewObject.virtualListCtrl):
     def OnGetItemText(self, item, column):
         if column == 0: column = 1
         return super().OnGetItemText(item, column)
-    
+
     def get(self):
         if self.pointer >= 0 and self.pointer < len(self.lst):
             return self.lst[self.pointer]

@@ -196,18 +196,31 @@ class eventProcessor():
             first = lcObj.GetFirstSelected()
             if first < 0: return
             else: 
-                itm = [first]
-                next = first
+                itm = [[first]]
+                nextTmp = first
+                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer == first:
+                    self.stop(True) # 再生中の曲を削除するときは停止
             while True:
-                next = lcObj.GetNextSelected(next)
-                if next < 0: break
-                else: itm.append(next)
-            if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer in itm:
-                self.stop(True) # 再生中の曲を削除するときは停止
+                next = lcObj.GetNextSelected(nextTmp)
+                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer == next:
+                    self.stop(True) # 再生中の曲を削除するときは停止
+                if next < 0:
+                    if itm[-1][0] != nextTmp: itm[-1].append(nextTmp)
+                    break
+                else:
+                    if next - nextTmp != 1:
+                        itm[-1].append(nextTmp)
+                        itm.append([next])
+                    nextTmp = next
             count = 0 # カウンタをリセットして削除開始
-            for i in itm:
-                del lcObj[i - count]
-                count += 1
+            for l in itm:
+                if len(l) == 2:
+                    del lcObj[l[0] - count: l[1] - count + 1]
+                    count += l[1] - l[0] + 1
+                else:
+                    del lcObj[l[0] - count]
+                    count += 1
+        view_manager.changeListLabel(lcObj)
 
     def fileChange(self, evt=None):
         self.fileChanging = True

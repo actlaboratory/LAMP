@@ -131,8 +131,8 @@ class virtualListCtrl(wx.ListCtrl):
 
     def __delitem__(self, key):
         self.lst.__delitem__(key)
+        super().RefreshItems(0, len(self.lst)-1)
         super().SetItemCount(len(self.lst))
-        super().RefreshItems(key, len(self.lst)-1)
 
     def __iter__(self):
         return self.lst.__iter__()
