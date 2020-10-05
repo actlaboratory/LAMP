@@ -6,6 +6,7 @@ skipInterval = (5,30,60,300,600)
 def setSkipInterval(sec):
     if sec in skipInterval:
         globalVars.app.config["player"]["skipInterval"] = str(int(sec))
+        globalVars.app.say(_("%d秒") % int(sec))
 
 def getSkipInterval():
     sec = globalVars.app.config.getint("player", "skipInterval", default=30)
