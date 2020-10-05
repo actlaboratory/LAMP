@@ -21,7 +21,7 @@ class virtualListCtrl(wx.ListCtrl):
         lstLen = len(lst)
         self.lst = []
         super().SetItemCount(lstLen)
-        if lstLen > 0: super().RefreshItems(0, lstLen)
+        if lstLen > 0: self.RefreshItems(0, lstLen)
 
 
     #
@@ -41,7 +41,7 @@ class virtualListCtrl(wx.ListCtrl):
     def append(self, object):
         self.lst.append(object)
         super().SetItemCount(len(self.lst))
-        super().RefreshItem(len(self.lst)-1)
+        self.RefreshItem(len(self.lst)-1)
 
 
     def clear(self):
@@ -55,17 +55,18 @@ class virtualListCtrl(wx.ListCtrl):
         return self.lst.count(value)
 
     def extend(self, iterable):
-            self.lst.extend(iterable)
-            newLen = len(self.lst)
-            super().SetItemCount(newLen)
-            if len(iterable) > 0: super().RefreshItems(newLen-len(iterable), newLen-1)
+        self.lst.extend(iterable)
+        newLen = len(self.lst)
+        super().SetItemCount(newLen)
+        if len(iterable) > 0: self.RefreshItems(newLen-len(iterable), newLen-1)
 
     def index(self, *pArg, **kArg):
         return self.lst.index(*pArg, *kArg)
 
     def insert(self, index, object):
         self.lst.insert(index, object)
-        super().RefreshItems(index, len(self.lst)-1)
+        super().SetItemCount(len(self.lst))
+        self.RefreshItems(index, len(self.lst)-1)
 
     def pop(self, index):
         l = self.GetSelectedItems()
@@ -74,7 +75,7 @@ class virtualListCtrl(wx.ListCtrl):
         else: f = None
         ret = self.lst.pop(index)
         super().SetItemCount(len(self.lst))
-        super().RefreshItems(index, len(self.lst)-1)
+        self.RefreshItems(index, len(self.lst)-1)
         self.__setFocus(f, l, previousL)
         self.__setSelectionFromList(l)
         return ret
@@ -86,17 +87,18 @@ class virtualListCtrl(wx.ListCtrl):
         else: f = None
         index = self.lst.index(value)
         self.lst.remove(value)
-        super().RefreshItems(index, len(self.lst)-1)
+        super().SetItemCount(len(self.lst))
+        self.RefreshItems(index, len(self.lst)-1)
         self.__setFocus(f, l, previousL)
         self.__setSelectionFromList(l)
 
     def reverse(self):
         self.lst.reverse()
-        super().RefreshItems(0, len(self.lst)-1)
+        self.RefreshItems(0, len(self.lst)-1)
 
     def sort(self):
         self.lst.sort()
-        super().RefreshItems(0, len(self.lst)-1)
+        self.RefreshItems(0, len(self.lst)-1)
 
     
     # 拡張比較
@@ -139,7 +141,7 @@ class virtualListCtrl(wx.ListCtrl):
 
     def __setitem__(self, key, value):
         self.lst.__setitem__(key, value)
-        super().RefreshItem(key)
+        self.RefreshItem(key)
 
     def __delitem__(self, key):
         l = self.GetSelectedItems()
@@ -147,8 +149,8 @@ class virtualListCtrl(wx.ListCtrl):
         if self.GetFocusedItem() >= 0: f = self.lst[self.GetFocusedItem()]
         else: f = None
         self.lst.__delitem__(key)
-        super().RefreshItems(0, len(self.lst)-1)
         super().SetItemCount(len(self.lst))
+        self.RefreshItems(0, len(self.lst)-1)
         self.__setFocus(f, l, previousL)
         self.__setSelectionFromList(l)
 
@@ -176,7 +178,7 @@ class virtualListCtrl(wx.ListCtrl):
         self.lst.__iadd__(other)
         newLen = len(self.lst)
         super().SetItemCount(newLen)
-        if oldLen < newLen: super().RefreshItems(oldLen, newLen-1)
+        if oldLen < newLen: self.RefreshItems(oldLen, newLen-1)
         return self
         
     def __imul__(self, other):
@@ -184,8 +186,7 @@ class virtualListCtrl(wx.ListCtrl):
         self.lst.__imul__(other)
         newLen = len(self.lst)
         super().SetItemCount(newLen)
-        if oldLen < newLen: super().RefreshItems(oldLen, newLen-1)
-        elif newLen == 0: super().SetItemCount(0)
+        if oldLen < newLen: self.RefreshItems(oldLen, newLen-1)
         return self
 
     def GetSelectedItems(self):
