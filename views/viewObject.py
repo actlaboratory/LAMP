@@ -144,15 +144,21 @@ class virtualListCtrl(wx.ListCtrl):
         self.RefreshItem(key)
 
     def __delitem__(self, key):
+        self.Show(False)
         l = self.GetSelectedItems()
         previousL = self.lst[0:self.GetFirstSelected() + 1]
+        fId = self.GetFocusedItem()
         if self.GetFocusedItem() >= 0: f = self.lst[self.GetFocusedItem()]
         else: f = None
+        top = self.GetTopItem()
+        self.Focus(0)
         self.lst.__delitem__(key)
         super().SetItemCount(len(self.lst))
         self.RefreshItems(0, len(self.lst)-1)
-        self.__setFocus(f, l, previousL)
+        self.__setFocus(f, fId, top, l, previousL)
         self.__setSelectionFromList(l)
+        self.Show()
+        self.SetFocus()
 
     def __iter__(self):
         return self.lst.__iter__()
@@ -205,18 +211,22 @@ class virtualListCtrl(wx.ListCtrl):
             if t in self.lst: self.Select(self.lst.index(t))
         if self.GetSelectedItemCount() == 0: self.Select(0)
 
-    def __setFocus(self, obj, selection, previousL):
-        """ フォーカス更新（オブジェクト, 選択リスト、選択領域直前までのリスト）"""
+    def __setFocus(self, obj, fId, topItem, selection, previousL):
+        """ フォーカス更新（オブジェクト, フォーカスID, トップID, 選択リスト、選択領域直前までのリスト）"""
         self.Focus(0)
         if obj in self.lst:
             self.Focus(self.lst.index(obj))
-            return
         else:
             for o in reversed(previousL):
                 if o in self.lst:
                     self.Focus(self.lst.index(o))
-                    return
-        self.Focus(0)
+                    break
+        if self.GetFocusedItem() == len(self.lst) - 1: newFocus = self.GetFocusedItem()
+        else: newFocus = self.GetFocusedItem() + 1
+        newTop = topItem - (fId - newFocus) + self.GetCountPerPage() - 1
+        if newTop >= len(self.lst): self.Focus(len(self.lst) - 1)
+        else: self.Focus(newTop)
+        self.Focus(newFocus)
 
 if __name__ == "__main__":
 	app = wx.App()
