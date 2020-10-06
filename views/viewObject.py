@@ -70,26 +70,18 @@ class virtualListCtrl(wx.ListCtrl):
 
     def pop(self, index):
         l = self.GetSelectedItems()
-        previousL = self.lst[0:self.GetFirstSelected() + 1]
-        if self.GetFocusedItem() >= 0: f = self.lst[self.GetFocusedItem()]
-        else: f = None
         ret = self.lst.pop(index)
-        super().SetItemCount(len(self.lst))
+        self.DeleteItem(index)
         self.RefreshItems(index, len(self.lst)-1)
-        self.__setFocus(f, l, previousL)
         self.__setSelectionFromList(l)
         return ret
 
     def remove(self, value):
-        l = self.GetSelectedItems()
-        previousL = self.lst[0:self.GetFirstSelected() + 1]
-        if self.GetFocusedItem() >= 0: f = self.lst[self.GetFocusedItem()]
-        else: f = None
         index = self.lst.index(value)
+        l = self.GetSelectedItems()
         self.lst.remove(value)
-        super().SetItemCount(len(self.lst))
+        self.DeleteItem(index)
         self.RefreshItems(index, len(self.lst)-1)
-        self.__setFocus(f, l, previousL)
         self.__setSelectionFromList(l)
 
     def reverse(self):
@@ -144,21 +136,32 @@ class virtualListCtrl(wx.ListCtrl):
         self.RefreshItem(key)
 
     def __delitem__(self, key):
-        self.Show(False)
-        l = self.GetSelectedItems()
-        previousL = self.lst[0:self.GetFirstSelected() + 1]
-        fId = self.GetFocusedItem()
-        if self.GetFocusedItem() >= 0: f = self.lst[self.GetFocusedItem()]
-        else: f = None
-        top = self.GetTopItem()
-        self.Focus(0)
-        self.lst.__delitem__(key)
-        super().SetItemCount(len(self.lst))
-        self.RefreshItems(0, len(self.lst)-1)
-        self.__setFocus(f, fId, top, l, previousL)
-        self.__setSelectionFromList(l)
-        self.Show()
-        self.SetFocus()
+        if len(self.lst[key]) >= 500: #大量処理の高速化
+            self.Show(False)
+            l = self.GetSelectedItems()
+            previousL = self.lst[0:self.GetFirstSelected() + 1]
+            fId = self.GetFocusedItem()
+            if self.GetFocusedItem() >= 0: f = self.lst[self.GetFocusedItem()]
+            else: f = None
+            top = self.GetTopItem()
+            self.Focus(0)
+            self.lst.__delitem__(key)
+            super().SetItemCount(len(self.lst))
+            self.RefreshItems(0, len(self.lst)-1)
+            self.__setFocus(f, fId, top, l, previousL)
+            self.__setSelectionFromList(l)
+            self.Show()
+            self.SetFocus()
+        elif type(key) == int:
+            self.lst.pop(key)
+            self.DeleteItem(key)
+            self.RefreshItems(0, len(self.lst)-1)
+        else:
+            for o in self.lst[key]:
+                i = self.lst.index(o)
+                self.lst.pop(i)
+                self.DeleteItem(i)
+            self.RefreshItems(0, len(self.lst)-1)
 
     def __iter__(self):
         return self.lst.__iter__()
