@@ -153,8 +153,8 @@ class virtualListCtrl(wx.ListCtrl):
             self.Show()
             self.SetFocus()
         elif type(key) == int:
-            self.lst.pop(key)
             self.DeleteItem(key)
+            self.lst.pop(key)
             self.RefreshItems(0, len(self.lst)-1)
         else:
             for o in self.lst[key]:

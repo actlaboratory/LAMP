@@ -198,12 +198,12 @@ class eventProcessor():
             else: 
                 itm = [[first]]
                 nextTmp = first
-                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer == first:
-                    self.stop(True) # 再生中の曲を削除するときは停止
+                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer() == first:
+                    self.stop() # 再生中の曲を削除するときは停止
             while True:
                 next = lcObj.GetNextSelected(nextTmp)
-                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer == next:
-                    self.stop(True) # 再生中の曲を削除するときは停止
+                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer() == next:
+                    self.stop() # 再生中の曲を削除するときは停止
                 if next < 0:
                     if itm[-1][0] != nextTmp: itm[-1].append(nextTmp)
                     break
