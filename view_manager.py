@@ -3,6 +3,7 @@ import globalVars
 import context_menus
 import defaultKeymap
 import keymap
+import listManager
 
 # イベントバインド関数
 def listViewSetting(lc, identifier):
@@ -41,8 +42,6 @@ class fileDrop(wx.FileDropTarget):
 		self.window = window
 		
 	def OnDropFiles(self, x, y, files):
-		if self.window == globalVars.app.hMainView.playlistView:
-			globalVars.playlist.addFiles(files)
-		elif self.window == globalVars.app.hMainView.queueView:
-			globalVars.queue.addFiles(files)
+		if self.window == globalVars.app.hMainView.playlistView or self.window == globalVars.app.hMainView.queueView:
+			listManager.addItems(files, self.window)
 		return True
