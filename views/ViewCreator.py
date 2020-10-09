@@ -7,7 +7,6 @@ import win32api
 import _winxptheme
 import wx
 #import wx.adv
-from views.viewObject import *
 
 from . import fontManager
 
@@ -37,8 +36,16 @@ class ViewCreator():
 		self.font=fontManager.FontManager()
 
 		#親ウィンドウ
-		self.parent=parent
-		self._setFace(parent)
+		if type(parent) in (wx.Panel,):
+			self.parent=parent
+			self._setFace(parent)
+		elif type(parent) in (wx.Notebook,wx.Choicebook,wx.Listbook):
+			self._setFace(parent)
+			self.parent=makePanel(parent)
+			self._setFace(self.parent)
+			parent.InsertPage(parent.GetPageCount(),self.parent,label)
+		else:
+			raise ValueError("ViewCreatorの親はパネルまたはブックコントロールである必要があります。")
 
 		#サイザー作成
 		if orient==FlexGridSizer:
@@ -154,7 +161,7 @@ class ViewCreator():
 
 	def checkbox(self,text, event=None, state=False, style=0, x=-1, sizerFlag=0, proportion=0,margin=5):
 		hPanel=wx.Panel(self.parent,wx.ID_ANY)
-		self._setFace(hPanel)
+		self._setFace(hPanel,mode=SKIP_COLOUR)
 		hSizer=self.BoxSizer(hPanel,self.sizer.GetOrientation())
 
 		if (isinstance(text,str)):	#単純に一つを作成
@@ -164,7 +171,8 @@ class ViewCreator():
 			self._setFace(hCheckBox,mode=SKIP_COLOUR)
 			hSizer.Add(hCheckBox)
 			Add(self.sizer,hPanel,proportion,sizerFlag,margin)
-			viewHelper.ScCheckbox(hPanel.GetHandle())
+			if self.mode==MODE_DARK:
+				viewHelper.ScCheckbox(hPanel.GetHandle())
 			self.AddSpace()
 			return hCheckBox
 		elif (isinstance(text,list)):	#複数同時作成
@@ -177,7 +185,8 @@ class ViewCreator():
 				hSizer.Add(hCheckBox)
 				hCheckBoxes.append(hCheckBox)
 			Add(self.sizer,hPanel,proportion,sizerFlag,margin)
-			viewHelper.ScCheckbox(hPanel.GetHandle())
+			if self.mode==MODE_DARK:
+				viewHelper.ScCheckbox(hPanel.GetHandle())
 			self.AddSpace()
 			return hCheckBoxes
 		else:
@@ -186,7 +195,7 @@ class ViewCreator():
 	# 3stateチェックボックス
 	def checkbox3(self,text, event=None, state=None, style=0, x=-1, sizerFlag=0, proportion=0,margin=0):
 		hPanel=wx.Panel(self.parent,wx.ID_ANY)
-		self._setFace(hPanel)
+		self._setFace(hPanel,mode=SKIP_COLOUR)
 		hSizer=self.BoxSizer(hPanel,self.sizer.GetOrientation())
 
 		if (isinstance(text,str)):	#単純に一つを作成
@@ -201,7 +210,8 @@ class ViewCreator():
 			hSizer.Add(hCheckBox)
 			self.AddSpace()
 			Add(self.sizer,hPanel,proportion,sizerFlag,margin)
-			viewHelper.ScCheckbox(hPanel.GetHandle())
+			if self.mode==MODE_DARK:
+				viewHelper.ScCheckbox(hPanel.GetHandle())
 			self.AddSpace()
 			return hCheckBox
 		elif (isinstance(text,list)):	#複数同時作成
@@ -220,7 +230,8 @@ class ViewCreator():
 				hSizer.Add(hCheckBox)
 				hCheckBoxes.append(hCheckBox)
 			Add(self.sizer,hPanel,proportion,sizerFlag,margin)
-			viewHelper.ScCheckbox(hPanel.GetHandle())
+			if self.mode==MODE_DARK:
+				viewHelper.ScCheckbox(hPanel.GetHandle())
 			self.AddSpace()
 			return hCheckBoxes
 		else:
@@ -260,7 +271,7 @@ class ViewCreator():
 	def listCtrl(self,text, event=None, style=0, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hListCtrl=virtualListCtrl(parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size)
+		hListCtrl=wx.ListCtrl(parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size)
 		hListCtrl.Bind(wx.EVT_LIST_ITEM_FOCUSED,event)
 		self._setFace(hListCtrl)
 		self._setFace(hListCtrl.GetMainWindow())

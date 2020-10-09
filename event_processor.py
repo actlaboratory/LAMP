@@ -127,7 +127,6 @@ class eventProcessor():
             globalVars.play.setVolume(vol)
         rtn = globalVars.play.getConfig(PLAYER_CONFIG_VOLUME)
         globalVars.app.hMainView.volumeSlider.SetValue(rtn)
-        globalVars.app.config["volume"]["default"] = str(int(rtn))
 
 
     # ファイルの新規再生

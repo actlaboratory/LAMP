@@ -4,6 +4,7 @@
 #Copyright (C) 2019-2020 yamahubuki <itiro.ishino@gmail.com>
 
 from views import lampViewObject
+from views import setting_dialog
 import logging
 import os
 import sys
@@ -155,7 +156,7 @@ class Menu(BaseMenu):
 		# 設定メニューの中身
 		self.hDeviceChangeInSettingsMenu = wx.Menu()
 		self.hSettingsMenu.AppendSubMenu(self.hDeviceChangeInSettingsMenu, _("再生出力先の変更"))
-
+		self.RegisterMenuCommand(self.hSettingsMenu, "ENVIRONMENT", _("環境設定"))
 		#ヘルプメニューの中身
 		self.RegisterMenuCommand(self.hHelpMenu,"EXAMPLE",_("テストダイアログを閲覧"))
 
@@ -276,6 +277,10 @@ class Events(BaseEvents):
 			else: globalVars.play.setDevice(selected - constants.DEVICE_LIST_MENU)
 		elif selected >= constants.PLAYLIST_HISTORY and selected < constants.PLAYLIST_HISTORY+ 20:
 			m3uManager.loadM3u(globalVars.m3uHistory.getList()[selected - constants.PLAYLIST_HISTORY])
+		elif selected==menuItemsStore.getRef("ENVIRONMENT"):
+			d = setting_dialog.settingDialog("environment_dialog")
+			d.Initialize()
+			d.Show()
 		elif selected==menuItemsStore.getRef("EXAMPLE"):
 			d = mkDialog.Dialog("testDialog")
 			d.Initialize("テスト", "これはテストです。", ("テ", "ス", "ト"))
