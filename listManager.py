@@ -1,6 +1,5 @@
 import wx, os, multiprocessing, re, time
-import globalVars, constants, view_manager, errorCodes
-from soundPlayer import fxPlayer
+import globalVars, constants, view_manager, errorCodes, fxManager
 from soundPlayer.bass import pybass, pytags
 from views import objectDetail
 from views import mkDialog
@@ -111,7 +110,7 @@ def addFilesCall(flst, lcObj, id=-1):
 	_append(pathList, lcObj, progress, id)
 	progress.Destroy()
 	view_manager.changeListLabel(lcObj)
-	fxPlayer.playFx("fx/load.mp3")
+	fxManager.load()
 
 # ディレクトリパスからファイルリストを取得（ファイルパスリスト, ディレクトリパス）
 def _appendDirList(lst, dir):

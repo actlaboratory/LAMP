@@ -4,6 +4,7 @@ import globalVars
 import constants
 import errorCodes
 import menuItemsStore
+import fxManager
 import listManager
 import view_manager
 import settings
@@ -175,7 +176,7 @@ class eventProcessor():
 
     def playError(self):
         # 再生エラーの処理
-        fxPlayer.playFx("./fx/error.mp3")
+        fxManager.error()
         d = mkDialog.Dialog("playErrorDialog")
         d.Initialize(_("再生時エラー"), _("このファイルは再生できません。"), (_("継続"),_("停止")))
         return d.Show()

@@ -29,7 +29,11 @@ class DefaultSettings:
 		config["volume"]={
 			"default": "100",
 		}
-
+		config["notification"]={
+			"sound": True,
+			"errorSound": True,
+			"fxOutput": "default"
+		}
 		return config
 
 initialValues={}

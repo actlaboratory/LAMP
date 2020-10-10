@@ -32,8 +32,10 @@ class playlist(viewObject.virtualListCtrl):
         return self.pointer
 
     def setPointer(self, index):
-        self.lst[index]
-        self.pointer = index
+        if index == -1: self.pointer = -1
+        else:
+            self.lst[index]
+            self.pointer = index
     
     def setList(self, lst):
         super().setList(lst)
