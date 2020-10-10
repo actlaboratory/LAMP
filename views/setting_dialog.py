@@ -36,6 +36,10 @@ class settingDialog(baseDialog.BaseDialog):
         # 通知
         notificationCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("通知"))
         self.readerCombo, readerLabel = notificationCreator.combobox(_("音声読み上げの出力先"), self.getValueList(self.readerDic))
+        self.notificationSound = notificationCreator.checkbox(_("効果音による通知を有効にする"))
+        if globalVars.app.config.getboolean("notification", "sound", True):
+            self.notificationSound.SetValue(True)
+        else: self.notificationSound.SetValue(False)
 
         # フッター
         footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, creator.GetSizer())
@@ -49,6 +53,7 @@ class settingDialog(baseDialog.BaseDialog):
         else: globalVars.app.config["view"]["colormode"] = "white"
         globalVars.app.config["volume"]["default"] = str(int(self.volumeSlider.GetValue()))
         globalVars.app.config["speech"]["reader"] = self.getKey(self.readerDic, self.readerCombo.GetStringSelection())
+        globalVars.app.config["notification"]["sound"] = self.notificationSound.IsChecked()
         self.wnd.EndModal(wx.ID_OK)
 
     def comboloader(self):
