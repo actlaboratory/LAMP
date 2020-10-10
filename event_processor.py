@@ -2,6 +2,7 @@ import os, sys, platform, wx
 import winsound
 import globalVars
 import constants
+import errorCodes
 import menuItemsStore
 import listManager
 import view_manager
@@ -176,8 +177,8 @@ class eventProcessor():
         # 再生エラーの処理
         fxPlayer.playFx("./fx/error.mp3")
         d = mkDialog.Dialog("playErrorDialog")
-        d.Initialize(_("再生時エラー"), _("このファイルは再生できません。"), (_("了解"),))
-        d.Show()
+        d.Initialize(_("再生時エラー"), _("このファイルは再生できません。"), (_("継続"),_("停止")))
+        return d.Show()
 
     def pause(self, pause=True):
         if pause == True: #一時停止
@@ -259,9 +260,18 @@ class eventProcessor():
 
     def previousFile(self):
         if self.shuffleCtrl == None:
-            return listManager.previous(self.playingList)
+            ret = listManager.previous(self.playingList)
         else:
-            return self.shuffleCtrl.previous()
+            ret = self.shuffleCtrl.previous(self.playingList)
+        if ret == False:
+            if self.playError() == constants.DIALOG_PE_CONTINUE:
+                self.playingList = constants.PLAYLIST
+                self.previousFile()
+            else: self.stop()
+            return False
+        elif ret == errorCodes.END:
+            return False
+        else: return True
 
     def playButtonControl(self):
         # 再生・一時停止を実行
@@ -277,15 +287,24 @@ class eventProcessor():
 
     def nextFile(self):
         if self.shuffleCtrl == None:
-            return listManager.next(self.playingList)
+            ret = listManager.next(self.playingList)
         else:
-            return self.shuffleCtrl.next()
+            ret = self.shuffleCtrl.next()
+        if ret == False:
+            if self.playError() == constants.DIALOG_PE_CONTINUE:
+                self.playingList = constants.PLAYLIST
+                self.nextFile()
+            else: self.stop()
+            return False
+        elif ret == errorCodes.END:
+            return False
+        else: return True
 
     def stop(self):
+        globalVars.app.hMainView.playlistView.setPointer(-1)
         globalVars.play.stop()
         globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
         globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
-        self.playingDataNo = None
         globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") + " : ")
         globalVars.app.hMainView.viewTagInfo.SetLabel("")
         globalVars.app.hMainView.tagInfoTimer.Stop()

@@ -1,66 +1,60 @@
-import random
-import globalVars
+import random, math
+import globalVars, constants, listManager, errorCodes
 
 #シャッフルコントロール（プレイリストオブジェクト）
 class shuffle():
     def __init__(self, list):
         self.list = list #シャッフルする元オブジェクト
         self.history = [] #再生履歴
-        self.playIndex = 0
+        self.playIndex = -1
+        self.deleted = False
 
-    def previous(self):
+    def previous(self, lstConstant):
         # プレイリスト再生中であれば
-        get = self.getNow()
-        if get[1] == globalVars.eventProcess.playingDataNo or get[1] == None:
+        if lstConstant == constants.PLAYLIST:
             #1曲前を再生
-            get = self.getPrevious()
-            globalVars.eventProcess.play(globalVars.playlist, get)
-        elif get[0] != None:
+            if self.deleted:
+                self.playIndex += 1
+                self.deleted = False
+            if self.playIndex <= 0:
+                return errorCodes.END
+            else:
+                self.playIndex -= 1
+                if self.history[self.playIndex] in self.list:
+                    self.list.setPointer(self.list.index(self.history[self.playIndex]))
+                    return globalVars.eventProcess.play()
+                else:
+                    self.delete(self.playIndex)
+                    self.previous(lstConstant)
+        else:
             # キューなどからの復帰
-            globalVars.eventProcess.play(globalVars.playlist, get)
+            if self.history[elf.playIndex] in self.list:
+                self.list.setPointer(self.list.index(self.history[self.playIndex]))
+                return globalVars.eventProcess.play()
+            else:
+                self.delete(self.playIndex)
+                self.previous(constants.PLAYLIST)
 
     def next(self):
         # キューを確認
-        get = globalVars.queue.getNext()
-        if get[0] == None:
-            # キューが空の時はシャッフルを進める
-            get = self.getNext()
-            if get[0] != None:
-                globalVars.eventProcess.play(globalVars.playlist, get)
-            else: #再生終了後に次がなければ停止とする
-                if globalVars.play.getChannelState() == player.state.STOPED:
-                    globalVars.eventProcess.stop()
-        else: #キューの再生
-            globalVars.eventProcess.play(globalVars.queue, get)
-
-    def getNow(self):
-        if len(self.history) == 0:
-            return (None, None)
+        t = globalVars.app.hMainView.queueView.get()
+        if t != None: return globalVars.eventProcess.play(constants.QUEUE)
+        # キューが空の時はシャッフルを進める
+        self.deleted = False
+        self.playIndex += 1
+        if self.playIndex < len(self.history):
+            if self.history[self.playIndex] in self.list:
+                self.list.setPointer(self.list.index(self.history[self.playIndex]))
+                return globalVars.eventProcess.play()
+            else:
+                self.next()
         else:
-            return self.history[self.playIndex]
+            if len(self.list) == 0: return errorCodes.END
+            else:
+                rnd = math.floor(random.random() * len(self.list))
+                self.list.setPointer(rnd)
+                if globalVars.eventProcess.play():
+                    self.history.append(self.list[rnd])
+                    return True
+                else: return False
 
-    def getPrevious(self):
-        if len(self.list.lst) == 0:
-            return (None, None)
-        elif self.playIndex == 0:
-            rtn = random.choice(self.list.lst)
-            self.history.insert(0, rtn)
-            return rtn
-        else:
-            self.playIndex -= 1
-            return self.history[self.playIndex]
-
-    def getNext(self):
-        if len(self.history) == 0 and self.playIndex == 0: #初期の場合
-            self.playIndex = -1
-        if len(self.list.lst) == 0:
-            rtn = (None, None)
-        elif self.playIndex == len(self.history)-1:
-            rtn = random.choice(self.list.lst)
-            self.history.append(rtn)
-            self.playIndex += 1
-        else:
-            self.playIndex += 1
-            rtn = self.history[self.playIndex]
-        if rtn == (None, None) and self.playIndex == -1: self.playIndex = 0
-        return rtn

@@ -1,5 +1,5 @@
 import wx, os, multiprocessing, re, time
-import globalVars, constants, view_manager
+import globalVars, constants, view_manager, errorCodes
 from soundPlayer import fxPlayer
 from soundPlayer.bass import pybass, pytags
 from views import objectDetail
@@ -20,11 +20,11 @@ def previous(lstConstant):
     if not lstConstant == constants.PLAYLIST:
         t = globalVars.app.hMainView.playlistView.get()
         if t != None: return globalVars.eventProcess.play(constants.PLAYLIST)
-        else: return False
+        else: return errorCodes.END #戻しきった
     else:
         t = globalVars.app.hMainView.playlistView.getPrevious()
         if t != None: return globalVars.eventProcess.play(constants.PLAYLIST)
-        else: return False
+        else: return errorCodes.END #戻しきった
 
 def next(lstConstant):
     t = globalVars.app.hMainView.queueView.get()
@@ -32,7 +32,7 @@ def next(lstConstant):
     else:
         t = globalVars.app.hMainView.playlistView.getNext()
         if t != None: return globalVars.eventProcess.play(constants.PLAYLIST)
-        else: return False
+        else: return errorCodes.END #進みきった
 
 def getLCObject(lstConstant):
     if lstConstant == constants.PLAYLIST: return globalVars.app.hMainView.playlistView
@@ -42,7 +42,8 @@ def getLCObject(lstConstant):
 def setTag(lstConstant):
 	if lstConstant == constants.PLAYLIST:
 		tp = getTuple(lstConstant)
-		tg = getTags([tp])
+		if len(tp) >= 3: tg = getTags([tp])
+		else: tg = [tp]
 		lc = getLCObject(lstConstant)
 		lc[lc.getPointer()] = tg[0]
 	else:
