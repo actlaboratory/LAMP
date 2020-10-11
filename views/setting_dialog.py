@@ -36,6 +36,10 @@ class settingDialog(baseDialog.BaseDialog):
         if globalVars.app.config.getboolean("player", "fadeOutOnExit", False):
             self.fadeOut.SetValue(True)
         else: self.fadeOut.SetValue(False)
+        self.manualFeed = generalCreator.checkbox(_("曲送りを手動で行う"))
+        if globalVars.app.config.getboolean("player", "manualSongFeed", False):
+            self.manualFeed.SetValue(True)
+        else: self.manualFeed.SetValue(False)
 
         # 通知
         notificationCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("通知"))
@@ -57,6 +61,7 @@ class settingDialog(baseDialog.BaseDialog):
         else: globalVars.app.config["view"]["colormode"] = "white"
         globalVars.app.config["volume"]["default"] = str(int(self.volumeSlider.GetValue()))
         globalVars.app.config["player"]["fadeOutOnExit"] = self.fadeOut.IsChecked()
+        globalVars.app.config["player"]["manualSongFeed"] = self.manualFeed.IsChecked()
         globalVars.app.config["speech"]["reader"] = self.getKey(self.readerDic, self.readerCombo.GetStringSelection())
         globalVars.app.config["notification"]["sound"] = self.notificationSound.IsChecked()
         self.wnd.EndModal(wx.ID_OK)

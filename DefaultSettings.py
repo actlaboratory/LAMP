@@ -25,7 +25,8 @@ class DefaultSettings:
 		}
 		config["player"]={
 			"skipInterval": "30",
-			"fadeOutOnExit": False
+			"fadeOutOnExit": False,
+			"manualSongFeed": False
 		}
 		config["volume"]={
 			"default": "100",

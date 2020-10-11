@@ -49,7 +49,9 @@ class eventProcessor():
 
         #ファイル送り
         if globalVars.play.getStatus() == PLAYER_STATUS_END:
-            self.fileChange()
+            if globalVars.app.config.getboolean("player", "manualSongFeed", False):
+                self.pause(True, True)
+            else: self.fileChange()
 
         #ファイル戻し（巻き戻し用）
         if globalVars.play.getStatus() == PLAYER_STATUS_OVERREWIND:
@@ -181,9 +183,9 @@ class eventProcessor():
         d.Initialize(_("再生時エラー"), _("このファイルは再生できません。"), (_("継続"),_("停止")))
         return d.Show()
 
-    def pause(self, pause=True):
+    def pause(self, pause=True, force=False):
         if pause == True: #一時停止
-            if globalVars.play.pause(): globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+            if globalVars.play.pause() or force: globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
         else: #一時停止解除
             if globalVars.play.play(): globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
 
@@ -284,7 +286,8 @@ class eventProcessor():
         elif globalVars.play.getStatus() == PLAYER_STATUS_STOPPED:
             self.nextFile()
         else:
-            self.play()
+            if globalVars.play.play(): globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
+            else: globalVars.app.hMainView.playPauseBtn.SetLabel(_("再生"))
 
     def nextFile(self):
         if self.shuffleCtrl == None:
