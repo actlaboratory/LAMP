@@ -5,6 +5,7 @@ import AppBase
 import event_processor, listManager, lampPipe
 import accessible_output2.outputs.auto
 import sys
+import time
 import ConfigManager
 import gettext
 import logging
@@ -64,7 +65,17 @@ class Main(AppBase.MainBase):
 		#設定の保存やリソースの開放など、終了前に行いたい処理があれば記述できる
 		#ビューへのアクセスや終了の抑制はできないので注意。
 
-
+		if globalVars.app.config.getboolean("player", "fadeOutOnExit", False):
+			while globalVars.play.setVolumeByDiff(-2):
+				time.sleep(0.07)
+		globalVars.play.exit()
+		m3uManager.dumpHistory()
+		globalVars.app.config.write()
+		if self.mutex != 0:
+			try: win32event.ReleaseMutex(self.mutex)
+			except: pass
+			self.mutex = 0
+		
 		#戻り値は無視される
 		return 0
 

@@ -24,7 +24,8 @@ class DefaultSettings:
 			"sizeY": "600",
 		}
 		config["player"]={
-			"skipInterval": "30"
+			"skipInterval": "30",
+			"fadeOutOnExit": False
 		}
 		config["volume"]={
 			"default": "100",

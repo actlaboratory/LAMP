@@ -32,6 +32,10 @@ class settingDialog(baseDialog.BaseDialog):
             self.darkMode.SetValue(False)
         else: self.darkMode.SetValue(True)
         self.volumeSlider, self.volumeLabel = generalCreator.slider(_("規定の音量"), 0, 100,None, globalVars.app.config.getint("volume","default",default=100, min=0, max=100), textLayout=wx.HORIZONTAL)
+        self.fadeOut = generalCreator.checkbox(_("終了時に曲をフェードアウトする"))
+        if globalVars.app.config.getboolean("player", "fadeOutOnExit", False):
+            self.fadeOut.SetValue(True)
+        else: self.fadeOut.SetValue(False)
 
         # 通知
         notificationCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("通知"))
@@ -52,6 +56,7 @@ class settingDialog(baseDialog.BaseDialog):
         if self.darkMode.IsChecked(): globalVars.app.config["view"]["colormode"] = "dark"
         else: globalVars.app.config["view"]["colormode"] = "white"
         globalVars.app.config["volume"]["default"] = str(int(self.volumeSlider.GetValue()))
+        globalVars.app.config["player"]["fadeOutOnExit"] = self.fadeOut.IsChecked()
         globalVars.app.config["speech"]["reader"] = self.getKey(self.readerDic, self.readerCombo.GetStringSelection())
         globalVars.app.config["notification"]["sound"] = self.notificationSound.IsChecked()
         self.wnd.EndModal(wx.ID_OK)

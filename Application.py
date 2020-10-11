@@ -27,9 +27,7 @@ def main():
 	globalVars.app=app
 	app.initialize()
 	app.MainLoop()
-	globalVars.play.exit()
-	m3uManager.dumpHistory()
-	app.config.write()
+
 
 #global schope
 if __name__ == "__main__": main()
