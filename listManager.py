@@ -88,10 +88,6 @@ def getFileInfoProcess(tuples):
 
 # 複数ファイルを追加（ファイルパスリスト, 追加先リストビュー, 追加先インデックス=末尾）
 def addItems(flst, lcObj, id=-1):
-	addFilesCall(flst,lcObj,id)
-
-#ファイル追加（ファイルパスリスト, 追加先リスト, リストビュー, 追加先インデックス=末尾）
-def addFilesCall(flst, lcObj, id=-1):
 	#プログレスダイアログ作成
 	progress=mkProgress.Dialog("importProgressDialog")
 	progress.Initialize(_("ファイルを集めています..."), _("読み込み中..."))
