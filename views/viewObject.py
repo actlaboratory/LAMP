@@ -73,7 +73,6 @@ class virtualListCtrl(wx.ListCtrl):
         ret = self.lst.pop(index)
         self.DeleteItem(index)
         self.RefreshItems(index, len(self.lst)-1)
-        self.__setSelectionFromList(l)
         return ret
 
     def remove(self, value):
@@ -157,10 +156,10 @@ class virtualListCtrl(wx.ListCtrl):
             self.lst.pop(key)
             self.RefreshItems(0, len(self.lst)-1)
         else:
-            for o in self.lst[key]:
+            for o in reversed(self.lst[key]):
                 i = self.lst.index(o)
-                self.lst.pop(i)
                 self.DeleteItem(i)
+                self.lst.pop(i)
             self.RefreshItems(0, len(self.lst)-1)
 
     def __iter__(self):
