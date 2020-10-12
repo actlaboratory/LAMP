@@ -76,7 +76,7 @@ class Events(BaseEvents):
             if i >= 0:
                 fList.append(self.parent[i][0])
                 while True:
-                    i = self.parent.GetNextSelected()
+                    i = self.parent.GetNextSelected(i)
                     if i >= 0: fList.append(self.parent[i][0])
                     else: break
             lampClipBoardCtrl.copy(fList)
