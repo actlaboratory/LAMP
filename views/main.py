@@ -245,9 +245,9 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("VOLUME_DEFAULT"):
 			globalVars.eventProcess.changeVolume(vol=100)
 		elif selected==menuItemsStore.getRef("VOLUME_UP"):
-			globalVars.eventProcess.changeVolume(+5)
+			globalVars.eventProcess.changeVolume(+1)
 		elif selected==menuItemsStore.getRef("VOLUME_DOWN"):
-			globalVars.eventProcess.changeVolume(-5)
+			globalVars.eventProcess.changeVolume(-1)
 		elif selected==menuItemsStore.getRef("MUTE"):
 			globalVars.eventProcess.mute()
 		elif selected==menuItemsStore.getRef("FAST_FORWARD"):
