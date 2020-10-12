@@ -110,7 +110,7 @@ def addFilesCall(flst, lcObj, id=-1):
 	_append(pathList, lcObj, progress, id)
 	view_manager.changeListLabel(lcObj)
 	fxManager.load()
-	progress.Destroy())
+	progress.Destroy()
 
 # ディレクトリパスからファイルリストを取得（ファイルパスリスト, ディレクトリパス）
 def _appendDirList(lst, dir):
