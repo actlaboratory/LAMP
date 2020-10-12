@@ -108,9 +108,9 @@ def addFilesCall(flst, lcObj, id=-1):
 			_appendDirList(pathList, s)
 	# 作成したファイルパスのリストから追加
 	_append(pathList, lcObj, progress, id)
-	wx.CallAfter(progress.Destroy)
 	view_manager.changeListLabel(lcObj)
 	fxManager.load()
+	wx.CallAfter(progress.Destroy)
 
 # ディレクトリパスからファイルリストを取得（ファイルパスリスト, ディレクトリパス）
 def _appendDirList(lst, dir):
