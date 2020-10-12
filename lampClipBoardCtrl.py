@@ -1,4 +1,4 @@
-import clipboard
+import clipboard, listManager
 
 def paste(type):
     """typeにリストオブジェクトを受け取る。"""
@@ -6,7 +6,7 @@ def paste(type):
     c = clipboard.ClipboardFile()
     pasteList = c.GetFileList()
     # ファイルの追加
-    type.addFiles(pasteList)
+    listManager.addItems(pasteList, type)
     return
 
 def copy(fileList):
