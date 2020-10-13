@@ -70,8 +70,8 @@ class virtualListCtrl(wx.ListCtrl):
 
     def pop(self, index):
         l = self.GetSelectedItems()
-        ret = self.lst.pop(index)
         self.DeleteItem(index)
+        ret = self.lst.pop(index)
         self.RefreshItems(index, len(self.lst)-1)
         return ret
 
