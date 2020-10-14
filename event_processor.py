@@ -161,8 +161,8 @@ class eventProcessor():
             if globalVars.play.play():
                 ret = True
                 self.playingList = constants.NOLIST # リストではない
-                globalVars.tmp.forcePlayFile = (source, os.path.basename(source))
-                tagManager.setTag(constants.NOLIST)
+                globalVars.listInfo.playingTmp = (source, os.path.basename(source), 0)
+                listManager.setTag(constants.NOLIST)
                 globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
             else: ret = False
         else: ret = False

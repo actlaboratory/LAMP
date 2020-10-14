@@ -15,6 +15,12 @@ class settingDialog(baseDialog.BaseDialog):
             "CLIPBOARD": _("クリップボード出力"),
             "NOSPEECH": _("読み上げなし")
         }
+        self.fileInterruptDic = {
+            "play": _("割り込み再生"),
+            "addPlaylist": _("プレイリストに追加"),
+            "addQueue": _("キューに追加"),
+            "addQueueHead": _("キューの先頭に追加")
+        }
         self.InstallControls()
         return True
 
@@ -36,6 +42,7 @@ class settingDialog(baseDialog.BaseDialog):
         if globalVars.app.config.getboolean("player", "fadeOutOnExit", False):
             self.fadeOut.SetValue(True)
         else: self.fadeOut.SetValue(False)
+        self.fileInterruptCombo, fileInterruptLabel = generalCreator.combobox(_("ファイル割り込み時の操作"), self.getValueList(self.fileInterruptDic))
         self.manualFeed = generalCreator.checkbox(_("曲送りを手動で行う"))
         if globalVars.app.config.getboolean("player", "manualSongFeed", False):
             self.manualFeed.SetValue(True)
@@ -61,12 +68,16 @@ class settingDialog(baseDialog.BaseDialog):
         else: globalVars.app.config["view"]["colormode"] = "white"
         globalVars.app.config["volume"]["default"] = str(int(self.volumeSlider.GetValue()))
         globalVars.app.config["player"]["fadeOutOnExit"] = self.fadeOut.IsChecked()
+        globalVars.app.config["player"]["fileInterrupt"] = self.getKey(self.fileInterruptDic, self.fileInterruptCombo.GetStringSelection())
         globalVars.app.config["player"]["manualSongFeed"] = self.manualFeed.IsChecked()
         globalVars.app.config["speech"]["reader"] = self.getKey(self.readerDic, self.readerCombo.GetStringSelection())
         globalVars.app.config["notification"]["sound"] = self.notificationSound.IsChecked()
         self.wnd.EndModal(wx.ID_OK)
 
     def comboloader(self):
+        fileInterrupt = globalVars.app.config.getstring("player", "fileInterrupt", "play", ("play", "addPlaylist", "addQueue", "addQueueHead"))
+        selectionStr = self.fileInterruptDic[fileInterrupt]
+        self.fileInterruptCombo.SetStringSelection(selectionStr)
         reader = globalVars.app.config["speech"]["reader"]
         selectionStr = self.readerDic[reader]
         self.readerCombo.SetStringSelection(selectionStr)

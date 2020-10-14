@@ -1,4 +1,4 @@
-import wx, namedPipe, globalVars, constants, sys, os, m3uManager
+import wx, namedPipe, globalVars, constants, sys, os, m3uManager, listManager
 
 
 def sendPipe():
@@ -17,7 +17,11 @@ def startPipeServer():
 
 def onReceive(msg):
     if os.path.isfile(msg):
-        if os.path.splitext(msg)[1] == ".mp3":
-            wx.CallAfter(globalVars.eventProcess.forcePlay, msg)
-        elif os.path.splitext(msg)[1] == ".m3u" or os.path.splitext(msg)[1] == ".m3u8":
+        if os.path.splitext(msg)[1].lower() in globalVars.fileExpansions:
+            setting = globalVars.app.config.getstring("player", "fileInterrupt", "play", ("play", "addPlaylist", "addQueue", "addQueueHead"))
+            if setting == "play": wx.CallAfter(globalVars.eventProcess.forcePlay, msg)
+            elif setting == "addPlaylist": wx.CallAfter(listManager.addItems, [msg], globalVars.app.hMainView.playlistView)
+            elif setting == "addQueue": wx.CallAfter(listManager.addItems, [msg], globalVars.app.hMainView.queueView)
+            elif setting == "addQueueHead": wx.CallAfter(listManager.addItems, [msg], globalVars.app.hMainView.queueView, 0)
+        elif os.path.splitext(msg)[1].lower() == ".m3u" or os.path.splitext(msg)[1].lower() == ".m3u8":
             wx.CallAfter(m3uManager.loadM3u, msg, m3uManager.REPLACE)
