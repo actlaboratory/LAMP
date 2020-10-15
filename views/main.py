@@ -73,7 +73,8 @@ class MainView(BaseView):
 
 		#トラックバーエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT,margin=20)
-		self.trackBar, dummy = self.horizontalCreator.slider(_("トラック"), event=self.events.onSlider, x=1000, sizerFlag=wx.LEFT | wx.RIGHT, proportion=1, margin=10)
+		self.trackBar, dummy = self.horizontalCreator.slider(_("トラック"), x=1000, sizerFlag=wx.LEFT | wx.RIGHT, proportion=1, margin=10)
+		self.trackBar.Bind(wx.EVT_SCROLL, self.events.onSlider)
 		self.nowTime = self.horizontalCreator.staticText("0:00:00 / 0:00:00", x=(350))
 
 		# リストビューエリア
