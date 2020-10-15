@@ -1,6 +1,7 @@
 import wx
 import globalVars
 from views import baseDialog, ViewCreator
+from soundPlayer import player
 
 class settingDialog(baseDialog.BaseDialog):
     def Initialize(self):
@@ -21,6 +22,11 @@ class settingDialog(baseDialog.BaseDialog):
             "addQueue": _("キューに追加"),
             "addQueueHead": _("キューの先頭に追加")
         }
+        dl = player.getDeviceList()
+        self.deviceDic = {}
+        for i in range(len(dl)):
+            if i == 0: self.deviceDic["default"] = _("規定の再生デバイス")
+            elif dl[i] != None: self.deviceDic[dl[i]] = dl[i]
         self.InstallControls()
         return True
 
@@ -55,6 +61,7 @@ class settingDialog(baseDialog.BaseDialog):
         if globalVars.app.config.getboolean("notification", "sound", True):
             self.notificationSound.SetValue(True)
         else: self.notificationSound.SetValue(False)
+        self.notificationDeviceCombo, notificationDeviceLabel = notificationCreator.combobox(_("効果音出力先"), self.getValueList(self.deviceDic))
 
         # フッター
         footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, creator.GetSizer())
@@ -72,6 +79,7 @@ class settingDialog(baseDialog.BaseDialog):
         globalVars.app.config["player"]["manualSongFeed"] = self.manualFeed.IsChecked()
         globalVars.app.config["speech"]["reader"] = self.getKey(self.readerDic, self.readerCombo.GetStringSelection())
         globalVars.app.config["notification"]["sound"] = self.notificationSound.IsChecked()
+        globalVars.app.config["notification"]["outputDevice"] = self.getKey(self.deviceDic, self.notificationDeviceCombo.GetStringSelection())
         self.wnd.EndModal(wx.ID_OK)
 
     def comboloader(self):
@@ -81,6 +89,9 @@ class settingDialog(baseDialog.BaseDialog):
         reader = globalVars.app.config["speech"]["reader"]
         selectionStr = self.readerDic[reader]
         self.readerCombo.SetStringSelection(selectionStr)
+        notificationDevice = globalVars.app.config.getstring("notification", "outputDevice", "default", self.getKeyList(self.deviceDic))
+        selectionStr = self.deviceDic[notificationDevice]
+        self.notificationDeviceCombo.SetStringSelection(selectionStr)
 
     def getValueList(self, dic):
         ret = []
@@ -88,6 +99,12 @@ class settingDialog(baseDialog.BaseDialog):
             ret.append(dic[i])
         return ret
 
+    def getKeyList(self, dic):
+        ret = []
+        for k in dic:
+            ret.append(k)
+        return ret
+    
     def getKey(self, dic, value):
         for i in dic:
             if dic[i] == value: return i

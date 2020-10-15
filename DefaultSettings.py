@@ -35,7 +35,7 @@ class DefaultSettings:
 		config["notification"]={
 			"sound": True,
 			"errorSound": True,
-			"fxOutput": "default"
+			"outputDevice": "default"
 		}
 		return config
 
