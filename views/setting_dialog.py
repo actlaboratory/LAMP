@@ -48,7 +48,7 @@ class settingDialog(baseDialog.BaseDialog):
         if globalVars.app.config.getboolean("player", "fadeOutOnExit", False):
             self.fadeOut.SetValue(True)
         else: self.fadeOut.SetValue(False)
-        self.fileInterruptCombo, fileInterruptLabel = generalCreator.combobox(_("ファイル割り込み時の操作"), self.getValueList(self.fileInterruptDic))
+        self.fileInterruptCombo, fileInterruptLabel = generalCreator.combobox(_("ファイル割り込み時の操作"), self.getValueList(self.fileInterruptDic), textLayout=wx.HORIZONTAL)
         self.manualFeed = generalCreator.checkbox(_("曲送りを手動で行う"))
         if globalVars.app.config.getboolean("player", "manualSongFeed", False):
             self.manualFeed.SetValue(True)
@@ -56,12 +56,16 @@ class settingDialog(baseDialog.BaseDialog):
 
         # 通知
         notificationCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("通知"))
-        self.readerCombo, readerLabel = notificationCreator.combobox(_("音声読み上げの出力先"), self.getValueList(self.readerDic))
+        self.readerCombo, readerLabel = notificationCreator.combobox(_("音声読み上げの出力先"), self.getValueList(self.readerDic), textLayout=wx.HORIZONTAL)
         self.notificationSound = notificationCreator.checkbox(_("効果音による通知を有効にする"))
         if globalVars.app.config.getboolean("notification", "sound", True):
             self.notificationSound.SetValue(True)
         else: self.notificationSound.SetValue(False)
-        self.notificationDeviceCombo, notificationDeviceLabel = notificationCreator.combobox(_("効果音出力先"), self.getValueList(self.deviceDic))
+        self.notificationDeviceCombo, notificationDeviceLabel = notificationCreator.combobox(_("効果音出力先"), self.getValueList(self.deviceDic), textLayout=wx.HORIZONTAL)
+
+        # 起動
+        startupCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("起動"))
+        self.startupDeviceCombo, startupDeviceLabel = startupCreator.combobox(_("起動時出力先"), self.getValueList(self.deviceDic), textLayout=wx.HORIZONTAL)
 
         # フッター
         footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, creator.GetSizer())
@@ -80,6 +84,7 @@ class settingDialog(baseDialog.BaseDialog):
         globalVars.app.config["speech"]["reader"] = self.getKey(self.readerDic, self.readerCombo.GetStringSelection())
         globalVars.app.config["notification"]["sound"] = self.notificationSound.IsChecked()
         globalVars.app.config["notification"]["outputDevice"] = self.getKey(self.deviceDic, self.notificationDeviceCombo.GetStringSelection())
+        globalVars.app.config["player"]["outputDevice"] = self.getKey(self.deviceDic, self.startupDeviceCombo.GetStringSelection())
         self.wnd.EndModal(wx.ID_OK)
 
     def comboloader(self):
@@ -92,6 +97,9 @@ class settingDialog(baseDialog.BaseDialog):
         notificationDevice = globalVars.app.config.getstring("notification", "outputDevice", "default", self.getKeyList(self.deviceDic))
         selectionStr = self.deviceDic[notificationDevice]
         self.notificationDeviceCombo.SetStringSelection(selectionStr)
+        startupDevice = globalVars.app.config.getstring("player", "outputDevice", "default", self.getKeyList(self.deviceDic))
+        selectionStr = self.deviceDic[startupDevice]
+        self.startupDeviceCombo.SetStringSelection(selectionStr)
 
     def getValueList(self, dic):
         ret = []

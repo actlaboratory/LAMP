@@ -24,6 +24,7 @@ class DefaultSettings:
 			"sizeY": "600",
 		}
 		config["player"]={
+			"outputDevice": "default",
 			"skipInterval": "30",
 			"fadeOutOnExit": False,
 			"fileInterrupt": "play",

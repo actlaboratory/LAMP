@@ -80,7 +80,14 @@ class Main(AppBase.MainBase):
 		return 0
 
 	def SetGlobalVars(self):
+		dl = player.getDeviceList()
+		dl[0] = "default"
+		dc = globalVars.app.config.getstring("player", "outputDevice", "default", dl)
+		if dc == "default": device = PLAYER_DEFAULT_SPEAKER
+		elif dc != None: device = dc
+		else: device = PLAYER_DEFAULT_SPEAKER
 		globalVars.play = player.player(PLAYER_DEFAULT_SPEAKER)
+		if device != PLAYER_DEFAULT_SPEAKER: globalVars.play.setDeviceByName(device)
 		globalVars.play.setVolume(globalVars.app.config.getint("volume","default",default=100, min=0, max=100))
 		globalVars.eventProcess = event_processor.eventProcessor()
 		globalVars.sleepTimer = sleep_timer.sleepTimer()
