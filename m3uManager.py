@@ -5,6 +5,7 @@ import history
 import datetime
 import globalVars
 import menuItemsStore
+import listManager
 from views import mkDialog
 
 #定数
@@ -43,13 +44,13 @@ def loadM3u(path=None, playlist=2):
         return ed.Show()
     if playlist == 2: #REPLACE
         if closeM3u() == False: return rtn #closeがキャンセルされたら中止
-        globalVars.playlist.addFiles(rtn)
-        globalVars.playlist.playlistFile = path
+        listManager.addItems(rtn, globalVars.app.hMainView.playlistView)
+        globalVars.listInfo.playlistFile = path
         globalVars.m3uHistory.add(path)
         globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U_OPEN"), True)
     elif playlist == 1: #ADD
-        globalVars.playlist.addFiles(rtn)
-        globalVars.playlist.playlistFile = path
+        listManager.addItems(rtn, globalVars.app.hMainView.playlistView)
+        globalVars.listInfo.playlistFile = path
         globalVars.m3uHistory.add(path)
     return rtn
 
@@ -61,27 +62,30 @@ def autoSaveM3u8():
 
 #プレイリストを閉じる（）
 def closeM3u():
-    if globalVars.playlist.playlistFile != None:
-        if loadM3u(globalVars.playlist.playlistFile, LOAD_ONLY) != globalVars.playlist.getAllFiles():
-            if os.path.splitext(globalVars.playlist.playlistFile)[1] == ".m3u": #変換を確認
+    if globalVars.listInfo.playlistFile != None:
+        lst = []
+        for t in globalVars.app.hMainView.playlistView:
+            lst.append(t[0])
+        if loadM3u(globalVars.listInfo.playlistFile, LOAD_ONLY) != lst:
+            if os.path.splitext(globalVars.listInfo.playlistFile)[1] == ".m3u": #変換を確認
                 d = mkDialog.Dialog("m3uConversionConfirmDialog")
                 d.Initialize(_("プレイリスト変換確認"), _("このプレイリストは変更されています。\nm3u8ファイルに変換して保存しますか？"), (_("保存"), _("破棄"), _("キャンセル")))
                 c = d.Show()
-            elif os.path.splitext(globalVars.playlist.playlistFile)[1] == ".m3u8": #上書きを確認
+            elif os.path.splitext(globalVars.listInfo.playlistFile)[1] == ".m3u8": #上書きを確認
                 d = mkDialog.Dialog("m3uOverwriteConfirmDialog")
                 d.Initialize(_("プレイリスト上書き保存の確認"), _("このプレイリストは変更されています。\n上書き保存しますか？"), (_("上書き"), _("破棄"), _("キャンセル")))
                 c = d.Show()
             if c == 0: saveM3u8(globalVars.playlist.playlistFile, False)
             elif c == wx.ID_CANCEL: return False
     else:
-        if len(globalVars.playlist.lst) != 0:
+        if len(globalVars.app.hMainView.playlistView) != 0:
             d = mkDialog.Dialog("m3uSaveConfirmDialog")
             d.Initialize(_("プレイリスト保存の確認"), _("このプレイリストは変更されています。\n保存しますか？"), (_("保存"), _("破棄"), _("キャンセル")))
             c = d.Show()
             if c == 0: saveM3u8(None, False)
             elif c == wx.ID_CANCEL: return False
-    globalVars.playlist.playlistFile = None
-    globalVars.playlist.deleteAllFiles()
+    globalVars.listInfo.playlistFile = None
+    globalVars.app.hMainView.playlistView.clear()
     #メニュー処理
     globalVars.app.hMainView.menu.hFileMenu.SetLabel(menuItemsStore.getRef("M3U8_SAVE"), _("プレイリストを上書き保存"))
     globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U8_SAVE"), False)
@@ -99,9 +103,11 @@ def saveM3u8(path=None, reload=True):
         path = fd.GetPath()
     path = os.path.splitext(path)[0]+".m3u8" #必ずm3u8ファイルを保存する
     with open(path, "w", encoding="utf-8") as f:
-        lst = globalVars.playlist.getAllFiles()
+        lst = []
+        for p in globalVars.app.hMainView.playlistView:
+            lst.append(p[0])
         f.write("\n".join(lst))
-    globalVars.playlist.playlistFile = path
+    globalVars.listInfo.playlistFile = path
     globalVars.m3uHistory.add(path)
 
 def loadHistory():

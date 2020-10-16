@@ -172,3 +172,4 @@ class listInfo():
 	def __init__(self):
 		self.itemCounter = 0
 		self.tmpTuple=None
+		self.playlistFile = None
