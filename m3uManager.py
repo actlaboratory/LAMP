@@ -24,14 +24,8 @@ def loadM3u(path=None, playlist=2):
         path = fd.GetPath()
     if os.path.isfile(path) and os.path.splitext(path)[1] == ".m3u":
         f = open(path, "r", encoding="shift-jis")
-        if playlist == 2:
-            globalVars.app.hMainView.menu.hFileMenu.SetLabel(menuItemsStore.getRef("M3U8_SAVE"), _("UTF-8プレイリストに変換"))
-            globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U8_SAVE"), True)
     elif os.path.isfile(path) and os.path.splitext(path)[1] == ".m3u8":
         f = open(path, "r", encoding="utf-8")
-        if playlist == 2:
-            globalVars.app.hMainView.menu.hFileMenu.SetLabel(menuItemsStore.getRef("M3U8_SAVE"), _("プレイリストを上書き保存"))
-            globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U8_SAVE"), True)
     if f != False: #ファイルの読み込み
         for s in f.readlines():
             s = s.strip()
@@ -52,6 +46,14 @@ def loadM3u(path=None, playlist=2):
         listManager.addItems(rtn, globalVars.app.hMainView.playlistView)
         globalVars.listInfo.playlistFile = path
         globalVars.m3uHistory.add(path)
+    if os.path.splitext(globalVars.listInfo.playlistFile)[1] == ".m3u":
+        if playlist == 2:
+            globalVars.app.hMainView.menu.hFileMenu.SetLabel(menuItemsStore.getRef("M3U8_SAVE"), _("UTF-8プレイリストに変換"))
+            globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U8_SAVE"), True)
+    elif os.path.splitext(globalVars.listInfo.playlistFile)[1] == ".m3u8":
+        if playlist == 2:
+            globalVars.app.hMainView.menu.hFileMenu.SetLabel(menuItemsStore.getRef("M3U8_SAVE"), _("プレイリストを上書き保存"))
+            globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U8_SAVE"), True)
     return rtn
 
 #プレイリスト自動保存
@@ -75,7 +77,7 @@ def closeM3u():
                 d = mkDialog.Dialog("m3uOverwriteConfirmDialog")
                 d.Initialize(_("プレイリスト上書き保存の確認"), _("このプレイリストは変更されています。\n上書き保存しますか？"), (_("上書き"), _("破棄"), _("キャンセル")))
                 c = d.Show()
-            if c == 0: saveM3u8(globalVars.playlist.playlistFile, False)
+            if c == 0: saveM3u8(globalVars.listInfo.playlistFile, False)
             elif c == wx.ID_CANCEL: return False
     else:
         if len(globalVars.app.hMainView.playlistView) != 0:
@@ -84,6 +86,8 @@ def closeM3u():
             c = d.Show()
             if c == 0: saveM3u8(None, False)
             elif c == wx.ID_CANCEL: return False
+    # 停止して削除
+    globalVars.eventProcess.stop()
     globalVars.listInfo.playlistFile = None
     globalVars.app.hMainView.playlistView.clear()
     #メニュー処理
