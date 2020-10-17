@@ -66,6 +66,7 @@ class settingDialog(baseDialog.BaseDialog):
         # 起動
         startupCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("起動"))
         self.startupDeviceCombo, startupDeviceLabel = startupCreator.combobox(_("起動時出力先"), self.getValueList(self.deviceDic), textLayout=wx.HORIZONTAL)
+        self.startupList, startupListLabel = startupCreator.inputbox(_("起動時に読み込むプレイリスト"), defaultValue=globalVars.app.config.getstring("player", "startupPlaylist", ""), x=-1)
 
         # フッター
         footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, creator.GetSizer())
@@ -85,6 +86,7 @@ class settingDialog(baseDialog.BaseDialog):
         globalVars.app.config["notification"]["sound"] = self.notificationSound.IsChecked()
         globalVars.app.config["notification"]["outputDevice"] = self.getKey(self.deviceDic, self.notificationDeviceCombo.GetStringSelection())
         globalVars.app.config["player"]["outputDevice"] = self.getKey(self.deviceDic, self.startupDeviceCombo.GetStringSelection())
+        globalVars.app.config["player"]["startupPlaylist"] = self.startupList.GetValue()
         self.wnd.EndModal(wx.ID_OK)
 
     def comboloader(self):

@@ -28,7 +28,8 @@ class DefaultSettings:
 			"skipInterval": "30",
 			"fadeOutOnExit": False,
 			"fileInterrupt": "play",
-			"manualSongFeed": False
+			"manualSongFeed": False,
+			"startupPlaylist": ""
 		}
 		config["volume"]={
 			"default": "100",

@@ -54,10 +54,14 @@ class Main(AppBase.MainBase):
 		self.hMainView=main.MainView()
 		if self.config.getboolean(self.hMainView.identifier,"maximized",False):
 			self.hMainView.hFrame.Maximize()
+		m3uloaded = False #条件に基づいてファイルの読み込み
 		if len(sys.argv) > 1 and os.path.isfile(sys.argv[1]):
 			if os.path.splitext(sys.argv[1])[1] == ".mp3": globalVars.eventProcess.forcePlay(sys.argv[1])
 			elif os.path.splitext(sys.argv[1])[1] == ".m3u" or os.path.splitext(sys.argv[1])[1] == ".m3u8":
 				m3uManager.loadM3u(sys.argv[1])
+				m3uloaded = True
+		startupList = globalVars.app.config.getstring("player", "startupPlaylist", "")
+		if startupList != "" and m3uloaded == False: m3uManager.loadM3u(startupList, 1)
 		self.hMainView.Show()
 		return True
 
