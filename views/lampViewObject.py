@@ -21,7 +21,8 @@ class playlist(viewObject.virtualListCtrl):
 
     def getPrevious(self):
         if self.pointer >= 0: self.pointer -= 1
-        return self.get()
+        if self.pointer >= 0: return self.get()
+        else: return None
 
     def getNext(self):
         if self.pointer < len(self.lst) - 1: self.pointer += 1

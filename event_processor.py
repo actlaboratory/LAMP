@@ -56,9 +56,8 @@ class eventProcessor():
         #ファイル戻し（巻き戻し用）
         if globalVars.play.getStatus() == PLAYER_STATUS_OVERREWIND:
             globalVars.play.overRewindOk() # プレイヤーに応答
-            if self.previousFile(): # 前の曲があったら末尾へ
+            if self.previousFile() == True: # 前の曲があったら末尾へ
                 globalVars.play.setPosition(globalVars.play.getLength() - 1)
-            else: globalVars.play.stopOverRewind() # なければ巻き戻しの停止
 
     # 曲情報更新
     def refreshTagInfo(self, evt=None):
