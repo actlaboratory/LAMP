@@ -43,9 +43,10 @@ class playlist(viewObject.virtualListCtrl):
         self.pointer = -1
 
     def clear(self):
+        self.SetItemCount(0)
         super().clear()
         self.pointer = -1
-    
+
     def insert(self, index, object):
         t = self.get()
         super().insert(index, object)
