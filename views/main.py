@@ -53,15 +53,15 @@ class MainView(BaseView):
 		
 		# ボタン・音量スライダエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,style=wx.ALL,space=20)
-		self.previousBtn = self.horizontalCreator.button(_("前"), self.events.onButtonClick)
-		self.playPauseBtn = self.horizontalCreator.button(_("再生"), self.events.onButtonClick)
-		self.nextBtn = self.horizontalCreator.button(_("次"), self.events.onButtonClick)
-		self.stopBtn = self.horizontalCreator.button(_("停止"), self.events.onButtonClick)
-		self.repeatLoopBtn = self.horizontalCreator.button(_("ﾘﾋﾟｰﾄ/ﾙｰﾌﾟ"), self.events.onButtonClick)
-		self.shuffleBtn = self.horizontalCreator.button(_("ｼｬｯﾌﾙ"), self.events.onButtonClick)
+		self.previousBtn = self.horizontalCreator.customButton(lampViewObject.button, _("前"), self.events.onButtonClick)
+		self.playPauseBtn = self.horizontalCreator.customButton(lampViewObject.button, _("再生"), self.events.onButtonClick)
+		self.nextBtn = self.horizontalCreator.customButton(lampViewObject.button, _("次"), self.events.onButtonClick)
+		self.stopBtn = self.horizontalCreator.customButton(lampViewObject.button, _("停止"), self.events.onButtonClick)
+		self.repeatLoopBtn = self.horizontalCreator.customButton(lampViewObject.button, _("ﾘﾋﾟｰﾄ/ﾙｰﾌﾟ"), self.events.onButtonClick)
+		self.shuffleBtn = self.horizontalCreator.customButton(lampViewObject.button, _("ｼｬｯﾌﾙ"), self.events.onButtonClick)
 		self.volumeSlider, dummy = self.horizontalCreator.slider(_("音量"), 0, 100, self.events.onSlider, 
 			globalVars.app.config.getint("volume","default",default=100, min=0, max=100), textLayout=None)
-		self.muteBtn = self.horizontalCreator.button(_("ﾐｭｰﾄ"), self.events.onButtonClick)
+		self.muteBtn = self.horizontalCreator.customButton(lampViewObject.button, _("ﾐｭｰﾄ"), self.events.onButtonClick)
 		#self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
 
 		# 曲情報表示
@@ -80,6 +80,7 @@ class MainView(BaseView):
 		# リストビューエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL, 0, style=wx.EXPAND | wx.LEFT | wx.ALL,proportion=1,margin=20)
 		self.playlistView, self.playlistLabel = self.horizontalCreator.customListCtrl(lampViewObject.playlist, _("プレイリスト") + " (0" + _("件") + ")", style=wx.LC_NO_HEADER, sizerFlag=wx.EXPAND | wx.RIGHT,proportion=2,textLayout=wx.VERTICAL)
+		self.playlistView.SetFocus()
 		view_manager.listViewSetting(self.playlistView, "playlist")
 		self.queueView, self.queueLabel = self.horizontalCreator.customListCtrl(lampViewObject.queue, _("キュー") + " (0" + _("件") + ")", style=wx.LC_NO_HEADER, sizerFlag=wx.EXPAND,proportion=1, textLayout=wx.VERTICAL)
 		view_manager.listViewSetting(self.queueView, "queue")

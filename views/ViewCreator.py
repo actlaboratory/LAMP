@@ -292,6 +292,14 @@ class ViewCreator():
 		self.AddSpace()
 		return hListCtrl,hStaticText
 
+	def customButton(self,btnObject, text, event=None, sizerFlag=wx.ALL, proportion=0,margin=5):
+		hButton=btnObject(self.parent, wx.ID_ANY,label=text, name=text, style=wx.BORDER_RAISED)
+		hButton.Bind(wx.EVT_BUTTON,event)
+		self._setFace(hButton,mode=BUTTON_COLOUR)
+		Add(self.sizer,hButton,proportion,sizerFlag,margin)
+		self.AddSpace()
+		return hButton
+
 	def tabCtrl(self,title, event=None, style=wx.NB_NOPAGETHEME | wx.NB_MULTILINE, sizerFlag=0, proportion=0, margin=5):
 		htab=wx.Notebook(self.parent, wx.ID_ANY,name=title,style=style)
 		htab.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED,event)

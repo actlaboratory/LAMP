@@ -1,5 +1,13 @@
+import wx
 import listManager
 from views import viewObject
+
+class button(wx.Button):
+    def __init__(self, *pArg, **kArg):
+        super().__init__(*pArg, **kArg)
+
+    def AcceptsFocusFromKeyboard(self):
+        return False
 
 class playlist(viewObject.virtualListCtrl):
     def __init__(self, *pArg, **kArg):
