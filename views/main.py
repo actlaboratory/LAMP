@@ -232,8 +232,10 @@ class Events(BaseEvents):
 		elif selected == menuItemsStore.getRef("SET_EFFECTOR"):
 			effector.effector()
 		elif selected == menuItemsStore.getRef("ABOUT_PLAYING"):
-			playingDataNo = globalVars.eventProcess.playingDataNo
-			if playingDataNo != None: data_dict.infoDialog(playingDataNo)
+			if globalVars.eventProcess.playingList == constants.PLAYLIST:
+				listManager.infoDialog(listManager.getTuple(constants.PLAYLIST))
+			else:
+				listManager.infoDialog(globalVars.listInfo.tmpTuple)
 		# 操作メニューのイベント
 		elif selected==menuItemsStore.getRef("PLAY_PAUSE"):
 			globalVars.eventProcess.playButtonControl()
