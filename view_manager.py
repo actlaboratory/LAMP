@@ -55,7 +55,7 @@ def setValueShadowList(l):
 	l.Append(_("アーティスト"))
 	l.Append(_("アルバムアーティスト"))
 	l.Append(_("合計"))
-	l.Append(_("経過時間を確認するには Control + T(Tango)を押します"))
+	l.Append(_("経過時間を確認するには Ctrl + T を押します"))
 
 def setFileShadowList():
 	l = globalVars.app.hMainView.shadowList
