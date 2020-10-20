@@ -195,7 +195,7 @@ class Events(BaseEvents):
 			if rtnCode == dialog.PLAYLIST:
 				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.playlistView)
 			elif rtnCode == dialog.QUEUE:
-				listManager.addItems([dialog.GetValue], globalVars.app.hMainView.queueView)
+				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.queueView)
 			else:
 				return
 		elif selected==menuItemsStore.getRef("DIR_OPEN"):
