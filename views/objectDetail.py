@@ -19,7 +19,7 @@ class Dialog(BaseDialog):
 
 	def InstallControls(self,dic):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,views.ViewCreator.FlexGridSizer,20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,views.ViewCreator.FlexGridSizer,20,2)
 
 		for title,content in dic.items():
 			self.iName,self.static=self.creator.inputbox(title,None,str(content),wx.TE_READONLY,400)
