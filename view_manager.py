@@ -1,6 +1,7 @@
 import wx
 import globalVars
 import context_menus
+import constants
 import defaultKeymap
 import keymap
 import listManager
@@ -45,3 +46,47 @@ class fileDrop(wx.FileDropTarget):
 		if self.window == globalVars.app.hMainView.playlistView or self.window == globalVars.app.hMainView.queueView:
 			listManager.addItems(files, self.window)
 		return True
+
+def setValueShadowList(l):
+	l.Append(_("ファイル名"))
+	l.Append(_("場所"))
+	l.Append(_("タイトル"))
+	l.Append(_("アルバム"))
+	l.Append(_("アーティスト"))
+	l.Append(_("アルバムアーティスト"))
+	l.Append(_("合計"))
+	l.Append(_("経過時間を確認するには Control + T(Tango)を押します"))
+
+def setFileShadowList():
+	l = globalVars.app.hMainView.shadowList
+	if globalVars.eventProcess.playingList == constants.PLAYLIST: t = listManager.getTuple(constants.PLAYLIST)
+	else: t = globalVars.listInfo.tmpTuple
+	l.SetString(0, _("ファイル名") + ":" + t[constants.ITEM_NAME])
+	l.SetString(1, _("場所") + ":" + t[constants.ITEM_PATH])
+	l.SetString(2, _("タイトル") + ":" + t[constants.ITEM_TITLE])
+	l.SetString(3, _("アルバム") + ":" + t[constants.ITEM_ALBUM])
+	l.SetString(4, _("アーティスト") + ":" + t[constants.ITEM_ARTIST])
+	l.SetString(5, _("アルバムアーティスト") + ":" + t[constants.ITEM_ALBUMARTIST])
+	if t[constants.ITEM_LENGTH] == None: length = ""
+	else:
+		hour = t[constants.ITEM_LENGTH] // 3600
+		min = (t[constants.ITEM_LENGTH] - hour * 3600) // 60
+		sec = t[constants.ITEM_LENGTH] - hour * 3600 - min * 60
+		if hour == 0: sHour = ""
+		else: sHour = str(int(hour)) + _("時間") + " "
+		if min == 0: sMin = ""
+		else: sMin = str(int(min)) + _("分") + " "
+		if sec == 0: sSec = ""
+		else: sSec = str(int(sec)) + _("秒")
+		length = sHour + sMin + sSec
+	l.SetString(6, _("合計") + ":" + length)
+
+def clearShadowList():
+	l = globalVars.app.hMainView.shadowList
+	l.SetString(0, _("ファイル名"))
+	l.SetString(1, _("場所"))
+	l.SetString(2, _("タイトル"))
+	l.SetString(3, _("アルバム"))
+	l.SetString(4, _("アーティスト"))
+	l.SetString(5, _("アルバムアーティスト"))
+	l.SetString(6, _("合計"))

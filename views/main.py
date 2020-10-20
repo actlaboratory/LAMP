@@ -87,6 +87,10 @@ class MainView(BaseView):
 
 		self.hPanel.Layout()
 
+		lb = wx.StaticText(self.hPanel, label=_("状況"), size=(0,0))
+		self.shadowList = wx.ListBox(self.hPanel, size=(0,0))
+		view_manager.setValueShadowList(self.shadowList)
+		
 		# タイマーの呼び出し
 		self.timer = wx.Timer(self.hFrame)
 		self.timer.Start(100)
