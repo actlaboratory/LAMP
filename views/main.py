@@ -261,6 +261,19 @@ class Events(BaseEvents):
 			globalVars.play.fastForward()
 		elif selected==menuItemsStore.getRef("REWIND"):
 			globalVars.play.rewind()
+		elif selected==menuItemsStore.getRef("SAY_TIME"):
+			pos = globalVars.play.getPosition()
+			if pos == -1: time = _("情報がありません")
+			else:
+				hour = pos // 3600
+				min = (pos - hour * 3600) // 60
+				sec = int(pos - hour * 3600 - min * 60)
+				if hour == 0: sHour = ""
+				else: sHour = str(int(hour)) + _("時間") + " "
+				if min == 0: sMin = ""
+				else: sMin = str(int(min)) + _("分") + " "
+				time = sHour + sMin + str(int(sec)) + _("秒")
+			globalVars.app.say(time)
 		elif selected==menuItemsStore.getRef("SKIP"):
 			globalVars.eventProcess.skip(settings.getSkipInterval()[0])
 		elif selected==menuItemsStore.getRef("REVERSE_SKIP"):

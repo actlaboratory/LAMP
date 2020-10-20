@@ -16,7 +16,7 @@ defaultKeymap["mainView"]={
 	"M3U_CLOSE": "ctrl+shift+C",
 	"EXIT": "ctrl+Q",
 	# 機能メニュー
-	"SET_SLEEPTIMER": "ctrl+T",
+	"SET_SLEEPTIMER": "ctrl+shift+T",
 	"SET_EFFECTOR": "ctrl+E",
 	"ABOUT_PLAYING": "ctrl+shift+I",
 	# 操作メニュー
@@ -30,6 +30,7 @@ defaultKeymap["mainView"]={
 	"PREVIOUS_TRACK": "ctrl+B",
 	"FAST_FORWARD": "ctrl+rightarrow",
 	"REWIND": "ctrl+leftarrow",
+	"SAY_TIME": "ctrl+T",
 	"SKIP": "alt+leftarrow",
 	"REVERSE_SKIP": "alt+rightarrow",
 	"SKIP_INTERVAL_INCREASE": "alt+uparrow",
