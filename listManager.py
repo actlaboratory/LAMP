@@ -1,4 +1,4 @@
-import wx, os, multiprocessing, re, time
+import wx, os, multiprocessing, re, time, threading
 import globalVars, constants, view_manager, errorCodes, fxManager
 from soundPlayer.bass import pybass, pytags
 from views import objectDetail
@@ -88,11 +88,13 @@ def getFileInfoProcess(tuples):
 
 # 複数ファイルを追加（ファイルパスリスト, 追加先リストビュー, 追加先インデックス=末尾）
 def addItems(flst, lcObj, id=-1):
-	#プログレスダイアログ作成
 	progress=mkProgress.Dialog("importProgressDialog")
 	progress.Initialize(_("ファイルを集めています..."), _("読み込み中..."))
 	progress.Show(False)
-	wx.YieldIfNeeded() #プログレスダイアログを強制更新
+	t = threading.Thread(target=addItemsThread, args=(progress, flst, lcObj, -1))
+	t.start()
+
+def addItemsThread(progress, flst, lcObj, id=-1):
 	# 作業するファイルのリスト（ファイルパス）
 	pathList = []
 	# リストで受け取ってフォルダとファイルに分ける
@@ -106,7 +108,7 @@ def addItems(flst, lcObj, id=-1):
 	_append(pathList, lcObj, progress, id)
 	view_manager.changeListLabel(lcObj)
 	fxManager.load()
-	progress.Destroy()
+	wx.CallAfter(progress.Destroy)
 
 # ディレクトリパスからファイルリストを取得（ファイルパスリスト, ディレクトリパス）
 def _appendDirList(lst, dir):
@@ -137,8 +139,9 @@ def _append(paths, lcObj, progress, id):
 		addedItemCount += 1
 		progPer = round(addedItemCount/(itemCount/50))
 		if progPer != progPerTmp:
-			progress.update(addedItemCount,_("読み込み中")+"  "+str(addedItemCount)+"/"+str(itemCount),itemCount)
-			wx.YieldIfNeeded() #プログレスダイアログを強制更新
+			wx.CallAfter(progress.update, addedItemCount,_("読み込み中")+"  "+str(addedItemCount)+"/"+str(itemCount),itemCount)
+			wx.CallAfter(wx.YieldIfNeeded)
+			#wx.YieldIfNeeded() #プログレスダイアログを強制更新
 		progPerTmp = progPer
 		globalVars.listInfo.itemCounter += 1
 		if progress.status == wx.CANCEL: return
