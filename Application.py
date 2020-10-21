@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #Application startup file
 
+import multiprocessing
 import win32timezone#ダミー
 def _(string): pass#dummy
 
@@ -12,9 +13,10 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 #dllやモジュールをカレントディレクトリから読み込むように設定
 import sys
 
+multiprocessing.freeze_support() #これがないとマルチプロセスでおかしなことになる
+
 if sys.version_info.major>=3 and sys.version_info.minor>=8:
 	os.add_dll_directory(os.path.dirname(os.path.abspath(__file__)))
-	print(os.path.dirname(os.path.abspath(__file__)))
 	sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 import app as application

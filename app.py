@@ -16,7 +16,6 @@ import win32event
 import win32api
 import winerror
 import datetime
-import multiprocessing
 import globalVars
 import m3uManager
 from logging import getLogger, FileHandler, Formatter
@@ -34,7 +33,6 @@ class Main(AppBase.MainBase):
 	def __init__(self):
 		super().__init__()
 		self.mutex = 0
-		multiprocessing.freeze_support() #これがないとマルチプロセスでおかしなことになる
 
 
 	def initialize(self):
