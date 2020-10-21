@@ -92,4 +92,5 @@ class Events(BaseEvents):
             t = self.parent[index]
             tag = listManager.getTags([t])
             self.parent[index] = tag[0]
-            listManager.infoDialog(self.parent, index)
+            t = self.parent[index]
+            listManager.infoDialog(t)
