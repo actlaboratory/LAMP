@@ -37,7 +37,6 @@ class sleepTimer():
         elif t[0] == _("キューの再生を完了した"):
             self.queueTimer = True
         else:
-            print("タイポ？")
             return
         self.sleepTimer = True
         self.endValue = t[1]
@@ -76,8 +75,6 @@ class sleepTimer():
             ctypes.windll.PowrProf.SetSuspendState(0, 1, 0)
         elif self.endValue == _("コンピュータの電源を切る"):
             os.system("shutdown -s")
-        else:
-            print("タイポ")
 
     def destroy(self): #タイマー破棄
         self.__init__()

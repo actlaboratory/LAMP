@@ -305,7 +305,6 @@ class Events(BaseEvents):
 			d = mkDialog.Dialog("testDialog")
 			d.Initialize("テスト", "これはテストです。", ("テ", "ス", "ト"))
 			r = d.Show()
-			print(r)
 
 	def OnMenuOpen(self, event):
 		if event.GetMenu()==self.parent.menu.hDeviceChangeInSettingsMenu:
