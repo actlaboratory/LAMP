@@ -49,6 +49,7 @@ class eventProcessor():
 
         #ファイル送り
         if globalVars.play.getStatus() == PLAYER_STATUS_END:
+            globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
             if globalVars.app.config.getboolean("player", "manualSongFeed", False):
                 self.pause(True, True)
             else: self.fileChange()
@@ -145,7 +146,6 @@ class eventProcessor():
             self.playingList = listPorQ
             if ret:
                 globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
-                globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
                 listManager.setTag(listPorQ)
                 globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
                 self.refreshTagInfo()
