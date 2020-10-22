@@ -29,50 +29,44 @@ class Dialog(BaseDialog):
         self.motionCombo, self.motionLabel = self.creator.combobox(_("スリープの動作"), choice, self.onCombobox, 0, textLayout=wx.HORIZONTAL)
         #値の設定
         self.creator.AddSpace(20)
-        self.valueCreator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.sizer,views.ViewCreator.wx.HORIZONTAL)
-        self.valueLabel = self.valueCreator.staticText(_("時間と分の指定"))
-        self.value1Spin, dummy = self.valueCreator.spinCtrl(_("発動までの時間(時)"), 0, 24, self.onSpin, 0, textLayout=None)
-        self.value1Label = self.valueCreator.staticText(" : ")
-        self.value2Spin, dummy = self.valueCreator.spinCtrl(_("発動までの時間(分)"), 0, 59, self.onSpin, 0, textLayout=None)
+        self.timeValueCreator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.sizer,views.ViewCreator.wx.HORIZONTAL)
+        timeLabel = self.timeValueCreator.staticText(_("時間と分の指定"))
+        self.hourSpin, dummy = self.timeValueCreator.spinCtrl(_("時間"), 0, 24, self.onSpin, 0, textLayout=None)
+        label = self.timeValueCreator.staticText(_("時間") + " ")
+        self.minSpin, dummy = self.timeValueCreator.spinCtrl(_("分"), 0, 59, self.onSpin, 0, textLayout=None)
+        label = self.timeValueCreator.staticText(_("分"))
+        self.countValueCreator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.sizer,views.ViewCreator.wx.HORIZONTAL)
+        countLabel = self.countValueCreator.staticText(_("曲数指定"))
+        self.countSpin, dummy = self.countValueCreator.spinCtrl(_("曲数"), 0, 999, self.onSpin, 0, textLayout=None)
+        label = self.countValueCreator.staticText(_("曲"))
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"", wx.ALIGN_RIGHT)
         self.bStart = self.creator.button(_("開始"),self.onButtonClick)
         self.bCancel = self.creator.cancelbutton(_("キャンセル"), self.onButtonClick)
+
+        self.sizer.Hide(self.countValueCreator.GetSizer(), True)
+        self.panel.Layout()
 
     def onCombobox(self, evt):
         evtObj = evt.GetEventObject()
         if evtObj == self.conditionCombo:
             if evtObj.GetValue() == _("次の時間が経過した"):
-                self.valueLabel.SetLabel(_("時間と分の指定"))
-                self.valueLabel.Show()
-                self.value1Spin.SetMax(24)
-                self.value1Spin.SetValue(0)
-                self.value1Spin.Show()
-                self.value1Label.SetLabel(" : ")
-                self.value1Label.Show()
-                self.value2Spin.SetMax(59)
-                self.value2Spin.Show()
+                self.sizer.Show(self.timeValueCreator.GetSizer(), True, True)
+                self.sizer.Hide(self.countValueCreator.GetSizer(), True)
+                self.panel.Layout()
             elif evtObj.GetValue() == _("次の曲数を再生した"):
-                self.valueLabel.SetLabel(_("曲数の指定"))
-                self.valueLabel.Show()
-                self.value1Spin.SetMax(999)
-                self.value1Spin.SetValue(0)
-                self.value1Spin.Show()
-                self.value1Label.SetLabel(_("曲"))
-                self.value1Label.Show()
-                self.value2Spin.Show(False)
+                self.sizer.Hide(self.timeValueCreator.GetSizer(), True)
+                self.sizer.Show(self.countValueCreator.GetSizer(), True, True)
+                self.panel.Layout()
             else:
-                self.valueLabel.Show(False)
-                self.value1Spin.Show(False)
-                self.value1Label.Show(False)
-                self.value2Spin.Show(False)
-
+                self.sizer.Hide(self.timeValueCreator.GetSizer(), True)
+                self.sizer.Hide(self.countValueCreator.GetSizer(), True)
 
 
     def GetData(self):
         if self.conditionCombo.GetValue() == _("次の時間が経過した"):
-            return (self.conditionCombo.GetValue(), self.motionCombo.GetValue(), self.value1Spin.GetValue(), self.value2Spin.GetValue())
+            return (self.conditionCombo.GetValue(), self.motionCombo.GetValue(), self.hourSpin.GetValue(), self.minSpin.GetValue())
         elif self.conditionCombo.GetValue() == _("次の曲数を再生した"):
-            return (self.conditionCombo.GetValue(), self.motionCombo.GetValue(), self.value1Spin.GetValue())
+            return (self.conditionCombo.GetValue(), self.motionCombo.GetValue(), self.countSpin.GetValue())
         else:
             return (self.conditionCombo.GetValue(), self.motionCombo.GetValue())
 
