@@ -181,6 +181,7 @@ class eventProcessor():
 
     def playError(self):
         # 再生エラーの処理
+        if globalVars.app.config.getboolean("notification", "ignoreError", True): return 0
         fxManager.error()
         d = mkDialog.Dialog("playErrorDialog")
         d.Initialize(_("再生時エラー"), _("このファイルは再生できません。"), (_("継続"),_("停止")))

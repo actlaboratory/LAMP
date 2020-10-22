@@ -62,6 +62,10 @@ class settingDialog(baseDialog.BaseDialog):
             self.notificationSound.SetValue(True)
         else: self.notificationSound.SetValue(False)
         self.notificationDeviceCombo, notificationDeviceLabel = notificationCreator.combobox(_("効果音出力先"), self.getValueList(self.deviceDic), textLayout=wx.HORIZONTAL)
+        self.ignoreError = notificationCreator.checkbox(_("エラーを通知せず無視する"))
+        if globalVars.app.config.getboolean("notification", "ignoreError", True):
+            self.ignoreError.SetValue(True)
+        else: self.ignoreError.SetValue(False)
 
         # 起動
         startupCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("起動"))
@@ -85,6 +89,7 @@ class settingDialog(baseDialog.BaseDialog):
         globalVars.app.config["speech"]["reader"] = self.getKey(self.readerDic, self.readerCombo.GetStringSelection())
         globalVars.app.config["notification"]["sound"] = self.notificationSound.IsChecked()
         globalVars.app.config["notification"]["outputDevice"] = self.getKey(self.deviceDic, self.notificationDeviceCombo.GetStringSelection())
+        globalVars.app.config["notification"]["ignoreError"] = self.ignoreError.IsChecked()
         globalVars.app.config["player"]["outputDevice"] = self.getKey(self.deviceDic, self.startupDeviceCombo.GetStringSelection())
         globalVars.app.config["player"]["startupPlaylist"] = self.startupList.GetValue()
         self.wnd.EndModal(wx.ID_OK)

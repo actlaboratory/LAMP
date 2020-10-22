@@ -6,7 +6,7 @@ def load():
     if _notiSound(): playFx("./fx/load.mp3", _notiDevice())
 
 def error():
-    playFx("./fx/error.mp3", _notiDevice())
+    if _notiSound(): playFx("./fx/error.mp3", _notiDevice())
 
 def _notiSound():
     return globalVars.app.config.getboolean("notification", "sound", True)
