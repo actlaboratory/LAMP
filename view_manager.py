@@ -60,7 +60,7 @@ def setValueShadowList(l):
 def setFileShadowList():
 	l = globalVars.app.hMainView.shadowList
 	if globalVars.eventProcess.playingList == constants.PLAYLIST: t = listManager.getTuple(constants.PLAYLIST)
-	else: t = globalVars.listInfo.tmpTuple
+	else: t = globalVars.listInfo.playingTmp
 	l.SetString(0, _("ファイル名") + ":" + t[constants.ITEM_NAME])
 	l.SetString(1, _("場所") + ":" + t[constants.ITEM_PATH])
 	l.SetString(2, _("タイトル") + ":" + t[constants.ITEM_TITLE])

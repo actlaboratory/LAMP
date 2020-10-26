@@ -154,7 +154,7 @@ class eventProcessor():
         if not ret:
             globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
-            view_manager.clearShadowList() #スクリーンリーダ用リストの更新
+            vie-w_manager.clearShadowList() #スクリーンリーダ用リストの更新
         return ret
 
     def forcePlay(self, source):

@@ -91,7 +91,7 @@ def addItems(flst, lcObj, id=-1):
 	progress=mkProgress.Dialog("importProgressDialog")
 	progress.Initialize(_("ファイルを集めています..."), _("読み込み中..."))
 	progress.Show(False)
-	t = threading.Thread(target=addItemsThread, args=(progress, flst, lcObj, -1))
+	t = threading.Thread(target=addItemsThread, args=(progress, flst, lcObj, id))
 	t.start()
 
 def addItemsThread(progress, flst, lcObj, id=-1):
@@ -105,7 +105,8 @@ def addItemsThread(progress, flst, lcObj, id=-1):
 		else:
 			_appendDirList(pathList, s)
 	# 作成したファイルパスのリストから追加
-	_append(pathList, lcObj, progress, id)
+	if len(lcObj) == 0: _append(pathList, lcObj, progress, -1)
+	else: _append(pathList, lcObj, progress, id)
 	view_manager.changeListLabel(lcObj)
 	fxManager.load()
 	wx.CallAfter(progress.Destroy)
@@ -174,5 +175,5 @@ def infoDialog(tuple):
 class listInfo():
 	def __init__(self):
 		self.itemCounter = 0
-		self.tmpTuple=None
+		self.playingTmp=None
 		self.playlistFile = None
