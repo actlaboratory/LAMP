@@ -27,8 +27,7 @@ class sleepTimer():
             self.sleepTimer = True
             # タイマーの呼び出し
             self.timer = wx.Timer(globalVars.app.hMainView.hFrame)
-            self.timer.Start((t[2]*(60**2)+t[3]*60)*10) #ミリ秒タイマー
-            print("今は時間が 1/100")
+            self.timer.Start((t[2]*(60**2)+t[3]*60)*1000) #ミリ秒タイマー
             globalVars.app.hMainView.hFrame.Bind(wx.EVT_TIMER, self.end, self.timer)
         elif t[0] == _("次の曲数を再生した"):
             self.fileTimer = t[2]
