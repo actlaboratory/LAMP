@@ -14,7 +14,7 @@ SETTING_FILE_NAME="settings.ini"
 KEYMAP_FILE_NAME="keymap.ini"
 
 #アプリケーション基本情報
-APP_NAME="Test Application"
+APP_NAME="LAMP"
 APP_VERSION="0.01"
 APP_COPYRIGHT_YEAR="20XX"
 APP_DEVELOPERS="Ananimous"

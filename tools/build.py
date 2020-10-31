@@ -19,8 +19,8 @@ if os.path.isdir("dist\\application"):
 	shutil.rmtree("dist\\")
 
 print("Building...")
-runcmd("pyinstaller --windowed --log-level=ERROR application.py")
+runcmd("pyinstaller --windowed --log-level=ERROR lamp.py")
 if len(sys.argv) > 1 and sys.argv[1] == "-d":
-	runcmd("pyinstaller application.py")
+	runcmd("pyinstaller lamp.py")
 shutil.copytree("locale\\","dist\\application\\locale", ignore=shutil.ignore_patterns("*.po", "*.pot", "*.po~"))
 print("Done!")
