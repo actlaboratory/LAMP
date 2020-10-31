@@ -150,11 +150,11 @@ class eventProcessor():
                 globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
                 self.refreshTagInfo()
                 globalVars.app.hMainView.tagInfoTimer.Start(10000)
-            view_manager.setFileShadowList() #スクリーンリーダ用リストの更新
+            view_manager.setFileStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
         if not ret:
             globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
-            vie-w_manager.clearShadowList() #スクリーンリーダ用リストの更新
+            view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
         return ret
 
     def forcePlay(self, source):
@@ -172,11 +172,11 @@ class eventProcessor():
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
             self.refreshTagInfo()
             globalVars.app.hMainView.tagInfoTimer.Start(10000)
-            view_manager.setFileShadowList() #スクリーンリーダ用リストの更新
+            view_manager.setFileStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
         else:
             globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
-            view_manager.clearShadowList() #スクリーンリーダ用リストの更新
+            view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
         return ret
 
     def playError(self):
@@ -309,7 +309,7 @@ class eventProcessor():
         else: return True
 
     def stop(self):
-        view_manager.clearShadowList() #スクリーンリーダ用リストの更新
+        view_manager.clearStaticInfoView() #スクリーンリーダ用リストの更新
         globalVars.app.hMainView.playlistView.setPointer(-1)
         globalVars.play.stop()
         globalVars.app.hMainView.playPauseBtn.SetLabel("再生")

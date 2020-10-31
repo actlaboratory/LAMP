@@ -57,7 +57,7 @@ def setValueShadowList(l):
 	l.Append(_("合計"))
 	l.Append(_("経過時間を確認するには Ctrl + T を押します"))
 
-def setFileShadowList():
+def setFileStaticInfoView():
 	l = globalVars.app.hMainView.shadowList
 	if globalVars.eventProcess.playingList == constants.PLAYLIST: t = listManager.getTuple(constants.PLAYLIST)
 	else: t = globalVars.listInfo.playingTmp
@@ -80,8 +80,10 @@ def setFileShadowList():
 		else: sSec = str(int(sec)) + _("秒")
 		length = sHour + sMin + sSec
 	l.SetString(6, _("合計") + ":" + length)
+	if t[constants.ITEM_TITLE] != "": globalVars.app.hMainView.hFrame.SetTitle("LAMP - " + str(t[constants.ITEM_TITLE]))
+	else: globalVars.app.hMainView.hFrame.SetTitle("LAMP - " + str(t[constants.ITEM_NAME]))
 
-def clearShadowList():
+def clearStaticInfoView():
 	l = globalVars.app.hMainView.shadowList
 	l.SetString(0, _("ファイル名"))
 	l.SetString(1, _("場所"))
@@ -90,3 +92,4 @@ def clearShadowList():
 	l.SetString(4, _("アーティスト"))
 	l.SetString(5, _("アルバムアーティスト"))
 	l.SetString(6, _("合計"))
+	globalVars.app.hMainView.hFrame.SetTitle("LAMP")
