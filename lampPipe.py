@@ -24,4 +24,6 @@ def onReceive(msg):
             elif setting == "addQueue": wx.CallAfter(listManager.addItems, [msg], globalVars.app.hMainView.queueView)
             elif setting == "addQueueHead": wx.CallAfter(listManager.addItems, [msg], globalVars.app.hMainView.queueView, 0)
         elif os.path.splitext(msg)[1].lower() == ".m3u" or os.path.splitext(msg)[1].lower() == ".m3u8":
-            wx.CallAfter(m3uManager.loadM3u, msg, m3uManager.REPLACE)
+            setting = globalVars.app.config.getstring("player", "playlistInterrupt", "open", ("open", "add"))
+            if setting == "open": wx.CallAfter(m3uManager.loadM3u, msg, m3uManager.REPLACE)
+            elif setting == "add": wx.CallAfter(m3uManager.loadM3u, msg, m3uManager.ADD)
