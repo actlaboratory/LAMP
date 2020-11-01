@@ -28,6 +28,7 @@ class DefaultSettings:
 			"skipInterval": "30",
 			"fadeOutOnExit": False,
 			"fileInterrupt": "play",
+			"playlistInterrupt": "open",
 			"manualSongFeed": False,
 			"startupPlaylist": ""
 		}
