@@ -213,9 +213,9 @@ class Events(BaseEvents):
 			dialog.Initialize(2) #2=URLダイアログ
 			rtnCode = dialog.Show()
 			if rtnCode == dialog.PLAYLIST:
-				globalVars.playlist.addFiles([dialog.GetValue()], globalVars.app.hMainView.playlistView)
+				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.playlistView)
 			elif rtnCode == dialog.QUEUE:
-				globalVars.queue.addFiles([dialog.GetValue()], globalVars.app.hMainView.queueView)
+				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.queueView)
 			else:
 				return
 		elif selected==menuItemsStore.getRef("M3U_OPEN"):
