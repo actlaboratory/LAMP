@@ -52,7 +52,9 @@ class eventProcessor():
             globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
             if globalVars.app.config.getboolean("player", "manualSongFeed", False):
                 self.pause(True, True)
-            else: self.fileChange()
+            else:
+                if self.fileChange() == False:
+                    self.stop()
 
         #ファイル戻し（巻き戻し用）
         if globalVars.play.getStatus() == PLAYER_STATUS_OVERREWIND:
@@ -233,8 +235,9 @@ class eventProcessor():
         self.fileChanging = True
         globalVars.sleepTimer.call() #スリープタイマー問い合わせ
         #自動で次のファイルを再生
-        self.nextFile()
+        ret = self.nextFile()
         self.fileChanging = False
+        return ret
 
     #スキップ間隔設定(増加=はい, 秒数直接指定=なし)
     def setSkipInterval(self, increase=True, sec=None):
