@@ -19,7 +19,7 @@ class virtualListCtrl(wx.ListCtrl):
     
     def setList(self, lst):
         lstLen = len(lst)
-        self.lst = []
+        self.lst = lst
         super().SetItemCount(lstLen)
         if lstLen > 0: self.RefreshItems(0, lstLen)
 

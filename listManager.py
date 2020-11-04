@@ -4,6 +4,7 @@ from soundPlayer.bass import pybass, pytags
 from views import objectDetail
 from views import mkDialog
 from views import mkProgress
+from views import loadErrorDialog
 
 
 def getTuple(lstConstant, queueDelete=False):
@@ -97,22 +98,30 @@ def addItems(flst, lcObj, id=-1):
 def addItemsThread(progress, flst, lcObj, id=-1):
 	# 作業するファイルのリスト（ファイルパス）
 	pathList = []
+	errorList = []
+	notFoundList = []
 	# リストで受け取ってフォルダとファイルに分ける
 	for s in flst:
 		if progress.status == wx.CANCEL: break
 		if (os.path.isfile(s) and os.path.splitext(s)[1].lower() in globalVars.fileExpansions) or re.search("^https?://.+\..+", s)!=None:
 			pathList.append(s)
+		elif os.path.isdir(s):
+			_appendDirList(pathList, s, errorList)
+		elif os.path.isfile(s):
+			errorList.append(s)
 		else:
-			_appendDirList(pathList, s)
+			notFoundList.append(s)
 	# 作成したファイルパスのリストから追加
 	if len(lcObj) == 0: _append(pathList, lcObj, progress, -1)
 	else: _append(pathList, lcObj, progress, id)
 	view_manager.changeListLabel(lcObj)
+	if len(errorList) != 0 or len(notFoundList) != 0:
+		wx.CallAfter(loadErrorDialog.run, errorList, notFoundList)
 	fxManager.load()
 	wx.CallAfter(progress.Destroy)
 
-# ディレクトリパスからファイルリストを取得（ファイルパスリスト, ディレクトリパス）
-def _appendDirList(lst, dir):
+# ディレクトリパスからファイルリストを取得（ファイルパスリスト, ディレクトリパス, 非対応格納リスト）
+def _appendDirList(lst, dir, errorList):
 	# ボトムアップで探索
 	dirObj = os.walk(dir, False)
 	for tp in dirObj:
@@ -120,6 +129,7 @@ def _appendDirList(lst, dir):
 			for file in tp[2]:
 				f = tp[0] + "\\" + file
 				if os.path.splitext(f)[1].lower() in globalVars.fileExpansions: lst.append(f)
+				else: errorList.append(f)
 
 # 追加
 def _append(paths, lcObj, progress, id):
