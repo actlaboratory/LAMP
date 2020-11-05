@@ -35,9 +35,11 @@ class Dialog(BaseDialog):
         self.iText,self.static=self.creator.inputbox(guideTexts[self.type], x=-1,proportion=1,textLayout=wx.VERTICAL,margin=0)
         if self.type<=1:
             self.browse=self.creator.button(_("参照"),self.onBrowseBtn,sizerFlag=wx.ALIGN_BOTTOM | wx.BOTTOM,margin=3)
+            self.browse.SetFocus()
 
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT | wx.ALL,margin=20)
         self.playlistBtn=self.creator.button(_("プレイリストに追加"),self.onButtonClick,proportion=1)
+        self.playlistBtn.SetDefault()        
         self.queueBtn=self.creator.button(_("キューに追加"),self.onButtonClick,proportion=1)
         self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 

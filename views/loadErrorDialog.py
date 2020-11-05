@@ -48,6 +48,7 @@ class Dialog(BaseDialog):
         nf.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
         self.bOk = self.creator.cancelbutton(_("了解"))
+        self.bOk.SetDefault()
 
     def GetData(self):
         return None
