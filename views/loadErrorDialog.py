@@ -3,14 +3,18 @@
 
 import wx
 import os
+import globalVars
+import fxManager
 from views.viewObject import virtualListCtrl
 import views.ViewCreator
 from logging import getLogger
 from views.baseDialog import *
 
 def run(errorList, notFoundList):
+    if globalVars.app.config.getboolean("notification", "ignoreError", True): return
     d = Dialog("loadErrorDialog")
     d.Initialize(errorList, notFoundList)
+    fxManager.error()
     return d.Show()
 
 class Dialog(BaseDialog):
