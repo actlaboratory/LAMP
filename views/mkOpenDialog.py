@@ -5,7 +5,9 @@ import wx
 import re
 import os
 import globalVars
+import fxManager
 import views.ViewCreator
+from views import mkDialog
 from logging import getLogger
 from views.baseDialog import *
 
@@ -59,12 +61,19 @@ class Dialog(BaseDialog):
 
     def onButtonClick(self, evt):
         if os.path.exists(self.GetData())==False and self.type != 2: #URI以外のファイルパスエラー
+            d = mkDialog.Dialog("pathErrorDialog")
+            d.Initialize(_("パスエラー"), _("入力されたパスは存在しません。"),((_("了解")),))
+            fxManager.error()
+            d.Show()
             return None
         elif re.search("https?://.+\..+", self.GetData()) == None and self.type == 2: #URLエラー
+            d = mkDialog.Dialog("urlErrorDialog")
+            d.Initialize(_("パスエラー"), _("入力されたURLに問題があります。"),((_("了解")),))
+            fxManager.error()
+            d.Show()
             return None
         if evt.GetEventObject()==self.playlistBtn:
             code = self.PLAYLIST
         elif evt.GetEventObject()==self.queueBtn:
             code = self.QUEUE
         self.wnd.EndModal(code)
-        
