@@ -7,6 +7,11 @@ import wx
 # 言語
 SUPPORTING_LANGUAGE={"ja_JP": "日本語","en_US": "English"}
 
+# update情報
+UPDATE_URL = "https://actlab.org/api/checkUpdate"
+UPDATER_VERSION = "1.0.0"
+UPDATER_WAKE_WORD = "hello"
+
 #各種ファイル名
 LOG_PREFIX="LAMP"
 LOG_FILE_NAME="lamp.log"
@@ -15,7 +20,7 @@ KEYMAP_FILE_NAME="keymap.ini"
 
 #アプリケーション基本情報
 APP_NAME="LAMP"
-APP_VERSION="0.01"
+APP_VERSION="0.0.1"
 APP_COPYRIGHT_YEAR="20XX"
 APP_DEVELOPERS="Ananimous"
 

@@ -163,6 +163,7 @@ class Menu(BaseMenu):
 		self.hSettingsMenu.AppendSubMenu(self.hDeviceChangeInSettingsMenu, _("再生出力先の変更"))
 		self.RegisterMenuCommand(self.hSettingsMenu, "ENVIRONMENT", _("環境設定"))
 		#ヘルプメニューの中身
+		self.RegisterMenuCommand(self.hHelpMenu,"CHECK_UPDATE",_("更新の確認"))
 		self.RegisterMenuCommand(self.hHelpMenu,"EXAMPLE",_("テストダイアログを閲覧"))
 
 		#メニューバーの生成
@@ -301,6 +302,8 @@ class Events(BaseEvents):
 			d = setting_dialog.settingDialog("environment_dialog")
 			d.Initialize()
 			d.Show()
+		elif selected==menuItemsStore.getRef("CHECK_UPDATE"):
+			globalVars.update.update()
 		elif selected==menuItemsStore.getRef("EXAMPLE"):
 			d = mkDialog.Dialog("testDialog")
 			d.Initialize("テスト", "これはテストです。", ("テ", "ス", "ト"))

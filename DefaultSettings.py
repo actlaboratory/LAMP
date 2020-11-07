@@ -10,7 +10,9 @@ class DefaultSettings:
 		config["general"]={
 			"language": "ja-JP",
 			"fileVersion": "100",
-			"locale": "ja-JP"
+			"locale": "ja-JP",
+			"update": True,
+			"timeout": 5
 		}
 		config["view"]={
 			"font": "bold 'ＭＳ ゴシック' 22 windows-932",
@@ -40,6 +42,9 @@ class DefaultSettings:
 			"errorSound": True,
 			"outputDevice": "default",
 			"ignoreError": True
+		}
+		config["network"]={
+			"auto_proxy": False
 		}
 		return config
 

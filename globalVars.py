@@ -16,3 +16,4 @@ m3uHistory = None
 listInfo = None
 popupMenu4listView = None
 fileExpansions = [".wav", ".mp3", ".aac", ".m4a", ".ogg", ".opus", ".flac", ".wma"]
+update = None

@@ -16,6 +16,7 @@ import win32event
 import win32api
 import winerror
 import datetime
+import proxyUtil
 import globalVars
 import m3uManager
 from logging import getLogger, FileHandler, Formatter
@@ -24,6 +25,7 @@ import sleep_timer
 from soundPlayer import player, bassController
 from soundPlayer.constants import *
 
+import update
 import constants
 import DefaultSettings
 import errorCodes
@@ -47,7 +49,18 @@ class Main(AppBase.MainBase):
 		else:
 			lampPipe.startPipeServer()
 		
+		# プロキシの設定を適用
+		if self.config.getboolean("network", "auto_proxy"):
+			print("TRUE")
+			self.proxyEnviron = proxyUtil.virtualProxyEnviron()
+			self.proxyEnviron.set_environ()
+		else:
+			self.proxyEnviron = None
+
 		self.SetGlobalVars()
+		# update関係を準備
+		if self.config.getboolean("general", "update"):
+			globalVars.update.update(True)
 		# メインビューを表示
 		self.hMainView=main.MainView()
 		if self.config.getboolean(self.hMainView.identifier,"maximized",False):
@@ -83,6 +96,7 @@ class Main(AppBase.MainBase):
 		return 0
 
 	def SetGlobalVars(self):
+		globalVars.update = update.update()
 		dl = player.getDeviceList()
 		dl[0] = "default"
 		dc = globalVars.app.config.getstring("player", "outputDevice", "default", dl)
