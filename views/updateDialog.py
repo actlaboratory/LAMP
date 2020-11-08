@@ -63,7 +63,7 @@ class updateDialog(BaseDialog):
 		globalVars.update.start()
 
 	def updater_notFound(self):
-		simpleDialog.errorDialog(_("updater.exeが見つかりませんでした。誤って削除したかなどをご確認ください。"))
+		simpleDialog.dialog(_("エラー"), _("updater.exeが見つかりませんでした。誤って削除したかなどをご確認ください。"))
 		self.end()
 
 	def end(self):
