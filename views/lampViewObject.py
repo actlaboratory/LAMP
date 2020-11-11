@@ -2,6 +2,7 @@ import wx
 import listManager
 from views import viewObject
 
+#delete
 class button(wx.Button):
     def __init__(self, *pArg, **kArg):
         super().__init__(*pArg, **kArg)
