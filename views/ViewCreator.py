@@ -3,6 +3,9 @@
 #Copyright (C) 2019-2020 yamahubuki <itiro.ishino@gmail.com>
 
 import wx
+import win32api
+import _winxptheme
+from views import ViewCreatorBase
 
 NORMAL=0
 BUTTON_COLOUR=1
@@ -17,10 +20,10 @@ MODE_DARK=1
 class ViewCreator(ViewCreatorBase.ViewCreatorBase):
 	def __init__(self, *pArg, **kArg):
 		# wxオブジェクトの入れ替えが必要ならば記述
-		# winObject[object] = newObject
+		# 136
+		# [object] = newObject
 
-
-		super().__init__(*pArg, **kAr)
+		super().__init__(*pArg, **kArg)
 
 	def customListCtrl(self,lcObject, text, event=None, style=0, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
@@ -33,15 +36,6 @@ class ViewCreator(ViewCreatorBase.ViewCreatorBase):
 		Add(sizer,hListCtrl,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hListCtrl,hStaticText
-
-	def customButton(self,btnObject, text, event=None, sizerFlag=wx.ALL, proportion=0,margin=5):
-		hButton=btnObject(self.parent, wx.ID_ANY,label=text, name=text, style=wx.BORDER_RAISED)
-		hButton.Bind(wx.EVT_BUTTON,event)
-		self._setFace(hButton,mode=BUTTON_COLOUR)
-		Add(self.sizer,hButton,proportion,sizerFlag,margin)
-		self.AddSpace()
-		return hButton
-
 
 
 #parentで指定したsizerの下に、新たなBoxSizerを設置

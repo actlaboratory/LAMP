@@ -1,6 +1,6 @@
 import wx
 
-class checkBox(wx.CheckBox):
+class spinCtrl(wx.SpinCtrl):
     def __init__(self, *pArg, **kArg):
         self.focusFromKbd = True #キーボードフォーカスの初期値
         return super().__init__(*pArg, **kArg)

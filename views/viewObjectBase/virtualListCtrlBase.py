@@ -8,7 +8,7 @@ class virtualListCtrl(wx.ListCtrl):
         elif len(lPArg) >= 5: lPArg[4] = lPArg[4] | wx.LC_REPORT | wx.LC_VIRTUAL
         else: kArg["style"] = wx.LC_REPORT | wx.LC_VIRTUAL
         self.lst = []
-        super().__init__(*lPArg, **kArg)
+        return super().__init__(*lPArg, **kArg)
 
     def RefreshItems(self, first, end):
         super().RefreshItems(first, end)

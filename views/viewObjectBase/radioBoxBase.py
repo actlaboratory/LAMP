@@ -3,7 +3,7 @@ import wx
 class radioBox(wx.RadioBox):
     def __init__(self, *pArg, **kArg):
         self.focusFromKbd = True #キーボードフォーカスの初期値
-        super().__init__(*pArg, **kArg)
+        return super().__init__(*pArg, **kArg)
 
     def AcceptsFocusFromKeyboard(self):
         return self.focusFromKbd

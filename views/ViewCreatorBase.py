@@ -20,6 +20,8 @@ from views.viewObjectBase import listCtrlBase
 from views.viewObjectBase import virtualListCtrlBase
 from views.viewObjectBase import notebookBase
 from views.viewObjectBase import textCtrlBase
+from views.viewObjectBase import spinCtrlBase
+from views.viewObjectBase import sliderBase
 
 viewHelper=ctypes.cdll.LoadLibrary("viewHelper.dll")
 
@@ -48,7 +50,9 @@ class ViewCreatorBase():
 			"virtualListCtrl": virtualListCtrlBase.virtualListCtrl,
 			"notebook": notebookBase.notebook,
 			"textCtrl": textCtrlBase.textCtrl,
-			"gauge": wx.Gauge
+			"gauge": wx.Gauge,
+			"spinCtrl": spinCtrlBase.spinCtrl,
+			"slider": sliderBase.slider
 		}
 		
 		#表示モード
@@ -129,7 +133,7 @@ class ViewCreatorBase():
 
 
 	def button(self,text, event=None, sizerFlag=wx.ALL, proportion=0,margin=5):
-		hButton=winObject["button"](self.parent, wx.ID_ANY,label=text, name=text, style=wx.BORDER_RAISED)
+		hButton=self.winObject["button"](self.parent, wx.ID_ANY,label=text, name=text, style=wx.BORDER_RAISED)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self._setFace(hButton,mode=BUTTON_COLOUR)
 		Add(self.sizer,hButton,proportion,sizerFlag,margin)
@@ -146,7 +150,7 @@ class ViewCreatorBase():
 		return hButton
 
 	def cancelbutton(self,text, event=None, sizerFlag=wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT | wx.ALL,proportion=1,margin=5):
-		hButton=winObject["button"](self.parent, wx.ID_CANCEL,label=text, name=text,style=wx.BORDER_RAISED)
+		hButton=self.winObject["button"](self.parent, wx.ID_CANCEL,label=text, name=text,style=wx.BORDER_RAISED)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self._setFace(hButton,mode=BUTTON_COLOUR)
 		Add(self.sizer,hButton,proportion,sizerFlag,margin)
@@ -154,7 +158,7 @@ class ViewCreatorBase():
 		return hButton
 
 	def staticText(self, text, style=0, x=-1, sizerFlag=wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5):
-		hStatic=winObject["staticText"](self.parent,wx.ID_ANY,label=text,name=text,size=(x,-1),style=style)
+		hStatic=self.winObject["staticText"](self.parent,wx.ID_ANY,label=text,name=text,size=(x,-1),style=style)
 		self._setFace(hStatic)
 		Add(self.sizer,hStatic,proportion,sizerFlag,margin)
 		return hStatic
@@ -165,7 +169,7 @@ class ViewCreatorBase():
 		v=""
 		if state>=0:
 			v=selection[state]
-		hCombo=winObject["comboBox"](parent,wx.ID_ANY,value=v,choices=selection,style=wx.BORDER_RAISED | style,name=text,size=(x,-1))
+		hCombo=self.winObject["comboBox"](parent,wx.ID_ANY,value=v,choices=selection,style=wx.BORDER_RAISED | style,name=text,size=(x,-1))
 		hCombo.Bind(wx.EVT_TEXT,event)
 		self._setFace(hCombo)
 		Add(sizer,hCombo,proportion,sizerFlag,margin)
@@ -397,7 +401,7 @@ class ViewCreatorBase():
 	def spinCtrl(self,text, min=0, max=100, event=None, defaultValue=0, style=wx.SP_ARROW_KEYS, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hSpinCtrl = wx.SpinCtrl(parent, wx.ID_ANY, min=min, max=max, initial=defaultValue, style=wx.BORDER_RAISED | style, size=(x,-1))
+		hSpinCtrl = self.winObject["spinCtrl"](parent, wx.ID_ANY, min=min, max=max, initial=defaultValue, style=wx.BORDER_RAISED | style, size=(x,-1))
 		hSpinCtrl.Bind(wx.EVT_TEXT,event)
 		self._setFace(hSpinCtrl)
 		Add(sizer,hSpinCtrl,proportion,sizerFlag,margin)
@@ -407,7 +411,7 @@ class ViewCreatorBase():
 	def slider(self,text, min=0, max=100, event=None, defaultValue=0, style=0, x=-1, sizerFlag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5,textLayout=wx.DEFAULT):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hSlider=wx.Slider(parent, wx.ID_ANY, size=(x,-1),value=defaultValue, minValue=min, maxValue=max, style=style)
+		hSlider=self.winObject["slider"](parent, wx.ID_ANY, size=(x,-1),value=defaultValue, minValue=min, maxValue=max, style=style)
 		hSlider.Bind(wx.EVT_SCROLL_CHANGED,event)
 		self._setFace(hSlider)
 		if x==-1:	#幅を拡張
