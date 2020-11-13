@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
-#View Creator
+#View CreatorBase
 #Copyright (C) 2019-2020 yamahubuki <itiro.ishino@gmail.com>
+#Copyright (C) 2019-2020 Hiroki Fujii <hfujii@hisystron.com>
 
 import ctypes
 import win32api
@@ -70,7 +71,7 @@ class ViewCreatorBase():
 		if type(parent) in (wx.Panel,):
 			self.parent=parent
 			self._setFace(parent)
-		elif type(parent) in (wx.Notebook,wx.Choicebook,wx.Listbook):
+		elif isinstance(parent, wx.Notebook) or isinstance(parent, wx.Choicebook) or isinstance(parent, wx.Listbook):
 			self._setFace(parent)
 			self.parent=makePanel(parent)
 			self._setFace(self.parent)

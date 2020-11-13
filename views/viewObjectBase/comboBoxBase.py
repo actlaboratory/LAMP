@@ -1,3 +1,7 @@
+#comboBoxBase for ViewCreator
+#Copyright (C) 2019-2020 Hiroki Fujii <hfujii@hisystron.com>
+
+
 import wx
 
 class comboBox(wx.ComboBox):

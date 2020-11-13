@@ -1,3 +1,7 @@
+#spinCtrlBase for ViewCreator
+#Copyright (C) 2019-2020 Hiroki Fujii <hfujii@hisystron.com>
+
+
 import wx
 
 class spinCtrl(wx.SpinCtrl):

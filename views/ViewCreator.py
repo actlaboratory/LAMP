@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 #View Creator
 #Copyright (C) 2019-2020 yamahubuki <itiro.ishino@gmail.com>
+#Copyright (C) 2019-2020 Hiroki Fujii <hfujii@hisystron.com>
 
 import wx
 import win32api

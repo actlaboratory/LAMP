@@ -1,3 +1,7 @@
+#buttonBase for ViewCreator
+#Copyright (C) 2019-2020 Hiroki Fujii <hfujii@hisystron.com>
+
+
 import wx
 
 class button(wx.Button):
@@ -7,7 +11,3 @@ class button(wx.Button):
 
     def AcceptsFocusFromKeyboard(self):
         return self.focusFromKbd
-
-    def enableFocusFromKeyboard(self, boolVal):
-        if boolVal: self.focusFromKbd = True
-        else: self.focusFromKbd = False

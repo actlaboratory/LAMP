@@ -54,21 +54,14 @@ class MainView(BaseView):
 		# ボタン・音量スライダエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,style=wx.ALL,space=20)
 		self.previousBtn = self.horizontalCreator.button(_("前"), self.events.onButtonClick)
-		self.previousBtn.enableFocusFromKeyboard(False)
 		self.playPauseBtn = self.horizontalCreator.button(_("再生"), self.events.onButtonClick)
-		self.previousBtn.enableFocusFromKeyboard(False)
 		self.nextBtn = self.horizontalCreator.button(_("次"), self.events.onButtonClick)
-		self.previousBtn.enableFocusFromKeyboard(False)
 		self.stopBtn = self.horizontalCreator.button(_("停止"), self.events.onButtonClick)
-		self.previousBtn.enableFocusFromKeyboard(False)
 		self.repeatLoopBtn = self.horizontalCreator.button(_("ﾘﾋﾟｰﾄ/ﾙｰﾌﾟ"), self.events.onButtonClick)
-		self.previousBtn.enableFocusFromKeyboard(False)
 		self.shuffleBtn = self.horizontalCreator.button(_("ｼｬｯﾌﾙ"), self.events.onButtonClick)
-		self.previousBtn.enableFocusFromKeyboard(False)
 		self.volumeSlider, dummy = self.horizontalCreator.slider(_("音量"), 0, 100, self.events.onSlider, 
 			globalVars.app.config.getint("volume","default",default=100, min=0, max=100), textLayout=None)
 		self.muteBtn = self.horizontalCreator.button(_("ﾐｭｰﾄ"), self.events.onButtonClick)
-		self.previousBtn.enableFocusFromKeyboard(False)
 		#self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
 
 		# 曲情報表示
@@ -102,6 +95,8 @@ class MainView(BaseView):
 		self.timer = wx.Timer(self.hFrame)
 		self.timer.Start(100)
 		self.hFrame.Bind(wx.EVT_TIMER, self.events.timerEvent, self.timer)
+
+		self.hFrame.Layout()
 
 class Menu(BaseMenu):
 	def __init__(self, identifier, event):
