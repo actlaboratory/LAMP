@@ -3,10 +3,11 @@
 
 
 import wx
+from views.viewObjectBase import viewObjectUtil
 
 class button(wx.Button):
     def __init__(self, *pArg, **kArg):
-        self.focusFromKbd = True #キーボードフォーカスの初期値
+        self.focusFromKbd = viewObjectUtil.popArg(kArg, "enableTabFocus", True)     #キーボードフォーカスの初期値
         return super().__init__(*pArg, **kArg)
 
     def AcceptsFocusFromKeyboard(self):

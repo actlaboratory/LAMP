@@ -133,8 +133,8 @@ class ViewCreatorBase():
 		return sizer
 
 
-	def button(self,text, event=None, sizerFlag=wx.ALL, proportion=0,margin=5):
-		hButton=self.winObject["button"](self.parent, wx.ID_ANY,label=text, name=text, style=wx.BORDER_RAISED)
+	def button(self,text, event=None, sizerFlag=wx.ALL, proportion=0,margin=5, enableTabFocus=True):
+		hButton=self.winObject["button"](self.parent, wx.ID_ANY,label=text, name=text, style=wx.BORDER_RAISED, enableTabFocus=enableTabFocus)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self._setFace(hButton,mode=BUTTON_COLOUR)
 		Add(self.sizer,hButton,proportion,sizerFlag,margin)
@@ -164,23 +164,23 @@ class ViewCreatorBase():
 		Add(self.sizer,hStatic,proportion,sizerFlag,margin)
 		return hStatic
 
-	def combobox(self,text, selection, event=None, state=-1, style=wx.CB_READONLY, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+	def combobox(self,text, selection, event=None, state=-1, style=wx.CB_READONLY, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
 		v=""
 		if state>=0:
 			v=selection[state]
-		hCombo=self.winObject["comboBox"](parent,wx.ID_ANY,value=v,choices=selection,style=wx.BORDER_RAISED | style,name=text,size=(x,-1))
+		hCombo=self.winObject["comboBox"](parent,wx.ID_ANY,value=v,choices=selection,style=wx.BORDER_RAISED | style,name=text,size=(x,-1), enableTabFocus=enableTabFocus)
 		hCombo.Bind(wx.EVT_TEXT,event)
 		self._setFace(hCombo)
 		Add(sizer,hCombo,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hCombo,hStaticText
 
-	def comboEdit(self,text, selection, event=None, defaultValue="", style=wx.CB_DROPDOWN, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+	def comboEdit(self,text, selection, event=None, defaultValue="", style=wx.CB_DROPDOWN, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hCombo=self.winObject["comboBox"](parent,wx.ID_ANY,value=defaultValue,choices=selection,style=wx.BORDER_RAISED | style,name=text,size=(x,-1))
+		hCombo=self.winObject["comboBox"](parent,wx.ID_ANY,value=defaultValue,choices=selection,style=wx.BORDER_RAISED | style,name=text,size=(x,-1), enableTabFocus=enableTabFocus)
 		hCombo.Bind(wx.EVT_TEXT,event)
 		if defaultValue in selection:
 			hCombo.SetSelection(selection.index(defaultValue))
@@ -192,13 +192,13 @@ class ViewCreatorBase():
 		self.AddSpace()
 		return hCombo,hStaticText
 
-	def checkbox(self,text, event=None, state=False, style=0, x=-1, sizerFlag=0, proportion=0,margin=5):
+	def checkbox(self,text, event=None, state=False, style=0, x=-1, sizerFlag=0, proportion=0,margin=5, enableTabFocus=True):
 		hPanel=wx.Panel(self.parent,wx.ID_ANY)
 		self._setFace(hPanel,mode=SKIP_COLOUR)
 		hSizer=self.BoxSizer(hPanel,self.getParentOrientation())
 
 		if (isinstance(text,str)):	#単純に一つを作成
-			hCheckBox=self.winObject["checkBox"](hPanel,wx.ID_ANY, label=text, name=text,size=(x,-1),style=style)
+			hCheckBox=self.winObject["checkBox"](hPanel,wx.ID_ANY, label=text, name=text,size=(x,-1),style=style, enableTabFocus=enableTabFocus)
 			hCheckBox.SetValue(state)
 			hCheckBox.Bind(wx.EVT_CHECKBOX,event)
 			self._setFace(hCheckBox,mode=SKIP_COLOUR)
@@ -211,7 +211,7 @@ class ViewCreatorBase():
 		elif (isinstance(text,list)):	#複数同時作成
 			hCheckBoxes=[]
 			for s in text:
-				hCheckBox=self.winObject["checkBox"](hPanel,wx.ID_ANY, label=s, name=s,size=(x,-1),style=style)
+				hCheckBox=self.winObject["checkBox"](hPanel,wx.ID_ANY, label=s, name=s,size=(x,-1),style=style, enableTabFocus=enableTabFocus)
 				hCheckBox.SetValue(state)
 				hCheckBox.Bind(wx.EVT_CHECKBOX,event)
 				self._setFace(hCheckBox,mode=SKIP_COLOUR)
@@ -226,7 +226,7 @@ class ViewCreatorBase():
 			raise ValueError("ViewCreatorはCheckboxの作成に際し正しくない型の値を受け取りました。")
 
 	# 3stateチェックボックス
-	def checkbox3(self,text, event=None, state=None, style=0, x=-1, sizerFlag=0, proportion=0,margin=0):
+	def checkbox3(self,text, event=None, state=None, style=0, x=-1, sizerFlag=0, proportion=0,margin=0, enableTabFocus=True):
 		hPanel=wx.Panel(self.parent,wx.ID_ANY)
 		self._setFace(hPanel,mode=SKIP_COLOUR)
 		hSizer=self.BoxSizer(hPanel,self.getParentOrientation())
@@ -234,7 +234,7 @@ class ViewCreatorBase():
 		if (isinstance(text,str)):	#単純に一つを作成
 			if (state==None):
 				state=wx.CHK_UNCHECKED
-			hCheckBox=self.winObject["checkBox"](hPanel,wx.ID_ANY, label=text, name=text,style=wx.CHK_3STATE | style,size=(x,0))
+			hCheckBox=self.winObject["checkBox"](hPanel,wx.ID_ANY, label=text, name=text,style=wx.CHK_3STATE | style,size=(x,0), enableTabFocus=enableTabFocus)
 			hCheckBox.Set3StateValue(state)
 			if state==wx.CHK_UNDETERMINED:
 				hCheckBox.SetWindowStyleFlag(wx.CHK_ALLOW_3RD_STATE_FOR_USER)
@@ -251,12 +251,12 @@ class ViewCreatorBase():
 			hCheckBoxes=[]
 			for i,s in enumerate(text):
 				if (state==None):
-					hCheckBox=self.winObject["checkBox"](hPanel,wx.ID_ANY, label=s, name=s,style=wx.CHK_3STATE | style,size=(x,0))
+					hCheckBox=self.winObject["checkBox"](hPanel,wx.ID_ANY, label=s, name=s,style=wx.CHK_3STATE | style,size=(x,0), enableTabFocus=enableTabFocus)
 				elif (state[i]==wx.CHK_UNDETERMINED):
-					hCheckBox=self.winObject["checkBox"](hPanel,wx.ID_ANY, label=s, name=s,style=wx.CHK_ALLOW_3RD_STATE_FOR_USER | wx.CHK_3STATE | style,size=(x,0))
+					hCheckBox=self.winObject["checkBox"](hPanel,wx.ID_ANY, label=s, name=s,style=wx.CHK_ALLOW_3RD_STATE_FOR_USER | wx.CHK_3STATE | style,size=(x,0), enableTabFocus=enableTabFocus)
 					hCheckBox.Set3StateValue(state[i])
 				else:
-					hCheckBox=self.winObject["checkBox"](hPanel,wx.ID_ANY, label=s, name=s,style=wx.CHK_3STATE | style,size=(x,0))
+					hCheckBox=self.winObject["checkBox"](hPanel,wx.ID_ANY, label=s, name=s,style=wx.CHK_3STATE | style,size=(x,0), enableTabFocus=enableTabFocus)
 					hCheckBox.Set3StateValue(state[i])
 				hCheckBox.Bind(wx.EVT_CHECKBOX,event)
 				self._setFace(hCheckBox,mode=SKIP_COLOUR)
@@ -270,12 +270,12 @@ class ViewCreatorBase():
 		else:
 			raise ValueError("ViewCreatorはCheckboxの作成に際し正しくない型の値を受け取りました。")
 
-	def radiobox(self,text, items, event=None, dimension=0, orient=wx.VERTICAL, style=0, x=-1, sizerFlag=0, proportion=0,margin=5):
+	def radiobox(self,text, items, event=None, dimension=0, orient=wx.VERTICAL, style=0, x=-1, sizerFlag=0, proportion=0,margin=5, enableTabFocus=True):
 		if orient==wx.VERTICAL:
 			style=wx.RA_SPECIFY_COLS | style
 		else:
 			style=wx.RA_SPECIFY_ROWS | style
-		hRadioBox=self.winObject["radioBox"](self.parent,label=text, name=text, choices=items,majorDimension=dimension,style=style,size=(x,-1))
+		hRadioBox=self.winObject["radioBox"](self.parent,label=text, name=text, choices=items,majorDimension=dimension,style=style,size=(x,-1), enableTabFocus=enableTabFocus)
 		hRadioBox.Bind(wx.EVT_RADIOBOX,event)
 		self._setFace(hRadioBox)
 
@@ -290,13 +290,13 @@ class ViewCreatorBase():
 		self.AddSpace()
 		return hRadioBox
 
-	def radio(self,text,event=None,state=False,style=0, x=-1, sizerFlag=0, proportion=0,margin=5):
+	def radio(self,text,event=None,state=False,style=0, x=-1, sizerFlag=0, proportion=0,margin=5, enableTabFocus=True):
 		hPanel=wx.Panel(self.parent,wx.ID_ANY)
 		self._setFace(hPanel,mode=SKIP_COLOUR)
 		hSizer=self.BoxSizer(hPanel,self.getParentOrientation())
 
 		if type(text)==str:
-			hRadio=self.winObject["radioButton"](hPanel,id=wx.ID_ANY,label=text,style=style,name=text)
+			hRadio=self.winObject["radioButton"](hPanel,id=wx.ID_ANY,label=text,style=style,name=text, enableTabFocus=enableTabFocus)
 			hRadio.SetValue(state)
 			hRadio.Bind(wx.EVT_RADIOBUTTON,event)
 			self._setFace(hRadio,mode=SKIP_COLOUR)
@@ -312,9 +312,9 @@ class ViewCreatorBase():
 			radios=[]
 			for s in text:
 				if len(radios)==0:	#最初の１つのみ追加のスタイルが必要
-					hRadio=self.winObject["radioButton"](hPanel,id=wx.ID_ANY,label=s,style=wx.RB_GROUP | style,name=s)
+					hRadio=self.winObject["radioButton"](hPanel,id=wx.ID_ANY,label=s,style=wx.RB_GROUP | style,name=s, enableTabFocus=enableTabFocus)
 				else :
-					hRadio=self.winObject["radioButton"](hPanel,id=wx.ID_ANY,label=s,style=style,name=s)
+					hRadio=self.winObject["radioButton"](hPanel,id=wx.ID_ANY,label=s,style=style,name=s, enableTabFocus=enableTabFocus)
 				hRadio.Bind(wx.EVT_RADIOBUTTON,event)
 				self._setFace(hRadio,mode=SKIP_COLOUR)
 				Add(hSizer,hRadio)
@@ -331,10 +331,10 @@ class ViewCreatorBase():
 		else:
 			raise ValueError("ViewCreatorはRadioの作成に際し不正な型ののtextパラメータを受け取りました。")
 
-	def listbox(self,text, choices=[], event=None, state=-1, style=0, size=(-1,-1), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+	def listbox(self,text, choices=[], event=None, state=-1, style=0, size=(-1,-1), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hListBox=self.winObject["listBox"](parent,wx.ID_ANY,name=text,choices=choices,size=size,style=style)
+		hListBox=self.winObject["listBox"](parent,wx.ID_ANY,name=text,choices=choices,size=size,style=style, enableTabFocus=enableTabFocus)
 		hListBox.Bind(wx.EVT_LISTBOX,event)
 		hListBox.SetSelection(state)
 		self._setFace(hListBox)
@@ -342,10 +342,10 @@ class ViewCreatorBase():
 		self.AddSpace()
 		return hListBox,hStaticText
 
-	def listCtrl(self,text, event=None, style=0, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+	def listCtrl(self,text, event=None, style=0, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hListCtrl=self.winObject["listCtrl"](parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size)
+		hListCtrl=self.winObject["listCtrl"](parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size, enableTabFocus=enableTabFocus)
 		hListCtrl.Bind(wx.EVT_LIST_ITEM_FOCUSED,event)
 		self._setFace(hListCtrl)
 		self._setFace(hListCtrl.GetMainWindow())
@@ -354,10 +354,10 @@ class ViewCreatorBase():
 		self.AddSpace()
 		return hListCtrl,hStaticText
 
-	def virtualListCtrl(self,text, event=None, style=0, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+	def virtualListCtrl(self,text, event=None, style=0, size=(200,200), sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hListCtrl=self.winObject["virtualListCtrl"](parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size)
+		hListCtrl=self.winObject["virtualListCtrl"](parent,wx.ID_ANY,style=style | wx.BORDER_RAISED, size=size, enableTabFocus=enableTabFocus)
 		hListCtrl.Bind(wx.EVT_LIST_ITEM_FOCUSED,event)
 		self._setFace(hListCtrl)
 		self._setFace(hListCtrl.GetMainWindow())
@@ -366,18 +366,18 @@ class ViewCreatorBase():
 		self.AddSpace()
 		return hListCtrl,hStaticText
 
-	def tabCtrl(self,title, event=None, style=wx.NB_NOPAGETHEME | wx.NB_MULTILINE, sizerFlag=0, proportion=0, margin=5):
-		htab=self.winObject["notebook"](self.parent, wx.ID_ANY,name=title,style=style)
+	def tabCtrl(self,title, event=None, style=wx.NB_NOPAGETHEME | wx.NB_MULTILINE, sizerFlag=0, proportion=0, margin=5, enableTabFocus=True):
+		htab=self.winObject["notebook"](self.parent, wx.ID_ANY,name=title,style=style, enableTabFocus=enableTabFocus)
 		htab.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED,event)
 		self._setFace(htab)
 		Add(self.sizer,htab,proportion,sizerFlag,margin,expandFlag=wx.HORIZONTAL)
 		self.sizer.Layout()
 		return htab
 
-	def inputbox(self,text, event=None, defaultValue="", style=0, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+	def inputbox(self,text, event=None, defaultValue="", style=0, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hTextCtrl=self.winObject["textCtrl"](parent, wx.ID_ANY,size=(x,-1),name=text,value=defaultValue,style=style | wx.BORDER_RAISED)
+		hTextCtrl=self.winObject["textCtrl"](parent, wx.ID_ANY,size=(x,-1),name=text,value=defaultValue,style=style | wx.BORDER_RAISED, enableTabFocus=enableTabFocus)
 		hTextCtrl.Bind(wx.EVT_TEXT,event)
 		self._setFace(hTextCtrl)
 		if x==-1:
@@ -399,20 +399,20 @@ class ViewCreatorBase():
 		self.AddSpace()
 		return hGauge,hStaticText
 
-	def spinCtrl(self,text, min=0, max=100, event=None, defaultValue=0, style=wx.SP_ARROW_KEYS, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+	def spinCtrl(self,text, min=0, max=100, event=None, defaultValue=0, style=wx.SP_ARROW_KEYS, x=-1, sizerFlag=wx.ALL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hSpinCtrl = self.winObject["spinCtrl"](parent, wx.ID_ANY, min=min, max=max, initial=defaultValue, style=wx.BORDER_RAISED | style, size=(x,-1))
+		hSpinCtrl = self.winObject["spinCtrl"](parent, wx.ID_ANY, min=min, max=max, initial=defaultValue, style=wx.BORDER_RAISED | style, size=(x,-1), enableTabFocus=enableTabFocus)
 		hSpinCtrl.Bind(wx.EVT_TEXT,event)
 		self._setFace(hSpinCtrl)
 		Add(sizer,hSpinCtrl,proportion,sizerFlag,margin)
 		self.AddSpace()
 		return hSpinCtrl,hStaticText
 
-	def slider(self,text, min=0, max=100, event=None, defaultValue=0, style=0, x=-1, sizerFlag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5,textLayout=wx.DEFAULT):
+	def slider(self,text, min=0, max=100, event=None, defaultValue=0, style=0, x=-1, sizerFlag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
-		hSlider=self.winObject["slider"](parent, wx.ID_ANY, size=(x,-1),value=defaultValue, minValue=min, maxValue=max, style=style)
+		hSlider=self.winObject["slider"](parent, wx.ID_ANY, size=(x,-1),value=defaultValue, minValue=min, maxValue=max, style=style, enableTabFocus=enableTabFocus)
 		hSlider.Bind(wx.EVT_SCROLL_CHANGED,event)
 		self._setFace(hSlider)
 		if x==-1:	#幅を拡張

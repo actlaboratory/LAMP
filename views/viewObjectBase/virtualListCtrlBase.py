@@ -3,6 +3,7 @@
 
 
 import wx
+from views.viewObjectBase import viewObjectUtil
 
 class virtualListCtrl(wx.ListCtrl):
     # listの機能を組み込み
@@ -12,12 +13,16 @@ class virtualListCtrl(wx.ListCtrl):
         elif len(lPArg) >= 5: lPArg[4] = lPArg[4] | wx.LC_REPORT | wx.LC_VIRTUAL
         else: kArg["style"] = wx.LC_REPORT | wx.LC_VIRTUAL
         self.lst = []
+        self.focusFromKbd = viewObjectUtil.popArg(kArg, "enableTabFocus", True)
         return super().__init__(*lPArg, **kArg)
 
     def RefreshItems(self, first, end):
         super().RefreshItems(first, end)
         wx.YieldIfNeeded()
     
+    def AcceptFocusFromKeyboard(self):
+        return self.focusFromKbd
+
     def getList(self):
         return self.copy()
     
