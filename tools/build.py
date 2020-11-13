@@ -47,7 +47,7 @@ for hook in constants.NEED_HOOKS:
 	shutil.copy(hook, hooks_path)
 runcmd("%s --windowed --log-level=ERROR %s" % (pyinstaller_path, constants.STARTUP_FILE))
 
-shutil.copytree("locale\\","dist\\SOC\\locale", ignore=shutil.ignore_patterns("*.po", "*.pot", "*.po~"))
+shutil.copytree("locale\\",os.path.join(package_path, "locale"), ignore=shutil.ignore_patterns("*.po", "*.pot", "*.po~"))
 for item in constants.PACKAGE_CONTAIN_ITEMS:
 	if os.path.isdir(item):
 		shutil.copytree(item, os.path.join(package_path, item))
@@ -55,9 +55,9 @@ for item in constants.PACKAGE_CONTAIN_ITEMS:
 		shutil.copyfile(item, os.path.join(package_name, os.path.basename(item)))
 for elem in glob.glob("public\\*"):
 	if os.path.isfile(elem):
-		shutil.copyfile(elem,"dist\\SOC\\%s" % os.path.basename(elem))
+		shutil.copyfile(elem, os.path.join(package_path, os.path.basename(elem)))
 	else:
-		shutil.copytree(elem,"dist\\SOC\\%s" % os.path.basename(elem))
+		shutil.copytree(elem, os.path.join(package_path, os.path.basename(elem)))
 #end copypublic
 
 print("Compressing into package...")
