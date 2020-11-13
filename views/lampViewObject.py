@@ -1,15 +1,8 @@
 import wx
 import listManager
-from views import viewObject
+from views.viewObjectBase import virtualListCtrlBase
 
-class button(wx.Button):
-    def __init__(self, *pArg, **kArg):
-        super().__init__(*pArg, **kArg)
-
-    def AcceptsFocusFromKeyboard(self):
-        return False
-
-class playlist(viewObject.virtualListCtrl):
+class playlist(virtualListCtrlBase.virtualListCtrl):
     def __init__(self, *pArg, **kArg):
         super().__init__(*pArg, **kArg)
         self.pointer = -1
@@ -89,7 +82,7 @@ class playlist(viewObject.virtualListCtrl):
 
     # to do 演算シミュレータを実装
 
-class queue(viewObject.virtualListCtrl):
+class queue(virtualListCtrlBase.virtualListCtrl):
     def __init__(self, *pArg, **kArg):
         super().__init__(*pArg, **kArg)
         self.pointer = -1
