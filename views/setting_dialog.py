@@ -75,7 +75,10 @@ class settingDialog(baseDialog.BaseDialog):
         startupCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("起動"))
         self.volumeSlider, self.volumeLabel = startupCreator.slider(_("規定の音量"), 0, 100,None, globalVars.app.config.getint("volume","default",default=100, min=0, max=100), textLayout=wx.HORIZONTAL)
         self.startupDeviceCombo, startupDeviceLabel = startupCreator.combobox(_("起動時出力先"), self.getValueList(self.deviceDic), textLayout=wx.HORIZONTAL)
-        self.startupList, startupListLabel = startupCreator.inputbox(_("起動時に読み込むプレイリスト"), defaultValue=globalVars.app.config.getstring("player", "startupPlaylist", ""), x=-1)
+        self.startupListLabel = startupCreator.staticText(_("起動時に読み込むプレイリスト"))
+        startupListCreator = ViewCreator.ViewCreator(self.viewMode, startupCreator.GetPanel(), startupCreator.GetSizer(), wx.HORIZONTAL)
+        self.startupList, dummy = startupListCreator.inputbox(_("起動時に読み込むプレイリスト"), defaultValue=globalVars.app.config.getstring("player", "startupPlaylist", ""), x=600, textLayout=None)
+        self.startupListSelectBtn = startupListCreator.button(_("参照"), self.onButton)
 
         # フッター
         footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, creator.GetSizer())
@@ -117,6 +120,14 @@ class settingDialog(baseDialog.BaseDialog):
         selectionStr = self.deviceDic[startupDevice]
         self.startupDeviceCombo.SetStringSelection(selectionStr)
 
+    def onButton(self, evt):
+        if evt.GetEventObject() == self.startupListSelectBtn:
+            fd = wx.FileDialog(None, _("プレイリストファイル選択"), wildcard=_("プレイリストファイル (.m3u8/.m3u)")+"|*.m3u8*;*.m3u")
+            c = fd.ShowModal()
+            if c == wx.ID_CANCEL: return
+            path = fd.GetPath()
+            self.startupList.SetValue(path)
+    
     def getValueList(self, dic):
         ret = []
         for i in dic:

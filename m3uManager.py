@@ -18,7 +18,7 @@ def loadM3u(path=None, playlist=2):
     rtn = [] #ファイルパスリスト
     f = False #ファイル
     if path == None:
-        fd = wx.FileDialog(None, _("プレイリストファイル選択"), wildcard=_("m3uファイル (.m3u)")+"|*.m3u|"+_("m3u8ファイル (.m3u8)")+"|*.m3u8")
+        fd = wx.FileDialog(None, _("プレイリストファイル選択"), wildcard=_("プレイリストファイル (.m3u8/.m3u)")+"|*.m3u8*;*.m3u")
         c = fd.ShowModal()
         if c == wx.ID_CANCEL: return rtn
         path = fd.GetPath()
