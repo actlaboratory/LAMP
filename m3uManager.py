@@ -42,6 +42,7 @@ def loadM3u(path=None, playlist=2):
         globalVars.listInfo.playlistFile = path
         globalVars.m3uHistory.add(path)
         globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U_OPEN"), True)
+        globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U_CLOSE"), True)
     elif playlist == 1: #ADD
         listManager.addItems(rtn, globalVars.app.hMainView.playlistView)
         globalVars.listInfo.playlistFile = path
