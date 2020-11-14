@@ -47,7 +47,6 @@ class settingDialog(baseDialog.BaseDialog):
         if globalVars.app.config.getstring("view", "colormode", "white", ("white", "dark")) == "white":
             self.darkMode.SetValue(False)
         else: self.darkMode.SetValue(True)
-        self.volumeSlider, self.volumeLabel = generalCreator.slider(_("規定の音量"), 0, 100,None, globalVars.app.config.getint("volume","default",default=100, min=0, max=100), textLayout=wx.HORIZONTAL)
         self.fadeOut = generalCreator.checkbox(_("終了時に曲をフェードアウトする"))
         if globalVars.app.config.getboolean("player", "fadeOutOnExit", False):
             self.fadeOut.SetValue(True)
@@ -74,6 +73,7 @@ class settingDialog(baseDialog.BaseDialog):
 
         # 起動
         startupCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("起動"))
+        self.volumeSlider, self.volumeLabel = startupCreator.slider(_("規定の音量"), 0, 100,None, globalVars.app.config.getint("volume","default",default=100, min=0, max=100), textLayout=wx.HORIZONTAL)
         self.startupDeviceCombo, startupDeviceLabel = startupCreator.combobox(_("起動時出力先"), self.getValueList(self.deviceDic), textLayout=wx.HORIZONTAL)
         self.startupList, startupListLabel = startupCreator.inputbox(_("起動時に読み込むプレイリスト"), defaultValue=globalVars.app.config.getstring("player", "startupPlaylist", ""), x=-1)
 
@@ -87,7 +87,6 @@ class settingDialog(baseDialog.BaseDialog):
     def onSaveButton(self, evt):
         if self.darkMode.IsChecked(): globalVars.app.config["view"]["colormode"] = "dark"
         else: globalVars.app.config["view"]["colormode"] = "white"
-        globalVars.app.config["volume"]["default"] = str(int(self.volumeSlider.GetValue()))
         globalVars.app.config["player"]["fadeOutOnExit"] = self.fadeOut.IsChecked()
         globalVars.app.config["player"]["manualSongFeed"] = self.manualFeed.IsChecked()
         globalVars.app.config["player"]["fileInterrupt"] = self.getKey(self.fileInterruptDic, self.fileInterruptCombo.GetStringSelection())
@@ -96,6 +95,7 @@ class settingDialog(baseDialog.BaseDialog):
         globalVars.app.config["notification"]["sound"] = self.notificationSound.IsChecked()
         globalVars.app.config["notification"]["outputDevice"] = self.getKey(self.deviceDic, self.notificationDeviceCombo.GetStringSelection())
         globalVars.app.config["notification"]["ignoreError"] = self.ignoreError.IsChecked()
+        globalVars.app.config["volume"]["default"] = str(int(self.volumeSlider.GetValue()))
         globalVars.app.config["player"]["outputDevice"] = self.getKey(self.deviceDic, self.startupDeviceCombo.GetStringSelection())
         globalVars.app.config["player"]["startupPlaylist"] = self.startupList.GetValue()
         self.wnd.EndModal(wx.ID_OK)
