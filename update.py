@@ -30,7 +30,7 @@ class update(threading.Thread):
 			if not auto:
 				simpleDialog.dialog(_("アップデート"), _("サーバーへの通信がタイムアウトしました。"))
 			return
-		except requests.exceptions.ConnectionError:
+		except requests.exceptions.ConnectionError as e:
 			print(e)
 			if not auto:
 				simpleDialog.dialog(_("アップデート"), _("サーバーへの接続に失敗しました。インターネット接続などをご確認ください"))
