@@ -1,6 +1,17 @@
 # -*- coding: utf-8 -*-
 #Application startup file
 
+import sys
+import traceback
+def exchandler(type, exc, tb):
+	msg=traceback.format_exception(type, exc, tb)
+	print("".join(msg))
+	f=open("errorLog.txt", "a")
+	f.writelines(msg)
+	f.close()
+
+sys.excepthook=exchandler
+
 import multiprocessing
 import win32timezone#ダミー
 def _(string): pass#dummy
@@ -11,7 +22,6 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 #Python3.8対応
 #dllやモジュールをカレントディレクトリから読み込むように設定
-import sys
 
 multiprocessing.freeze_support() #これがないとマルチプロセスでおかしなことになる
 
