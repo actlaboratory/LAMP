@@ -20,6 +20,7 @@ KEYMAP_FILE_NAME="keymap.ini"
 
 #アプリケーション基本情報
 APP_NAME="LAMP"
+APP_LONGNAME="Light And Accessible Music Player"
 APP_VERSION="0.0.1"
 APP_COPYRIGHT_YEAR="20XX"
 APP_DEVELOPERS="Ananimous"
