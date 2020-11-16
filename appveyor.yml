@@ -20,10 +20,6 @@ environment:
 
 install:
   # We need wheel installed to build wheels
-  - cmd: git tag -d LAMP-latestcommit
-  - cmd: git push -d https://actlab-auto:%gitHubPassword%@github.com/actlaboratory/LAMP.git LAMP-latestcommit
-  - cmd: git tag LAMP-latestcommit
-  - cmd: git push https://actlab-auto:%gitHubPassword%@github.com/actlaboratory/LAMP.git LAMP-latestcommit
   - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
 
 build: off
@@ -44,6 +40,13 @@ after_test:
   # 64-bit Python 3.3/3.4. And you need to use %PYTHON% to get the correct
   # interpreter
   - "%PYTHON%\\python.exe tools\\build.py --appveyor"
+  - cmd: curl "https://actlab.org/git-release.php?repo_name=%APPVEYOR_REPO_NAME%&tag_name=LAMP-latestcommit&password=%SCRIPT_PASSWORD%"
+  - cmd: git tag -d LAMP-latestcommit
+  - cmd: git push -d https://actlab-auto:%gitHubPassword%@github.com/actlaboratory/LAMP.git LAMP-latestcommit
+  - cmd: git tag LAMP-latestcommit
+  - cmd: git push https://actlab-auto:%gitHubPassword%@github.com/actlaboratory/LAMP.git LAMP-latestcommit
+
+
 
 artifacts:
   - path: LAMP-*.zip
