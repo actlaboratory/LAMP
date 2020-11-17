@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 #Application startup file
 
+
+import simpleDialog, sys, os
+simpleDialog.dialog("debug", str(os.getcwd()) + "\n" + "\n".join(sys.argv))
 import sys
 import traceback
 def exchandler(type, exc, tb):
@@ -17,7 +20,7 @@ import win32timezone#ダミー
 def _(string): pass#dummy
 
 #dllを相対パスで指定した時のため、カレントディレクトリを変更
-import os
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 #Python3.8対応
