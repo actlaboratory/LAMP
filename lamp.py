@@ -3,8 +3,8 @@
 
 
 #dllを相対パスで指定した時のため、カレントディレクトリを変更
-import os
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+import os, sys
+os.chdir(os.path.dirname(sys.executable))
 #Python3.8対応
 #dllやモジュールをカレントディレクトリから読み込むように設定
 import sys
