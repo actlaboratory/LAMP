@@ -2,9 +2,20 @@
 #Application startup file
 
 
-import simpleDialog, sys, os
-simpleDialog.dialog("debug", str(os.getcwd()) + "\n" + "\n".join(sys.argv))
+#dllを相対パスで指定した時のため、カレントディレクトリを変更
+import os
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+#Python3.8対応
+#dllやモジュールをカレントディレクトリから読み込むように設定
 import sys
+if sys.version_info.major>=3 and sys.version_info.minor>=8:
+	os.add_dll_directory(os.path.dirname(os.path.abspath(__file__)))
+	sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+import simpleDialog
+simpleDialog.dialog("debug", str(os.getcwd()) + "\n" + "\n".join(sys.argv))
+
+#エラーの出力
 import traceback
 def exchandler(type, exc, tb):
 	msg=traceback.format_exception(type, exc, tb)
