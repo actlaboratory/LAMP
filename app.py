@@ -67,7 +67,7 @@ class Main(AppBase.MainBase):
 		if self.config.getboolean(self.hMainView.identifier,"maximized",False):
 			self.hMainView.hFrame.Maximize()
 		m3uloaded = False #条件に基づいてファイルの読み込み
-		if len(sys.argv) > 1 and os.path.isfile(sys.argv[1]):
+		if len(sys.argv) == 2 and os.path.isfile(sys.argv[1]):
 			if os.path.splitext(sys.argv[1])[1].lower() in globalVars.fileExpansions:
 				globalVars.eventProcess.forcePlay(sys.argv[1])
 			elif os.path.splitext(sys.argv[1])[1] == ".m3u" or os.path.splitext(sys.argv[1])[1] == ".m3u8":
