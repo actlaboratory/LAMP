@@ -29,9 +29,6 @@ if sys.version_info.major>=3 and sys.version_info.minor>=8:
 	sys.path.append(os.getcwd())
 
 
-import simpleDialog
-simpleDialog.dialog("debug", str(os.getcwd()) + "\n" + "\n".join(sys.argv))
-
 import app as application
 import constants
 import globalVars
