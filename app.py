@@ -38,6 +38,7 @@ class Main(AppBase.MainBase):
 
 
 	def initialize(self):
+		self.log.debug(str(sys.argv))
 		# 多重起動処理8
 		try: self.mutex = win32event.CreateMutex(None, 1, constants.PIPE_NAME)
 		except: pass
