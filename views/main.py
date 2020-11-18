@@ -26,6 +26,7 @@ from soundPlayer.constants import *
 
 import view_manager
 from views import mkDialog
+from views import fileAssocDialog
 
 from logging import getLogger
 from simpleDialog import dialog
@@ -164,6 +165,7 @@ class Menu(BaseMenu):
 		# 設定メニューの中身
 		self.hDeviceChangeInSettingsMenu = wx.Menu()
 		self.hSettingsMenu.AppendSubMenu(self.hDeviceChangeInSettingsMenu, _("再生出力先の変更"))
+		self.RegisterMenuCommand(self.hSettingsMenu, "FILE_ASSOCIATE", _("拡張子関連付け設定"))
 		self.RegisterMenuCommand(self.hSettingsMenu, "ENVIRONMENT", _("環境設定"))
 		#ヘルプメニューの中身
 		self.RegisterMenuCommand(self.hHelpMenu,"CHECK_UPDATE",_("更新の確認"))
@@ -301,6 +303,8 @@ class Events(BaseEvents):
 			else: globalVars.play.setDevice(selected - constants.DEVICE_LIST_MENU)
 		elif selected >= constants.PLAYLIST_HISTORY and selected < constants.PLAYLIST_HISTORY+ 20:
 			m3uManager.loadM3u(globalVars.m3uHistory.getList()[selected - constants.PLAYLIST_HISTORY])
+		elif selected==menuItemsStore.getRef("FILE_ASSOCIATE"):
+			fileAssocDialog.assocDialog()
 		elif selected==menuItemsStore.getRef("ENVIRONMENT"):
 			d = setting_dialog.settingDialog("environment_dialog")
 			d.Initialize()

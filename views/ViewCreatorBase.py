@@ -142,7 +142,7 @@ class ViewCreatorBase():
 		return hButton
 
 	def okbutton(self,text, event=None, sizerFlag=wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT | wx.ALL,proportion=1,margin=5):
-		hButton=winObject["button"](self.parent, wx.ID_OK,label=text, name=text,style=wx.BORDER_RAISED)
+		hButton=self.winObject["button"](self.parent, wx.ID_OK,label=text, name=text,style=wx.BORDER_RAISED)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self._setFace(hButton,mode=BUTTON_COLOUR)
 		Add(self.sizer,hButton,proportion,sizerFlag,margin)
