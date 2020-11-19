@@ -1,17 +1,17 @@
 import wx, itertools, sys, winreg, logging
 import globalVars, shellapi, constants
 
-def setAssoc(extension, associate=None, content=None):
+def setAssoc(extension, associate=None, mimetype=None):
 	if not hasattr(sys,"frozen"): return False
 	if extension[0] != ".": extension = "." + extension
 	if associate == None: associate = "actlab.%s" % constants.APP_NAME
-	return _registerFileAssociation(extension, sys.executable, associate, content)
+	return _registerFileAssociation(extension, sys.executable, associate, mimetype)
 
 def unsetAssoc(associate=None):
 	if associate == None: associate = "actlab.%s" % constants.APP_NAME
 	unregisterAddonFileAssociation(associate)
 
-def _registerFileAssociation(extension, exePath, associate, content):
+def _registerFileAssociation(extension, exePath, associate, mimetype):
 	try:
 		with winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, "SOFTWARE\\Classes\\%s" % associate, 0, winreg.KEY_WRITE) as k:
 			#winreg.SetValueEx(k, None, 0, winreg.REG_SZ, "")
