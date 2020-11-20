@@ -5,6 +5,7 @@
 
 from views import lampViewObject
 from views import setting_dialog
+from views import notificationText
 import logging
 import os
 import sys
@@ -98,6 +99,7 @@ class MainView(BaseView):
 		self.hFrame.Bind(wx.EVT_TIMER, self.events.timerEvent, self.timer)
 
 		self.hFrame.Layout()
+		self.notification = notificationText.notification(self.hPanel)
 
 class Menu(BaseMenu):
 	def __init__(self, identifier, event):

@@ -253,6 +253,7 @@ class eventProcessor():
         strVal = settings.getSkipInterval()[1]
         globalVars.app.hMainView.menu.hOperationMenu.SetLabel(menuItemsStore.getRef("SKIP"), strVal+" "+_("進む"))
         globalVars.app.hMainView.menu.hOperationMenu.SetLabel(menuItemsStore.getRef("REVERSE_SKIP"), strVal+" "+_("戻る"))
+        globalVars.app.hMainView.notification.show(strVal + _("スキップ"), 2)
         globalVars.app.say(strVal)
 
     #スキップ（秒, 方向=進む)
