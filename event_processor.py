@@ -137,6 +137,7 @@ class eventProcessor():
 
     # ファイルの新規再生
     def play(self, listPorQ=constants.PLAYLIST):
+        if not globalVars.play.isDeviceOk(): return False #デバイス異常時は処理を中止
         if globalVars.play.getStatus() == PLAYER_STATUS_DEVICEERROR:
             return False
         t = listManager.getTuple(listPorQ, True)
@@ -160,6 +161,7 @@ class eventProcessor():
         return ret
 
     def forcePlay(self, source):
+        if not globalVars.play.isDeviceOk(): return False #デバイス異常時は処理を中止
         if globalVars.play.setSource(source):
             if globalVars.play.play():
                 ret = True
@@ -271,6 +273,7 @@ class eventProcessor():
             globalVars.play.setPosition(0)
 
     def previousFile(self):
+        if not globalVars.play.isDeviceOk(): return False
         if self.shuffleCtrl == None:
             ret = listManager.previous(self.playingList)
         else:
@@ -287,7 +290,9 @@ class eventProcessor():
 
     def playButtonControl(self):
         # 再生・一時停止を実行
-        if globalVars.play.getStatus() == PLAYER_STATUS_PLAYING:
+        s = globalVars.play.getStatus()
+        if s == PLAYER_STATUS_DEVICEERROR: return
+        if s == PLAYER_STATUS_PLAYING:
             self.pause()
         elif globalVars.play.getStatus() == PLAYER_STATUS_PAUSED:
             self.pause(False)
@@ -299,6 +304,8 @@ class eventProcessor():
             else: globalVars.app.hMainView.playPauseBtn.SetLabel(_("再生"))
 
     def nextFile(self):
+        if not globalVars.play.isDeviceOk():
+            return False
         if self.shuffleCtrl == None:
             ret = listManager.next(self.playingList)
         else:
@@ -365,6 +372,7 @@ class eventProcessor():
     
     # リストビューで選択されたアイテムの処理
     def listSelection(self, evtObj):
+        if not globalVars.play.isDeviceOk(): return False #デバイス異常時は処理を中止
         if evtObj == globalVars.app.hMainView.playlistView:
             lst = constants.PLAYLIST
         elif evtObj == globalVars.app.hMainView.queueView:
