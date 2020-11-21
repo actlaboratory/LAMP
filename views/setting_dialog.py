@@ -31,6 +31,8 @@ class settingDialog(baseDialog.BaseDialog):
         for i in range(len(dl)):
             if i == 0: self.deviceDic["default"] = _("規定の再生デバイス")
             elif dl[i] != None: self.deviceDic[dl[i]] = dl[i]
+        self.notificationDeviceDic = {"same": _("音楽再生の出力先と同じ")}
+        self.notificationDeviceDic.update(self.deviceDic)
         self.InstallControls()
         return True
 
@@ -65,7 +67,7 @@ class settingDialog(baseDialog.BaseDialog):
         if globalVars.app.config.getboolean("notification", "sound", True):
             self.notificationSound.SetValue(True)
         else: self.notificationSound.SetValue(False)
-        self.notificationDeviceCombo, notificationDeviceLabel = notificationCreator.combobox(_("効果音出力先"), self.getValueList(self.deviceDic), textLayout=wx.HORIZONTAL)
+        self.notificationDeviceCombo, notificationDeviceLabel = notificationCreator.combobox(_("効果音出力先"), self.getValueList(self.notificationDeviceDic), textLayout=wx.HORIZONTAL)
         self.ignoreError = notificationCreator.checkbox(_("エラーを通知せず無視する"))
         if globalVars.app.config.getboolean("notification", "ignoreError", True):
             self.ignoreError.SetValue(True)
@@ -96,7 +98,7 @@ class settingDialog(baseDialog.BaseDialog):
         globalVars.app.config["player"]["playlistInterrupt"] = self.getKey(self.playlistInterruptDic, self.playlistInterruptCombo.GetStringSelection())
         globalVars.app.config["speech"]["reader"] = self.getKey(self.readerDic, self.readerCombo.GetStringSelection())
         globalVars.app.config["notification"]["sound"] = self.notificationSound.IsChecked()
-        globalVars.app.config["notification"]["outputDevice"] = self.getKey(self.deviceDic, self.notificationDeviceCombo.GetStringSelection())
+        globalVars.app.config["notification"]["outputDevice"] = self.getKey(self.notificationDeviceDic, self.notificationDeviceCombo.GetStringSelection())
         globalVars.app.config["notification"]["ignoreError"] = self.ignoreError.IsChecked()
         globalVars.app.config["volume"]["default"] = str(int(self.volumeSlider.GetValue()))
         globalVars.app.config["player"]["outputDevice"] = self.getKey(self.deviceDic, self.startupDeviceCombo.GetStringSelection())
@@ -113,8 +115,8 @@ class settingDialog(baseDialog.BaseDialog):
         reader = globalVars.app.config["speech"]["reader"]
         selectionStr = self.readerDic[reader]
         self.readerCombo.SetStringSelection(selectionStr)
-        notificationDevice = globalVars.app.config.getstring("notification", "outputDevice", "default", self.getKeyList(self.deviceDic))
-        selectionStr = self.deviceDic[notificationDevice]
+        notificationDevice = globalVars.app.config.getstring("notification", "outputDevice", "default", self.getKeyList(self.notificationDeviceDic))
+        selectionStr = self.notificationDeviceDic[notificationDevice]
         self.notificationDeviceCombo.SetStringSelection(selectionStr)
         startupDevice = globalVars.app.config.getstring("player", "outputDevice", "default", self.getKeyList(self.deviceDic))
         selectionStr = self.deviceDic[startupDevice]
