@@ -22,8 +22,11 @@ KEYMAP_FILE_NAME="keymap.ini"
 APP_NAME="LAMP"
 APP_FULL_NAME = "Light And Accessible Music Player"
 APP_VERSION="0.0.1"
-APP_COPYRIGHT_YEAR="20XX"
-APP_DEVELOPERS="Ananimous"
+APP_COPYRIGHT_YEAR="2020"
+APP_LICENSE="Apache License 2.0"
+APP_DEVELOPERS="ACT Laboratory"
+APP_DEVELOPERS_URL="https://actlab.org/"
+APP_DETAILS_URL="https://actlab.org/software/LAMP"
 
 #フォントの設定可能サイズ範囲
 FONT_MIN_SIZE=5

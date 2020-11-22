@@ -6,6 +6,7 @@
 from views import lampViewObject
 from views import setting_dialog
 from views import notificationText
+from views import versionDialog
 import logging
 import os
 import sys
@@ -172,6 +173,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hSettingsMenu, "ENVIRONMENT", _("環境設定"))
 		#ヘルプメニューの中身
 		self.RegisterMenuCommand(self.hHelpMenu,"CHECK_UPDATE",_("更新の確認"))
+		self.RegisterMenuCommand(self.hHelpMenu,"VERSION_INFO",_("バージョン情報"))
 		self.RegisterMenuCommand(self.hHelpMenu,"EXAMPLE",_("テストダイアログを閲覧"))
 
 		#メニューバーの生成
@@ -316,6 +318,8 @@ class Events(BaseEvents):
 			d.Show()
 		elif selected==menuItemsStore.getRef("CHECK_UPDATE"):
 			globalVars.update.update()
+		elif selected==menuItemsStore.getRef("VERSION_INFO"):
+			versionDialog.versionDialog()
 		elif selected==menuItemsStore.getRef("EXAMPLE"):
 			d = mkDialog.Dialog("testDialog")
 			d.Initialize("テスト", "これはテストです。", ("テ", "ス", "ト"))

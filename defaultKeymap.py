@@ -42,8 +42,8 @@ defaultKeymap["mainView"]={
 }
 
 defaultKeymap["playlist"]={
-	"POPUP_ADD_QUEUE_HEAD": "ctrl+shift+enter",
-	"POPUP_ADD_QUEUE": "shift+enter",
+	"POPUP_ADD_QUEUE_HEAD": "ctrl+shift+return",
+	"POPUP_ADD_QUEUE": "shift+return",
 	"POPUP_COPY": "ctrl+C",
 	"POPUP_PASTE": "ctrl+V",
 	"POPUP_DELETE": "delete",
@@ -51,7 +51,7 @@ defaultKeymap["playlist"]={
 }
 
 defaultKeymap["queue"]={
-	"POPUP_ADD_PLAYLIST": "shift+enter",
+	"POPUP_ADD_PLAYLIST": "shift+return",
 	"POPUP_COPY": "ctrl+C",
 	"POPUP_PASTE": "ctrl+v",
 	"POPUP_DELETE": "delete",
