@@ -164,6 +164,7 @@ class Menu(BaseMenu):
 		self.RegisterRadioMenuCommand(self.hRepeatLoopInOperationMenu, "RL_REPEAT", _("リピート"))
 		self.RegisterRadioMenuCommand(self.hRepeatLoopInOperationMenu, "RL_LOOP", _("ループ"))
 		self.RegisterCheckMenuCommand(self.hOperationMenu, "SHUFFLE", _("シャッフル再生"))
+		self.RegisterCheckMenuCommand(self.hOperationMenu, "MANUAL_SONG_FEED", _("手動で曲送り"))
 		# 設定メニューの中身
 		self.hDeviceChangeInSettingsMenu = wx.Menu()
 		self.hSettingsMenu.AppendSubMenu(self.hDeviceChangeInSettingsMenu, _("再生出力先の変更"))
@@ -300,6 +301,8 @@ class Events(BaseEvents):
 			globalVars.eventProcess.repeatLoopCtrl(2)
 		elif selected==menuItemsStore.getRef("SHUFFLE"):
 			globalVars.eventProcess.shuffleSw()
+		elif selected==menuItemsStore.getRef("MANUAL_SONG_FEED"):
+			globalVars.eventProcess.setSongFeed()
 		elif selected >= constants.DEVICE_LIST_MENU and selected < constants.DEVICE_LIST_MENU + 500:
 			if selected == constants.DEVICE_LIST_MENU: globalVars.play.setDevice(PLAYER_DEFAULT_SPEAKER)
 			else: globalVars.play.setDevice(selected - constants.DEVICE_LIST_MENU)
@@ -319,6 +322,8 @@ class Events(BaseEvents):
 			r = d.Show()
 
 	def OnMenuOpen(self, event):
+		menuObject = event.GetEventObject()
+		
 		if event.GetMenu()==self.parent.menu.hDeviceChangeInSettingsMenu:
 			menu = self.parent.menu.hDeviceChangeInSettingsMenu
 			# 内容クリア
@@ -335,7 +340,7 @@ class Events(BaseEvents):
 			deviceNow = globalVars.play.getConfig(PLAYER_CONFIG_DEVICE)
 			if deviceNow == PLAYER_DEFAULT_SPEAKER: menu.Check(constants.DEVICE_LIST_MENU, True)
 			elif deviceNow > 0 and deviceNow < len(deviceList) and deviceList[deviceNow] != None: menu.Check(constants.DEVICE_LIST_MENU + deviceNow, True)
-		elif event.GetEventObject() == self.parent.menu.hPlaylistMenu:
+		elif menuObject == self.parent.menu.hPlaylistMenu:
 			menu = self.parent.menu.hPlaylistMenu
 			# 履歴部分を削除
 			for i in range(menu.GetMenuItemCount() - 1):
@@ -345,6 +350,8 @@ class Events(BaseEvents):
 			for path in globalVars.m3uHistory.getList():
 				menu.Insert(1, constants.PLAYLIST_HISTORY + index, path)
 				index += 1
+		elif menuObject == self.parent.menu.hOperationMenu:
+			self.parent.menu.hOperationMenu.Check(menuItemsStore.getRef("MANUAL_SONG_FEED"), globalVars.app.config.getboolean("player", "manualSongFeed", False))
 	
 	def onButtonClick(self, event):
 			if event.GetEventObject() == globalVars.app.hMainView.previousBtn:

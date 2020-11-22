@@ -381,3 +381,14 @@ class eventProcessor():
         if evtObj.GetSelectedItemCount() == 1:
             evtObj.setPointer(evtObj.GetFirstSelected())
             p = self.play(lst)
+
+    def setSongFeed(self):
+        if globalVars.app.config.getboolean("player", "manualSongFeed", False):
+            globalVars.app.config["player"]["manualSongFeed"] = False
+            globalVars.app.hMainView.notification.show(_("曲送りは自動"), 2)
+            globalVars.app.say(_("曲送りは自動"))
+        else:
+            globalVars.app.config["player"]["manualSongFeed"] = True
+            globalVars.app.hMainView.notification.show(_("曲送りは手動"), 2)
+            globalVars.app.say(_("曲送りは手動"))
+        
