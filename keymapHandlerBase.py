@@ -402,7 +402,7 @@ class KeymapHandlerBase():
 		for e in key.split("/"):
 			entry=makeEntry(ref,e,self.filter,self.log)
 			if entry==False:
-				self.addError(identifier,ref,key)
+				self.addError(identifier,ref,key,"make entry failed")
 				continue
 
 			#キーの重複確認
@@ -416,7 +416,7 @@ class KeymapHandlerBase():
 						self.replaceOriginalRef(checkList,identifier)
 						entry=None
 					else:
-						self.addError(identifier,ref,key)
+						self.addError(identifier,ref,key,"confrict")
 						continue
 
 			#GetKeyStringに備えてself.mapに追加
@@ -433,8 +433,9 @@ class KeymapHandlerBase():
 				self.entries[identifier].append(entry)
 		return
 
-	def addError(self,identifier,ref,key):
+	def addError(self,identifier,ref,key,reason=""):
 		"""エラー発生時、情報を記録します。"""
+		self.log.warning("Cannot add %s=%s in %s reason=%s" % (ref,key,identifier,reason))
 		try:
 			self.errors[identifier][ref]=key
 		except KeyError:
@@ -518,10 +519,12 @@ def makeEntry(ref,key,filter,log):
 
 	#修飾キーのみのもの、修飾キーでないキーが複数含まれるものはダメ
 	if not len(codestr)-flagCount==1:
+		log.warning("%s is invalid pattern." % key)
 		return False
 
 	codestr=codestr[len(codestr)-1]
 	if not codestr in str2key:			#存在しないキーの指定はエラー
+		log.warning("keyname %s is wrong" % codestr)
 		return False
 
 	#フィルタの確認
