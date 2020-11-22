@@ -8,6 +8,7 @@ import wx
 
 import constants
 import defaultKeymap
+import errorCodes
 import globalVars
 import keymap
 import menuItemsStore
@@ -39,6 +40,7 @@ class BaseView(object):
 	def MakePanel(self,space=0):
 		self.hPanel=views.ViewCreator.makePanel(self.hFrame)
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.hPanel,None, wx.VERTICAL,style=wx.ALL,space=space)
+		self.hFrame.Layout()
 
 	def Clear(self):
 		self.hFrame.DestroyChildren()
@@ -82,12 +84,16 @@ class BaseView(object):
 		self.hFrame.SetAcceleratorTable(t)
 
 class BaseMenu(object):
-	def __init__(self,identifier):
+	def __init__(self,identifier,*,keyFilter=None):
 		"""メニューバー・acceleratorTable登録準備"""
 		self.hMenuBar=wx.MenuBar()
-		self.keymap=keymap.KeymapHandler(defaultKeymap.defaultKeymap,keymap.KeyFilter().SetDefault(False,True))
+		if keyFilter==None:
+			keyFilter=keymap.KeyFilter().SetDefault(False,True)
+		self.keymap=keymap.KeymapHandler(None,keyFilter)
+		if self.keymap.addFile(constants.KEYMAP_FILE_NAME)!=errorCodes.OK:
+			self.keymap.addDict(defaultKeymap.defaultKeymap)
+			self.keymap.SaveFile(constants.KEYMAP_FILE_NAME)
 		self.keymap_identifier=identifier
-		self.keymap.addFile(constants.KEYMAP_FILE_NAME)
 		errors=self.keymap.GetError(identifier)
 		if errors:
 			tmp=_(constants.KEYMAP_FILE_NAME+"で設定されたショートカットキーが正しくありません。キーの重複、存在しないキー名の指定、使用できないキーパターンの指定などが考えられます。以下のキーの設定内容をご確認ください。\n\n")
@@ -95,9 +101,6 @@ class BaseMenu(object):
 				tmp+=v+"\n"
 			dialog(_("エラー"),tmp)
 		self.acceleratorTable=self.keymap.GetTable(self.keymap_identifier)
-
-		#これ以降はユーザ設定の追加なのでフィルタを変更
-		self.keymap.filter=keymap.KeyFilter().SetDefault(False,False)
 
 	def RegisterMenuCommand(self,menu_handle,ref_id,title="",subMenu=None,index=-1):
 		if type(ref_id)==dict:
