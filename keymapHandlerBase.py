@@ -319,11 +319,12 @@ class KeymapHandlerBase():
 		self.entries={}		#生成したAcceleratorEntry
 		self.map={}			#ref番号→ショートカットキーに変換
 		self.refMap={}		#キーの重複によりこのインスタンスで処理する必要のあるメニューと、そのとび先の本来のref
+		self.permitConfrict=permitConfrict
+		self.filter=filter	#指定の妥当性をチェックするフィルタ
 
 		if dict:
 			self.addDict(dict)
-		self.permitConfrict=permitConfrict
-		self.filter=filter	#指定の妥当性をチェックするフィルタ
+
 
 	def addDict(self,dict):
 		read=configparser.ConfigParser()
