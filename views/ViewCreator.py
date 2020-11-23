@@ -20,8 +20,21 @@ MODE_DARK=1
 
 class ViewCreator(ViewCreatorBase.ViewCreatorBase):
 	def __init__(self, *pArg, **kArg):
+		"""
+		ViewCreator
+
+		:param str mode: Set view mode.
+		:param wx.Window parent: Set parent window.
+		:param wx.Sizer parentSizer: Set parent sizer. Default is None.
+		:param flag orient: Set Set widget layout. Default is wx.HORIZONTAL.
+		:param int space: Set gap between items. Default is 0.
+		:param str/int label: Set item label(str) or grid sizer's column count(int).
+		:param flags style: Set sizer flags.
+		:param int proportion: Set proportion.
+		:param int margin: Set viewCreator's margin.
+		"""
+		
 		# wxオブジェクトの入れ替えが必要ならば記述
-		# 136
 		# [object] = newObject
 
 		super().__init__(*pArg, **kArg)
