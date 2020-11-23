@@ -51,12 +51,12 @@ class Main(AppBase.MainBase):
 			lampPipe.startPipeServer()
 		
 		# プロキシの設定を適用
-		if self.config.getboolean("network", "auto_proxy"):
-			print("TRUE")
-			self.proxyEnviron = proxyUtil.virtualProxyEnviron()
-			self.proxyEnviron.set_environ()
-		else:
-			self.proxyEnviron = None
+		self.proxyEnviron = proxyUtil.virtualProxyEnviron()
+		if self.config.getboolean("network", "manual_proxy", False):
+			sv = self.config.getstring("network", "proxy_server", "")
+			pr = self.config.getint("network", "proxy_port", 8080, 0, 65535)
+			self.proxyEnviron.set_environ(sv, pr)
+		else: self.proxyEnviron.set_environ()
 
 		self.SetGlobalVars()
 		# update関係を準備

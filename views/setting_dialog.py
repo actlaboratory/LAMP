@@ -82,6 +82,17 @@ class settingDialog(baseDialog.BaseDialog):
         self.startupList, dummy = startupListCreator.inputbox(_("起動時に読み込むプレイリスト"), defaultValue=globalVars.app.config.getstring("player", "startupPlaylist", ""), x=600, textLayout=None)
         self.startupListSelectBtn = startupListCreator.button(_("参照"), self.onButton)
 
+        # ネットワーク
+        netCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("ネットワーク"))
+        self.manualProxy = netCreator.checkbox(_("手動でプロキシ設定を行う"), self.onCheckBox)
+        if globalVars.app.config.getboolean("network", "manual_proxy", False):
+            self.manualProxy.SetValue(True)
+        else: self.manualProxy.SetValue(False)
+        self.proxyServer, self.proxyServerLabel = netCreator.inputbox(_("サーバ名"), defaultValue=globalVars.app.config.getstring("network", "proxy_server", ""), x=400, textLayout=wx.HORIZONTAL)
+        self.proxyPort, self.proxyPortLabel = netCreator.spinCtrl(_("ポート"), 0, 65535, None, globalVars.app.config.getint("network", "proxy_port", 8080, 0, 65535), textLayout=wx.HORIZONTAL)
+
+        self.onCheckBox()
+
         # フッター
         footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, creator.GetSizer())
         self.saveBtn = footerCreator.button(_("保存"), self.onSaveButton)
@@ -103,6 +114,16 @@ class settingDialog(baseDialog.BaseDialog):
         globalVars.app.config["volume"]["default"] = str(int(self.volumeSlider.GetValue()))
         globalVars.app.config["player"]["outputDevice"] = self.getKey(self.deviceDic, self.startupDeviceCombo.GetStringSelection())
         globalVars.app.config["player"]["startupPlaylist"] = self.startupList.GetValue()
+        globalVars.app.config["network"]["manual_proxy"] = self.manualProxy.IsChecked()
+        globalVars.app.config["network"]["proxy_server"] = self.proxyServer.GetValue()
+        globalVars.app.config["network"]["proxy_port"] = self.proxyPort.GetValue()
+
+        # プロキシ即時反映
+        if self.manualProxy.IsChecked():
+            globalVars.app.proxyEnviron.set_environ(self.proxyServer.GetValue(), self.proxyPort.GetValue())
+        else: globalVars.app.proxyEnviron.set_environ()
+        
+
         self.wnd.EndModal(wx.ID_OK)
 
     def comboloader(self):
@@ -121,6 +142,21 @@ class settingDialog(baseDialog.BaseDialog):
         startupDevice = globalVars.app.config.getstring("player", "outputDevice", "default", self.getKeyList(self.deviceDic))
         selectionStr = self.deviceDic[startupDevice]
         self.startupDeviceCombo.SetStringSelection(selectionStr)
+
+    def onCheckBox(self, evt=None):
+        if evt == None: evtObject = None
+        else: evtObject = evt.GetEventObject()
+        if evtObject == self.manualProxy or evtObject == None:
+            if self.manualProxy.IsChecked():
+                self.proxyServer.Enable(True)
+                self.proxyServerLabel.Enable(True)
+                self.proxyPort.Enable(True)
+                self.proxyPortLabel.Enable(True)
+            else:
+                self.proxyServer.Enable(False)
+                self.proxyServerLabel.Enable(False)
+                self.proxyPort.Enable(False)
+                self.proxyPortLabel.Enable(False)
 
     def onButton(self, evt):
         if evt.GetEventObject() == self.startupListSelectBtn:
