@@ -84,6 +84,10 @@ class settingDialog(baseDialog.BaseDialog):
 
         # ネットワーク
         netCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("ネットワーク"))
+        self.updateCheck = netCreator.checkbox(_("起動時に更新を確認"))
+        if globalVars.app.config.getboolean("general", "update", True):
+            self.updateCheck.SetValue(True)
+        else: self.updateCheck.SetValue(False)
         self.manualProxy = netCreator.checkbox(_("手動でプロキシ設定を行う"), self.onCheckBox)
         if globalVars.app.config.getboolean("network", "manual_proxy", False):
             self.manualProxy.SetValue(True)
@@ -114,6 +118,7 @@ class settingDialog(baseDialog.BaseDialog):
         globalVars.app.config["volume"]["default"] = str(int(self.volumeSlider.GetValue()))
         globalVars.app.config["player"]["outputDevice"] = self.getKey(self.deviceDic, self.startupDeviceCombo.GetStringSelection())
         globalVars.app.config["player"]["startupPlaylist"] = self.startupList.GetValue()
+        globalVars.app.config["general"]["update"] = self.updateCheck.IsChecked()
         globalVars.app.config["network"]["manual_proxy"] = self.manualProxy.IsChecked()
         globalVars.app.config["network"]["proxy_server"] = self.proxyServer.GetValue()
         globalVars.app.config["network"]["proxy_port"] = self.proxyPort.GetValue()
