@@ -62,8 +62,9 @@ class MainView(BaseView):
 		self.stopBtn = self.horizontalCreator.button(_("停止"), self.events.onButtonClick, enableTabFocus=False)
 		self.repeatLoopBtn = self.horizontalCreator.button(_("ﾘﾋﾟｰﾄ/ﾙｰﾌﾟ"), self.events.onButtonClick, enableTabFocus=False)
 		self.shuffleBtn = self.horizontalCreator.button(_("ｼｬｯﾌﾙ"), self.events.onButtonClick, enableTabFocus=False)
-		self.volumeSlider, dummy = self.horizontalCreator.slider(_("音量"), 0, 100, self.events.onSlider, 
-			globalVars.app.config.getint("volume","default",default=100, min=0, max=100), textLayout=None)
+		self.volumeSlider, dummy = self.horizontalCreator.clearSlider(_("音量"), 0, 100, self.events.onSlider,
+			globalVars.app.config.getint("volume","default",default=100, min=0, max=100), x=150, textLayout=None)
+		self.volumeSlider.SetThumbLength(20)
 		self.muteBtn = self.horizontalCreator.button(_("ﾐｭｰﾄ"), self.events.onButtonClick, enableTabFocus=False)
 		#self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
 
@@ -76,7 +77,9 @@ class MainView(BaseView):
 
 		#トラックバーエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT,margin=20)
-		self.trackBar, dummy = self.horizontalCreator.slider(_("トラック"), x=1000, sizerFlag=wx.LEFT | wx.RIGHT, proportion=1, margin=10)
+		self.trackBar, dummy = self.horizontalCreator.clearSlider(_("トラック"), x=1000, sizerFlag=wx.LEFT | wx.RIGHT, proportion=1, margin=10)
+		self.trackBar.SetThumbLength(40)
+
 		self.trackBar.Bind(wx.EVT_SCROLL, self.events.onSlider)
 		self.nowTime = self.horizontalCreator.staticText("0:00:00 / 0:00:00", x=(350))
 
