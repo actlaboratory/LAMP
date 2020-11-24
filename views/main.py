@@ -177,7 +177,6 @@ class Menu(BaseMenu):
 		#ヘルプメニューの中身
 		self.RegisterMenuCommand(self.hHelpMenu,"CHECK_UPDATE",_("更新の確認"))
 		self.RegisterMenuCommand(self.hHelpMenu,"VERSION_INFO",_("バージョン情報"))
-		self.RegisterMenuCommand(self.hHelpMenu,"EXAMPLE",_("テストダイアログを閲覧"))
 
 		#メニューバーの生成
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル") + " (&F)")
@@ -323,10 +322,6 @@ class Events(BaseEvents):
 			globalVars.update.update()
 		elif selected==menuItemsStore.getRef("VERSION_INFO"):
 			versionDialog.versionDialog()
-		elif selected==menuItemsStore.getRef("EXAMPLE"):
-			d = mkDialog.Dialog("testDialog")
-			d.Initialize("テスト", "これはテストです。", ("テ", "ス", "ト"))
-			r = d.Show()
 
 	def OnMenuOpen(self, event):
 		menuObject = event.GetEventObject()
