@@ -46,7 +46,7 @@ class clearSlider(views.viewObjectBase.sliderBase.slider):
 		dc.DrawRectangle(0, 0, dc.GetSize().GetWidth(), dc.GetSize().GetHeight())
 
 		# 枠描画のため背景色で塗る
-		dc.SetPen(wx.Pen(wx.Colour(0, 0, 255), self.BORDER_WIDTH, wx.PENSTYLE_SOLID))
+		dc.SetPen(wx.Pen(wx.Colour(0, 102, 204), self.BORDER_WIDTH, wx.PENSTYLE_SOLID))
 		dc.DrawRectangle(self.getLeftMargin() + self.ELLIPSE_WIDTH / 2, 0, dc.GetSize().GetWidth() - self.getLeftMargin() - self.getRightMargin() - self.ELLIPSE_WIDTH, dc.GetSize().GetHeight())
 
 		# 現在のパーセンテージまで塗る
