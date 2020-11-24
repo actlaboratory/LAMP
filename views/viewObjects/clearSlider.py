@@ -50,13 +50,13 @@ class clearSlider(views.viewObjectBase.sliderBase.slider):
 		dc.DrawRectangle(self.getLeftMargin() + self.ELLIPSE_WIDTH / 2, 0, dc.GetSize().GetWidth() - self.getLeftMargin() - self.getRightMargin() - self.ELLIPSE_WIDTH, dc.GetSize().GetHeight())
 
 		# 現在のパーセンテージまで塗る
-		dc.SetBrush(wx.Brush(wx.Colour(0, 0, 255), wx.BRUSHSTYLE_SOLID))
-		dc.SetPen(wx.Pen(wx.Colour(0, 0, 255), 1, wx.PENSTYLE_SOLID))
+		dc.SetBrush(wx.Brush(wx.Colour(0, 102, 204), wx.BRUSHSTYLE_SOLID))
+		dc.SetPen(wx.Pen(wx.Colour(0, 102, 204), 1, wx.PENSTYLE_SOLID))
 		dc.DrawRectangle(self.getLeftMargin() + self.BORDER_WIDTH / 2 - 1 + self.ELLIPSE_WIDTH / 2, 0, self.GetValueBarLength(), dc.GetSize().GetHeight())
 
 		# 現在の位置に円を描画
-		dc.SetBrush(wx.Brush(wx.Colour(0, 255, 0), wx.BRUSHSTYLE_SOLID))
-		dc.SetPen(wx.Pen(wx.Colour(0, 255, 0), 1, wx.PENSTYLE_SOLID))
+		dc.SetBrush(wx.Brush(wx.Colour(255, 100, 0), wx.BRUSHSTYLE_SOLID))
+		dc.SetPen(wx.Pen(wx.Colour(255, 100, 0), 1, wx.PENSTYLE_SOLID))
 		dc.DrawEllipse(self.getLeftMargin() + self.BORDER_WIDTH / 2 - 1 + self.GetValueBarLength(), 0, self.ELLIPSE_WIDTH, dc.GetSize().GetHeight())
 
 	# スタートから塗る長さを返す
@@ -72,7 +72,7 @@ class clearSlider(views.viewObjectBase.sliderBase.slider):
 		#Value 1あたりの幅を計算
 		v = w / (self.GetMax() - self.GetMin())
 
-		return v * self.GetValue()
+		return v * (self.GetValue() - self.GetMin())
 
 	def getLeftMargin(self):
 		return self.GetThumbLength() / 5 + 1
