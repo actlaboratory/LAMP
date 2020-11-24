@@ -23,6 +23,7 @@ from views.viewObjectBase import notebookBase
 from views.viewObjectBase import textCtrlBase
 from views.viewObjectBase import spinCtrlBase
 from views.viewObjectBase import sliderBase
+from views.viewObjects import clearSlider
 
 viewHelper=ctypes.cdll.LoadLibrary("viewHelper.dll")
 
@@ -53,7 +54,8 @@ class ViewCreatorBase():
 			"textCtrl": textCtrlBase.textCtrl,
 			"gauge": wx.Gauge,
 			"spinCtrl": spinCtrlBase.spinCtrl,
-			"slider": sliderBase.slider
+			"slider": sliderBase.slider,
+			"clear_slider": clearSlider.clearSlider
 		}
 		
 		#表示モード
@@ -413,6 +415,19 @@ class ViewCreatorBase():
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
 		hSlider=self.winObject["slider"](parent, wx.ID_ANY, size=(x,-1),value=defaultValue, minValue=min, maxValue=max, style=style, enableTabFocus=enableTabFocus)
+		hSlider.Bind(wx.EVT_SCROLL_CHANGED,event)
+		self._setFace(hSlider)
+		if x==-1:	#幅を拡張
+			Add(sizer,hSlider,proportion,sizerFlag,margin,expandFlag=wx.HORIZONTAL)
+		else:
+			Add(sizer,hSlider,proportion,sizerFlag,margin)
+		self.AddSpace()
+		return hSlider,hStaticText
+
+	def clearSlider(self,text, min=0, max=100, event=None, defaultValue=0, style=0, x=-1, sizerFlag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
+
+		hSlider=self.winObject["clear_slider"](parent, wx.ID_ANY, size=(x,-1),value=defaultValue, minValue=min, maxValue=max, style=style, enableTabFocus=enableTabFocus)
 		hSlider.Bind(wx.EVT_SCROLL_CHANGED,event)
 		self._setFace(hSlider)
 		if x==-1:	#幅を拡張
