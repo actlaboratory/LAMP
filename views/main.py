@@ -54,6 +54,11 @@ class MainView(BaseView):
 		)
 		self.InstallMenuEvent(Menu(self.identifier, self.events),self.events.OnMenuSelect)
 		
+		# 矢印キーUpを握りつぶしてショートカットキーの重複を回避
+		def stopArrowPropagation(evt):
+			if evt.GetKeyCode() in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT): evt.StopPropagation()
+			else: evt.Skip()
+		
 		# ボタン・音量スライダエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,style=wx.ALL,space=20)
 		self.previousBtn = self.horizontalCreator.button(_("前"), self.events.onButtonClick, enableTabFocus=False)
@@ -64,6 +69,7 @@ class MainView(BaseView):
 		self.shuffleBtn = self.horizontalCreator.button(_("ｼｬｯﾌﾙ"), self.events.onButtonClick, enableTabFocus=False)
 		self.volumeSlider, dummy = self.horizontalCreator.clearSlider(_("音量"), 0, 100, self.events.onSlider,
 			globalVars.app.config.getint("volume","default",default=100, min=0, max=100), x=150, textLayout=None)
+		self.volumeSlider.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
 		self.volumeSlider.SetThumbLength(20)
 		self.muteBtn = self.horizontalCreator.button(_("ﾐｭｰﾄ"), self.events.onButtonClick, enableTabFocus=False)
 		#self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
@@ -79,6 +85,7 @@ class MainView(BaseView):
 		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT,margin=20)
 		self.trackBar, dummy = self.horizontalCreator.clearSlider(_("トラック"), x=1000, sizerFlag=wx.LEFT | wx.RIGHT, proportion=1, margin=10)
 		self.trackBar.SetThumbLength(40)
+		self.trackBar.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
 
 		self.trackBar.Bind(wx.EVT_SCROLL, self.events.onSlider)
 		self.nowTime = self.horizontalCreator.staticText("0:00:00 / 0:00:00", x=(350))
