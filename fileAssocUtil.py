@@ -44,7 +44,7 @@ def unregisterAddonFileAssociation(associate):
 def _deleteKeyAndSubkeys(key, subkey):
 	isFinished = False
 	tryCount = 0
-	while isOpen == False and tryCount <= 10:
+	while isFinished == False and tryCount <= 10:
 		try:
 			with winreg.OpenKey(key, subkey, 0, winreg.KEY_WRITE|winreg.KEY_READ) as k:
 				for i in itertools.count():
