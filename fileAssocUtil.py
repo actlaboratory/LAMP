@@ -49,12 +49,13 @@ def _deleteKeyAndSubkeys(key, subkey):
 			try:
 				subkeyName = winreg.EnumKey(k, i)
 				log.debug("del_reg_get - %s" %(subkeyName))
-			except WindowsError:
-				continue
+			except WindowsError as e:
+				log.debug("del_reg_get - %s" %(str(e)))
+				break
 			_deleteKeyAndSubkeys(k, subkeyName)
 		try:
 			winreg.DeleteKey(k, "")
 			log.debug("del_reg_del - %s" %(k))
 		except Exception as e:
 			log.error("delete_regKey \"%s\" - %s" %(k, e))
-			
+
