@@ -26,9 +26,9 @@ def _registerFileAssociation(extension, exePath, associate, mimetype):
 			winreg.CloseKey(k2)
 		shellapi.SHChangeNotify(shellapi.SHCNE_ASSOCCHANGED, shellapi.SHCNF_IDLIST, None, None)
 		return True
-	except WindowsError:
+	except WindowsError as e:
 		log = logging.getLogger("%s.fileAssoc" % (constants.LOG_PREFIX))
-		log.error("file Association faild")
+		log.error("file Association faild - e.message()")
 		return False
 
 def unregisterAddonFileAssociation(associate):
