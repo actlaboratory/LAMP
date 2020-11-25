@@ -42,12 +42,11 @@ def unregisterAddonFileAssociation(associate):
 	return True
 
 def _deleteKeyAndSubkeys(key, subkey):
-	isOpen = False
+	isFinished = False
 	tryCount = 0
 	while isOpen == False and tryCount <= 10:
 		try:
 			with winreg.OpenKey(key, subkey, 0, winreg.KEY_WRITE|winreg.KEY_READ) as k:
-				isOpen = True
 				for i in itertools.count():
 					try:
 						subkeyName = winreg.EnumKey(k, i)
@@ -55,5 +54,6 @@ def _deleteKeyAndSubkeys(key, subkey):
 						break
 					_deleteKeyAndSubkeys(k, subkeyName)
 				winreg.DeleteKey(k, "")
+			isFinished = True
 		except: tryCount += 1
 
