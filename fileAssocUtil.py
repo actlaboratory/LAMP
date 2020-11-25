@@ -42,37 +42,18 @@ def unregisterAddonFileAssociation(associate):
 	return True
 
 def _deleteKeyAndSubkeys(key, subkey):
-	log = logging.getLogger("%s.fileAssoc" % (constants.LOG_PREFIX))
 	isOpen = False
 	tryCount = 0
-	while not isOpen and tryCount <= 10:
+	while isOpen == False and tryCount <= 10:
 		try:
 			with winreg.OpenKey(key, subkey, 0, winreg.KEY_WRITE|winreg.KEY_READ) as k:
 				isOpen = True
-				log.debug("del_reg_open - %s" %(str(k)))
 				for i in itertools.count():
-					isOpen1 = False
-					tryCount1 = 0
-					while not isOpen1 and tryCount1 <= 10:
-						try:
-							isOpen1 = True
-							subkeyName = winreg.EnumKey(k, i)
-							log.debug("del_reg_get - %s" %(subkeyName))
-						except Exception as e:
-							tryCount1 += 1
-							log.debug("del_reg_get - %s" %(str(e)))
-							break
-						_deleteKeyAndSubkeys(k, subkeyName)
-				isOpen2 = False
-				tryCount2 = 0
-				while not isOpen2 and tryCount2 <= 10:
 					try:
-						isOpen2 = True
-						winreg.DeleteKey(k, "")
-						log.debug("del_reg_del - %s" %(k))
-					except Exception as e:
-						tryCount2 += 1
-						log.error("delete_regKey \"%s\" - %s" %(k, e))
-		except:
-			tryCount += 1
+						subkeyName = winreg.EnumKey(k, i)
+					except WindowsError as e:
+						break
+					_deleteKeyAndSubkeys(k, subkeyName)
+				winreg.DeleteKey(k, "")
+		except: tryCount += 1
 
