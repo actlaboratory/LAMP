@@ -28,15 +28,15 @@ def _registerFileAssociation(extension, exePath, associate, mimetype):
 		return True
 	except WindowsError as e:
 		log = logging.getLogger("%s.fileAssoc" % (constants.LOG_PREFIX))
-		log.error("file Association faild - e.message()")
+		log.error("file Association faild - %s" %(e.message()))
 		return False
 
 def unregisterAddonFileAssociation(associate):
 	try:
 		_deleteKeyAndSubkeys(winreg.HKEY_CURRENT_USER, "Software\\Classes\\%s" % associate)
-	except WindowsError:
+	except WindowsError as e:
 		log = logging.getLogger("%s.fileAssoc" % (constants.LOG_PREFIX))
-		log.error("Unset File Association faild")
+		log.error("Unset File Association faild - %s" %(e.message()))
 		return False
 	shellapi.SHChangeNotify(shellapi.SHCNE_ASSOCCHANGED, shellapi.SHCNF_IDLIST, None, None)
 	return True
