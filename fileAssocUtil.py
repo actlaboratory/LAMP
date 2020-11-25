@@ -37,8 +37,9 @@ def unregisterAddonFileAssociation(associate):
 	except WindowsError as e:
 		log = logging.getLogger("%s.fileAssoc" % (constants.LOG_PREFIX))
 		log.error("Unset File Association faild - %s" %(e.format_excption_only(type(e), e)))
-		return
+		return False
 	shellapi.SHChangeNotify(shellapi.SHCNE_ASSOCCHANGED, shellapi.SHCNF_IDLIST, None, None)
+	return True
 
 def _deleteKeyAndSubkeys(key, subkey):
 	with winreg.OpenKey(key, subkey, 0, winreg.KEY_WRITE|winreg.KEY_READ) as k:
