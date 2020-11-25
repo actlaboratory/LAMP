@@ -1,12 +1,12 @@
-import wx, time
-import globalVars, fileAssocUtil
-from views import baseDialog, ViewCreator, mkDialog
+import wx
+import globalVars, fileAssocUtil, fxManager
+from views import baseDialog, ViewCreator, mkDialog, mkDialog
 from soundPlayer import player
 
 UNSET = 1001
 
 def assocDialog():
-    d = dialog("fileAssocDialoa")
+    d = dialog("fileAssocDialog")
     d.Initialize()
     r = d.Show()
     if r == wx.ID_OK:
@@ -15,25 +15,22 @@ def assocDialog():
             if not fileAssocUtil.setAssoc(s, "lamp.audio"):
                 e = mkDialog.Dialog("fileAssocError")
                 e.Initialize(_("エラー"), _("ファイル関連付け情報の書き込みに失敗しました。"), ("了解",))
+                fxManager.error()
                 e.Show()
                 break
-            else:
-                nd = mkDialog.Dialog("fileAssocOk")
-                nd.Initialize(_("拡張子関連付け完了"), _("ファイルの関連付け情報を書き込みました。\r\nファイルのコンテキストメニュー内、\r\n[プログラムから開く] > [別のプログラムを選択]\r\nに表示されます。"), ("了解",))
-                nd.Show()
+            nd = mkDialog.Dialog("fileAssocOk")
+            nd.Initialize(_("拡張子関連付け完了"), _("ファイルの関連付け情報を書き込みました。\r\nファイルのコンテキストメニュー内、\r\n[プログラムから開く] > [別のプログラムを選択]\r\nに表示されます。"), ("了解",))
+            nd.Show()
     elif r == UNSET:
         if fileAssocUtil.unsetAssoc("lamp.audio"):
-            globalVars.app.hMainView.notification(_("拡張子の関連付けを解除しています..."), 1)
-            time.sleep(1)
-            fileAssocUtil.unsetAssoc("lamp.audio")
             nd = mkDialog.Dialog("unsetFileAssocOk")
-            nd.Initialize(_("関連付け解除完了"), _("ファイルの関連付けを解除しました。"), ("了解",))
+            nd.Initialize(_("関連付け解除完了"), _("ファイルの関連付けを解除しました。"), (_("了解"),))
             nd.Show()
         else:
             e = mkDialog.Dialog("unsetFileAssocError")
-            e.Initialize(_("エラー"), _("ファイルの関連付けを解除できませんでした。"), ("了解",))
+            e.Initialize(_("エラー"), _("ファイルの関連付けを解除できませんでした。"), (_("了解"),))
+            fxManager.error()
             e.Show()
-
 
 class dialog(baseDialog.BaseDialog):
     def Initialize(self):
@@ -62,10 +59,19 @@ class dialog(baseDialog.BaseDialog):
         
         # フッター
         footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, self.sizer)
-        self.okBtn = footerCreator.okbutton(_("登録"))
+        self.okBtn = footerCreator.okbutton(_("登録"), self.onOkBtn)
         cancelBtn = footerCreator.cancelbutton(_("中止"))
         unsetBtn = footerCreator.button(_("全関連付け解除"), self.onUnsetBtn)
 
+
+    def onOkBtn(self, evt):
+        if len(self.GetData()) == 0:
+            d = mkDialog.Dialog("fileType_notSelected")
+            d.Initialize(_("エラー"), _("1つ以上のファイル形式を選択してください。"), (_("了解"),))
+            fxManager.error()
+            d.Show()
+
+        else: self.wnd.EndModal(wx.ID_OK)
 
     def onUnsetBtn(self, evt):
         self.wnd.EndModal(UNSET)

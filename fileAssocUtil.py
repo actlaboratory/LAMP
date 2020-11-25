@@ -9,7 +9,7 @@ def setAssoc(extension, associate=None, mimetype=None):
 
 def unsetAssoc(associate=None):
 	if associate == None: associate = "actlab.%s" % constants.APP_NAME
-	unregisterAddonFileAssociation(associate)
+	return _unregisterFileAssociation(associate)
 
 def _registerFileAssociation(extension, exePath, associate, mimetype):
 	try:
@@ -31,7 +31,7 @@ def _registerFileAssociation(extension, exePath, associate, mimetype):
 		log.error("file Association faild - %s" %(str(e)))
 		return False
 
-def unregisterAddonFileAssociation(associate):
+def _unregisterFileAssociation(associate):
 	try:
 		_deleteKeyAndSubkeys(winreg.HKEY_CURRENT_USER, "Software\\Classes\\%s" % associate)
 	except WindowsError as e:
