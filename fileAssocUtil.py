@@ -28,7 +28,7 @@ def _registerFileAssociation(extension, exePath, associate, mimetype):
 		return True
 	except WindowsError as e:
 		log = logging.getLogger("%s.fileAssoc" % (constants.LOG_PREFIX))
-		log.error("file Association faild - %s" %(e.message()))
+		log.error("file Association faild - %s" %(str(e)))
 		return False
 
 def unregisterAddonFileAssociation(associate):
@@ -36,17 +36,25 @@ def unregisterAddonFileAssociation(associate):
 		_deleteKeyAndSubkeys(winreg.HKEY_CURRENT_USER, "Software\\Classes\\%s" % associate)
 	except WindowsError as e:
 		log = logging.getLogger("%s.fileAssoc" % (constants.LOG_PREFIX))
-		log.error("Unset File Association faild - %s" %(e.message()))
+		log.error("Unset File Association faild - %s" %str(e))
 		return False
 	shellapi.SHChangeNotify(shellapi.SHCNE_ASSOCCHANGED, shellapi.SHCNF_IDLIST, None, None)
 	return True
 
 def _deleteKeyAndSubkeys(key, subkey):
+	log = logging.getLogger("%s.fileAssoc" % (constants.LOG_PREFIX))
 	with winreg.OpenKey(key, subkey, 0, winreg.KEY_WRITE|winreg.KEY_READ) as k:
+		log.debug("del_reg_open - %s" %(str(k)))
 		for i in itertools.count():
 			try:
 				subkeyName = winreg.EnumKey(k, i)
+				log.debug("del_reg_get - %s" %(subkeyName))
 			except WindowsError:
-				break
+				continue
 			_deleteKeyAndSubkeys(k, subkeyName)
-		winreg.DeleteKey(k, "")
+		try:
+			winreg.DeleteKey(k, "")
+			log.debug("del_reg_del - %s" %(k))
+		except Exception as e:
+			log.error("delete_regKey \"%s\" - %s" %(k, e))
+			
