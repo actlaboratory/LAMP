@@ -45,7 +45,7 @@ def _deleteKeyAndSubkeys(key, subkey):
 	log = logging.getLogger("%s.fileAssoc" % (constants.LOG_PREFIX))
 	isOpen = False
 	tryCount = 0
-	while not isOpen or tryCount <= 10:
+	while not isOpen and tryCount <= 10:
 		try:
 			with winreg.OpenKey(key, subkey, 0, winreg.KEY_WRITE|winreg.KEY_READ) as k:
 				isOpen = True
@@ -53,7 +53,7 @@ def _deleteKeyAndSubkeys(key, subkey):
 				for i in itertools.count():
 					isOpen1 = False
 					tryCount1 = 0
-					while not isOpen1 or tryCount1 <= 10:
+					while not isOpen1 and tryCount1 <= 10:
 						try:
 							isOpen1 = True
 							subkeyName = winreg.EnumKey(k, i)
@@ -65,7 +65,7 @@ def _deleteKeyAndSubkeys(key, subkey):
 						_deleteKeyAndSubkeys(k, subkeyName)
 				isOpen2 = False
 				tryCount2 = 0
-				while not isOpen2 or tryCount2 <= 10:
+				while not isOpen2 and tryCount2 <= 10:
 					try:
 						isOpen2 = True
 						winreg.DeleteKey(k, "")
