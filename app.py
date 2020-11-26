@@ -82,7 +82,7 @@ class Main(AppBase.MainBase):
 		#設定の保存やリソースの開放など、終了前に行いたい処理があれば記述できる
 		#ビューへのアクセスや終了の抑制はできないので注意。
 
-		if globalVars.app.config.getboolean("player", "fadeOutOnExit", False):
+		if globalVars.app.config.getboolean("player", "fadeOutOnExit", False) and globalVars.play.getStatus() == PLAYER_STATUS_PLAYING:
 			while globalVars.play.setVolumeByDiff(-2):
 				time.sleep(0.07)
 		globalVars.play.exit()
