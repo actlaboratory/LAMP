@@ -334,10 +334,12 @@ class eventProcessor():
         if self.shuffleCtrl == None:
             self.shuffleCtrl = shuffle_ctrl.shuffle(listManager.getLCObject(constants.PLAYLIST))
             view_manager.buttonSetShuffleOn()
+            globalVars.app.say(_("シャッフル"))
             globalVars.app.hMainView.menu.hOperationMenu.Check(menuItemsStore.getRef("SHUFFLE"), True)
         else: #シャッフルを解除してプレイリストに復帰
             self.shuffleCtrl = None
             view_manager.buttonSetShuffleOff()
+            globalVars.app.say(_("オフ"))
             globalVars.app.hMainView.menu.hOperationMenu.Check(menuItemsStore.getRef("SHUFFLE"), False)
 
     #リピートﾙｰﾌﾟフラグを切り替え(モード=順次)
@@ -352,14 +354,17 @@ class eventProcessor():
         if self.repeatLoopFlag == 0:
             globalVars.play.setRepeat(False)
             view_manager.buttonSetRepeatLoop()
+            globalVars.app.say(_("オフ"))
             globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("REPEAT_LOOP_NONE"), True)
         elif self.repeatLoopFlag == 1:
             globalVars.play.setRepeat(True)
             view_manager.buttonSetRepeat()
+            globalVars.app.say(_("リピート"))
             globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("RL_REPEAT"), True)
         elif self.repeatLoopFlag == 2:
             globalVars.play.setRepeat(False)
             view_manager.buttonSetLoop()
+            globalVars.app.say(_("ループ"))
             globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("RL_LOOP"), True)
 
     def trackBarCtrl(self, bar):

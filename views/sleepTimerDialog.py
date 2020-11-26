@@ -88,14 +88,14 @@ class Dialog(BaseDialog):
             self.errorDialog(_("キューにアイテムがないため、このタイマーを設定できません。"))
             return False
         #再生するアイテムがなければ設定できない
-        elif self.GetData()[0] == _("すべての再生が完了した") and len(globalVars.playlist.lst) == 0 and len(globalVars.queue.lst) == 0 and globalVars.play.getStatus() == PLAYER_STATUS_STOPPED:
+        elif self.GetData()[0] == _("すべての再生が完了した") and len(globalVars.app.hMainView.playlistView.lst) == 0 and len(globalVars.queue.lst) == 0 and globalVars.play.getStatus() == PLAYER_STATUS_STOPPED:
             self.errorDialog(_("再生する曲がないため、このタイマーを設定できません。"))
             return False
         worning = [] #警告の処理
-        if (self.GetData()[0] == _("次の曲数を再生した") or self.GetData()[0] == _("すべての再生が完了した")) and globalVars.eventProcess.shuffleCtrl != 0:
+        if (self.GetData()[0] == _("次の曲数を再生した") or self.GetData()[0] == _("すべての再生が完了した")) and globalVars.eventProcess.shuffleCtrl != None:
             worning.append(_("シャッフルが有効です。"))
-            if globalVars.eventProcess.repeatLoopFlag == 2:
-                worning.append(_("ループが有効です。"))
+        if globalVars.eventProcess.repeatLoopFlag == 2:
+            worning.append(_("ループが有効です。"))
         if self.GetData()[0] != _("次の時間が経過した") and globalVars.eventProcess.repeatLoopFlag == 1:
             worning.append(_("リピートが有効です。"))
         if len(worning) == 0: return True
