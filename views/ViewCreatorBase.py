@@ -135,8 +135,8 @@ class ViewCreatorBase():
 		return sizer
 
 
-	def button(self,text, event=None, sizerFlag=wx.ALL, proportion=0,margin=5, enableTabFocus=True):
-		hButton=self.winObject["button"](self.parent, wx.ID_ANY,label=text, name=text, style=wx.BORDER_RAISED, enableTabFocus=enableTabFocus)
+	def button(self,text, event=None, style=wx.BORDER_RAISED, sizerFlag=wx.ALL, proportion=0,margin=5, enableTabFocus=True):
+		hButton=self.winObject["button"](self.parent, wx.ID_ANY,label=text, name=text, style=style, enableTabFocus=enableTabFocus)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self._setFace(hButton,mode=BUTTON_COLOUR)
 		Add(self.sizer,hButton,proportion,sizerFlag,margin)

@@ -112,14 +112,14 @@ class eventProcessor():
             globalVars.play.setVolume(0)
             self.muteFlag = True
             globalVars.app.hMainView.volumeSlider.Disable()
-            globalVars.app.hMainView.muteBtn.SetLabel("ﾐｭｰﾄ解除")
+            view_manager.buttonSetMuteOn()
             globalVars.app.hMainView.menu.hVolumeInOperationMenu.SetLabel(menuItemsStore.getRef("MUTE"), _("消音を解除"))
         elif self.muteFlag: #ミュート解除処理
             val = globalVars.app.hMainView.volumeSlider.GetValue()
             globalVars.play.setVolume(val)
             self.muteFlag = False
             globalVars.app.hMainView.volumeSlider.Enable()
-            globalVars.app.hMainView.muteBtn.SetLabel("ﾐｭｰﾄ")
+            view_manager.buttonSetMuteOff()
             globalVars.app.hMainView.menu.hVolumeInOperationMenu.SetLabel(menuItemsStore.getRef("MUTE"), _("消音に設定"))
 
     #音量変更（変更幅+-%=変更しない, %指定=無視）
@@ -148,14 +148,14 @@ class eventProcessor():
         if ret:
             self.playingList = listPorQ
             if ret:
-                globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
+                view_manager.buttonSetPause()
                 listManager.setTag(listPorQ)
                 globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
                 self.refreshTagInfo()
                 globalVars.app.hMainView.tagInfoTimer.Start(10000)
             view_manager.setFileStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
         if not ret:
-            globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+            view_manager.buttonSetPlay()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
             view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
         return ret
@@ -172,13 +172,13 @@ class eventProcessor():
             else: ret = False
         else: ret = False
         if ret:
-            globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
+            view_manager.buttonSetPause()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
             self.refreshTagInfo()
             globalVars.app.hMainView.tagInfoTimer.Start(10000)
             view_manager.setFileStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
         else:
-            globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+            view_manager.buttonSetPlay()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
             view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
         return ret
@@ -193,9 +193,9 @@ class eventProcessor():
 
     def pause(self, pause=True, force=False):
         if pause == True: #一時停止
-            if globalVars.play.pause() or force: globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+            if globalVars.play.pause() or force: view_manager.buttonSetPlay()
         else: #一時停止解除
-            if globalVars.play.play(): globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
+            if globalVars.play.play(): view_manager.buttonSetPause()
 
     #削除（リストオブジェクト, インデックス）
     def delete(self, lcObj):
@@ -300,8 +300,8 @@ class eventProcessor():
         elif globalVars.play.getStatus() == PLAYER_STATUS_STOPPED:
             self.nextFile()
         else:
-            if globalVars.play.play(): globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
-            else: globalVars.app.hMainView.playPauseBtn.SetLabel(_("再生"))
+            if globalVars.play.play(): view_manager.buttonSetPause()
+            else: view_manager.buttonSetPlay()
 
     def nextFile(self):
         if not globalVars.play.isDeviceOk():
@@ -324,7 +324,7 @@ class eventProcessor():
         view_manager.clearStaticInfoView() #スクリーンリーダ用リストの更新
         globalVars.app.hMainView.playlistView.setPointer(-1)
         globalVars.play.stop()
-        globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+        view_manager.buttonSetPlay()
         globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
         globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") + " : ")
         globalVars.app.hMainView.viewTagInfo.SetLabel("")
@@ -333,11 +333,11 @@ class eventProcessor():
     def shuffleSw(self):
         if self.shuffleCtrl == None:
             self.shuffleCtrl = shuffle_ctrl.shuffle(listManager.getLCObject(constants.PLAYLIST))
-            globalVars.app.hMainView.shuffleBtn.SetLabel(_("ｼｬｯﾌﾙ解除"))
+            view_manager.buttonSetShuffleOn()
             globalVars.app.hMainView.menu.hOperationMenu.Check(menuItemsStore.getRef("SHUFFLE"), True)
         else: #シャッフルを解除してプレイリストに復帰
             self.shuffleCtrl = None
-            globalVars.app.hMainView.shuffleBtn.SetLabel(_("ｼｬｯﾌﾙ"))
+            view_manager.buttonSetShuffleOff()
             globalVars.app.hMainView.menu.hOperationMenu.Check(menuItemsStore.getRef("SHUFFLE"), False)
 
     #リピートﾙｰﾌﾟフラグを切り替え(モード=順次)
@@ -351,15 +351,15 @@ class eventProcessor():
             self.repeatLoopFlag = mode
         if self.repeatLoopFlag == 0:
             globalVars.play.setRepeat(False)
-            globalVars.app.hMainView.repeatLoopBtn.SetLabel("ﾘﾋﾟｰﾄ / ﾙｰﾌﾟ")
+            view_manager.buttonSetRepeatLoop()
             globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("REPEAT_LOOP_NONE"), True)
         elif self.repeatLoopFlag == 1:
             globalVars.play.setRepeat(True)
-            globalVars.app.hMainView.repeatLoopBtn.SetLabel("只今: リピート")
+            view_manager.buttonSetRepeat()
             globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("RL_REPEAT"), True)
         elif self.repeatLoopFlag == 2:
             globalVars.play.setRepeat(False)
-            globalVars.app.hMainView.repeatLoopBtn.SetLabel("只今: ループ")
+            view_manager.buttonSetLoop()
             globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("RL_LOOP"), True)
 
     def trackBarCtrl(self, bar):

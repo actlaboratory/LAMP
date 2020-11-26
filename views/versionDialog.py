@@ -35,6 +35,9 @@ class dialog(baseDialog.BaseDialog):
         textList.append("Copyright (c) %s %s All lights reserved." %(constants.APP_COPYRIGHT_YEAR, constants.APP_DEVELOPERS))
 
         self.info, dummy = versionCreator.inputbox("", defaultValue="\r\n".join(textList), style=wx.TE_MULTILINE|wx.TE_READONLY, sizerFlag=wx.EXPAND, x=750, textLayout=None)
+        f = self.info.GetFont()
+        f.SetPointSize(f.GetPointSize() * (2/3))
+        self.info.SetFont(f)
 
         # フッター
         footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, self.sizer, style=wx.ALIGN_RIGHT)

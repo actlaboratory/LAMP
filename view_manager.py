@@ -93,3 +93,45 @@ def clearStaticInfoView():
 	l.SetString(5, _("アルバムアーティスト"))
 	l.SetString(6, _("合計"))
 	globalVars.app.hMainView.hFrame.SetTitle("LAMP")
+
+
+# ボタン制御
+def buttonSetPlay():
+	globalVars.app.hMainView.playPauseBtn.SetBitmap(wx.Bitmap("./resources/gif/play.gif", wx.BITMAP_TYPE_GIF))
+	globalVars.app.hMainView.playPauseBtn.SetLabel(_("再生"))
+
+def buttonSetPause():
+	globalVars.app.hMainView.playPauseBtn.SetBitmap(wx.Bitmap("./resources/gif/pause.gif", wx.BITMAP_TYPE_GIF))
+	globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
+
+def buttonSetRepeatLoop():
+	globalVars.app.hMainView.repeatLoopBtn.SetBitmap(wx.Bitmap("./resources/gif/repeatLoop.gif", wx.BITMAP_TYPE_GIF))
+	globalVars.app.hMainView.repeatLoopBtn.SetLabel(_("リピートループ"))
+
+def buttonSetRepeat():
+	globalVars.app.hMainView.repeatLoopBtn.SetBitmap(wx.Bitmap("./resources/gif/repeat_on.gif", wx.BITMAP_TYPE_GIF))
+	globalVars.app.hMainView.repeatLoopBtn.SetLabel(_("リピートオン"))
+
+def buttonSetLoop():
+	globalVars.app.hMainView.repeatLoopBtn.SetBitmap(wx.Bitmap("./resources/gif/loop_on.gif", wx.BITMAP_TYPE_GIF))
+	globalVars.app.hMainView.repeatLoopBtn.SetLabel(_("ループオン"))
+
+def buttonSetShuffleOff():
+	globalVars.app.hMainView.shuffleBtn.SetBitmap(wx.Bitmap("./resources/gif/shuffle_off.gif", wx.BITMAP_TYPE_GIF))
+	globalVars.app.hMainView.shuffleBtn.SetLabel(_("シャッフルオフ"))
+
+def buttonSetShuffleOn():
+	globalVars.app.hMainView.shuffleBtn.SetBitmap(wx.Bitmap("./resources/gif/shuffle_on.gif", wx.BITMAP_TYPE_GIF))
+	globalVars.app.hMainView.shuffleBtn.SetLabel(_("シャッフルオン"))
+
+def buttonSetMuteOff():
+	if globalVars.app.config.getstring("view","colorMode","white",("white","dark")) == "white":
+		globalVars.app.hMainView.muteBtn.SetBitmap(wx.Bitmap("./resources/gif/volume.gif", wx.BITMAP_TYPE_GIF))
+	else: globalVars.app.hMainView.muteBtn.SetBitmap(wx.Bitmap("./resources/gif/volume_bk.gif", wx.BITMAP_TYPE_GIF))
+	globalVars.app.hMainView.muteBtn.SetLabel(_("ミュートオフ"))
+
+def buttonSetMuteOn():
+	if globalVars.app.config.getstring("view","colorMode","white",("white","dark")) == "white":
+		globalVars.app.hMainView.muteBtn.SetBitmap(wx.Bitmap("./resources/gif/mute.gif", wx.BITMAP_TYPE_GIF))
+	else: globalVars.app.hMainView.muteBtn.SetBitmap(wx.Bitmap("./resources/gif/mute_bk.gif", wx.BITMAP_TYPE_GIF))
+	globalVars.app.hMainView.muteBtn.SetLabel(_("ミュートオン"))
