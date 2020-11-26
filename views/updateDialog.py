@@ -2,11 +2,14 @@
 # update dialog
 
 import wx
+
+import constants
 import globalVars
+import simpleDialog
 import views.ViewCreator
+
 from logging import getLogger
 from views.baseDialog import *
-import simpleDialog
 
 class updateDialog(BaseDialog):
 	def __init__(self):
@@ -16,7 +19,7 @@ class updateDialog(BaseDialog):
 
 	def Initialize(self):
 		self.log.debug("created")
-		super().Initialize(None,_("アップデート - SOC"))
+		super().Initialize(None,_("アップデート - %s") % constants.APP_NAME)
 		self.InstallControls()
 		return True
 

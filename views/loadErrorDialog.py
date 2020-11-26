@@ -29,7 +29,7 @@ class Dialog(BaseDialog):
 
     def InstallControls(self):
         """いろんなwidgetを設置する。"""
-        self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
+        self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20, style=wx.ALL, margin=20)
         self.creator.staticText(_("以下のファイルは、読み込むことができませんでした。"))
         er, erl = self.creator.virtualListCtrl(_("対応していないファイル") + " (" + str(len(self.error)) + _("件") + ")", style=wx.LC_NO_HEADER | wx.LC_SINGLE_SEL, sizerFlag=wx.EXPAND)
         nf, nfl = self.creator.virtualListCtrl(_("見つからなかったファイル") + " (" + str(len(self.notFound)) + _("件") + ")", style=wx.LC_NO_HEADER | wx.LC_SINGLE_SEL, sizerFlag=wx.EXPAND)
