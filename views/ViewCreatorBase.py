@@ -79,6 +79,8 @@ class ViewCreatorBase():
 			self._setFace(self.parent)
 			parent.InsertPage(parent.GetPageCount(),self.parent,label)
 			label=""
+			parentSizer=self.BoxSizer(parentSizer,wx.VERTICAL,"",margin,style,proportion)
+
 		else:
 			raise ValueError("ViewCreatorの親はパネルまたはブックコントロールである必要があります。")
 

@@ -44,7 +44,7 @@ class settingDialog(baseDialog.BaseDialog):
         tabCtrl = creator.tabCtrl(_("環境設定"))
 
         # 一般
-        generalCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("一般"))
+        generalCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("一般"), style=wx.ALL, margin=20)
         self.darkMode = generalCreator.checkbox(_("ダークモード（白黒反転）"))
         if globalVars.app.config.getstring("view", "colormode", "white", ("white", "dark")) == "white":
             self.darkMode.SetValue(False)
@@ -61,7 +61,7 @@ class settingDialog(baseDialog.BaseDialog):
         self.playlistInterruptCombo, fileInterruptLabel = generalCreator.combobox(_("新たなプレイリストにより開かれたとき"), self.getValueList(self.playlistInterruptDic), textLayout=wx.VERTICAL)
 
         # 通知
-        notificationCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("通知"))
+        notificationCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("通知"), style=wx.ALL, margin=20)
         self.readerCombo, readerLabel = notificationCreator.combobox(_("音声読み上げの出力先"), self.getValueList(self.readerDic), textLayout=wx.HORIZONTAL)
         self.notificationSound = notificationCreator.checkbox(_("効果音による通知を有効にする"))
         if globalVars.app.config.getboolean("notification", "sound", True):
@@ -74,7 +74,7 @@ class settingDialog(baseDialog.BaseDialog):
         else: self.ignoreError.SetValue(False)
 
         # 起動
-        startupCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("起動"))
+        startupCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("起動"), style=wx.ALL, margin=20)
         self.volumeSlider, self.volumeLabel = startupCreator.slider(_("規定の音量"), 0, 100,None, globalVars.app.config.getint("volume","default",default=100, min=0, max=100), textLayout=wx.HORIZONTAL)
         self.startupDeviceCombo, startupDeviceLabel = startupCreator.combobox(_("起動時出力先"), self.getValueList(self.deviceDic), textLayout=wx.HORIZONTAL)
         self.startupListLabel = startupCreator.staticText(_("起動時に読み込むプレイリスト"))
@@ -83,7 +83,7 @@ class settingDialog(baseDialog.BaseDialog):
         self.startupListSelectBtn = startupListCreator.button(_("参照"), self.onButton)
 
         # ネットワーク
-        netCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("ネットワーク"))
+        netCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("ネットワーク"), style=wx.ALL, margin=20)
         self.updateCheck = netCreator.checkbox(_("起動時に更新を確認"))
         if globalVars.app.config.getboolean("general", "update", True):
             self.updateCheck.SetValue(True)
@@ -98,7 +98,7 @@ class settingDialog(baseDialog.BaseDialog):
         self.onCheckBox()
 
         # フッター
-        footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, creator.GetSizer())
+        footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, creator.GetSizer(), style=wx.ALIGN_RIGHT | wx.ALL, margin=10)
         self.saveBtn = footerCreator.button(_("保存"), self.onSaveButton)
         cancelBtn = footerCreator.cancelbutton(_("破棄"))
 
