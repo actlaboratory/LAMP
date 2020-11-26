@@ -59,8 +59,12 @@ class MainView(BaseView):
 			if evt.GetKeyCode() in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT): evt.StopPropagation()
 			else: evt.Skip()
 		
+
+		#上余白
+		self.creator.AddSpace(15)
+
 		# ボタン・音量スライダエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,style=wx.ALL,space=20)
+		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,style=wx.LEFT | wx.RIGHT | wx.EXPAND,space=20,margin=65)
 		self.previousBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, enableTabFocus=False)
 		self.previousBtn.SetBackgroundColour(self.hPanel.GetBackgroundColour())
 		self.previousBtn.SetBitmap(wx.Bitmap("./resources/gif/back.gif", wx.BITMAP_TYPE_GIF))
@@ -85,6 +89,7 @@ class MainView(BaseView):
 		self.shuffleBtn.SetBackgroundColour(self.hPanel.GetBackgroundColour())
 		self.shuffleBtn.SetBitmap(wx.Bitmap("./resources/gif/shuffle_off.gif", wx.BITMAP_TYPE_GIF))
 		self.shuffleBtn.SetLabel(_("シャッフルオフ"))
+		self.horizontalCreator.GetSizer().AddStretchSpacer(1)
 		self.muteBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, sizerFlag=wx.ALL|wx.ALIGN_CENTER, enableTabFocus=False)
 		self.muteBtn.SetBackgroundColour(self.hPanel.GetBackgroundColour())
 		if globalVars.app.config.getstring("view","colorMode","white",("white","dark")) == "white":
@@ -94,30 +99,34 @@ class MainView(BaseView):
 		self.volumeSlider, dummy = self.horizontalCreator.clearSlider(_("音量"), 0, 100, self.events.onSlider,
 			globalVars.app.config.getint("volume","default",default=100, min=0, max=100), x=150, sizerFlag=wx.ALIGN_CENTER, textLayout=None)
 		self.volumeSlider.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
-		self.volumeSlider.SetThumbLength(20)
+		self.volumeSlider.SetThumbLength(25)
 		#self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
 
-		# 曲情報表示
-		self.viewTitle = self.creator.staticText(_("タイトル") +  " : ",sizerFlag=wx.LEFT | wx.RIGHT,margin=20)
+		self.creator.AddSpace(10)
 
-		self.viewTagInfo = self.creator.staticText("",sizerFlag=wx.LEFT | wx.RIGHT,margin=20)
+		# 曲情報表示
+		self.viewTitle = self.creator.staticText(_("タイトル") +  " : ",sizerFlag=wx.LEFT | wx.RIGHT,margin=60)
+		self.viewTagInfo = self.creator.staticText("",sizerFlag=wx.LEFT | wx.RIGHT,margin=60)
 		f = self.viewTagInfo.GetFont()
 		f.SetPointSize(f.GetPointSize() * (2/3))
 		self.viewTagInfo.SetFont(f)
 		self.tagInfoTimer = wx.Timer()
 		self.tagInfoTimer.Bind(wx.EVT_TIMER, globalVars.eventProcess.refreshTagInfo)
 
-		#トラックバーエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT,margin=20)
-		self.trackBar, dummy = self.horizontalCreator.clearSlider(_("トラック"), x=1000, sizerFlag=wx.LEFT | wx.RIGHT, proportion=1, margin=10)
-		self.trackBar.SetThumbLength(40)
-		self.trackBar.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
+		self.creator.AddSpace(10)
 
+		#トラックバーエリア
+		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT, margin=60)
+		self.trackBar, dummy = self.horizontalCreator.clearSlider(_("トラックバー"), x=1000, sizerFlag=wx.LEFT | wx.RIGHT, proportion=1, margin=10, textLayout=None)
+		self.trackBar.SetThumbLength(35)
+		self.trackBar.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
 		self.trackBar.Bind(wx.EVT_SCROLL, self.events.onSlider)
-		self.nowTime = self.horizontalCreator.staticText("0:00:00 / 0:00:00", x=(350))
+		self.nowTime = self.horizontalCreator.staticText("0:00:00 / 0:00:00", sizerFlag=wx.ALL)
+
+		self.creator.AddSpace(20)
 
 		# リストビューエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL, 0, style=wx.EXPAND | wx.LEFT | wx.ALL,proportion=1,margin=20)
+		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL, 15, style=wx.EXPAND | wx.LEFT | wx.LEFT | wx.RIGHT, proportion=1, margin=60)
 		self.playlistView, self.playlistLabel = self.horizontalCreator.customListCtrl(lampViewObject.playlist, _("プレイリスト") + " (0" + _("件") + ")", style=wx.LC_NO_HEADER, sizerFlag=wx.EXPAND | wx.RIGHT,proportion=2,textLayout=wx.VERTICAL)
 		self.playlistView.SetFocus()
 		view_manager.listViewSetting(self.playlistView, "playlist")
