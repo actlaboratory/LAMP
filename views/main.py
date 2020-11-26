@@ -105,23 +105,29 @@ class MainView(BaseView):
 		self.creator.AddSpace(10)
 
 		# 曲情報表示
-		self.viewTitle = self.creator.staticText(_("タイトル") +  " : ",sizerFlag=wx.LEFT | wx.RIGHT,margin=60)
-		self.viewTagInfo = self.creator.staticText("",sizerFlag=wx.LEFT | wx.RIGHT,margin=60)
+		infoCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT, margin=60)
+		lb = infoCreator.staticText("♪")
+		f = lb.GetFont()
+		f.SetPointSize(f.GetPointSize() * (5/3))
+		lb.SetFont(f)
+		infoRight = views.ViewCreator.ViewCreator(self.viewMode, infoCreator.GetPanel(), infoCreator.GetSizer(), wx.VERTICAL,0, style=wx.EXPAND | wx.LEFT, margin=5, proportion=1)
+		self.viewTitle = infoRight.staticText("")
+		self.viewTagInfo = infoRight.staticText("")
 		f = self.viewTagInfo.GetFont()
 		f.SetPointSize(f.GetPointSize() * (2/3))
 		self.viewTagInfo.SetFont(f)
 		self.tagInfoTimer = wx.Timer()
 		self.tagInfoTimer.Bind(wx.EVT_TIMER, globalVars.eventProcess.refreshTagInfo)
+		self.nowTime = infoCreator.staticText("0:00:00 / 0:00:00", sizerFlag=wx.ALL, proportion = 0)
 
 		self.creator.AddSpace(10)
 
 		#トラックバーエリア
 		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT, margin=60)
 		self.trackBar, dummy = self.horizontalCreator.clearSlider(_("トラックバー"), x=1000, sizerFlag=wx.LEFT | wx.RIGHT, proportion=1, margin=10, textLayout=None)
-		self.trackBar.SetThumbLength(35)
+		self.trackBar.SetThumbLength(30)
 		self.trackBar.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
 		self.trackBar.Bind(wx.EVT_SCROLL, self.events.onSlider)
-		self.nowTime = self.horizontalCreator.staticText("0:00:00 / 0:00:00", sizerFlag=wx.ALL)
 
 		self.creator.AddSpace(20)
 

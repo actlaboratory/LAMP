@@ -66,7 +66,7 @@ class eventProcessor():
     def refreshTagInfo(self, evt=None):
         if evt == None: self.tagInfoProcess = 0
         if self.playingList == None:
-            globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") +  " : ")
+            globalVars.app.hMainView.viewTitle.SetLabel("")
             globalVars.app.hMainView.viewTagInfo.SetLabel("")
         else:
             if self.playingList == constants.PLAYLIST: t = listManager.getTuple(constants.PLAYLIST)
@@ -76,20 +76,20 @@ class eventProcessor():
             if self.tagInfoProcess == 0: # アルバム名表示
                 if t[constants.ITEM_ALBUM] == "": album = _("情報なし")
                 else: album = t[constants.ITEM_ALBUM]
-                globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") +  " : " + title)
-                globalVars.app.hMainView.viewTagInfo.SetLabel(_("アルバム") + " : " + album)
+                globalVars.app.hMainView.viewTitle.SetLabel(title)
+                globalVars.app.hMainView.viewTagInfo.SetLabel("💿　" + album)
                 self.tagInfoProcess = 1
             elif self.tagInfoProcess == 1: # アーティスト情報表示
                 if t[constants.ITEM_ARTIST] == "": artist = _("情報なし")
                 else: artist = t[constants.ITEM_ARTIST]
-                globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") +  " : " + title)
-                globalVars.app.hMainView.viewTagInfo.SetLabel(_("アーティスト") + " : " + artist)
+                globalVars.app.hMainView.viewTitle.SetLabel(title)
+                globalVars.app.hMainView.viewTagInfo.SetLabel("👤　" + artist)
                 self.tagInfoProcess = 2
             elif self.tagInfoProcess == 2: # アルバムアーティスト表示
                 if t[constants.ITEM_ALBUMARTIST] == "": albumArtist = _("情報なし")
                 else: albumArtist = t[constants.ITEM_ALBUMARTIST]
-                globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") +  " : " + title)
-                globalVars.app.hMainView.viewTagInfo.SetLabel(_("アルバムアーティスト") + " : " + albumArtist)
+                globalVars.app.hMainView.viewTitle.SetLabel(title)
+                globalVars.app.hMainView.viewTagInfo.SetLabel("💿👤　" + albumArtist)
                 self.tagInfoProcess = 0
 
     #経過時間表示を更新
