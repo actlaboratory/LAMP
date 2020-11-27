@@ -6,6 +6,14 @@ import defaultKeymap
 import keymap
 import listManager
 
+# ビットマップボタンの構成
+def setBitmapButton(button, backgroundWindow, bitmap, label):
+	if backgroundWindow != None: button.SetBackgroundColour(backgroundWindow.GetBackgroundColour())
+	button.SetBitmap(bitmap)
+	button.SetLabel(label)
+	button.SetToolTip(label)
+	button.GetToolTip().SetDelay(0)
+
 # イベントバインド関数
 def listViewSetting(lc, identifier):
 	lc.AppendColumn("")
@@ -97,41 +105,32 @@ def clearStaticInfoView():
 
 # ボタン制御
 def buttonSetPlay():
-	globalVars.app.hMainView.playPauseBtn.SetBitmap(wx.Bitmap("./resources/gif/play.gif", wx.BITMAP_TYPE_GIF))
-	globalVars.app.hMainView.playPauseBtn.SetLabel(_("再生"))
+	setBitmapButton(globalVars.app.hMainView.playPauseBtn, None, wx.Bitmap("./resources/gif/play.gif", wx.BITMAP_TYPE_GIF), _("再生"))
 
 def buttonSetPause():
-	globalVars.app.hMainView.playPauseBtn.SetBitmap(wx.Bitmap("./resources/gif/pause.gif", wx.BITMAP_TYPE_GIF))
-	globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
+	setBitmapButton(globalVars.app.hMainView.playPauseBtn, None, wx.Bitmap("./resources/gif/pause.gif", wx.BITMAP_TYPE_GIF), _("一時停止"))
 
 def buttonSetRepeatLoop():
-	globalVars.app.hMainView.repeatLoopBtn.SetBitmap(wx.Bitmap("./resources/gif/repeatLoop.gif", wx.BITMAP_TYPE_GIF))
-	globalVars.app.hMainView.repeatLoopBtn.SetLabel(_("リピートに切り替える"))
+	setBitmapButton(globalVars.app.hMainView.repeatLoopBtn, None, wx.Bitmap("./resources/gif/repeatLoop.gif", wx.BITMAP_TYPE_GIF), _("リピートに切り替える"))
 
 def buttonSetRepeat():
-	globalVars.app.hMainView.repeatLoopBtn.SetBitmap(wx.Bitmap("./resources/gif/repeat_on.gif", wx.BITMAP_TYPE_GIF))
-	globalVars.app.hMainView.repeatLoopBtn.SetLabel(_("ループに切り替える"))
+	setBitmapButton(globalVars.app.hMainView.repeatLoopBtn, None, wx.Bitmap("./resources/gif/repeat_on.gif", wx.BITMAP_TYPE_GIF), _("ループに切り替える"))
 
 def buttonSetLoop():
-	globalVars.app.hMainView.repeatLoopBtn.SetBitmap(wx.Bitmap("./resources/gif/loop_on.gif", wx.BITMAP_TYPE_GIF))
-	globalVars.app.hMainView.repeatLoopBtn.SetLabel(_("リピートとループを解除する"))
+	setBitmapButton(globalVars.app.hMainView.repeatLoopBtn, None, wx.Bitmap("./resources/gif/loop_on.gif", wx.BITMAP_TYPE_GIF), _("リピートとループを解除する"))
 
 def buttonSetShuffleOff():
-	globalVars.app.hMainView.shuffleBtn.SetBitmap(wx.Bitmap("./resources/gif/shuffle_off.gif", wx.BITMAP_TYPE_GIF))
-	globalVars.app.hMainView.shuffleBtn.SetLabel(_("シャッフルをオンにする"))
+	setBitmapButton(globalVars.app.hMainView.shuffleBtn, None, wx.Bitmap("./resources/gif/shuffle_off.gif", wx.BITMAP_TYPE_GIF), _("シャッフルをオンにする"))
 
 def buttonSetShuffleOn():
-	globalVars.app.hMainView.shuffleBtn.SetBitmap(wx.Bitmap("./resources/gif/shuffle_on.gif", wx.BITMAP_TYPE_GIF))
-	globalVars.app.hMainView.shuffleBtn.SetLabel(_("シャッフルをオフにする"))
+	setBitmapButton(globalVars.app.hMainView.shuffleBtn, None, wx.Bitmap("./resources/gif/shuffle_on.gif", wx.BITMAP_TYPE_GIF), _("シャッフルをオフにする"))
 
 def buttonSetMuteOff():
 	if globalVars.app.config.getstring("view","colorMode","white",("white","dark")) == "white":
-		globalVars.app.hMainView.muteBtn.SetBitmap(wx.Bitmap("./resources/gif/volume.gif", wx.BITMAP_TYPE_GIF))
-	else: globalVars.app.hMainView.muteBtn.SetBitmap(wx.Bitmap("./resources/gif/volume_bk.gif", wx.BITMAP_TYPE_GIF))
-	globalVars.app.hMainView.muteBtn.SetLabel(_("ミュートをオンにする"))
+		setBitmapButton(globalVars.app.hMainView.muteBtn, None, wx.Bitmap("./resources/gif/volume.gif", wx.BITMAP_TYPE_GIF), _("ミュートをオンにする"))
+	else: setBitmapButton(globalVars.app.hMainView.muteBtn, None, wx.Bitmap("./resources/gif/volume_bk.gif", wx.BITMAP_TYPE_GIF), _("ミュートをオンにする"))
 
 def buttonSetMuteOn():
 	if globalVars.app.config.getstring("view","colorMode","white",("white","dark")) == "white":
-		globalVars.app.hMainView.muteBtn.SetBitmap(wx.Bitmap("./resources/gif/mute.gif", wx.BITMAP_TYPE_GIF))
-	else: globalVars.app.hMainView.muteBtn.SetBitmap(wx.Bitmap("./resources/gif/mute_bk.gif", wx.BITMAP_TYPE_GIF))
-	globalVars.app.hMainView.muteBtn.SetLabel(_("ミュートをオフにする"))
+		setBitmapButton(globalVars.app.hMainView.muteBtn, None, wx.Bitmap("./resources/gif/mute.gif", wx.BITMAP_TYPE_GIF), _("ミュートをオフにする"))
+	else: setBitmapButton(globalVars.app.hMainView.muteBtn, None, wx.Bitmap("./resources/gif/mute_bk.gif", wx.BITMAP_TYPE_GIF), _("ミュートをオフにする"))
