@@ -52,27 +52,40 @@ class clearSlider(views.viewObjectBase.sliderBase.slider):
 		# 現在のパーセンテージまで塗る
 		dc.SetBrush(wx.Brush(wx.Colour(0, 102, 204), wx.BRUSHSTYLE_SOLID))
 		dc.SetPen(wx.Pen(wx.Colour(0, 102, 204), 1, wx.PENSTYLE_SOLID))
-		dc.DrawRectangle(self.getLeftMargin() + self.BORDER_WIDTH / 2 - 1 + self.ELLIPSE_WIDTH / 2, 0, self.GetValueBarLength(), dc.GetSize().GetHeight())
+		dc.DrawRectangle(self.getLeftMargin() + self.BORDER_WIDTH / 2 - 1 + self.ELLIPSE_WIDTH / 2, 0, self.getValueBarLength(), dc.GetSize().GetHeight())
 
 		# 現在の位置に円を描画
 		dc.SetBrush(wx.Brush(wx.Colour(255, 100, 0), wx.BRUSHSTYLE_SOLID))
 		dc.SetPen(wx.Pen(wx.Colour(255, 100, 0), 1, wx.PENSTYLE_SOLID))
-		dc.DrawEllipse(self.getLeftMargin() + self.BORDER_WIDTH / 2 - 1 + self.GetValueBarLength(), 0, self.ELLIPSE_WIDTH, dc.GetSize().GetHeight())
+		dc.DrawEllipse(self.getLeftMargin() + self.BORDER_WIDTH / 2 - 1 + self.getValueBarLength(), 0, self.ELLIPSE_WIDTH, dc.GetSize().GetHeight())
+
+	#ウィンドウ内座標xからその位置のvalueの値を計算する
+	def pos2value(x):
+		# 0除算対策
+		if (self.GetMax() - self.GetMin() == 0) or self._getVarLength()==0:
+			return 0
+
+		#Value 1あたりの幅を計算
+		v = self._getVarLength() / (self.GetMax() - self.GetMin())
+
+		return (x - getLeftMargin()) / v
+
 
 	# スタートから塗る長さを返す
 	# スライダーが最小値の時0、最大値の時にウィンドウ幅-左右マージンとなる
-	def GetValueBarLength(self):
+	def getValueBarLength(self):
 		# 0除算対策
-		if self.GetMax() - self.GetMin() == 0:
+		if (self.GetMax() - self.GetMin() == 0) or self._getVarLength()==0:
 			return 0
 
-		#まずは対象領域の幅を計算
-		w = self.GetSize().GetWidth() - self.BORDER_WIDTH - self.getLeftMargin() - self.getRightMargin() - self.ELLIPSE_WIDTH
-
 		#Value 1あたりの幅を計算
-		v = w / (self.GetMax() - self.GetMin())
+		v = self._getVarLength() / (self.GetMax() - self.GetMin())
 
 		return v * (self.GetValue() - self.GetMin())
+
+	# 描画されるバーの長さを返す
+	def _getVarLength(self):
+		return self.GetSize().GetWidth() - self.BORDER_WIDTH - self.getLeftMargin() - self.getRightMargin() - self.ELLIPSE_WIDTH
 
 	def getLeftMargin(self):
 		return self.GetThumbLength() / 5 + 1
