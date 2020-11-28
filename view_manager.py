@@ -11,8 +11,8 @@ def setBitmapButton(button, backgroundWindow, bitmap, label):
 	if backgroundWindow != None: button.SetBackgroundColour(backgroundWindow.GetBackgroundColour())
 	button.SetBitmap(bitmap)
 	button.SetLabel(label)
-	button.SetToolTip(label)
-	button.GetToolTip().SetDelay(0)
+	button.setToolTip()
+
 
 # イベントバインド関数
 def listViewSetting(lc, identifier):
