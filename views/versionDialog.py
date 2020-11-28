@@ -33,7 +33,7 @@ class dialog(baseDialog.BaseDialog):
         textList.append("")
         textList.append(_("本ソフトウェアには、他の団体または個人の成果物が含まれている場合があります。ライセンス情報の詳細については、同梱の license.txt を参照してください。"))
         textList.append("")
-        textList.append("Copyright (c) %s %s All lights reserved." %(constants.APP_COPYRIGHT_YEAR, constants.APP_DEVELOPERS))
+        textList.append(constants.APP_COPYRIGHT_MESSAGE)
 
         self.info, dummy = versionCreator.inputbox("", defaultValue="\r\n".join(textList), style=wx.TE_MULTILINE|wx.TE_READONLY | wx.TE_NO_VSCROLL, sizerFlag=wx.EXPAND, x=750, textLayout=None)
         f = self.info.GetFont()
