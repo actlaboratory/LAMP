@@ -3,5 +3,4 @@
 
 class controlBase():
     def AcceptsFocusFromKeyboard(self):
-        if self.IsEnabled(): return self.focusFromKbd
-        else: False
+        return self.focusFromKbd

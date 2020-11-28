@@ -153,15 +153,11 @@ class settingDialog(baseDialog.BaseDialog):
         else: evtObject = evt.GetEventObject()
         if evtObject == self.manualProxy or evtObject == None:
             if self.manualProxy.IsChecked():
-                self.proxyServer.Enable(True)
-                self.proxyServerLabel.Enable(True)
-                self.proxyPort.Enable(True)
-                self.proxyPortLabel.Enable(True)
+                self.proxyServer.GetParent().Enable()
+                self.proxyPort.GetParent().Enable()
             else:
-                self.proxyServer.Enable(False)
-                self.proxyServerLabel.Enable(False)
-                self.proxyPort.Enable(False)
-                self.proxyPortLabel.Enable(False)
+                self.proxyServer.GetParent().Disable()
+                self.proxyPort.GetParent().Disable()
 
     def onButton(self, evt):
         if evt.GetEventObject() == self.startupListSelectBtn:
