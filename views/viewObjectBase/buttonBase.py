@@ -3,9 +3,9 @@
 
 
 import wx
-from views.viewObjectBase import viewObjectUtil, toolTipBase
+from views.viewObjectBase import viewObjectUtil, toolTipBase, controlBase
 
-class button(wx.Button):
+class button(controlBase.controlBase, wx.Button):
     def __init__(self, *pArg, **kArg):
         self.focusFromKbd = viewObjectUtil.popArg(kArg, "enableTabFocus", True)     #キーボードフォーカスの初期値
         super().__init__(*pArg, **kArg)
@@ -15,9 +15,6 @@ class button(wx.Button):
         self.toolTipObject = toolTipBase.toolTip #ツールチップオブジェクトを指定
         self.enableToolTip = False
 
-    def AcceptsFocusFromKeyboard(self):
-        if self.IsEnabled(): return self.focusFromKbd
-        else: False
     
     def setToolTip(self, label=None):
         """

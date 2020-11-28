@@ -3,9 +3,9 @@
 
 
 import wx
-from views.viewObjectBase import viewObjectUtil
+from views.viewObjectBase import viewObjectUtil, controlBase
 
-class virtualListCtrl(wx.ListCtrl):
+class virtualListCtrl(controlBase.controlBase, wx.ListCtrl):
     # listの機能を組み込み
     def __init__(self, *pArg, **kArg):
         lPArg = list(pArg)
@@ -20,9 +20,6 @@ class virtualListCtrl(wx.ListCtrl):
         super().RefreshItems(first, end)
         wx.YieldIfNeeded()
     
-    def AcceptFocusFromKeyboard(self):
-        return self.focusFromKbd
-
     def getList(self):
         return self.copy()
     
