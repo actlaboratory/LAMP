@@ -2,7 +2,7 @@
 # Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
 
 import wx
-import constants
+import constants, update
 from views import baseDialog, ViewCreator, mkDialog
 
 
@@ -25,7 +25,8 @@ class dialog(baseDialog.BaseDialog):
         textList = []
         textList.append(str(constants.APP_FULL_NAME) + " (" + constants.APP_NAME + ")")
         textList.append(_("ソフトウェアバージョン") + ": " + str(constants.APP_VERSION))
-        textList.append(_("アップデータバージョン") + ": " + "---")
+        try: textList.append(_("アップデータバージョン") + ": " + update.getUpdaterVersion()[1])
+        except: pass
         textList.append(_("ライセンス") + ": " + constants.APP_LICENSE)
         textList.append(_("開発元") + ": %s - %s" %(constants.APP_DEVELOPERS, constants.APP_DEVELOPERS_URL))
         textList.append(_("ソフトウェア詳細情報") + ": " + constants.APP_DETAILS_URL)
