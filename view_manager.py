@@ -13,7 +13,6 @@ def setBitmapButton(button, backgroundWindow, bitmap, label):
 	button.SetLabel(label)
 	button.setToolTip()
 
-
 # イベントバインド関数
 def listViewSetting(lc, identifier):
 	lc.AppendColumn("")
@@ -108,7 +107,7 @@ def buttonSetPlay():
 	setBitmapButton(globalVars.app.hMainView.playPauseBtn, None, wx.Bitmap("./resources/gif/play.gif", wx.BITMAP_TYPE_GIF), _("再生"))
 
 def buttonSetPause():
-	setBitmapButton(globalVars.app.hMainView.playPauseBtn, None, wx.Bitmap("./resources/gif/pause.gif", wx.BITMAP_TYPE_GIF), _("一時停止"))
+	wx.CallAfter(setBitmapButton, globalVars.app.hMainView.playPauseBtn, None, wx.Bitmap("./resources/gif/pause.gif", wx.BITMAP_TYPE_GIF), _("一時停止"))
 
 def buttonSetRepeatLoop():
 	setBitmapButton(globalVars.app.hMainView.repeatLoopBtn, None, wx.Bitmap("./resources/gif/repeatLoop.gif", wx.BITMAP_TYPE_GIF), _("リピートに切り替える"))
