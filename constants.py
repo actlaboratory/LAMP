@@ -28,6 +28,7 @@ APP_LICENSE="Apache License 2.0"
 APP_DEVELOPERS="ACT Laboratory"
 APP_DEVELOPERS_URL="https://actlab.org/"
 APP_DETAILS_URL="https://actlab.org/software/LAMP"
+APP_COPYRIGHT_MESSAGE = "Copyright (c) %s %s All lights reserved." % (APP_COPYRIGHT_YEAR, APP_DEVELOPERS)
 
 #フォントの設定可能サイズ範囲
 FONT_MIN_SIZE=5
