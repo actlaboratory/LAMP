@@ -39,6 +39,6 @@ VSVersionInfo(
         StringStruct(u'ProductName', u'%PRODUCT_NAME%'),
         StringStruct(u'ProductVersion', u'%PRODUCT_VERSION_TEXT%')])
       ]), 
-    VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
+    VarFileInfo([VarStruct(u'Translation', [1033, 1041])])
   ]
 )
