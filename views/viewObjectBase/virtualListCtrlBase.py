@@ -162,11 +162,20 @@ class virtualListCtrl(controlBase.controlBase, wx.ListCtrl):
             self.lst.pop(key)
             self.RefreshItems(0, len(self.lst)-1)
         else:
+            l = self.GetSelectedItems()
+            previousL = self.lst[0:self.GetFirstSelected() + 1]
+            fId = self.GetFocusedItem()
+            if self.GetFocusedItem() >= 0: f = self.lst[self.GetFocusedItem()]
+            else: f = None
+            top = self.GetTopItem()
+            self.Focus(0)
             for o in reversed(self.lst[key]):
                 i = self.lst.index(o)
                 self.DeleteItem(i)
                 self.lst.pop(i)
             self.RefreshItems(0, len(self.lst)-1)
+            self.__setFocus(f, fId, top, l, previousL)
+            self.__setSelectionFromList(l)
 
     def __iter__(self):
         return self.lst.__iter__()

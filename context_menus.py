@@ -7,10 +7,10 @@ import lampClipBoardCtrl
 from views.base import BaseMenu, BaseEvents
 from views import objectDetail
 
-def setContextMenu(listCtrl, identifire):
+def setContextMenu(listCtrl, identifier):
     events = Events(listCtrl, "listView")
-    menu=Menu("mainView")
-    menu.Apply(listCtrl, identifire)
+    menu=Menu(identifier)
+    menu.Apply(listCtrl, identifier)
     listCtrl.Bind(wx.EVT_MENU, events.OnMenuSelect)
     return menu
 
@@ -60,37 +60,44 @@ class Events(BaseEvents):
         selected=event.GetId()#メニュー識別しの数値が出る
 
         if selected==menuItemsStore.getRef("POPUP_PLAY"):
-            globalVars.eventProcess.listSelection(self.parent)
+            if self.parent.GetSelectedItemCount() == 1:
+                globalVars.eventProcess.listSelection(self.parent)
         elif selected==menuItemsStore.getRef("POPUP_ADD_QUEUE_HEAD"):
-            t = self.parent[self.parent.GetFirstSelected()]
-            listManager.addItems((t[0],), globalVars.app.hMainView.queueView, 0)
+            if self.parent.GetSelectedItemCount() != 0:
+                t = self.parent[self.parent.GetFirstSelected()]
+                listManager.addItems((t[0],), globalVars.app.hMainView.queueView, 0)
         elif selected==menuItemsStore.getRef("POPUP_ADD_QUEUE"):
-            t = self.parent[self.parent.GetFirstSelected()]
-            listManager.addItems((t[0],), globalVars.app.hMainView.queueView)
+            if self.parent.GetSelectedItemCount() != 0:
+                t = self.parent[self.parent.GetFirstSelected()]
+                listManager.addItems((t[0],), globalVars.app.hMainView.queueView)
         elif selected==menuItemsStore.getRef("POPUP_ADD_PLAYLIST"):
-            t = self.parent[self.parent.GetFirstSelected()]
-            listManager.addItems((t[0],), globalVars.app.hMainView.queueView)
+            if self.parent.GetSelectedItemCount() != 0:
+                t = self.parent[self.parent.GetFirstSelected()]
+                listManager.addItems((t[0],), globalVars.app.hMainView.playlistView)
         elif selected==menuItemsStore.getRef("POPUP_COPY"):
-            fList = []
-            i = self.parent.GetFirstSelected()
-            if i >= 0:
-                fList.append(self.parent[i][0])
-                while True:
-                    i = self.parent.GetNextSelected(i)
-                    if i >= 0: fList.append(self.parent[i][0])
-                    else: break
-            lampClipBoardCtrl.copy(fList)
+            if self.parent.GetSelectedItemCount() != 0:
+                fList = []
+                i = self.parent.GetFirstSelected()
+                if i >= 0:
+                    fList.append(self.parent[i][0])
+                    while True:
+                        i = self.parent.GetNextSelected(i)
+                        if i >= 0: fList.append(self.parent[i][0])
+                        else: break
+                lampClipBoardCtrl.copy(fList)
         elif selected==menuItemsStore.getRef("POPUP_PASTE"):
             lampClipBoardCtrl.paste(self.parent)
         elif selected==menuItemsStore.getRef("POPUP_DELETE"):
-            globalVars.eventProcess.delete(self.parent)
+            if self.parent.GetSelectedItemCount() != 0:
+                globalVars.eventProcess.delete(self.parent)
         elif selected==menuItemsStore.getRef("POPUP_SELECT_ALL"):
             for i in range(self.parent.GetItemCount()):
                 self.parent.Select(i - 1)
         elif selected==menuItemsStore.getRef("POPUP_ABOUT"):
-            index = self.parent.GetFirstSelected()
-            t = self.parent[index]
-            tag = listManager.getTags([t])
-            self.parent[index] = tag[0]
-            t = self.parent[index]
-            listManager.infoDialog(t)
+            if self.parent.GetSelectedItemCount() == 1:
+                index = self.parent.GetFirstSelected()
+                t = self.parent[index]
+                tag = listManager.getTags([t])
+                self.parent[index] = tag[0]
+                t = self.parent[index]
+                listManager.infoDialog(t)

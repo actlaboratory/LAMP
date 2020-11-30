@@ -31,6 +31,7 @@ def listViewSetting(lc, identifier):
 
 	globalVars.popupMenu4listView = context_menus.setContextMenu(lc, identifier)
 
+
 # リストコントロールのラベルを変更
 def changeListLabel(lc):
 	if lc == globalVars.app.hMainView.playlistView:
