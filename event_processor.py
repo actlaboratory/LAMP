@@ -285,6 +285,9 @@ class eventProcessor():
             else: self.stop()
             return False
         elif ret == errorCodes.END:
+            if self.repeatLoopFlag == 2 and len(globalVars.app.hMainView.playlistView) >= 1: #ループ再生
+                globalVars.app.hMainView.playlistView.setPointer(len(globalVars.app.hMainView.playlistView) - 1)
+                return self.play()
             return False
         else: return True
 
@@ -317,6 +320,10 @@ class eventProcessor():
             else: self.stop()
             return False
         elif ret == errorCodes.END:
+            if self.repeatLoopFlag == 2 and len(globalVars.app.hMainView.playlistView) >= 1: #ループ再生
+                self.playingList = constants.PLAYLIST
+                globalVars.app.hMainView.playlistView.setPointer(0)
+                return self.play()
             return False
         else: return True
 
