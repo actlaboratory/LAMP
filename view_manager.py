@@ -1,9 +1,6 @@
 import wx
 import globalVars
-import context_menus
 import constants
-import defaultKeymap
-import keymap
 import listManager
 
 # ビットマップボタンの構成
@@ -18,19 +15,10 @@ def listViewSetting(lc, identifier):
 	lc.AppendColumn("")
 	lc.SetDropTarget(fileDrop(lc))
 	lc.Bind(wx.EVT_LIST_ITEM_ACTIVATED, globalVars.eventProcess.listActivate)
-	lc.Bind(wx.EVT_CONTEXT_MENU, context_menus.contextMenuOnListView)
-
-	"""acceleratorTable登録準備"""
-	keymaping=keymap.KeymapHandler(defaultKeymap.defaultKeymap)
-	t = keymaping.GetTable(identifier)
-	lc.SetAcceleratorTable(t)
 
 	#自動リサイズ
 	lc.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
 	lc.Bind(wx.EVT_SIZE, resizeEvent)
-
-	globalVars.popupMenu4listView = context_menus.setContextMenu(lc, identifier)
-
 
 # リストコントロールのラベルを変更
 def changeListLabel(lc):
