@@ -86,6 +86,7 @@ class MainView(BaseView):
 			globalVars.app.config.getint("volume","default",default=100, min=0, max=100), x=150, sizerFlag=wx.ALIGN_CENTER, textLayout=None)
 		self.volumeSlider.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
 		self.volumeSlider.SetThumbLength(25)
+		self.volumeSlider.setToolTip(self.val2vol)
 		#self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
 
 		self.creator.AddSpace(10)
@@ -109,11 +110,12 @@ class MainView(BaseView):
 		self.creator.AddSpace(10)
 
 		#トラックバーエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT, margin=60)
-		self.trackBar, dummy = self.horizontalCreator.clearSlider(_("トラックバー"), x=1000, sizerFlag=wx.LEFT | wx.RIGHT, proportion=1, margin=10, textLayout=None)
+		#self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT, margin=60)
+		self.trackBar, dummy = self.creator.clearSlider(_("トラックバー"), x=1000, sizerFlag=wx.EXPAND | wx.LEFT | wx.RIGHT, proportion=0, margin=60, textLayout=None)
 		self.trackBar.SetThumbLength(30)
 		self.trackBar.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
 		self.trackBar.Bind(wx.EVT_SCROLL, self.events.onSlider)
+		self.trackBar.setToolTip(self.sec2TimeStr)
 
 		self.creator.AddSpace(20)
 
@@ -138,6 +140,19 @@ class MainView(BaseView):
 
 		self.hFrame.Layout()
 		self.notification = notificationText.notification(self.hPanel)
+
+	def val2vol(self, val):
+		return "%d%%" %(round(val))
+
+	def sec2TimeStr(self, sec):
+		i = int(sec)
+		hour = 0
+		min = 0
+		sec = 0
+		if i > 0: hour = i // 3600
+		if i-(hour*3600) > 0: min = (i - hour) // 60
+		if i-(hour*3600)-(min*60) > 0: sec = i - (hour*3600) - (min*60)
+		return f"{hour:01}:{min:02}:{sec:02}"
 
 class Menu(BaseMenu):
 	def __init__(self, identifier, event):
