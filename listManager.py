@@ -51,6 +51,8 @@ def setTag(lstConstant):
 	
 
 def getTags(tupleList):
+	if len(tupleList) == 1 and len(tupleList[0]) > 3:
+		return tupleList
 	pl = multiprocessing.Pool()
 	result = pl.apply_async(getFileInfoProcess, (tupleList,))
 	while result.ready() == False: time.sleep(0.1)
@@ -64,6 +66,9 @@ def getFileInfoProcess(tuples):
 	rtn = []
 	for t in tuples:
 		l = list(t)
+		if len(l) > 3:
+			rtn.append(tuple(l))
+			continue
 		handle = pybass.BASS_StreamCreateFile(False, l[0], 0, 0, pybass.BASS_UNICODE)
 		if handle == 0:
 			handle = pybass.BASS_StreamCreateURL(l[0].encode(), 0, 0, 0, 0)
