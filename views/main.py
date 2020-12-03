@@ -310,7 +310,7 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("PREVIOUS_TRACK"):
 			globalVars.eventProcess.previousBtn()
 		elif selected==menuItemsStore.getRef("NEXT_TRACK"):
-			globalVars.eventProcess.nextFile()
+			globalVars.eventProcess.nextFile(button=True)
 		elif selected==menuItemsStore.getRef("VOLUME_DEFAULT"):
 			globalVars.eventProcess.changeVolume(vol=100)
 		elif selected==menuItemsStore.getRef("VOLUME_UP"):
@@ -410,7 +410,7 @@ class Events(BaseEvents):
 			elif event.GetEventObject() == globalVars.app.hMainView.playPauseBtn:
 				globalVars.eventProcess.playButtonControl()
 			elif event.GetEventObject() == globalVars.app.hMainView.nextBtn:
-				globalVars.eventProcess.nextFile()
+				globalVars.eventProcess.nextFile(button=True)
 			elif event.GetEventObject() == globalVars.app.hMainView.stopBtn:
 				globalVars.eventProcess.stop()
 			elif event.GetEventObject() == globalVars.app.hMainView.repeatLoopBtn:

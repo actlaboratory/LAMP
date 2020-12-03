@@ -267,6 +267,7 @@ class eventProcessor():
             globalVars.play.setPosition(pos-sec)
     
     def previousBtn(self):
+        if globalVars.play.getStatus() == PLAYER_STATUS_STOPPED: return
         if globalVars.play.getPosition() <= 5:
             self.previousFile()
         else:
@@ -306,9 +307,9 @@ class eventProcessor():
             if globalVars.play.play(): view_manager.buttonSetPause()
             else: view_manager.buttonSetPlay()
 
-    def nextFile(self):
-        if not globalVars.play.isDeviceOk():
-            return False
+    def nextFile(self, button=False):
+        if button==True and globalVars.play.getStatus() == PLAYER_STATUS_STOPPED: return
+        if not globalVars.play.isDeviceOk(): return False
         if self.shuffleCtrl == None:
             ret = listManager.next(self.playingList)
         else:
