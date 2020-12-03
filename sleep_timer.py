@@ -14,26 +14,26 @@ class sleepTimer():
         self.endValue = None
 
     def set(self):
-        d = sleepTimerDialog.Dialog("sleepTimerDialog")
-        d.Initialize()
-        r = d.Show()
+        self.sleepDialog = sleepTimerDialog.Dialog("sleepTimerDialog")
+        self.sleepDialog.Initialize()
+        r = self.sleepDialog.Show()
         if r == wx.ID_CANCEL:
             return
-        self.setTimer(d.GetData())
+        self.setTimer(self.sleepDialog.GetData())
 
     #エラー処理後に呼び出す
     def setTimer(self, t):
-        if t[0] == _("次の時間が経過した"):
+        if t[0] == self.sleepDialog.TIME_COUNTER:
             self.sleepTimer = True
             # タイマーの呼び出し
             self.timer = wx.Timer(globalVars.app.hMainView.hFrame)
             self.timer.Start((t[2]*(60**2)+t[3]*60)*1000) #ミリ秒タイマー
             globalVars.app.hMainView.hFrame.Bind(wx.EVT_TIMER, self.end, self.timer)
-        elif t[0] == _("次の曲数を再生した"):
+        elif t[0] == self.sleepDialog.PLAY_COUNTER:
             self.fileTimer = t[2]
-        elif t[0] == _("すべての再生が完了した"):
+        elif t[0] == self.sleepDialog.PLAY_END:
             self.allFileTimer = True
-        elif t[0] == _("キューの再生を完了した"):
+        elif t[0] == self.sleepDialog.QUEUE_END:
             self.queueTimer = True
         else:
             return
