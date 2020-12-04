@@ -378,7 +378,7 @@ class KeymapHandlerBase():
 	def SaveFile(self,fileName):
 		"""
 			指定した名前でキーマップの保存を試みる
-			成功時はreturn errorCodes.OKを、失敗時は理由に関わらずerrorCodes.ACCESS_DENIEDを返す
+			成功時はerrorCodes.OKを、失敗時は理由に関わらずerrorCodes.ACCESS_DENIEDを返す
 		"""
 		c=configparser.ConfigParser()
 		try:
@@ -409,7 +409,7 @@ class KeymapHandlerBase():
 		return ret
 
 	def GetKeyString(self,identifier,ref):
-		"""指定されたコマンドのショートカットキー文字列を取得します。"""
+		"""指定されたコマンドのショートカットキー文字列を取得する"""
 		ref=ref.upper()
 		identifier=identifier.upper()
 
@@ -600,7 +600,7 @@ class KeyFilterBase:
 
 	def __init__(self):
 		"""
-			必用な変数を作成し、OSが利用するコマンドとの重複は設定できないようブロックします。
+			必用な変数を作成し、OSが利用するコマンドとの重複は設定できないようブロックする
 		"""
 		self.errorString=""									#最後に検知したエラーの原因を格納
 		self.modifierKey=set()								#有効な修飾キー
@@ -616,19 +616,19 @@ class KeyFilterBase:
 
 	def SetDefault(self,supportInputChar,isSystem,arrowCharKey=False):
 		"""
-			フィルタを一般的な設定に構成します。
+			フィルタを一般的な設定に構成する。
 
-			supportInputCharには、そのウィンドウでの文字入力の可否を設定します。
-			ここでTrueを設定すると、Home,BS,Enterなど文字入力と競合する修飾キーを単体でショートカットとして利用可能になります。
+			supportInputCharには、そのウィンドウでの文字入力の可否を設定する。
+			ここでTrueを設定すると、Home,BS,Enterなど文字入力と競合する修飾キーを単体でショートカットとして利用可能になる
 
-			isSystemには、システム内部で設定する場合にはTrue、ユーザが独自で設定する場合にはFalseを指定します。
-			ユーザが独自にキーをカスタマイズする場合に、指定することが望ましくないキーの組み合わせをブロックします。
-			将来、開発者が機能拡張する際の問題を和らげることを目的としています。
-			なお、開発者であってもコメントで記した目的以外に利用することは避けるべきです。
+			isSystemには、システム内部で設定する場合にはTrue、ユーザが独自で設定する場合にはFalseを指定する。
+			ユーザが独自にキーをカスタマイズする場合に、指定することが望ましくないキーの組み合わせをブロックする。
+			将来、開発者が機能拡張する際の問題を和らげることを目的としている。
+			なお、開発者であってもコメントで記した目的以外に利用することは避けるべきである。
 
-			arrowCharKeyには、原則Falseを指定します。
-			ここでTrueを設定すると英数字や各種記号文字のキーを単体でショートカットキーとして利用可能になります。
-			ただし、各種コントロールのインクリメンタルサーチ等と競合するため、この設定は推奨されません。
+			arrowCharKeyには、原則Falseを指定する。
+			ここでTrueを設定すると英数字や各種記号文字のキーを単体でショートカットキーとして利用可能になる。
+			ただし、各種コントロールのインクリメンタルサーチ等と競合するため、この設定は推奨されない。
 		"""
 		self.modifierKey.add("CTRL")
 		self.modifierKey.add("ALT")
@@ -788,4 +788,3 @@ class KeyFilterBase:
 
 	def GetLastError(self):
 			return self.errorString
-
