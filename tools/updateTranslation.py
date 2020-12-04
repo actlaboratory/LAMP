@@ -6,6 +6,8 @@ import os
 import subprocess
 import glob
 import shutil
+sys.path.append(os.getcwd())
+import constants
 
 if not os.path.exists("locale"):
 	print("Error: no locale folder found. Your working directory must be the root of the project. You shouldn't cd to tools and run this script.")
@@ -23,12 +25,12 @@ for l in langs:
 	print(l)
 
 files=glob.glob("*.py")
+files.extend(glob.glob("*/*.py", recursive=True))
 print("Detected files:")
-for f in files:
-	print(f)
+print("Detected files: %d" % len(files))
 
 print("Updating the base dictionary(pot)")
-subprocess.call(("tools\\xgettext.exe -p locale --from-code utf-8 --package-name=application %s" % (" ".join(files))).split())
+subprocess.call(("tools\\xgettext.exe -p locale --from-code utf-8 --package-name=%s %s" % (constants.APP_NAME, " ".join(files))).split())
 for l in langs:
 	if os.path.exists("locale/%s/LC_MESSAGES/messages.po" % (l)):
 		print("Merging %s" % l)
