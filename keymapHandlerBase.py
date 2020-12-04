@@ -320,7 +320,6 @@ class KeymapHandlerBase():
 		self.map={}					#ref番号→ショートカットキーに変換
 		self.refMap={}				#キーの重複によりこのインスタンスで処理する必要のあるメニューと、そのとび先の本来のref
 		self.permitConfrict=permitConfrict
-		self.makeEntry=makeEntry	#エントリ作成関数。クラスの継承先での変更のみ想定
 		self.filter=filter			#指定の妥当性をチェックするフィルタ
 
 		if dict:
@@ -446,6 +445,8 @@ class KeymapHandlerBase():
 			window.Bind(wx.EVT_MENU,eventHandler)
 		return window.SetAcceleratorTable(self.GetTable(identifier))
 
+	def makeEntry(self,*pArgs, **kArgs):
+		return makeEntry(*pArgs,*kArgs)
 
 	def _add(self,identifier,ref,key):
 		"""重複をチェックしながらキーマップにショートカットを追加する"""
@@ -534,24 +535,23 @@ def makeEntry(ref,key,filter,log):
 	"""ref(String)と、/区切りでない単一のkey(String)からwx.AcceleratorEntryを生成"""
 	key=key.upper()					#大文字に統一して処理
 
-	#修飾キーの確認
-	ctrl="CTRL+" in key
-	alt="ALT+" in key
-	shift="SHIFT+" in key
-	codestr=key.split("+")
+	modifireKeys ={
+		"CTRL":wx.ACCEL_CTRL,
+		"ALT":wx.ACCEL_ALT,
+		"SHIFT":wx.ACCEL_SHIFT
+	}
+
+	if filter and ("WINDOWS" in filter.modifierKey):
+		modifireKeys["WINDOWS"]=wx.MOD_WIN
+
 	flags=0
 	flagCount=0
-	if ctrl:
-		flags=wx.ACCEL_CTRL
-		flagCount+=1
-	if alt:
-		flags=flags|wx.ACCEL_ALT
-		flagCount+=1
-	if shift:
-		flags=flags|wx.ACCEL_SHIFT
-		flagCount+=1
-
+	for name,value in modifireKeys.items():
+		if name+"+" in key:
+			flags|=value
+			flagCount+=1
 	#修飾キーのみのもの、修飾キーでないキーが複数含まれるものはダメ
+	codestr=key.split("+")
 	if not len(codestr)-flagCount==1:
 		log.warning("%s is invalid pattern." % key)
 		return False
@@ -566,7 +566,6 @@ def makeEntry(ref,key,filter,log):
 		log.warning("%s(%s): %s" % (ref,key,filter.GetLastError()))
 		return False
 	return AcceleratorEntry(flags,str2key[codestr],menuItemsStore.getRef(ref.upper()),ref.upper())
-
 
 
 class AcceleratorEntry(wx.AcceleratorEntry):

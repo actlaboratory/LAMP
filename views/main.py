@@ -18,6 +18,7 @@ import pywintypes
 import constants
 import errorCodes
 import globalVars
+import hotkeyHandler
 import menuItemsStore
 import settings
 import m3uManager
@@ -141,6 +142,11 @@ class MainView(BaseView):
 		self.hFrame.Layout()
 		self.notification = notificationText.notification(self.hPanel)
 
+		hotkey = hotkeyHandler.HotkeyHandler(None,hotkeyHandler.HotkeyFilter().SetDefault())
+		if hotkey.addFile(constants.KEYMAP_FILE_NAME,["HOTKEY"])==errorCodes.OK:
+			#TODO: 一部エラーかもしれないのでチェックしてユーザに通知
+			hotkey.Set("HOTKEY",self.hFrame)
+
 	def val2vol(self, val):
 		return "%d%%" %(round(val))
 
@@ -248,7 +254,6 @@ class Events(BaseEvents):
 			return
 
 		selected=event.GetId()#メニュー識別しの数値が出る
-
 
 		if selected==menuItemsStore.getRef("FILE_OPEN"):
 			dialog= views.mkOpenDialog.Dialog("fileOpenDialog")
