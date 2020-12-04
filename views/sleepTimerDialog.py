@@ -96,11 +96,11 @@ class Dialog(BaseDialog):
             self.errorDialog(_("タイマーには１分以上の長さが必要です。"))
             return False
         #キューが消費済みであれば設定できない
-        elif self.GetData()[0] == self.QUQUQ_END and len(globalVars.queue.lst) == 0:
+        elif self.GetData()[0] == self.QUQUQ_END and len(globalVars.app.hMainView.queueView.lst) == 0:
             self.errorDialog(_("キューにアイテムがないため、このタイマーを設定できません。"))
             return False
         #再生するアイテムがなければ設定できない
-        elif self.GetData()[0] == self.PLAY_END and len(globalVars.app.hMainView.playlistView.lst) == 0 and len(globalVars.queue.lst) == 0 and globalVars.play.getStatus() == PLAYER_STATUS_STOPPED:
+        elif self.GetData()[0] == self.PLAY_END and len(globalVars.app.hMainView.playlistView.lst) == 0 and len(globalVars.app.hMainView.queueView.lst) == 0 and globalVars.play.getStatus() == PLAYER_STATUS_STOPPED:
             self.errorDialog(_("再生する曲がないため、このタイマーを設定できません。"))
             return False
         worning = [] #警告の処理
@@ -122,5 +122,5 @@ class Dialog(BaseDialog):
 
     def worningDialog(self, message):
         d = mkDialog.Dialog("sleepTimerWorningDialog")
-        d.Initialize(_("お知らせ"), message, (_("了解"),))
+        d.Initialize(_("お知らせ"), message, ("OK",))
         d.Show()

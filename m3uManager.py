@@ -34,7 +34,7 @@ def loadM3u(path=None, playlist=2):
         f.close()
     else:
         ed = mkDialog.Dialog("m3uLoadErrorDialog")
-        ed.Initialize(_("読み込みエラー"), _("プレイリストファイルの読み込みに失敗しました。"), (_("了解"),))
+        ed.Initialize(_("読み込みエラー"), _("プレイリストファイルの読み込みに失敗しました。"), ("OK",))
         return ed.Show()
     if playlist == 2: #REPLACE
         if closeM3u() == False: return rtn #closeがキャンセルされたら中止
