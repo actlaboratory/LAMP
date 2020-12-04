@@ -17,7 +17,7 @@ class Dialog(BaseDialog):
         self.TIME_COUNTER = _("指定の時間が経過した")
         self.PLAY_COUNTER = _("指定の曲数を再生した")
         self.PLAY_END = _("すべての再生を完了した")
-        self.QUQUQ_END = _("キューの再生が完了した")
+        self.QUEUE_END = _("キューの再生が完了した")
         self.DO_STOP = _("再生の停止")
         self.DO_EXIT = _("LAMPの終了")
         self.DO_SLEEP = _("コンピュータのスリープ")
@@ -34,7 +34,7 @@ class Dialog(BaseDialog):
         """いろんなwidgetを設置する。"""
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL, style=wx.ALL, margin=20)
         # スリープの条件
-        choice = [self.TIME_COUNTER, self.PLAY_COUNTER,self.QUQUQ_END, self.PLAY_END]
+        choice = [self.TIME_COUNTER, self.PLAY_COUNTER,self.QUEUE_END, self.PLAY_END]
         self.conditionCombo, self.conditionLabel = self.creator.combobox(_("スリープの条件"), choice, self.onCombobox, 0, textLayout=wx.HORIZONTAL)
         #スリープの動作
         choice = [self.DO_STOP, self.DO_EXIT, self.DO_SLEEP,self.DO_SHUTDOWN]
@@ -96,7 +96,7 @@ class Dialog(BaseDialog):
             self.errorDialog(_("タイマーには１分以上の長さが必要です。"))
             return False
         #キューが消費済みであれば設定できない
-        elif self.GetData()[0] == self.QUQUQ_END and len(globalVars.app.hMainView.queueView.lst) == 0:
+        elif self.GetData()[0] == self.QUEUE_END and len(globalVars.app.hMainView.queueView.lst) == 0:
             self.errorDialog(_("キューにアイテムがないため、このタイマーを設定できません。"))
             return False
         #再生するアイテムがなければ設定できない
