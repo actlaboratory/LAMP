@@ -27,6 +27,7 @@ from soundPlayer import player
 from soundPlayer.constants import *
 
 import view_manager
+import sendToManager
 from views import mkDialog
 from views import fileAssocDialog
 
@@ -222,6 +223,7 @@ class Menu(BaseMenu):
 		self.hDeviceChangeInSettingsMenu = wx.Menu()
 		self.hSettingsMenu.AppendSubMenu(self.hDeviceChangeInSettingsMenu, _("再生出力先の変更"))
 		self.RegisterMenuCommand(self.hSettingsMenu, "FILE_ASSOCIATE", _("ファイルの関連付け"))
+		self.RegisterMenuCommand(self.hSettingsMenu, "SET_SENDTO", _("送るメニューに登録"))
 		self.RegisterMenuCommand(self.hSettingsMenu, "ENVIRONMENT", _("環境設定"))
 		#ヘルプメニューの中身
 		self.RegisterMenuCommand(self.hHelpMenu,"CHECK_UPDATE",_("更新の確認"))
@@ -363,6 +365,8 @@ class Events(BaseEvents):
 			m3uManager.loadM3u(globalVars.m3uHistory.getList()[selected - constants.PLAYLIST_HISTORY])
 		elif selected==menuItemsStore.getRef("FILE_ASSOCIATE"):
 			fileAssocDialog.assocDialog()
+		elif selected==menuItemsStore.getRef("SET_SENDTO"):
+			sendToManager.sendToCtrl("LAMP")
 		elif selected==menuItemsStore.getRef("ENVIRONMENT"):
 			d = setting_dialog.settingDialog("environment_dialog")
 			d.Initialize()
