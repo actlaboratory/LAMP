@@ -788,3 +788,8 @@ class KeyFilterBase:
 
 	def GetLastError(self):
 			return self.errorString
+
+	def GetUsableKeys(self):
+		ret=[]
+		ret.extend([*self.modifierKey,*self.functionKey,*self.enableKey,*self.noShiftEnableKey])
+		return ret
