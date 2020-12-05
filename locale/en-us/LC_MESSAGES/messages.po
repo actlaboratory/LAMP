@@ -481,7 +481,7 @@ msgid ""
 "ファイルのコンテキストメニュー内、\r\n"
 "[プログラムから開く] > [別のプログラムを選択]\r\n"
 "に表示されます。"
-msgstr ""
+msgstr "file association information has successfully written.\r\nIs will be displayed in [choose another apps] submenu in [Open with] submenu in the files context menu.\r\n"
 
 #: views\fileAssocDialog.py:27
 msgid "関連付け解除完了"
@@ -504,7 +504,7 @@ msgid ""
 "規定のアプリとして登録したいファイル形式に\n"
 "チェックを入れ、登録ボタンを選択します。\n"
 "解除するには、全関連付け解除を選択します。"
-msgstr ""
+msgstr "Check the preferred items and press [register] button. To remove all settings, press [remove all settings] button."
 
 #: views\fileAssocDialog.py:48
 msgid "音声ファイル"
