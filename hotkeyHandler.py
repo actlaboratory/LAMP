@@ -45,11 +45,13 @@ class HotkeyHandler(keymapHandlerBase.KeymapHandlerBase):
 		"""
 		if eventHandler:
 			window.Bind(wx.EVT_HOTKEY,eventHandler)
-		for entry in self.entries[identifier.upper()]:
-			if not window.RegisterHotKey(entry.GetCommand(),entry.GetFlags(),entry.GetKeyCode()):
-				self.log.warning("hotkey set failed. ref=%s may be confrict." % entry.GetRefName)
-				self.addError(identifier,entry.GetRefName(),"N/A","register failed. may be confrict.")
-
+		try:
+			for entry in self.entries[identifier.upper()]:
+				if not window.RegisterHotKey(entry.GetCommand(),entry.GetFlags(),entry.GetKeyCode()):
+					self.log.warning("hotkey set failed. ref=%s may be confrict." % entry.GetRefName)
+					self.addError(identifier,entry.GetRefName(),"N/A","register failed. may be confrict.")
+		except KeyError:
+			self.log.debug("hotkey set failed. identifier %s not defined." % identifier.upper())
 
 def permitConfrict(items,log):
 	return False		#ホットキーではOSの仕様により重複登録できない
