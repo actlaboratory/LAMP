@@ -142,10 +142,17 @@ class MainView(BaseView):
 		self.hFrame.Layout()
 		self.notification = notificationText.notification(self.hPanel)
 
-		hotkey = hotkeyHandler.HotkeyHandler(None,hotkeyHandler.HotkeyFilter().SetDefault())
-		if hotkey.addFile(constants.KEYMAP_FILE_NAME,["HOTKEY"])==errorCodes.OK:
-			#TODO: 一部エラーかもしれないのでチェックしてユーザに通知
-			hotkey.Set("HOTKEY",self.hFrame)
+		self.hotkey = hotkeyHandler.HotkeyHandler(None,hotkeyHandler.HotkeyFilter().SetDefault())
+		if self.hotkey.addFile(constants.KEYMAP_FILE_NAME,["HOTKEY"])!=errorCodes.OK:
+			self.hotkey.addDict(defaultKeymap.defaultKeymap, ["HOTKEY"])
+			self.hotkey.SaveFile(constants.KEYMAP_FILE_NAME)
+		errors=self.hotkey.GetError("HOTKEY")
+		if errors:
+			tmp=_(constants.KEYMAP_FILE_NAME+"で設定されたホットキーが正しくありません。キーの重複、存在しないキー名の指定、使用できないキーパターンの指定などが考えられます。以下のキーの設定内容をご確認ください。\n\n")
+			for v in errors:
+				tmp+=v+"\n"
+			dialog(_("エラー"),tmp)
+		self.hotkey.Set("HOTKEY",self.hFrame)
 
 	def val2vol(self, val):
 		return "%d%%" %(round(val))
