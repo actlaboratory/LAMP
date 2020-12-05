@@ -5,7 +5,7 @@
 import wx
 
 # 言語
-SUPPORTING_LANGUAGE={"ja_JP": "日本語","en_US": "English"}
+SUPPORTING_LANGUAGE={"ja-JP": "日本語","en-US": "English"}
 
 # update情報
 UPDATE_URL = "https://actlab.org/api/checkUpdate"
