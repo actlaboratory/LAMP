@@ -57,3 +57,5 @@ defaultKeymap["queue"]={
 	"POPUP_DELETE": "delete",
 	"POPUP_SELECT_ALL": "ctrl+A"
 }
+defaultKeymap["HOTKEY"]={
+}
