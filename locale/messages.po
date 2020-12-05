@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the application package.
+# This file is distributed under the same license as the LAMP package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: application\n"
+"Project-Id-Version: LAMP\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-05 15:05+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -19,413 +19,407 @@ msgstr ""
 
 #: event_processor.py:77 event_processor.py:83 event_processor.py:89
 msgid "情報なし"
-msgstr "no information"
+msgstr ""
 
 #: event_processor.py:116
 msgid "消音を解除"
-msgstr "unmute"
+msgstr ""
 
 #: event_processor.py:123 views\main.py:212
 msgid "消音に設定"
-msgstr "mute"
+msgstr ""
 
 #: event_processor.py:191
 msgid "再生時エラー"
-msgstr "playback error"
+msgstr ""
 
 #: event_processor.py:191
 msgid "このファイルは再生できません。"
-msgstr "This file is not supported."
+msgstr ""
 
 #: event_processor.py:191
 msgid "継続"
-msgstr "continue"
+msgstr ""
 
 #: event_processor.py:191 sleep_timer.py:42 views\main.py:75 views\main.py:195
 msgid "停止"
-msgstr "stop"
+msgstr ""
 
 #: event_processor.py:256 views\main.py:199
 msgid "進む"
-msgstr "forward"
+msgstr ""
 
 #: event_processor.py:257 views\main.py:200
 msgid "戻る"
-msgstr "backward"
+msgstr ""
 
 #: event_processor.py:258
 msgid "スキップ"
-msgstr "skip"
+msgstr ""
 
 #: event_processor.py:337 listManager.py:180 view_manager.py:49
 #: view_manager.py:62 view_manager.py:86
 msgid "タイトル"
-msgstr "title"
+msgstr ""
 
 #: event_processor.py:345
 msgid "シャッフル"
-msgstr "shuffle"
+msgstr ""
 
 #: event_processor.py:350 event_processor.py:365
 msgid "オフ"
-msgstr "off"
+msgstr ""
 
 #: event_processor.py:370 views\main.py:217
 msgid "リピート"
-msgstr "repeat"
+msgstr ""
 
 #: event_processor.py:375 views\main.py:218
 msgid "ループ"
-msgstr "loop"
+msgstr ""
 
 #: event_processor.py:401 event_processor.py:402
 msgid "曲送りは自動"
-msgstr "auto track advance"
+msgstr ""
 
 #: event_processor.py:405 event_processor.py:406
 msgid "曲送りは手動"
-msgstr "manual track advance"
+msgstr ""
 
 #: keymapHandlerBase.py:648 keymapHandlerBase.py:678
 #, python-format
 msgid "%s は存在しないキーです。"
-msgstr "%s does not exist."
+msgstr ""
 
 #: keymapHandlerBase.py:719
 #, python-format
 msgid "%s は使用できないキーです。"
-msgstr "%s is unusable key."
+msgstr ""
 
 #: keymapHandlerBase.py:728
 msgid "修飾キーのみのパターンは設定できません。"
-msgstr "Keystroke which consists of only modifier keys cannot be added."
+msgstr ""
 
 #: keymapHandlerBase.py:730
 msgid "このキーは修飾キーと合わせて指定する必要があります。"
-msgstr "This key must be added with some modifier keys."
+msgstr ""
 
 #: keymapHandlerBase.py:735
 msgid "修飾キーでないキーを複数指定することはできません。"
-msgstr "This key combination is not supported."
+msgstr ""
 
 #: keymapHandlerBase.py:738 keymapHandlerBase.py:746
 msgid "このキーは、SHIFTキー以外の修飾キーと合わせて指定する必要があります。"
-msgstr "This key cannot be added with Shift key."
+msgstr ""
 
 #: keymapHandlerBase.py:741
 msgid "修飾キーのみの組み合わせは指定できません。"
-msgstr "Keystroke which consists of only modifier keys cannot be added."
+msgstr ""
 
 #: keymapHandlerBase.py:750
 msgid "この組み合わせは別の用途で予約されているため、利用できません。"
-msgstr "This keystroke is already reserved."
+msgstr ""
 
 #: listManager.py:98
 msgid "ファイルを集めています..."
-msgstr "processing files..."
+msgstr ""
 
 #: listManager.py:98
 msgid "読み込み中..."
-msgstr "loading..."
+msgstr ""
 
 #: listManager.py:158
 msgid "読み込み中"
-msgstr "loading"
+msgstr ""
 
 #: listManager.py:177
 msgid "ファイルの場所"
-msgstr "files location"
+msgstr ""
 
 #: listManager.py:178 view_manager.py:47 view_manager.py:60 view_manager.py:84
 msgid "ファイル名"
-msgstr "file name"
+msgstr ""
 
 #: listManager.py:179
 msgid "ファイルサイズ"
-msgstr "file size"
+msgstr ""
 
 #: listManager.py:181
 msgid "長さ"
-msgstr "length"
+msgstr ""
 
 #: listManager.py:182 view_manager.py:51 view_manager.py:64 view_manager.py:88
 msgid "アーティスト"
-msgstr "artist"
+msgstr ""
 
 #: listManager.py:183 view_manager.py:50 view_manager.py:63 view_manager.py:87
 msgid "アルバム"
-msgstr "album"
+msgstr ""
 
 #: listManager.py:184 view_manager.py:52 view_manager.py:65 view_manager.py:89
 msgid "アルバムアーティスト"
-msgstr "album artist"
+msgstr ""
 
 #: m3uManager.py:21 views\setting_dialog.py:164
 msgid "プレイリストファイル選択"
-msgstr "select playlist file"
+msgstr ""
 
 #: m3uManager.py:21 views\setting_dialog.py:164
 msgid "プレイリストファイル (.m3u8/.m3u)"
-msgstr "playlist files (.m3u8/.m3u)"
+msgstr ""
 
 #: m3uManager.py:37 views\loadErrorDialog.py:21
 msgid "読み込みエラー"
-msgstr "loading error"
+msgstr ""
 
 #: m3uManager.py:37
 msgid "プレイリストファイルの読み込みに失敗しました。"
-msgstr "Failed to load playlist files."
+msgstr ""
 
 #: m3uManager.py:52
 msgid "UTF-8プレイリストに変換"
-msgstr "convert to UTF-8 playlist"
+msgstr ""
 
 #: m3uManager.py:56 m3uManager.py:95 views\main.py:179
 msgid "プレイリストを上書き保存"
-msgstr "save playlist"
+msgstr ""
 
 #: m3uManager.py:75
 msgid "プレイリスト変換確認"
-msgstr "playlist conversion confirmation"
+msgstr ""
 
 #: m3uManager.py:75
 msgid ""
 "このプレイリストは変更されています。\n"
 "m3u8ファイルに変換して保存しますか？"
 msgstr ""
-"This playlist is modified.\n"
-"Save as m3u8 playlist file?"
 
 #: m3uManager.py:75 m3uManager.py:86 views\setting_dialog.py:102
 msgid "保存"
-msgstr "save"
+msgstr ""
 
 #: m3uManager.py:75 m3uManager.py:79 m3uManager.py:86
 #: views\setting_dialog.py:103
 msgid "破棄"
-msgstr "discard"
+msgstr ""
 
 #: m3uManager.py:75 m3uManager.py:79 m3uManager.py:86 views\mkDialog.py:30
 #: views\mkOpenDialog.py:46 views\sleepTimerDialog.py:56
 #: views\updateDialog.py:44
 msgid "キャンセル"
-msgstr "cancel"
+msgstr ""
 
 #: m3uManager.py:79
 msgid "プレイリスト上書き保存の確認"
-msgstr "playlist overwrite confirmation"
+msgstr ""
 
 #: m3uManager.py:79
 msgid ""
 "このプレイリストは変更されています。\n"
 "上書き保存しますか？"
 msgstr ""
-"This playlist is modified.\n"
-"Overwrite?"
 
 #: m3uManager.py:79
 msgid "上書き"
-msgstr "overwrite"
+msgstr ""
 
 #: m3uManager.py:86
 msgid "プレイリスト保存の確認"
-msgstr "playlist save confirmation"
+msgstr ""
 
 #: m3uManager.py:86
 msgid ""
 "このプレイリストは変更されています。\n"
 "保存しますか？"
 msgstr ""
-"This playlist is modified.\n"
-"save as playlist file?"
 
 #: m3uManager.py:106
 msgid "プレイリストファイル保存"
-msgstr "save"
+msgstr ""
 
 #: m3uManager.py:106
 msgid "m3u8ファイル (.m3u8)"
-msgstr "m3u8 files (.m3u8)"
+msgstr ""
 
 #: settings.py:16 view_manager.py:76 views\main.py:337
 msgid "秒"
-msgstr "seconds"
+msgstr ""
 
 #: settings.py:18 view_manager.py:74 views\main.py:336
 #: views\sleepTimerDialog.py:48 views\sleepTimerDialog.py:49
 msgid "分"
-msgstr "minutes"
+msgstr ""
 
 #: sleep_timer.py:33
 #, python-format
 msgid "あと%sで発動し、以下を実行します。\n"
-msgstr "Following will be carried out by %s.\n"
+msgstr ""
 
 #: sleep_timer.py:35
 #, python-format
 msgid "あと、%d曲で、以下を実行します。\n"
-msgstr "Following will be carried out after %d tracks is played.\n"
+msgstr ""
 
 #: sleep_timer.py:37
 msgid "すべての再生が完了したとき、以下を実行します。\n"
-msgstr "Following will be carried out after all tracks is played.\n"
+msgstr ""
 
 #: sleep_timer.py:39
 msgid "キューの再生が完了したとき、以下を実行します。\n"
-msgstr "Following will be carried out after all items in playback queue are played.\n"
+msgstr ""
 
 #: sleep_timer.py:40
 #, python-format
 msgid "動作: %s"
-msgstr "operation: %s"
+msgstr ""
 
 #: sleep_timer.py:42
 msgid "作動状況"
-msgstr "status"
+msgstr ""
 
 #: sleep_timer.py:42
 msgid "変更"
-msgstr "modify"
+msgstr ""
 
 #: sleep_timer.py:42 views\effectorDialog.py:43 views\versionDialog.py:46
 msgid "閉じる"
-msgstr "close"
+msgstr ""
 
 #: sleep_timer.py:60
 #, python-format
 msgid "%d時間"
-msgstr "%d hours"
+msgstr ""
 
 #: sleep_timer.py:61
 #, python-format
 msgid "%d分"
-msgstr "%d minutes"
+msgstr ""
 
 #: sleep_timer.py:62
 #, python-format
 msgid "%d秒"
-msgstr "%d seconds"
+msgstr ""
 
 #: sleep_timer.py:110 views\sleepTimerDialog.py:21
 msgid "再生の停止"
-msgstr "stop playback"
+msgstr ""
 
 #: sleep_timer.py:113 views\sleepTimerDialog.py:22
 msgid "LAMPの終了"
-msgstr "exit LAMP"
+msgstr ""
 
 #: sleep_timer.py:115
 msgid "コンピュータをスリープ"
-msgstr "sleep computer"
+msgstr ""
 
 #: sleep_timer.py:119 views\sleepTimerDialog.py:24
 msgid "コンピュータの電源を切る"
-msgstr "shutdown computer"
+msgstr ""
 
 #: update.py:40 update.py:53 update.py:58 update.py:62 update.py:68
 #: update.py:72 update.py:76 views\updateDialog.py:38
 msgid "アップデート"
-msgstr "update"
+msgstr ""
 
 #: update.py:40
 msgid ""
 "アップデータが利用できません。お手数ですが、再度ソフトウェアをダウンロードし"
 "てください。"
-msgstr "Updater is not available. Download this software again."
+msgstr ""
 
 #: update.py:53
 msgid "サーバーへの通信がタイムアウトしました。"
-msgstr "Connection timeout."
+msgstr ""
 
 #: update.py:58
 msgid "サーバーへの接続に失敗しました。インターネット接続などをご確認ください"
-msgstr "Connection failed. Check the internet connection."
+msgstr ""
 
 #: update.py:62
 msgid "サーバーとの通信に失敗しました。"
-msgstr "Connection failed."
+msgstr ""
 
 #: update.py:68
 msgid "現在のバージョンが最新です。アップデートの必要はありません。"
-msgstr "This is the latest version."
+msgstr ""
 
 #: update.py:72
 msgid "リクエストパラメーターが不正です。開発者まで連絡してください"
-msgstr "request parameter is invalid. Contact to the developer."
+msgstr ""
 
 #: update.py:76
 msgid "アップデーターが登録されていません。開発者に連絡してください。"
-msgstr "Updater is not registered. Contact to the developer."
+msgstr ""
 
 #: view_manager.py:26 views\main.py:124 views\main.py:233
 msgid "プレイリスト"
-msgstr "playlist"
+msgstr ""
 
 #: view_manager.py:26 view_manager.py:28 views\loadErrorDialog.py:34
 #: views\loadErrorDialog.py:35 views\main.py:124 views\main.py:127
 msgid "件"
-msgstr "items"
+msgstr ""
 
 #: view_manager.py:28 views\main.py:127
 msgid "キュー"
-msgstr "queue"
+msgstr ""
 
 #: view_manager.py:48 view_manager.py:61 view_manager.py:85
 msgid "場所"
-msgstr "location"
+msgstr ""
 
 #: view_manager.py:53 view_manager.py:78 view_manager.py:90
 msgid "合計"
-msgstr "total"
+msgstr ""
 
 #: view_manager.py:54
 msgid "経過時間を確認するには Ctrl + T を押します"
-msgstr "To display elapsed time, press Ctrl+T."
+msgstr ""
 
 #: view_manager.py:72 views\main.py:334 views\sleepTimerDialog.py:46
 #: views\sleepTimerDialog.py:47
 msgid "時間"
-msgstr "hours"
+msgstr ""
 
 #: view_manager.py:96 views\lampViewObject.py:142 views\main.py:71
 msgid "再生"
-msgstr "play"
+msgstr ""
 
 #: view_manager.py:99
 msgid "一時停止"
-msgstr "pause"
+msgstr ""
 
 #: view_manager.py:102 views\main.py:77
 msgid "リピートに切り替える"
-msgstr "repeat"
+msgstr ""
 
 #: view_manager.py:105
 msgid "ループに切り替える"
-msgstr "loop"
+msgstr ""
 
 #: view_manager.py:108
 msgid "リピートとループを解除する"
-msgstr "disable repeat and loop"
+msgstr ""
 
 #: view_manager.py:111 views\main.py:79
 msgid "シャッフルをオンにする"
-msgstr "enable shuffle"
+msgstr ""
 
 #: view_manager.py:114
 msgid "シャッフルをオフにする"
-msgstr "disable shuffle"
+msgstr ""
 
 #: view_manager.py:118 view_manager.py:119 views\main.py:83 views\main.py:84
 msgid "ミュートをオンにする"
-msgstr "mute"
+msgstr ""
 
 #: view_manager.py:123 view_manager.py:124
 msgid "ミュートをオフにする"
-msgstr "unmute"
+msgstr ""
 
 #: views\base.py:64
 msgid "現在メニューは操作できません"
-msgstr "You cannot use the menu at the moment."
+msgstr ""
 
 #: views\base.py:99
 msgid ""
@@ -434,46 +428,44 @@ msgid ""
 "内容をご確認ください。\n"
 "\n"
 msgstr ""
-"keyboard shortcut is invalid. Please check for conflicting / unusable key "
-"combinations and key names.\n"
 
 #: views\base.py:102 views\fileAssocDialog.py:17 views\fileAssocDialog.py:31
 #: views\fileAssocDialog.py:68 views\fontManager.py:25 views\fontManager.py:50
 #: views\sleepTimerDialog.py:120 views\updateDialog.py:69
 msgid "エラー"
-msgstr "error"
+msgstr ""
 
 #: views\effectorDialog.py:18
 msgid "エフェクト設定"
-msgstr "effect settings"
+msgstr ""
 
 #: views\effectorDialog.py:27 views\effectorDialog.py:28
 msgid "増幅"
-msgstr "amplify"
+msgstr ""
 
 #: views\effectorDialog.py:31 views\effectorDialog.py:32
 msgid "速さ"
-msgstr "speed"
+msgstr ""
 
 #: views\effectorDialog.py:35 views\effectorDialog.py:36
 msgid "キー"
-msgstr "key"
+msgstr ""
 
 #: views\effectorDialog.py:39 views\effectorDialog.py:40
 msgid "周波数"
-msgstr "frequency"
+msgstr ""
 
 #: views\effectorDialog.py:44
 msgid "リセット"
-msgstr "reset"
+msgstr ""
 
 #: views\fileAssocDialog.py:17
 msgid "ファイル関連付け情報の書き込みに失敗しました。"
-msgstr "Failed to write file association information."
+msgstr ""
 
 #: views\fileAssocDialog.py:22
 msgid "拡張子関連付け完了"
-msgstr "done"
+msgstr ""
 
 #: views\fileAssocDialog.py:22
 msgid ""
@@ -481,365 +473,365 @@ msgid ""
 "ファイルのコンテキストメニュー内、\r\n"
 "[プログラムから開く] > [別のプログラムを選択]\r\n"
 "に表示されます。"
-msgstr "file association information has successfully written.\r\nIt will be displayed in\r\n[choose another apps] submenu in [Open with] submenu in the files context menu."
+msgstr ""
 
 #: views\fileAssocDialog.py:27
 msgid "関連付け解除完了"
-msgstr "remove association information"
+msgstr ""
 
 #: views\fileAssocDialog.py:27
 msgid "ファイルの関連付けを解除しました。"
-msgstr "File association information was removed."
+msgstr ""
 
 #: views\fileAssocDialog.py:31
 msgid "ファイルの関連付けを解除できませんでした。"
-msgstr "Failed to remove association information."
+msgstr ""
 
 #: views\fileAssocDialog.py:38
 msgid "拡張子関連付け設定"
-msgstr "file association settings"
+msgstr ""
 
 #: views\fileAssocDialog.py:46
 msgid ""
 "規定のアプリとして登録したいファイル形式に\n"
 "チェックを入れ、登録ボタンを選択します。\n"
 "解除するには、全関連付け解除を選択します。"
-msgstr "Check the preferred items and press [register] button. To remove all settings, press [remove all settings] button."
+msgstr ""
 
 #: views\fileAssocDialog.py:48
 msgid "音声ファイル"
-msgstr "audio files"
+msgstr ""
 
 #: views\fileAssocDialog.py:53
 msgid "プレイリストファイル"
-msgstr "playlist files"
+msgstr ""
 
 #: views\fileAssocDialog.py:60
 msgid "登録"
-msgstr "register"
+msgstr ""
 
 #: views\fileAssocDialog.py:61 views\mkProgress.py:24
 msgid "中止"
-msgstr "abort"
+msgstr ""
 
 #: views\fileAssocDialog.py:62
 msgid "全関連付け解除"
-msgstr "remove all settings"
+msgstr ""
 
 #: views\fileAssocDialog.py:68
 msgid "1つ以上のファイル形式を選択してください。"
-msgstr "Select one or more file types."
+msgstr ""
 
 #: views\fontManager.py:25
 msgid ""
 "設定されているフォント情報が不正です。デフォルトのフォントを適用します。"
-msgstr "Font configuration is invalid. Default settings will be applied."
+msgstr ""
 
 #: views\fontManager.py:50
 msgid "原因不明のエラーにより、フォントの変更に失敗しました。"
-msgstr "Font configuration has failed."
+msgstr ""
 
 #: views\lampViewObject.py:146
 msgid "キューの先頭に割り込み"
-msgstr "add to top of playback queue"
+msgstr ""
 
 #: views\lampViewObject.py:147 views\mkOpenDialog.py:45
 #: views\setting_dialog.py:22
 msgid "キューに追加"
-msgstr "add to playback queue"
+msgstr ""
 
 #: views\lampViewObject.py:152 views\mkOpenDialog.py:43
 #: views\setting_dialog.py:21
 msgid "プレイリストに追加"
-msgstr "add to playlist"
+msgstr ""
 
 #: views\lampViewObject.py:155
 msgid "コピー"
-msgstr "copy"
+msgstr ""
 
 #: views\lampViewObject.py:156
 msgid "貼り付け"
-msgstr "paste"
+msgstr ""
 
 #: views\lampViewObject.py:157
 msgid "削除"
-msgstr "delete"
+msgstr ""
 
 #: views\lampViewObject.py:158
 msgid "すべてを選択"
-msgstr "select all"
+msgstr ""
 
 #: views\lampViewObject.py:159 views\objectDetail.py:16
 msgid "このファイルについて"
-msgstr "about this file"
+msgstr ""
 
 #: views\loadErrorDialog.py:33
 msgid "以下のファイルは、読み込むことができませんでした。"
-msgstr "Failed to load following files."
+msgstr ""
 
 #: views\loadErrorDialog.py:34
 msgid "対応していないファイル"
-msgstr "unsupported files"
+msgstr ""
 
 #: views\loadErrorDialog.py:35
 msgid "見つからなかったファイル"
-msgstr "unfound files"
+msgstr ""
 
 #: views\main.py:69
 msgid "前へ"
-msgstr "go back"
+msgstr ""
 
 #: views\main.py:73 views\main.py:197
 msgid "次へ"
-msgstr "go ahead"
+msgstr ""
 
 #: views\main.py:85 views\main.py:208
 msgid "音量"
-msgstr "volume"
+msgstr ""
 
 #: views\main.py:114
 msgid "トラックバー"
-msgstr "track bar"
+msgstr ""
 
 #: views\main.py:132
 msgid "状況"
-msgstr "status"
+msgstr ""
 
 #: views\main.py:174 views\mkOpenDialog.py:19
 msgid "ファイルを開く"
-msgstr "open files"
+msgstr ""
 
 #: views\main.py:175 views\mkOpenDialog.py:21
 msgid "フォルダを開く"
-msgstr "open folders"
+msgstr ""
 
 #: views\main.py:176 views\mkOpenDialog.py:23
 msgid "URLを開く"
-msgstr "open URL"
+msgstr ""
 
 #: views\main.py:177
 msgid "プレイリストを開く"
-msgstr "open playlists"
+msgstr ""
 
 #: views\main.py:178
 msgid "名前を付けてプレイリストを保存"
-msgstr "save playlist as"
+msgstr ""
 
 #: views\main.py:181
 msgid "プレイリストから読み込む"
-msgstr "load from playlist"
+msgstr ""
 
 #: views\main.py:182
 msgid "プレイリストを閉じる"
-msgstr "close playlist"
+msgstr ""
 
 #: views\main.py:184
 msgid "終了"
-msgstr "exit"
+msgstr ""
 
 #: views\main.py:186
 msgid "スリープタイマーを設定"
-msgstr "configure sleep timer"
+msgstr ""
 
 #: views\main.py:187
 msgid "エフェクター"
-msgstr "effector"
+msgstr ""
 
 #: views\main.py:188
 msgid "再生中のファイルについて"
-msgstr "about now playing"
+msgstr ""
 
 #: views\main.py:191
 msgid "履歴（20件まで）"
-msgstr "history(less than 20 items)"
+msgstr ""
 
 #: views\main.py:194
 msgid "再生 / 一時停止"
-msgstr "play / pause"
+msgstr ""
 
 #: views\main.py:196
 msgid "前へ / 頭出し"
-msgstr "previous"
+msgstr ""
 
 #: views\main.py:203
 msgid "スキップ間隔設定"
-msgstr "configure skip amount"
+msgstr ""
 
 #: views\main.py:204
 msgid "間隔を大きくする"
-msgstr "increase amount"
+msgstr ""
 
 #: views\main.py:205
 msgid "間隔を小さくする"
-msgstr "decrease amount"
+msgstr ""
 
 #: views\main.py:209
 msgid "音量を100%に設定"
-msgstr "set volume to 100%"
+msgstr ""
 
 #: views\main.py:210
 msgid "音量を上げる"
-msgstr "volume up"
+msgstr ""
 
 #: views\main.py:211
 msgid "音量を下げる"
-msgstr "volume down"
+msgstr ""
 
 #: views\main.py:215
 msgid "リピート・ループ"
-msgstr "repeat/loop"
+msgstr ""
 
 #: views\main.py:216
 msgid "解除する"
-msgstr "disable"
+msgstr ""
 
 #: views\main.py:219
 msgid "シャッフル再生"
-msgstr "shuffle"
+msgstr ""
 
 #: views\main.py:220
 msgid "手動で曲送り"
-msgstr "manual track advance"
+msgstr ""
 
 #: views\main.py:223
 msgid "再生出力先の変更"
-msgstr "change output device"
+msgstr ""
 
 #: views\main.py:224
 msgid "ファイルの関連付け"
-msgstr "associate file types"
+msgstr ""
 
 #: views\main.py:225 views\setting_dialog.py:9 views\setting_dialog.py:44
 msgid "環境設定"
-msgstr "preferences"
+msgstr ""
 
 #: views\main.py:227
 msgid "更新の確認"
-msgstr "check for update"
+msgstr ""
 
 #: views\main.py:228 views\versionDialog.py:18
 msgid "バージョン情報"
-msgstr "version info"
+msgstr ""
 
 #: views\main.py:231
 msgid "ファイル"
-msgstr "file"
+msgstr ""
 
 #: views\main.py:232
 msgid "機能"
-msgstr "functions"
+msgstr ""
 
 #: views\main.py:234
 msgid "操作"
-msgstr "operations"
+msgstr ""
 
 #: views\main.py:235
 msgid "設定"
-msgstr "settings"
+msgstr ""
 
 #: views\main.py:236
 msgid "ヘルプ"
-msgstr "help"
+msgstr ""
 
 #: views\main.py:328
 msgid "情報がありません"
-msgstr "no information"
+msgstr ""
 
 #: views\main.py:387
 msgid "規定の出力先"
-msgstr "default output device"
+msgstr ""
 
 #: views\mkOpenDialog.py:34
 msgid "ファイルの場所を指定"
-msgstr "set file location"
+msgstr ""
 
 #: views\mkOpenDialog.py:34
 msgid "フォルダの場所を指定"
-msgstr "set folder location"
+msgstr ""
 
 #: views\mkOpenDialog.py:34
 msgid "URLを指定"
-msgstr "set URL"
+msgstr ""
 
 #: views\mkOpenDialog.py:39 views\setting_dialog.py:83
 msgid "参照"
-msgstr "browse"
+msgstr ""
 
 #: views\mkOpenDialog.py:55
 msgid "ファイルを選択"
-msgstr "select files"
+msgstr ""
 
 #: views\mkOpenDialog.py:58
 msgid "フォルダを選択"
-msgstr "select folders"
+msgstr ""
 
 #: views\mkOpenDialog.py:65 views\mkOpenDialog.py:71
 msgid "パスエラー"
-msgstr "path error"
+msgstr ""
 
 #: views\mkOpenDialog.py:65
 msgid "入力されたパスは存在しません。"
-msgstr "Such path does not exist."
+msgstr ""
 
 #: views\mkOpenDialog.py:71
 msgid "入力されたURLに問題があります。"
-msgstr "This URL is invalid."
+msgstr ""
 
 #: views\objectDetail.py:29
 msgid "ＯＫ"
-msgstr "OK"
+msgstr ""
 
 #: views\setting_dialog.py:11
 msgid "自動選択"
-msgstr "auto selection"
+msgstr ""
 
 #: views\setting_dialog.py:16
 msgid "クリップボード出力"
-msgstr "send to clipboard"
+msgstr ""
 
 #: views\setting_dialog.py:17
 msgid "読み上げなし"
-msgstr "no speech"
+msgstr ""
 
 #: views\setting_dialog.py:20
 msgid "割り込み再生"
-msgstr "play immediately"
+msgstr ""
 
 #: views\setting_dialog.py:23
 msgid "キューの先頭に追加"
-msgstr "add to top of playback queue"
+msgstr ""
 
 #: views\setting_dialog.py:26
 msgid "新たにプレイリストを開く"
-msgstr "open new playlist"
+msgstr ""
 
 #: views\setting_dialog.py:27
 msgid "現在のプレイリストに追加"
-msgstr "add to current playlist"
+msgstr ""
 
 #: views\setting_dialog.py:32
 msgid "規定の再生デバイス"
-msgstr "default output device"
+msgstr ""
 
 #: views\setting_dialog.py:34
 msgid "音楽再生の出力先と同じ"
-msgstr "same as playback output device"
+msgstr ""
 
 #: views\setting_dialog.py:47
 msgid "一般"
-msgstr "general"
+msgstr ""
 
 #: views\setting_dialog.py:48
 msgid "ダークモード（白黒反転）"
-msgstr "dark mode"
+msgstr ""
 
 #: views\setting_dialog.py:52
 msgid "終了時に曲をフェードアウトする"
-msgstr "fade out when closing"
+msgstr ""
 
 #: views\setting_dialog.py:56
 msgid "曲送りを手動で行う"
-msgstr "manual playlist advance"
+msgstr ""
 
 #: views\setting_dialog.py:60
 msgid "新たなファイルにより開かれたとき"
@@ -851,199 +843,199 @@ msgstr ""
 
 #: views\setting_dialog.py:64
 msgid "通知"
-msgstr "notification"
+msgstr ""
 
 #: views\setting_dialog.py:65
 msgid "音声読み上げの出力先"
-msgstr "speech output"
+msgstr ""
 
 #: views\setting_dialog.py:66
 msgid "効果音による通知を有効にする"
-msgstr "enable notification sounds"
+msgstr ""
 
 #: views\setting_dialog.py:70
 msgid "効果音出力先"
-msgstr "output device for notification sounds"
+msgstr ""
 
 #: views\setting_dialog.py:71
 msgid "エラーを通知せず無視する"
-msgstr "ignore errors"
+msgstr ""
 
 #: views\setting_dialog.py:77
 msgid "起動"
-msgstr "run"
+msgstr ""
 
 #: views\setting_dialog.py:78
 msgid "規定の音量"
-msgstr "default volume"
+msgstr ""
 
 #: views\setting_dialog.py:79
 msgid "起動時出力先"
-msgstr "default output device"
+msgstr ""
 
 #: views\setting_dialog.py:80 views\setting_dialog.py:82
 msgid "起動時に読み込むプレイリスト"
-msgstr "default playlist"
+msgstr ""
 
 #: views\setting_dialog.py:86
 msgid "ネットワーク"
-msgstr "network"
+msgstr ""
 
 #: views\setting_dialog.py:87
 msgid "起動時に更新を確認"
-msgstr "automatically check for update"
+msgstr ""
 
 #: views\setting_dialog.py:91
 msgid "手動でプロキシ設定を行う"
-msgstr "use manual proxy settings"
+msgstr ""
 
 #: views\setting_dialog.py:95
 msgid "サーバ名"
-msgstr "server name"
+msgstr ""
 
 #: views\setting_dialog.py:96
 msgid "ポート"
-msgstr "port"
+msgstr ""
 
 #: views\sleepTimerDialog.py:17
 msgid "指定の時間が経過した"
-msgstr "after specific time"
+msgstr ""
 
 #: views\sleepTimerDialog.py:18
 msgid "指定の曲数を再生した"
-msgstr "after playing specific amount of tracks"
+msgstr ""
 
 #: views\sleepTimerDialog.py:19
 msgid "すべての再生を完了した"
-msgstr "after finished playback"
+msgstr ""
 
 #: views\sleepTimerDialog.py:20
 msgid "キューの再生が完了した"
-msgstr "end of playback queue"
+msgstr ""
 
 #: views\sleepTimerDialog.py:23
 msgid "コンピュータのスリープ"
-msgstr "sleep computer"
+msgstr ""
 
 #: views\sleepTimerDialog.py:28
 msgid "スリープタイマー設定"
-msgstr "sleep timer settings"
+msgstr ""
 
 #: views\sleepTimerDialog.py:38
 msgid "スリープの条件"
-msgstr "sleep requirements"
+msgstr ""
 
 #: views\sleepTimerDialog.py:41
 msgid "スリープの動作"
-msgstr "sleep operations"
+msgstr ""
 
 #: views\sleepTimerDialog.py:45
 msgid "時間と分の指定"
-msgstr "set sleep time"
+msgstr ""
 
 #: views\sleepTimerDialog.py:51
 msgid "曲数指定"
-msgstr "set amount of tracks"
+msgstr ""
 
 #: views\sleepTimerDialog.py:52
 msgid "曲数"
-msgstr "number of tracks"
+msgstr ""
 
 #: views\sleepTimerDialog.py:53
 msgid "曲"
-msgstr "tracks"
+msgstr ""
 
 #: views\sleepTimerDialog.py:55
 msgid "開始"
-msgstr "start"
+msgstr ""
 
 #: views\sleepTimerDialog.py:96
 msgid "タイマーには１分以上の長さが必要です。"
-msgstr "Timer requires more than one minute."
+msgstr ""
 
 #: views\sleepTimerDialog.py:100
 msgid "キューにアイテムがないため、このタイマーを設定できません。"
-msgstr "No items are found in playback queue."
+msgstr ""
 
 #: views\sleepTimerDialog.py:104
 msgid "再生する曲がないため、このタイマーを設定できません。"
-msgstr "playback tracks is not found."
+msgstr ""
 
 #: views\sleepTimerDialog.py:108
 msgid "シャッフルが有効です。"
-msgstr "Shuffle is enabled."
+msgstr ""
 
 #: views\sleepTimerDialog.py:110
 msgid "ループが有効です。"
-msgstr "Loop is enabled."
+msgstr ""
 
 #: views\sleepTimerDialog.py:112
 msgid "リピートが有効です。"
-msgstr "Repeat is enabled."
+msgstr ""
 
 #: views\sleepTimerDialog.py:115
 msgid "以下の理由により、このままではタイマーが終了しません。"
-msgstr "Timer will not be ended for following reasons."
+msgstr ""
 
 #: views\sleepTimerDialog.py:120
 msgid "やり直す"
-msgstr "redo"
+msgstr ""
 
 #: views\sleepTimerDialog.py:125
 msgid "お知らせ"
-msgstr "notification"
+msgstr ""
 
 #: views\updateDialog.py:22
 #, python-format
 msgid "アップデート - %s"
-msgstr "update - %s"
+msgstr ""
 
 #: views\updateDialog.py:31
 #, python-format
 msgid "version %s にアップデートが可能です。\n"
-msgstr "Version %s is now available.\n"
+msgstr ""
 
 #: views\updateDialog.py:32
 #, python-format
 msgid "version %s アップデート情報"
-msgstr "version %s update information"
+msgstr ""
 
 #: views\updateDialog.py:33
 msgid "アップデーターをダウンロード中..."
-msgstr "Downloading updater..."
+msgstr ""
 
 #: views\updateDialog.py:40
 msgid "緊急のお知らせがあります。"
-msgstr "There is an important information."
+msgstr ""
 
 #: views\updateDialog.py:43
 msgid "お知らせページへ"
-msgstr "Go to information page"
+msgstr ""
 
 #: views\updateDialog.py:69
 msgid ""
 "updater.exeが見つかりませんでした。誤って削除したかなどをご確認ください。"
-msgstr "Updater.exe is not found."
+msgstr ""
 
 #: views\versionDialog.py:27
 msgid "ソフトウェアバージョン"
-msgstr "software version"
+msgstr ""
 
 #: views\versionDialog.py:28
 msgid "アップデータバージョン"
-msgstr "updater version"
+msgstr ""
 
 #: views\versionDialog.py:30
 msgid "ライセンス"
-msgstr "license"
+msgstr ""
 
 #: views\versionDialog.py:31
 msgid "開発元"
-msgstr "developer"
+msgstr ""
 
 #: views\versionDialog.py:32
 msgid "ソフトウェア詳細情報"
-msgstr "software details"
+msgstr ""
 
 #: views\versionDialog.py:34
 msgid ""
