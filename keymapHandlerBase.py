@@ -771,7 +771,7 @@ class KeyFilterBase:
 		elif modFlg==False and shiftFlg==False and funcCount==0:
 			self.errorString=_("このキーは、SHIFTキー以外の修飾キーと合わせて指定する必要があります。")
 			return
-		elif funcCount==0 and noShiftCount==0:
+		elif funcCount==0 and noShiftCount==0 and enableCount==0:
 			self.errorString=_("修飾キーのみの組み合わせは指定できません。")
 			return False
 		if enableCount>0 and modFlg==False and shiftFlg==False:
