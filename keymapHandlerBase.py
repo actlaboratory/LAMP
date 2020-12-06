@@ -326,7 +326,7 @@ class KeymapHandlerBase():
 			self.addDict(dict)
 
 
-	def addDict(self,dict,sections):
+	def addDict(self,dict,sections=None):
 		"""
 			sectionsにlistまたはsetを指定すると、読み込むセクションを指定したもののみに制限できる。大文字で指定する。
 			sectionsを指定しない場合、セクション名にHOTKEYが含まれるものはスキップされる
@@ -341,7 +341,7 @@ class KeymapHandlerBase():
 			self.log.debug("read section %s" % identifier)
 			for elem in read.items(identifier):
 				if elem[1]!="":						#空白のものは無視する
-					self._add(identifier,elem[0],elem[1])
+					self.add(identifier,elem[0],elem[1])
 
 	def addFile(self, filename,sections=None):
 		"""
@@ -372,7 +372,7 @@ class KeymapHandlerBase():
 			self.log.debug("read section %s" % identifier)
 			for elem in newKeys.items(identifier):
 				if elem[1]!="":				#空白のものは無視する
-					self._add(identifier,elem[0],elem[1])
+					self.add(identifier,elem[0],elem[1])
 		return errorCodes.OK
 
 	def SaveFile(self,fileName):
@@ -448,7 +448,7 @@ class KeymapHandlerBase():
 	def makeEntry(self,*pArgs, **kArgs):
 		return makeEntry(*pArgs,*kArgs)
 
-	def _add(self,identifier,ref,key):
+	def add(self,identifier,ref,key):
 		"""重複をチェックしながらキーマップにショートカットを追加する"""
 		#refとidentifierは大文字・小文字の区別をしないので大文字に統一
 		ref=ref.upper()

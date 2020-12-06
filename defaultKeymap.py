@@ -30,7 +30,6 @@ defaultKeymap["mainView"]={
 	"PREVIOUS_TRACK": "ctrl+B",
 	"FAST_FORWARD": "ctrl+rightarrow",
 	"REWIND": "ctrl+leftarrow",
-	"SAY_TIME": "ctrl+T",
 	"SKIP": "alt+leftarrow",
 	"REVERSE_SKIP": "alt+rightarrow",
 	"SKIP_INTERVAL_INCREASE": "alt+uparrow",
@@ -38,14 +37,17 @@ defaultKeymap["mainView"]={
 	"REPEAT_LOOP": "ctrl+L",
 	"SHUFFLE": "ctrl+H",
 	"MANUAL_SONG_FEED": "ctrl+shift+H",
+	# 設定メニュー
 	"SET_FONT": "",
 	"SET_KEYMAP": "",
 	"SET_HOTKEY": "",
 	"ENVIRONMENT": "ctrl+shift+E",
+	# ヘルプメニュー
 	"HELP": "F1",
 	"CHECK_UPDATE": "ctrl+shift+U",
-	"VERSION_INFO": "ctrl+shift+V"
-
+	"VERSION_INFO": "ctrl+shift+V",
+	# その他
+	"SAY_TIME": "ctrl+T",
 }
 
 defaultKeymap["playlist"]={
@@ -65,4 +67,23 @@ defaultKeymap["queue"]={
 	"POPUP_SELECT_ALL": "ctrl+A"
 }
 defaultKeymap["HOTKEY"]={
+	"EXIT": "",
+	"VOLUME_UP": "",
+	"VOLUME_DOWN": "",
+	"VOLUME_DEFAULT": "",
+	"MUTE": "",
+	"PLAY_PAUSE": "",
+	"STOP": "",
+	"NEXT_TRACK": "",
+	"PREVIOUS_TRACK": "",
+	"FAST_FORWARD": "",
+	"REWIND": "",
+	"SKIP": "",
+	"REVERSE_SKIP": "",
+	"SKIP_INTERVAL_INCREASE": "ctrl+alt++w",
+	"SKIP_INTERVAL_DECREASE": "ctrl+alt+s",
+	"REPEAT_LOOP": "",
+	"SHUFFLE": "",
+	"MANUAL_SONG_FEED": "",
+	"SAY_TIME": "",
 }
