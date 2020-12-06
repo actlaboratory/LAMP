@@ -224,8 +224,12 @@ class Menu(BaseMenu):
 		self.hSettingsMenu.AppendSubMenu(self.hDeviceChangeInSettingsMenu, _("再生出力先の変更"))
 		self.RegisterMenuCommand(self.hSettingsMenu, "FILE_ASSOCIATE", _("ファイルの関連付け"))
 		self.RegisterMenuCommand(self.hSettingsMenu, "SET_SENDTO", _("送るメニューに登録"))
+		self.RegisterMenuCommand(self.hSettingsMenu, "SET_FONT", _("フォント設定"))
+		self.RegisterMenuCommand(self.hSettingsMenu, "SET_KEYMAP", _("ショートカットキー設定"))
+		self.RegisterMenuCommand(self.hSettingsMenu, "SET_HOTKEY", _("グローバルホットキー設定"))
 		self.RegisterMenuCommand(self.hSettingsMenu, "ENVIRONMENT", _("環境設定"))
 		#ヘルプメニューの中身
+		self.RegisterMenuCommand(self.hHelpMenu,"HELP",_("ヘルプ"))
 		self.RegisterMenuCommand(self.hHelpMenu,"CHECK_UPDATE",_("更新の確認"))
 		self.RegisterMenuCommand(self.hHelpMenu,"VERSION_INFO",_("バージョン情報"))
 
