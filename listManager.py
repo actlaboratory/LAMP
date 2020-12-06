@@ -174,7 +174,7 @@ def infoDialog(tuple):
 		size = str(round(tuple[constants.ITEM_SIZE] / 10**9, 2)) + "GB"
 	if tuple[constants.ITEM_LENGTH] == None or tuple[constants.ITEM_LENGTH] < 0: length = ""
 	else: length = str(int(tuple[constants.ITEM_LENGTH] // 60)) + ":" + format(int(tuple[constants.ITEM_LENGTH]) // 60, "02")
-	dict = {_("ァイルの場所"): tuple[constants.ITEM_PATH],
+	dict = {_("ファイルの場所"): tuple[constants.ITEM_PATH],
 		_("ファイル名"): tuple[constants.ITEM_NAME],
 		_( "ファイルサイズ"): size,
 		_("タイトル"): tuple[constants.ITEM_TITLE],

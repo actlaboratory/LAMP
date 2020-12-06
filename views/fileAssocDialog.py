@@ -24,11 +24,11 @@ def assocDialog():
     elif r == UNSET:
         if fileAssocUtil.unsetAssoc("lamp.audio"):
             nd = mkDialog.Dialog("unsetFileAssocOk")
-            nd.Initialize(_("関連付け解除完了"), _("ファイルの関連付けを解除しました。"), (_("了解"),))
+            nd.Initialize(_("関連付け解除完了"), _("ファイルの関連付けを解除しました。"), ("OK",))
             nd.Show()
         else:
             e = mkDialog.Dialog("unsetFileAssocError")
-            e.Initialize(_("エラー"), _("ファイルの関連付けを解除できませんでした。"), (_("了解"),))
+            e.Initialize(_("エラー"), _("ファイルの関連付けを解除できませんでした。"), ("OK",))
             fxManager.error()
             e.Show()
 
@@ -65,7 +65,7 @@ class dialog(baseDialog.BaseDialog):
     def onOkBtn(self, evt):
         if len(self.GetData()) == 0:
             d = mkDialog.Dialog("fileType_notSelected")
-            d.Initialize(_("エラー"), _("1つ以上のファイル形式を選択してください。"), (_("了解"),))
+            d.Initialize(_("エラー"), _("1つ以上のファイル形式を選択してください。"), ("OK",))
             fxManager.error()
             d.Show()
 
