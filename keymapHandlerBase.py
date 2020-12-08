@@ -726,7 +726,7 @@ class KeyFilterBase:
 			return False
 
 		self.errorString=""
-		keys=keyString.split("+")
+		keys=keyString.upper().split("+")
 		modFlg=False
 		shiftFlg=False
 		funcCount=0
