@@ -190,7 +190,7 @@ class SettingDialogBase(BaseDialog):
 				dummy.Hide()
 				self.edits[i].Hide()
 			if self.buttons[i]:
-				dummy=self.creator.button(self.buttons[i][0],self.buttons[i][1],wx.ALIGN_RIGHT)
+				dummy=self.creator.button(self.buttons[i][0],self.buttons[i][1],sizerFlag=wx.ALIGN_RIGHT)
 
 		#ボタンエリア
 		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
