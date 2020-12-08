@@ -1,43 +1,32 @@
 ﻿# -*- coding: utf-8 -*-
 #Application Main
 
-import AppBase
-import event_processor, listManager, lampPipe
-import accessible_output2.outputs.auto
-import sys
-import time
-import ConfigManager
-import gettext
+import sys, os, wx, time, _datetime
+import win32event, win32api, winerror
+import gettext, locale
 import logging
-import os
-import wx
-import locale
-import win32event
-import win32api
-import winerror
-import datetime
-import proxyUtil
-import globalVars
-import m3uManager
 from logging import getLogger, FileHandler, Formatter
+import proxyUtil
+import AppBase
 from simpleDialog import *
-import sleep_timer
 from soundPlayer import player, bassController
 from soundPlayer.constants import *
+import accessible_output2.outputs.auto
+import constants, errorCodes
+def _import():
+	global event_processor, listManager, lampPipe, ConfigManager, globalVars, m3uManager, sleep_timer, DefaultSettings, update, main
 
-import update
-import constants
-import DefaultSettings
-import errorCodes
-from views import main
+	import event_processor, listManager, lampPipe, ConfigManager, globalVars, m3uManager, sleep_timer, DefaultSettings
+	import update
+	from views import main
 
 class Main(AppBase.MainBase):
 	def __init__(self):
 		super().__init__()
 		self.mutex = 0
 
-
 	def initialize(self):
+		_import()
 		self.log.debug(str(sys.argv))
 		# 多重起動処理8
 		try: self.mutex = win32event.CreateMutex(None, 1, constants.PIPE_NAME)

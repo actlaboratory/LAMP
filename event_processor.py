@@ -113,14 +113,14 @@ class eventProcessor():
             self.muteFlag = True
             globalVars.app.hMainView.volumeSlider.Disable()
             view_manager.buttonSetMuteOn()
-            globalVars.app.hMainView.menu.hVolumeInOperationMenu.SetLabel(menuItemsStore.getRef("MUTE"), _("消音を解除"))
+            globalVars.app.hMainView.menu.SetMenuLabel("MUTE", _("消音を解除"))
         elif self.muteFlag: #ミュート解除処理
             val = globalVars.app.hMainView.volumeSlider.GetValue()
             globalVars.play.setVolume(val)
             self.muteFlag = False
             globalVars.app.hMainView.volumeSlider.Enable()
             view_manager.buttonSetMuteOff()
-            globalVars.app.hMainView.menu.hVolumeInOperationMenu.SetLabel(menuItemsStore.getRef("MUTE"), _("消音に設定"))
+            globalVars.app.hMainView.menu.SetMenuLabel("MUTE", _("消音に設定"))
 
     #音量変更（変更幅+-%=変更しない, %指定=無視）
     def changeVolume(self, change=0, vol=-2): #vol=-1でデフォルト
@@ -253,8 +253,8 @@ class eventProcessor():
             if idx > 0:
                 settings.setSkipInterval(settings.skipInterval[idx-1])
         strVal = settings.getSkipInterval()[1]
-        globalVars.app.hMainView.menu.hOperationMenu.SetLabel(menuItemsStore.getRef("SKIP"), strVal+" "+_("進む"))
-        globalVars.app.hMainView.menu.hOperationMenu.SetLabel(menuItemsStore.getRef("REVERSE_SKIP"), strVal+" "+_("戻る"))
+        globalVars.app.hMainView.menu.SetMenuLabel("SKIP", strVal+" "+_("進む"))
+        globalVars.app.hMainView.menu.SetMenuLabel("REVERSE_SKIP", strVal+" "+_("戻る"))
         globalVars.app.hMainView.notification.show(strVal + _("スキップ"), 2)
         globalVars.app.say(strVal)
 
@@ -363,17 +363,17 @@ class eventProcessor():
             globalVars.play.setRepeat(False)
             view_manager.buttonSetRepeatLoop()
             globalVars.app.say(_("オフ"))
-            globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("REPEAT_LOOP_NONE"), True)
+            globalVars.app.hMainView.menu.hRepeatLoopSubMenu.Check(menuItemsStore.getRef("REPEAT_LOOP_NONE"), True)
         elif self.repeatLoopFlag == 1:
             globalVars.play.setRepeat(True)
             view_manager.buttonSetRepeat()
             globalVars.app.say(_("リピート"))
-            globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("RL_REPEAT"), True)
+            globalVars.app.hMainView.menu.hRepeatLoopSubMenu.Check(menuItemsStore.getRef("RL_REPEAT"), True)
         elif self.repeatLoopFlag == 2:
             globalVars.play.setRepeat(False)
             view_manager.buttonSetLoop()
             globalVars.app.say(_("ループ"))
-            globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("RL_LOOP"), True)
+            globalVars.app.hMainView.menu.hRepeatLoopSubMenu.Check(menuItemsStore.getRef("RL_LOOP"), True)
 
     def trackBarCtrl(self, bar):
         val = bar.GetValue()

@@ -183,66 +183,48 @@ class Menu(BaseMenu):
 		self.hHelpMenu=wx.Menu()
 
 		#ファイルメニューの中身
-		self.RegisterMenuCommand(self.hFileMenu,"FILE_OPEN",_("ファイルを開く"))
-		self.RegisterMenuCommand(self.hFileMenu,"DIR_OPEN",_("フォルダを開く"))
-		self.RegisterMenuCommand(self.hFileMenu,"URL_OPEN",_("URLを開く"))
-		self.RegisterMenuCommand(self.hFileMenu,"M3U_OPEN",_("プレイリストを開く"))
-		self.RegisterMenuCommand(self.hFileMenu,"NEW_M3U8_SAVE",_("名前を付けてプレイリストを保存"))
-		self.RegisterMenuCommand(self.hFileMenu,"M3U8_SAVE",_("プレイリストを上書き保存"))
+		self.RegisterMenuCommand(self.hFileMenu,
+			["FILE_OPEN", "DIR_OPEN", "URL_OPEN", "M3U_OPEN", "NEW_M3U8_SAVE", "M3U8_SAVE", "M3U_ADD", "M3U_CLOSE", "EXIT"])
 		self.hFileMenu.Enable(menuItemsStore.getRef("M3U8_SAVE"), False)
-		self.RegisterMenuCommand(self.hFileMenu,"M3U_ADD",_("プレイリストから読み込む"))
-		self.RegisterMenuCommand(self.hFileMenu,"M3U_CLOSE",_("プレイリストを閉じる"))
 		self.hFileMenu.Enable(menuItemsStore.getRef("M3U_CLOSE"), False)
-		self.RegisterMenuCommand(self.hFileMenu,"EXIT",_("終了"))
+		
 		#機能メニューの中身
-		self.RegisterMenuCommand(self.hFunctionMenu, "SET_SLEEPTIMER", _("スリープタイマーを設定"))
-		self.RegisterMenuCommand(self.hFunctionMenu, "SET_EFFECTOR", _("エフェクター"))
-		self.RegisterMenuCommand(self.hFunctionMenu, "ABOUT_PLAYING", _("再生中のファイルについて"))
+		self.RegisterMenuCommand(self.hFunctionMenu, ["SET_SLEEPTIMER",	"SET_EFFECTOR", "ABOUT_PLAYING"])
 		self.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
+		
 		# プレイリストメニューの中身
 		self.RegisterMenuCommand(self.hPlaylistMenu,"PLAYLIST_HISTORY_LABEL",_("履歴（20件まで）"))
 		self.hPlaylistMenu.Enable(menuItemsStore.getRef("PLAYLIST_HISTORY_LABEL"), False)
+		
 		#操作メニューの中身
-		self.RegisterMenuCommand(self.hOperationMenu, "PLAY_PAUSE", _("再生 / 一時停止"))
-		self.RegisterMenuCommand(self.hOperationMenu, "STOP", _("停止"))
-		self.RegisterMenuCommand(self.hOperationMenu, "PREVIOUS_TRACK", _("前へ / 頭出し"))
-		self.RegisterMenuCommand(self.hOperationMenu, "NEXT_TRACK", _("次へ"))
+		self.RegisterMenuCommand(self.hOperationMenu, ["PLAY_PAUSE", "STOP", "PREVIOUS_TRACK", "NEXT_TRACK"])
 		skipRtn = settings.getSkipInterval()
-		self.RegisterMenuCommand(self.hOperationMenu, "SKIP", skipRtn[1]+" "+_("進む"))
-		self.RegisterMenuCommand(self.hOperationMenu, "REVERSE_SKIP", skipRtn[1]+" "+_("戻る"))
+		self.RegisterMenuCommand(self.hOperationMenu, {"SKIP": skipRtn[1]+" "+_("進む"), "REVERSE_SKIP": skipRtn[1]+" "+_("戻る")})
 		#スキップ間隔設定
-		self.hSetSkipIntervalInOperationMenu=wx.Menu()
-		self.hOperationMenu.AppendSubMenu(self.hSetSkipIntervalInOperationMenu, _("スキップ間隔設定"))
-		self.RegisterMenuCommand(self.hSetSkipIntervalInOperationMenu, "SKIP_INTERVAL_INCREASE", _("間隔を大きくする"))
-		self.RegisterMenuCommand(self.hSetSkipIntervalInOperationMenu, "SKIP_INTERVAL_DECREASE", _("間隔を小さくする"))
+		self.hSkipIntervalSubMenu = wx.Menu()
+		self.RegisterMenuCommand(self.hSkipIntervalSubMenu, ["SKIP_INTERVAL_INCREASE", "SKIP_INTERVAL_DECREASE"])
+		self.RegisterMenuCommand(self.hOperationMenu, "SET_SKIP_INTERVAL_SUB", None, self.hSkipIntervalSubMenu)
 		#音量
-		self.hVolumeInOperationMenu=wx.Menu()
-		self.hOperationMenu.AppendSubMenu(self.hVolumeInOperationMenu, _("音量"))
-		self.RegisterMenuCommand(self.hVolumeInOperationMenu, "VOLUME_DEFAULT", _("音量を100%に設定"))
-		self.RegisterMenuCommand(self.hVolumeInOperationMenu, "VOLUME_UP", _("音量を上げる"))
-		self.RegisterMenuCommand(self.hVolumeInOperationMenu, "VOLUME_DOWN", _("音量を下げる"))
-		self.RegisterMenuCommand(self.hVolumeInOperationMenu, "MUTE", _("消音に設定"))
+		self.hVolumeSubMenu = wx.Menu()
+		self.RegisterMenuCommand(self.hVolumeSubMenu, ["VOLUME_100", "VOLUME_UP", "VOLUME_DOWN", "MUTE"])
+		self.RegisterMenuCommand(self.hOperationMenu, "SET_VOLUME_SUB",  None, self.hVolumeSubMenu)
 		#リピート・ループ
-		self.hRepeatLoopInOperationMenu=wx.Menu()
-		self.hOperationMenu.AppendSubMenu(self.hRepeatLoopInOperationMenu, _("リピート・ループ")+"\tCtrl+R")
-		self.RegisterRadioMenuCommand(self.hRepeatLoopInOperationMenu, "REPEAT_LOOP_NONE", _("解除する"))
-		self.RegisterRadioMenuCommand(self.hRepeatLoopInOperationMenu, "RL_REPEAT", _("リピート"))
-		self.RegisterRadioMenuCommand(self.hRepeatLoopInOperationMenu, "RL_LOOP", _("ループ"))
-		self.RegisterCheckMenuCommand(self.hOperationMenu, "SHUFFLE", _("シャッフル再生"))
-		self.RegisterCheckMenuCommand(self.hOperationMenu, "MANUAL_SONG_FEED", _("手動で曲送り"))
+		self.hRepeatLoopSubMenu = wx.Menu()
+		self.RegisterMenuCommand(self.hOperationMenu, "SET_REPEAT_LOOP_SUB", None, self.hRepeatLoopSubMenu)
+		self.RegisterRadioMenuCommand(self.hRepeatLoopSubMenu, "REPEAT_LOOP_NONE")
+		self.RegisterRadioMenuCommand(self.hRepeatLoopSubMenu, "RL_REPEAT")
+		self.RegisterRadioMenuCommand(self.hRepeatLoopSubMenu, "RL_LOOP")
+		self.RegisterCheckMenuCommand(self.hOperationMenu, "SHUFFLE")
+		self.RegisterCheckMenuCommand(self.hOperationMenu, "MANUAL_SONG_FEED")
+		
 		# 設定メニューの中身
-		self.hDeviceChangeInSettingsMenu = wx.Menu()
-		self.hSettingsMenu.AppendSubMenu(self.hDeviceChangeInSettingsMenu, _("再生出力先の変更"))
-		self.RegisterMenuCommand(self.hSettingsMenu, "FILE_ASSOCIATE", _("ファイルの関連付け"))
-		self.RegisterMenuCommand(self.hSettingsMenu, "SET_SENDTO", _("送るメニューに登録"))
-		self.RegisterMenuCommand(self.hSettingsMenu, "SET_FONT", _("フォント設定"))
-		self.RegisterMenuCommand(self.hSettingsMenu, "SET_KEYMAP", _("ショートカットキー設定"))
-		self.RegisterMenuCommand(self.hSettingsMenu, "SET_HOTKEY", _("グローバルホットキー設定"))
-		self.RegisterMenuCommand(self.hSettingsMenu, "ENVIRONMENT", _("環境設定"))
+		self.hDeviceSubMenu = wx.Menu()
+		self.RegisterMenuCommand(self.hSettingsMenu, "SET_DEVICE_SUB", _("再生出力先の変更"), self.hDeviceSubMenu)
+		self.RegisterMenuCommand(self.hSettingsMenu,
+			["FILE_ASSOCIATE", "SET_SENDTO", "SET_FONT", "SET_KEYMAP", "SET_HOTKEY", "ENVIRONMENT"])
+
 		#ヘルプメニューの中身
-		self.RegisterMenuCommand(self.hHelpMenu,"HELP",_("ヘルプ"))
-		self.RegisterMenuCommand(self.hHelpMenu,"CHECK_UPDATE",_("更新の確認"))
-		self.RegisterMenuCommand(self.hHelpMenu,"VERSION_INFO",_("バージョン情報"))
+		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "CHECK_UPDATE", "VERSION_INFO"])
 
 		#メニューバーの生成
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル") + " (&F)")
@@ -327,7 +309,7 @@ class Events(BaseEvents):
 			globalVars.eventProcess.previousBtn()
 		elif selected==menuItemsStore.getRef("NEXT_TRACK"):
 			globalVars.eventProcess.nextFile(button=True)
-		elif selected==menuItemsStore.getRef("VOLUME_DEFAULT"):
+		elif selected==menuItemsStore.getRef("VOLUME_100"):
 			globalVars.eventProcess.changeVolume(vol=100)
 		elif selected==menuItemsStore.getRef("VOLUME_UP"):
 			globalVars.eventProcess.changeVolume(+1)
@@ -393,8 +375,8 @@ class Events(BaseEvents):
 	def OnMenuOpen(self, event):
 		menuObject = event.GetEventObject()
 		
-		if event.GetMenu()==self.parent.menu.hDeviceChangeInSettingsMenu:
-			menu = self.parent.menu.hDeviceChangeInSettingsMenu
+		if event.GetMenu()==self.parent.menu.hDeviceSubMenu:
+			menu = self.parent.menu.hDeviceSubMenu
 			# 内容クリア
 			for i in range(menu.GetMenuItemCount()):
 				menu.DestroyItem(menu.FindItemByPosition(0))

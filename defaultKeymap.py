@@ -22,7 +22,7 @@ defaultKeymap["mainView"]={
 	# 操作メニュー
 	"VOLUME_UP": "ctrl+uparrow",
 	"VOLUME_DOWN": "ctrl+downarrow",
-	"VOLUME_DEFAULT": "ctrl+shift+uparrow",
+	"VOLUME_100": "ctrl+shift+uparrow",
 	"MUTE": "ctrl+shift+downarrow",
 	"PLAY_PAUSE": "ctrl+P/space",
 	"STOP": "ctrl+Space",
