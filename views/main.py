@@ -412,6 +412,7 @@ class Events(BaseEvents):
 
 		#ショートカットキーの変更適用とメニューバーの再描画
 		self.parent.menu.InitShortcut()
+		self.parent.menu.ApplyShortcut(self.parent.hFrame)
 		self.parent.menu.Apply(self.parent.hFrame)
 		return
 
