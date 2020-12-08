@@ -70,7 +70,7 @@ defaultKeymap["HOTKEY"]={
 	"EXIT": "",
 	"VOLUME_UP": "",
 	"VOLUME_DOWN": "",
-	"VOLUME_DEFAULT": "",
+	"VOLUME_100": "",
 	"MUTE": "",
 	"PLAY_PAUSE": "",
 	"STOP": "",

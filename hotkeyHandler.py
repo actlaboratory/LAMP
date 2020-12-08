@@ -53,6 +53,23 @@ class HotkeyHandler(keymapHandlerBase.KeymapHandlerBase):
 		except KeyError:
 			self.log.debug("hotkey set failed. identifier %s not defined." % identifier.upper())
 
+	def UnSet(self,identifier,window):
+		"""
+			指定されたウィンドウに対するホットキーの登録を解除する
+			identifier で、どのビューでのテーブルを取得するかを指定する。
+			windowには、先にSet()で登録を行ったwindowを指定する
+			イベントのバインドも削除(Noneで上書き)する
+		"""
+		window.Bind(wx.EVT_HOTKEY,None)
+		try:
+			for entry in self.entries[identifier.upper()]:
+				if not window.UnregisterHotKey(entry.GetCommand()):
+					self.log.warning("hotkey unset failed. ref=%s may be confrict." % entry.GetRefName)
+					self.addError(identifier,entry.GetRefName(),"N/A","unregister failed.")
+		except KeyError:
+			self.log.debug("hotkey set failed. identifier %s not defined." % identifier.upper())
+
+
 def permitConfrict(items,log):
 	return False		#ホットキーではOSの仕様により重複登録できない
 

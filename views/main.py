@@ -145,6 +145,9 @@ class MainView(BaseView):
 		self.hFrame.Layout()
 		self.notification = notificationText.notification(self.hPanel)
 
+		self.applyHotKey()
+
+	def applyHotKey(self):
 		self.hotkey = hotkeyHandler.HotkeyHandler(None,hotkeyHandler.HotkeyFilter().SetDefault())
 		if self.hotkey.addFile(constants.KEYMAP_FILE_NAME,["HOTKEY"])==errorCodes.OK:
 			errors=self.hotkey.GetError("HOTKEY")
@@ -370,9 +373,16 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("SET_SENDTO"):
 			sendToManager.sendToCtrl("LAMP")
 		elif selected==menuItemsStore.getRef("SET_KEYMAP"):
-			self.setKeymap("MainView")
+			if self.setKeymap("MainView"):
+				#ショートカットキーの変更適用とメニューバーの再描画
+				self.parent.menu.InitShortcut()
+				self.parent.menu.ApplyShortcut(self.parent.hFrame)
+				self.parent.menu.Apply(self.parent.hFrame)
 		elif selected==menuItemsStore.getRef("SET_HOTKEY"):
-			self.setKeymap("HotKey")
+			if self.setKeymap("HotKey",self.parent.hotkey):
+				#変更適用
+				self.parent.hotkey.UnSet("HOTKEY",self.parent.hFrame)
+				self.parent.applyHotKey()
 		elif selected==menuItemsStore.getRef("ENVIRONMENT"):
 			d = setting_dialog.settingDialog("environment_dialog")
 			d.Initialize()
@@ -382,8 +392,11 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("VERSION_INFO"):
 			versionDialog.versionDialog()
 
-	def setKeymap(self, identifier):
-		keys=self.parent.menu.keymap.map[identifier.upper()]
+	def setKeymap(self, identifier,keymap=None):
+		if keymap:
+			keys=keymap.map[identifier.upper()]
+		else:
+			keys=self.parent.menu.keymap.map[identifier.upper()]
 		keyData={}
 		menuData={}
 		for refName in defaultKeymap.defaultKeymap[identifier.upper()].keys():
@@ -395,26 +408,21 @@ class Events(BaseEvents):
 			menuData[title]=refName
 		d=views.globalKeyConfig.Dialog(keyData,menuData)
 		d.Initialize()
-		if d.Show()==wx.ID_CANCEL: return
+		if d.Show()==wx.ID_CANCEL: return False
 
 		result={}
 		keyData,menuData=d.GetValue()
 
 		#キーマップの既存設定を置き換える
-		keymap=ConfigManager.ConfigManager()
-		keymap.read(constants.KEYMAP_FILE_NAME)
+		newMap=ConfigManager.ConfigManager()
+		newMap.read(constants.KEYMAP_FILE_NAME)
 		for name,key in keyData.items():
 			if key!=_("なし"):
-				keymap[identifier.upper()][menuData[name]]=key
+				newMap[identifier.upper()][menuData[name]]=key
 			else:
-				keymap[identifier.upper()][menuData[name]]=""
-		keymap.write()
-
-		#ショートカットキーの変更適用とメニューバーの再描画
-		self.parent.menu.InitShortcut()
-		self.parent.menu.ApplyShortcut(self.parent.hFrame)
-		self.parent.menu.Apply(self.parent.hFrame)
-		return
+				newMap[identifier.upper()][menuData[name]]=""
+		newMap.write()
+		return True
 
 	def OnMenuOpen(self, event):
 		menuObject = event.GetEventObject()
