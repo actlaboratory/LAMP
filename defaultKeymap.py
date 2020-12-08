@@ -38,7 +38,14 @@ defaultKeymap["mainView"]={
 	"REPEAT_LOOP": "ctrl+L",
 	"SHUFFLE": "ctrl+H",
 	"MANUAL_SONG_FEED": "ctrl+shift+H",
-	"EXAMPLE": "ctrl+F12/shift+delete/ctrl+c/INSERT/ctrl+BACK",
+	"SET_FONT": "",
+	"SET_KEYMAP": "",
+	"SET_HOTKEY": "",
+	"ENVIRONMENT": "ctrl+shift+E",
+	"HELP": "F1",
+	"CHECK_UPDATE": "ctrl+shift+U",
+	"VERSION_INFO": "ctrl+shift+V"
+
 }
 
 defaultKeymap["playlist"]={
