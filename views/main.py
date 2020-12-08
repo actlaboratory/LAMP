@@ -7,6 +7,7 @@ from views import lampViewObject
 from views import setting_dialog
 from views import notificationText
 from views import versionDialog
+from views import globalKeyConfig
 import logging
 import os
 import sys
@@ -21,6 +22,7 @@ import globalVars
 import hotkeyHandler
 import menuItemsStore
 import settings
+import ConfigManager
 import m3uManager
 import effector
 import listManager
@@ -165,6 +167,10 @@ class MainView(BaseView):
 		if i-(hour*3600) > 0: min = (i - hour) // 60
 		if i-(hour*3600)-(min*60) > 0: sec = i - (hour*3600) - (min*60)
 		return f"{hour:01}:{min:02}:{sec:02}"
+
+	def GetKeyEntries(self):
+		return self.menu.keymap.GetEntries(self.identifier)
+
 
 class Menu(BaseMenu):
 	def __init__(self, identifier, event):
@@ -363,6 +369,10 @@ class Events(BaseEvents):
 			fileAssocDialog.assocDialog()
 		elif selected==menuItemsStore.getRef("SET_SENDTO"):
 			sendToManager.sendToCtrl("LAMP")
+		elif selected==menuItemsStore.getRef("SET_KEYMAP"):
+			self.setKeymap("MainView")
+		elif selected==menuItemsStore.getRef("SET_HOTKEY"):
+			self.setKeymap("HotKey")
 		elif selected==menuItemsStore.getRef("ENVIRONMENT"):
 			d = setting_dialog.settingDialog("environment_dialog")
 			d.Initialize()
@@ -371,6 +381,39 @@ class Events(BaseEvents):
 			globalVars.update.update()
 		elif selected==menuItemsStore.getRef("VERSION_INFO"):
 			versionDialog.versionDialog()
+
+	def setKeymap(self, identifier):
+		keys=self.parent.menu.keymap.map[identifier.upper()]
+		keyData={}
+		menuData={}
+		for refName in defaultKeymap.defaultKeymap[identifier.upper()].keys():
+			title=menuItemsDic.dic[refName]
+			if refName in keys:
+				keyData[title]=keys[refName]
+			else:
+				keyData[title]="なし"
+			menuData[title]=refName
+		d=views.globalKeyConfig.Dialog(keyData,menuData)
+		d.Initialize()
+		if d.Show()==wx.ID_CANCEL: return
+
+		result={}
+		keyData,menuData=d.GetValue()
+
+		#キーマップの既存設定を置き換える
+		keymap=ConfigManager.ConfigManager()
+		keymap.read(constants.KEYMAP_FILE_NAME)
+		for name,key in keyData.items():
+			if key!=_("なし"):
+				keymap[identifier.upper()][menuData[name]]=key
+			else:
+				keymap[identifier.upper()][menuData[name]]=""
+		keymap.write()
+
+		#ショートカットキーの変更適用とメニューバーの再描画
+		self.parent.menu.InitShortcut()
+		self.parent.menu.Apply(self.parent.hFrame)
+		return
 
 	def OnMenuOpen(self, event):
 		menuObject = event.GetEventObject()

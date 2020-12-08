@@ -18,6 +18,8 @@ dic={
 	# 操作メニュー
 	"PLAY_PAUSE": _("再生 / 一時停止"),
 	"STOP": _("停止"),
+	"FAST_FORWARD": _("早送り"),
+	"REWIND": _("巻き戻し"),
 	"PREVIOUS_TRACK": _("前へ / 頭出し"),
 	"NEXT_TRACK": _("次へ"),
 	"SKIP": _("スキップ"),
@@ -54,6 +56,8 @@ dic={
 	"HELP": _("ヘルプ"),
 	"CHECK_UPDATE": _("更新の確認"),
 	"VERSION_INFO": _("バージョン情報"),
+	
+	"SAY_TIME": _("経過時間の読み上げ"),
 
 	"":""		#セパレータ追加時用
 }

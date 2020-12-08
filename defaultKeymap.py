@@ -4,7 +4,7 @@
 
 defaultKeymap={}
 
-defaultKeymap["mainView"]={
+defaultKeymap["MAINVIEW"]={
 	# ファイルメニュー
 	"FILE_OPEN": "ctrl+shift+F",
 	"DIR_OPEN": "ctrl+shift+O",
@@ -86,4 +86,6 @@ defaultKeymap["HOTKEY"]={
 	"SHUFFLE": "",
 	"MANUAL_SONG_FEED": "",
 	"SAY_TIME": "",
+}
+defaultKeymap["HOTKEY"]={
 }
