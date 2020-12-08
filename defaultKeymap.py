@@ -87,5 +87,3 @@ defaultKeymap["HOTKEY"]={
 	"MANUAL_SONG_FEED": "",
 	"SAY_TIME": "",
 }
-defaultKeymap["HOTKEY"]={
-}
