@@ -394,7 +394,10 @@ class Events(BaseEvents):
 
 	def setKeymap(self, identifier,keymap=None):
 		if keymap:
-			keys=keymap.map[identifier.upper()]
+			try:
+				keys=keymap.map[identifier.upper()]
+			except KeyError:
+				keys={}
 		else:
 			keys=self.parent.menu.keymap.map[identifier.upper()]
 		keyData={}
