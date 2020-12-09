@@ -79,6 +79,7 @@ class Dialog(BaseDialog):
 				hits.append(name)
 
 		if hits:
+			self.bCancel.Disable()		#こうしないとEnterで反応してEnterがショートカットに使えない
 			self.key=""
 			for i,key in enumerate(hits):
 				self.key+=key
