@@ -15,7 +15,7 @@ import views.KeyValueSettingDialogBase
 from simpleDialog import dialog
 
 class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
-	def __init__(self,keyConfig,menuIds):
+	def __init__(self,keyConfig,menuIds,checkEntries=[],filter=None):
 		info=[
 			(_("名前"),wx.LIST_FORMAT_LEFT,200),
 			(_("ショートカット"),wx.LIST_FORMAT_LEFT,350),
@@ -23,6 +23,10 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		]
 		super().__init__("globalKeyConfigDialog",SettingDialog,info,keyConfig,menuIds)
 		self.oldKeyConfig=copy.copy(keyConfig)
+		self.checkEntries=checkEntries
+		self.filter=filter
+		if filter==None:
+			self.filter=globalVars.app.hMainView.menu.keymap.filter
 
 	def Initialize(self):
 		super().Initialize(self.app.hMainView.hFrame,_("ショートカットキーの設定"))
@@ -30,12 +34,15 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		self.deleteButton.Hide()
 		return
 
+	def SettingDialogHook(self,dialog):
+		dialog.SetFilter(self.filter)
+
 	def OkButtonEvent(self,event):
 		"""
 			設定されたキーが重複している場合はエラーとする
 		"""
 		#他のビューとの重複調査
-		if not views.KeyValueSettingDialogBase.KeySettingValidation(self.oldKeyConfig,self.values[0],self.log,None,True):
+		if not views.KeyValueSettingDialogBase.KeySettingValidation(self.oldKeyConfig,self.values[0],self.log,self.checkEntries,True):
 			return
 
 		#このビュー内での重複調査
@@ -99,16 +106,20 @@ class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 		ret[2]=self.edits[6].GetLineText(0)
 		return ret
 
+	def SetFilter(self,filter):
+		"""
+			SettingDialogHookから呼び出され、フィルタを登録する
+		"""
+		self.filter=filter
+
 	def keyDialog(self,no):
 		#フィルタに引っかかるものが既に設定されている場合、その変更は許さない
 		before=self.edits[no].GetLineText(0)
 		if before!=_("なし"):
-			filter=globalVars.app.hMainView.menu.keymap.filter
-			if not filter.Check(before):
+			if not self.filter.Check(before):
 				dialog(_("エラー"),_("このショートカットは変更できません。"))
-				print(filter.GetLastError())
 				return
-		d=views.keyConfig.Dialog(self.wnd)
+		d=views.keyConfig.Dialog(self.wnd,self.filter)
 		d.Initialize()
 		if d.Show()==wx.ID_CANCEL:
 			globalVars.app.say(_("解除しました。"))

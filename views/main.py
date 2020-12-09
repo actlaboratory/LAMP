@@ -379,7 +379,7 @@ class Events(BaseEvents):
 				self.parent.menu.ApplyShortcut(self.parent.hFrame)
 				self.parent.menu.Apply(self.parent.hFrame)
 		elif selected==menuItemsStore.getRef("SET_HOTKEY"):
-			if self.setKeymap("HotKey",self.parent.hotkey):
+			if self.setKeymap("HOTKEY",self.parent.hotkey,filter=self.parent.hotkey.filter):
 				#変更適用
 				self.parent.hotkey.UnSet("HOTKEY",self.parent.hFrame)
 				self.parent.applyHotKey()
@@ -392,14 +392,17 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("VERSION_INFO"):
 			versionDialog.versionDialog()
 
-	def setKeymap(self, identifier,keymap=None):
+	def setKeymap(self, identifier,keymap=None,filter=None):
 		if keymap:
 			try:
 				keys=keymap.map[identifier.upper()]
 			except KeyError:
 				keys={}
 		else:
-			keys=self.parent.menu.keymap.map[identifier.upper()]
+			try:
+				keys=self.parent.menu.keymap.map[identifier.upper()]
+			except KeyError:
+				keys={}
 		keyData={}
 		menuData={}
 		for refName in defaultKeymap.defaultKeymap[identifier.upper()].keys():
@@ -409,7 +412,14 @@ class Events(BaseEvents):
 			else:
 				keyData[title]="なし"
 			menuData[title]=refName
-		d=views.globalKeyConfig.Dialog(keyData,menuData)
+
+		entries=[]
+		for map in (self.parent.menu.keymap,self.parent.hotkey):
+			for i in map.entries.keys():
+				if identifier.upper()!=i:	#今回の変更対象以外のビューのものが対象
+					entries.extend(map.entries[i])
+
+		d=views.globalKeyConfig.Dialog(keyData,menuData,entries,filter)
 		d.Initialize()
 		if d.Show()==wx.ID_CANCEL: return False
 

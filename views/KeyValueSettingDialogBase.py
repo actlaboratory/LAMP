@@ -86,6 +86,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 	def add(self,event):
 		d=self.settingDialog(self.wnd)
 		d.Initialize()
+		self.SettingDialogHook(d)
 		if d.Show()==wx.ID_CANCEL:
 			return
 		v=d.GetValue()
@@ -111,6 +112,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 
 		d=self.settingDialog(self.wnd,*v)
 		d.Initialize()
+		self.SettingDialogHook(d)
 		if d.Show()==wx.ID_CANCEL:
 			return
 		v=d.GetValue()
@@ -144,6 +146,13 @@ class KeyValueSettingDialogBase(BaseDialog):
 		for i in range(len(self.values)):
 			del self.values[i][key]
 		self.hListCtrl.DeleteItem(index)
+
+	def SettingDialogHook(self,dialog):
+		"""
+			settingDialogのInitializeが終わったあと、表示の直前に呼ばれる
+			オーバーライドすることでダイアログへの値の受け渡しなどに活用できる
+		"""
+		pass
 
 	def OkButtonEvent(self,event):
 		"""
