@@ -613,6 +613,9 @@ class KeyFilterBase:
 		self.AddDisablePattern("CTRL+WINDOWS+RETURN")		#ナレーターの起動と終了
 		self.AddDisablePattern("ALT+SHIFT+PRINTSCREEN")		#ハイコントラストの切り替え
 		self.AddDisablePattern("ALT+ESCAPE")				#最前面ウィンドウの最小化
+		self.AddDisablePattern("ALT+TAB")					#ウィンドウ間の移動
+		self.AddDisablePattern("ALT+SHIFT+TAB")				#ウィンドウ間の移動
+
 
 	def SetDefault(self,supportInputChar,isSystem,arrowCharKey=False):
 		"""
