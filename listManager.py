@@ -6,6 +6,7 @@ from views import mkDialog
 from views import mkProgress
 from views import loadErrorDialog
 
+lock = threading.Lock()
 
 def getTuple(lstConstant, queueDelete=False):
     if lstConstant == constants.PLAYLIST:
@@ -101,29 +102,30 @@ def addItems(flst, lcObj, id=-1):
 	t.start()
 
 def addItemsThread(progress, flst, lcObj, id=-1):
-	# 作業するファイルのリスト（ファイルパス）
-	pathList = []
-	errorList = []
-	notFoundList = []
-	# リストで受け取ってフォルダとファイルに分ける
-	for s in flst:
-		if progress.status == wx.CANCEL: break
-		if (os.path.isfile(s) and os.path.splitext(s)[1].lower() in globalVars.fileExpansions) or re.search("^https?://.+\..+", s)!=None:
-			pathList.append(s)
-		elif os.path.isdir(s):
-			_appendDirList(pathList, s, errorList)
-		elif os.path.isfile(s):
-			errorList.append(s)
-		else:
-			notFoundList.append(s)
-	# 作成したファイルパスのリストから追加
-	if len(lcObj) == 0: _append(pathList, lcObj, progress, -1)
-	else: _append(pathList, lcObj, progress, id)
-	view_manager.changeListLabel(lcObj)
-	if len(errorList) != 0 or len(notFoundList) != 0:
-		wx.CallAfter(loadErrorDialog.run, errorList, notFoundList)
-	fxManager.load()
-	wx.CallAfter(progress.Destroy)
+	with lock:
+		# 作業するファイルのリスト（ファイルパス）
+		pathList = []
+		errorList = []
+		notFoundList = []
+		# リストで受け取ってフォルダとファイルに分ける
+		for s in flst:
+			if progress.status == wx.CANCEL: break
+			if (os.path.isfile(s) and os.path.splitext(s)[1].lower() in globalVars.fileExpansions) or re.search("^https?://.+\..+", s)!=None:
+				pathList.append(s)
+			elif os.path.isdir(s):
+				_appendDirList(pathList, s, errorList)
+			elif os.path.isfile(s):
+				errorList.append(s)
+			else:
+				notFoundList.append(s)
+		# 作成したファイルパスのリストから追加
+		if len(lcObj) == 0: _append(pathList, lcObj, progress, -1)
+		else: _append(pathList, lcObj, progress, id)
+		view_manager.changeListLabel(lcObj)
+		if len(errorList) != 0 or len(notFoundList) != 0:
+			wx.CallAfter(loadErrorDialog.run, errorList, notFoundList)
+		fxManager.load()
+		wx.CallAfter(progress.Destroy)
 
 # ディレクトリパスからファイルリストを取得（ファイルパスリスト, ディレクトリパス, 非対応格納リスト）
 def _appendDirList(lst, dir, errorList):
@@ -160,7 +162,9 @@ def _append(paths, lcObj, progress, id):
 			#wx.YieldIfNeeded() #プログレスダイアログを強制更新
 		progPerTmp = progPer
 		globalVars.listInfo.itemCounter += 1
-		if progress.status == wx.CANCEL: return
+		if progress.status == wx.CANCEL: 
+			lcObj.extend(lst)
+			return
 	lcObj.extend(lst)
 
 def infoDialog(tuple):

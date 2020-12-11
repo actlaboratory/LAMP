@@ -99,6 +99,7 @@ class clearSlider(sliderBase.slider):
 
     def sliderEvent(self,event):
         self.Refresh()
+        event.Skip()
 
     def setToolTip(self, labelFunction):
         """
