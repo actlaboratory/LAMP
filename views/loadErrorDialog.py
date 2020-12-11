@@ -48,6 +48,7 @@ class Dialog(BaseDialog):
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
         self.bOk = self.creator.cancelbutton("OK")
         self.bOk.SetDefault()
+        self.bOk.SetFocus()
 
     def GetData(self):
         return None
