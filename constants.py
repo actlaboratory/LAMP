@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-a#constant values
+#constant values
 #Copyright (C) 20XX anonimous <anonimous@sample.com>
 
 import wx
