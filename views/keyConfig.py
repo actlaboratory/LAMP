@@ -42,8 +42,7 @@ class Dialog(BaseDialog):
 		self.errorText=self.creator.staticText("")
 
 
-		self.buttonArea=views.ViewCreator.BoxSizer(self.sizer,wx.HORIZONTAL, wx.ALIGN_RIGHT)
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.buttonArea,wx.HORIZONTAL,20)
+		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,style=wx.ALIGN_RIGHT)
 		self.bCancel=self.creator.cancelbutton(_("設定解除"),None)
 
 	def Show(self):
@@ -67,7 +66,10 @@ class Dialog(BaseDialog):
 
 		#キーの判定
 		hits=[]
-		for name in self.filter.GetUsableKeys():
+		keyNames=self.filter.GetUsableKeys()
+		if "WINDOWS" not in keyNames:
+			keyNames.append("WINDOWS")
+		for name in keyNames:
 			#マウス関連は利用不可
 			code=keymap.str2key[name]
 			if code<=4:

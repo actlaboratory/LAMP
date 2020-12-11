@@ -73,7 +73,6 @@ str2UnknownKey={
 	"SCROLL":wx.WXK_SCROLL,					#ScrLk
 	"COMMAND":wx.WXK_COMMAND,				#CONTROLと同じ
 	"RAW_CONTROL":wx.WXK_RAW_CONTROL,		#CONTROLと同じ
-	"CLEAR":wx.WXK_CLEAR,					#テンキー5
 
 	#記号キー 動作しない
 	"MULTIPLY":wx.WXK_MULTIPLY,
@@ -150,6 +149,7 @@ str2StandaloneKey={
 	"UPARROW":wx.WXK_UP,
 	"RIGHTARROW":wx.WXK_RIGHT,
 	"DOWNARROW":wx.WXK_DOWN,
+	"CLEAR":wx.WXK_CLEAR,					#テンキー5
 }
 
 #単独または修飾キーとの組み合わせで利用できる
@@ -615,7 +615,7 @@ class KeyFilterBase:
 		self.AddDisablePattern("ALT+ESCAPE")				#最前面ウィンドウの最小化
 		self.AddDisablePattern("ALT+TAB")					#ウィンドウ間の移動
 		self.AddDisablePattern("ALT+SHIFT+TAB")				#ウィンドウ間の移動
-
+		self.AddDisablePattern("ALT+ESCAPE")				#ウィンドウの最小化
 
 	def SetDefault(self,supportInputChar,isSystem,arrowCharKey=False):
 		"""
