@@ -188,18 +188,19 @@ class SettingDialogBase(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.VERTICAL,20)
+		self.baseCreator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.VERTICAL,20)
 
 		for i,name in enumerate(self.valueNames):
+			self.creator=views.ViewCreator.ViewCreator(1,self.baseCreator.GetPanel(),self.baseCreator.GetSizer(),wx.HORIZONTAL,10)
 			if name[1]:
-				self.edits[i],dummy=self.creator.inputbox(name[0],x=500,defaultValue=self.values[i])
+				self.edits[i],dummy=self.creator.inputbox(name[0],x=500,defaultValue=self.values[i], textLayout=wx.VERTICAL)
 			else:
-				self.edits[i],dummy=self.creator.inputbox(name[0],x=500,defaultValue=self.values[i],style=wx.TE_READONLY)
+				self.edits[i],dummy=self.creator.inputbox(name[0],x=500,defaultValue=self.values[i],style=wx.TE_READONLY, textLayout=wx.VERTICAL)
 			if name[1]==None:
 				dummy.Hide()
 				self.edits[i].Hide()
 			if self.buttons[i]:
-				dummy=self.creator.button(self.buttons[i][0],self.buttons[i][1],sizerFlag=wx.ALIGN_RIGHT)
+				dummy=self.creator.button(self.buttons[i][0],self.buttons[i][1],sizerFlag=wx.ALIGN_BOTTOM | wx.BOTTOM, margin=10)
 
 		#ボタンエリア
 		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
