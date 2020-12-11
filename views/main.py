@@ -5,6 +5,8 @@
 
 from views import lampViewObject
 from views import setting_dialog
+from views import notificationText
+from views import versionDialog
 import logging
 import os
 import sys
@@ -25,7 +27,9 @@ from soundPlayer import player
 from soundPlayer.constants import *
 
 import view_manager
+import sendToManager
 from views import mkDialog
+from views import fileAssocDialog
 
 from logging import getLogger
 from simpleDialog import dialog
@@ -51,34 +55,74 @@ class MainView(BaseView):
 		)
 		self.InstallMenuEvent(Menu(self.identifier, self.events),self.events.OnMenuSelect)
 		
+		# 矢印キーUpを握りつぶしてショートカットキーの重複を回避
+		def stopArrowPropagation(evt):
+			if evt.GetKeyCode() in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT): evt.StopPropagation()
+			else: evt.Skip()
+		
+
+		#上余白
+		self.creator.AddSpace(15)
+
 		# ボタン・音量スライダエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,style=wx.ALL,space=20)
-		self.previousBtn = self.horizontalCreator.button(_("前"), self.events.onButtonClick, enableTabFocus=False)
-		self.playPauseBtn = self.horizontalCreator.button(_("再生"), self.events.onButtonClick, enableTabFocus=False)
-		self.nextBtn = self.horizontalCreator.button(_("次"), self.events.onButtonClick, enableTabFocus=False)
-		self.stopBtn = self.horizontalCreator.button(_("停止"), self.events.onButtonClick, enableTabFocus=False)
-		self.repeatLoopBtn = self.horizontalCreator.button(_("ﾘﾋﾟｰﾄ/ﾙｰﾌﾟ"), self.events.onButtonClick, enableTabFocus=False)
-		self.shuffleBtn = self.horizontalCreator.button(_("ｼｬｯﾌﾙ"), self.events.onButtonClick, enableTabFocus=False)
-		self.volumeSlider, dummy = self.horizontalCreator.slider(_("音量"), 0, 100, self.events.onSlider, 
-			globalVars.app.config.getint("volume","default",default=100, min=0, max=100), textLayout=None)
-		self.muteBtn = self.horizontalCreator.button(_("ﾐｭｰﾄ"), self.events.onButtonClick, enableTabFocus=False)
+		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,style=wx.LEFT | wx.RIGHT | wx.EXPAND,space=20,margin=65)
+		self.previousBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, enableTabFocus=False)
+		view_manager.setBitmapButton(self.previousBtn, self.hPanel, wx.Bitmap("./resources/back.dat", wx.BITMAP_TYPE_GIF), _("前へ"))
+		self.playPauseBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, enableTabFocus=False)
+		view_manager.setBitmapButton(self.playPauseBtn, self.hPanel, wx.Bitmap("./resources/play.dat", wx.BITMAP_TYPE_GIF), _("再生"))
+		self.nextBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, enableTabFocus=False)
+		view_manager.setBitmapButton(self.nextBtn, self.hPanel, wx.Bitmap("./resources/next.dat", wx.BITMAP_TYPE_GIF), _("次へ"))
+		self.stopBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, enableTabFocus=False)
+		view_manager.setBitmapButton(self.stopBtn, self.hPanel, wx.Bitmap("./resources/stop.dat", wx.BITMAP_TYPE_GIF), _("停止"))
+		self.repeatLoopBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, enableTabFocus=False)
+		view_manager.setBitmapButton(self.repeatLoopBtn, self.hPanel, wx.Bitmap("./resources/repeatLoop.dat", wx.BITMAP_TYPE_GIF), _("リピートに切り替える"))
+		self.shuffleBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, enableTabFocus=False)
+		view_manager.setBitmapButton(self.shuffleBtn, self.hPanel, wx.Bitmap("./resources/shuffle_off.dat", wx.BITMAP_TYPE_GIF), _("シャッフルをオンにする"))
+		self.horizontalCreator.GetSizer().AddStretchSpacer(1)
+		self.muteBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, sizerFlag=wx.ALL|wx.ALIGN_CENTER, enableTabFocus=False)
+		if globalVars.app.config.getstring("view","colorMode","white",("white","dark")) == "white":
+			view_manager.setBitmapButton(self.muteBtn, self.hPanel, wx.Bitmap("./resources/volume.dat", wx.BITMAP_TYPE_GIF), _("ミュートをオンにする"))
+		else: view_manager.setBitmapButton(self.muteBtn, self.hPanel, wx.Bitmap("./resources/volume_bk.dat", wx.BITMAP_TYPE_GIF), _("ミュートをオンにする"))
+		self.volumeSlider, dummy = self.horizontalCreator.clearSlider(_("音量"), 0, 100, None,
+			globalVars.app.config.getint("volume","default",default=100, min=0, max=100), x=150, sizerFlag=wx.ALIGN_CENTER, textLayout=None)
+		self.volumeSlider.Bind(wx.EVT_SCROLL, self.events.onSlider)
+		self.volumeSlider.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
+		self.volumeSlider.SetThumbLength(25)
+		self.volumeSlider.setToolTip(self.val2vol)
 		#self.hFrame.Bind(wx.EVT_BUTTON, self.events.onButtonClick)
 
-		# 曲情報表示
-		self.viewTitle = self.creator.staticText(_("タイトル") +  " : ",sizerFlag=wx.LEFT | wx.RIGHT,margin=20)
+		self.creator.AddSpace(10)
 
-		self.viewTagInfo = self.creator.staticText("")
+		# 曲情報表示
+		infoCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT, margin=60)
+		lb = infoCreator.staticText("♪")
+		f = lb.GetFont()
+		f.SetPointSize(f.GetPointSize() * (5/3))
+		lb.SetFont(f)
+		infoRight = views.ViewCreator.ViewCreator(self.viewMode, infoCreator.GetPanel(), infoCreator.GetSizer(), wx.VERTICAL,0, style=wx.EXPAND | wx.LEFT, margin=5, proportion=1)
+		self.viewTitle = infoRight.staticText("")
+		self.viewTagInfo = infoRight.staticText("")
+		f = self.viewTagInfo.GetFont()
+		f.SetPointSize(f.GetPointSize() * (2/3))
+		self.viewTagInfo.SetFont(f)
 		self.tagInfoTimer = wx.Timer()
 		self.tagInfoTimer.Bind(wx.EVT_TIMER, globalVars.eventProcess.refreshTagInfo)
+		self.nowTime = infoCreator.staticText("0:00:00 / 0:00:00", sizerFlag=wx.ALL, proportion = 0)
+
+		self.creator.AddSpace(10)
 
 		#トラックバーエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT,margin=20)
-		self.trackBar, dummy = self.horizontalCreator.slider(_("トラック"), x=1000, sizerFlag=wx.LEFT | wx.RIGHT, proportion=1, margin=10)
+		#self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT, margin=60)
+		self.trackBar, dummy = self.creator.clearSlider(_("トラックバー"), x=1000, sizerFlag=wx.EXPAND | wx.LEFT | wx.RIGHT, proportion=0, margin=60, textLayout=None)
+		self.trackBar.SetThumbLength(30)
+		self.trackBar.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
 		self.trackBar.Bind(wx.EVT_SCROLL, self.events.onSlider)
-		self.nowTime = self.horizontalCreator.staticText("0:00:00 / 0:00:00", x=(350))
+		self.trackBar.setToolTip(self.sec2TimeStr)
+
+		self.creator.AddSpace(20)
 
 		# リストビューエリア
-		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL, 0, style=wx.EXPAND | wx.LEFT | wx.ALL,proportion=1,margin=20)
+		self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL, 15, style=wx.EXPAND | wx.LEFT | wx.LEFT | wx.RIGHT, proportion=1, margin=60)
 		self.playlistView, self.playlistLabel = self.horizontalCreator.customListCtrl(lampViewObject.playlist, _("プレイリスト") + " (0" + _("件") + ")", style=wx.LC_NO_HEADER, sizerFlag=wx.EXPAND | wx.RIGHT,proportion=2,textLayout=wx.VERTICAL)
 		self.playlistView.SetFocus()
 		view_manager.listViewSetting(self.playlistView, "playlist")
@@ -97,6 +141,20 @@ class MainView(BaseView):
 		self.hFrame.Bind(wx.EVT_TIMER, self.events.timerEvent, self.timer)
 
 		self.hFrame.Layout()
+		self.notification = notificationText.notification(self.hPanel)
+
+	def val2vol(self, val):
+		return "%d%%" %(round(val))
+
+	def sec2TimeStr(self, sec):
+		i = int(sec)
+		hour = 0
+		min = 0
+		sec = 0
+		if i > 0: hour = i // 3600
+		if i-(hour*3600) > 0: min = (i - hour) // 60
+		if i-(hour*3600)-(min*60) > 0: sec = i - (hour*3600) - (min*60)
+		return f"{hour:01}:{min:02}:{sec:02}"
 
 class Menu(BaseMenu):
 	def __init__(self, identifier, event):
@@ -161,13 +219,20 @@ class Menu(BaseMenu):
 		self.RegisterRadioMenuCommand(self.hRepeatLoopInOperationMenu, "RL_REPEAT", _("リピート"))
 		self.RegisterRadioMenuCommand(self.hRepeatLoopInOperationMenu, "RL_LOOP", _("ループ"))
 		self.RegisterCheckMenuCommand(self.hOperationMenu, "SHUFFLE", _("シャッフル再生"))
+		self.RegisterCheckMenuCommand(self.hOperationMenu, "MANUAL_SONG_FEED", _("手動で曲送り"))
 		# 設定メニューの中身
 		self.hDeviceChangeInSettingsMenu = wx.Menu()
 		self.hSettingsMenu.AppendSubMenu(self.hDeviceChangeInSettingsMenu, _("再生出力先の変更"))
+		self.RegisterMenuCommand(self.hSettingsMenu, "FILE_ASSOCIATE", _("ファイルの関連付け"))
+		self.RegisterMenuCommand(self.hSettingsMenu, "SET_SENDTO", _("送るメニューに登録"))
+		self.RegisterMenuCommand(self.hSettingsMenu, "SET_FONT", _("フォント設定"))
+		self.RegisterMenuCommand(self.hSettingsMenu, "SET_KEYMAP", _("ショートカットキー設定"))
+		self.RegisterMenuCommand(self.hSettingsMenu, "SET_HOTKEY", _("グローバルホットキー設定"))
 		self.RegisterMenuCommand(self.hSettingsMenu, "ENVIRONMENT", _("環境設定"))
 		#ヘルプメニューの中身
+		self.RegisterMenuCommand(self.hHelpMenu,"HELP",_("ヘルプ"))
 		self.RegisterMenuCommand(self.hHelpMenu,"CHECK_UPDATE",_("更新の確認"))
-		self.RegisterMenuCommand(self.hHelpMenu,"EXAMPLE",_("テストダイアログを閲覧"))
+		self.RegisterMenuCommand(self.hHelpMenu,"VERSION_INFO",_("バージョン情報"))
 
 		#メニューバーの生成
 		self.hMenuBar.Append(self.hFileMenu,_("ファイル") + " (&F)")
@@ -252,7 +317,7 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("PREVIOUS_TRACK"):
 			globalVars.eventProcess.previousBtn()
 		elif selected==menuItemsStore.getRef("NEXT_TRACK"):
-			globalVars.eventProcess.nextFile()
+			globalVars.eventProcess.nextFile(button=True)
 		elif selected==menuItemsStore.getRef("VOLUME_DEFAULT"):
 			globalVars.eventProcess.changeVolume(vol=100)
 		elif selected==menuItemsStore.getRef("VOLUME_UP"):
@@ -296,23 +361,29 @@ class Events(BaseEvents):
 			globalVars.eventProcess.repeatLoopCtrl(2)
 		elif selected==menuItemsStore.getRef("SHUFFLE"):
 			globalVars.eventProcess.shuffleSw()
+		elif selected==menuItemsStore.getRef("MANUAL_SONG_FEED"):
+			globalVars.eventProcess.setSongFeed()
 		elif selected >= constants.DEVICE_LIST_MENU and selected < constants.DEVICE_LIST_MENU + 500:
 			if selected == constants.DEVICE_LIST_MENU: globalVars.play.setDevice(PLAYER_DEFAULT_SPEAKER)
 			else: globalVars.play.setDevice(selected - constants.DEVICE_LIST_MENU)
 		elif selected >= constants.PLAYLIST_HISTORY and selected < constants.PLAYLIST_HISTORY+ 20:
 			m3uManager.loadM3u(globalVars.m3uHistory.getList()[selected - constants.PLAYLIST_HISTORY])
+		elif selected==menuItemsStore.getRef("FILE_ASSOCIATE"):
+			fileAssocDialog.assocDialog()
+		elif selected==menuItemsStore.getRef("SET_SENDTO"):
+			sendToManager.sendToCtrl("LAMP")
 		elif selected==menuItemsStore.getRef("ENVIRONMENT"):
 			d = setting_dialog.settingDialog("environment_dialog")
 			d.Initialize()
 			d.Show()
 		elif selected==menuItemsStore.getRef("CHECK_UPDATE"):
 			globalVars.update.update()
-		elif selected==menuItemsStore.getRef("EXAMPLE"):
-			d = mkDialog.Dialog("testDialog")
-			d.Initialize("テスト", "これはテストです。", ("テ", "ス", "ト"))
-			r = d.Show()
+		elif selected==menuItemsStore.getRef("VERSION_INFO"):
+			versionDialog.versionDialog()
 
 	def OnMenuOpen(self, event):
+		menuObject = event.GetEventObject()
+		
 		if event.GetMenu()==self.parent.menu.hDeviceChangeInSettingsMenu:
 			menu = self.parent.menu.hDeviceChangeInSettingsMenu
 			# 内容クリア
@@ -329,7 +400,7 @@ class Events(BaseEvents):
 			deviceNow = globalVars.play.getConfig(PLAYER_CONFIG_DEVICE)
 			if deviceNow == PLAYER_DEFAULT_SPEAKER: menu.Check(constants.DEVICE_LIST_MENU, True)
 			elif deviceNow > 0 and deviceNow < len(deviceList) and deviceList[deviceNow] != None: menu.Check(constants.DEVICE_LIST_MENU + deviceNow, True)
-		elif event.GetEventObject() == self.parent.menu.hPlaylistMenu:
+		elif menuObject == self.parent.menu.hPlaylistMenu:
 			menu = self.parent.menu.hPlaylistMenu
 			# 履歴部分を削除
 			for i in range(menu.GetMenuItemCount() - 1):
@@ -339,6 +410,8 @@ class Events(BaseEvents):
 			for path in globalVars.m3uHistory.getList():
 				menu.Insert(1, constants.PLAYLIST_HISTORY + index, path)
 				index += 1
+		elif menuObject == self.parent.menu.hOperationMenu:
+			self.parent.menu.hOperationMenu.Check(menuItemsStore.getRef("MANUAL_SONG_FEED"), globalVars.app.config.getboolean("player", "manualSongFeed", False))
 	
 	def onButtonClick(self, event):
 			if event.GetEventObject() == globalVars.app.hMainView.previousBtn:
@@ -346,7 +419,7 @@ class Events(BaseEvents):
 			elif event.GetEventObject() == globalVars.app.hMainView.playPauseBtn:
 				globalVars.eventProcess.playButtonControl()
 			elif event.GetEventObject() == globalVars.app.hMainView.nextBtn:
-				globalVars.eventProcess.nextFile()
+				globalVars.eventProcess.nextFile(button=True)
 			elif event.GetEventObject() == globalVars.app.hMainView.stopBtn:
 				globalVars.eventProcess.stop()
 			elif event.GetEventObject() == globalVars.app.hMainView.repeatLoopBtn:

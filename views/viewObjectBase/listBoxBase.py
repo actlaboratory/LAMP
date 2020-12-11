@@ -3,12 +3,9 @@
 
 
 import wx
-from views.viewObjectBase import viewObjectUtil
+from views.viewObjectBase import viewObjectUtil, controlBase
 
-class listBox(wx.ListBox):
+class listBox(controlBase.controlBase, wx.ListBox):
     def __init__(self, *pArg, **kArg):
         self.focusFromKbd = viewObjectUtil.popArg(kArg, "enableTabFocus", True) #キーボードフォーカスの初期値
         return super().__init__(*pArg, **kArg)
-
-    def AcceptsFocusFromKeyboard(self):
-        return self.focusFromKbd

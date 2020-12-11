@@ -37,12 +37,20 @@ defaultKeymap["mainView"]={
 	"SKIP_INTERVAL_DECREASE": "alt+downarrow",
 	"REPEAT_LOOP": "ctrl+L",
 	"SHUFFLE": "ctrl+H",
-	"EXAMPLE": "ctrl+F12/shift+delete/ctrl+c/INSERT/ctrl+BACK",
+	"MANUAL_SONG_FEED": "ctrl+shift+H",
+	"SET_FONT": "",
+	"SET_KEYMAP": "",
+	"SET_HOTKEY": "",
+	"ENVIRONMENT": "ctrl+shift+E",
+	"HELP": "F1",
+	"CHECK_UPDATE": "ctrl+shift+U",
+	"VERSION_INFO": "ctrl+shift+V"
+
 }
 
 defaultKeymap["playlist"]={
-	"POPUP_ADD_QUEUE_HEAD": "ctrl+shift+G",
-	"POPUP_ADD_QUEUE": "ctrl+G",
+	"POPUP_ADD_QUEUE_HEAD": "ctrl+shift+return",
+	"POPUP_ADD_QUEUE": "shift+return",
 	"POPUP_COPY": "ctrl+C",
 	"POPUP_PASTE": "ctrl+V",
 	"POPUP_DELETE": "delete",
@@ -50,7 +58,7 @@ defaultKeymap["playlist"]={
 }
 
 defaultKeymap["queue"]={
-	"POPUP_ADD_PLAYLIST": "ctrl+G",
+	"POPUP_ADD_PLAYLIST": "shift+return",
 	"POPUP_COPY": "ctrl+C",
 	"POPUP_PASTE": "ctrl+v",
 	"POPUP_DELETE": "delete",

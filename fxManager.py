@@ -1,3 +1,4 @@
+import globalVars
 from soundPlayer.fxPlayer import *
 from soundPlayer.constants import *
 import globalVars
@@ -14,6 +15,11 @@ def _notiSound():
 def _notiDevice():
     dl = getDeviceList()
     dl[0] = "default"
+    dl.append("same")
     dc = globalVars.app.config.getstring("notification", "outputDevice", "default", dl)
     if dc == "default": return PLAYER_DEFAULT_SPEAKER
+    elif dc == "same":
+        md = globalVars.play.getConfig(PLAYER_CONFIG_DEVICE)
+        if md > 0 and md < len(dl) - 1: return dl[md]
+        else: return PLAYER_DEFAULT_SPEAKER
     else: return dc

@@ -7,15 +7,11 @@ class shuffle():
         self.list = list #シャッフルする元オブジェクト
         self.history = [] #再生履歴
         self.playIndex = -1
-        self.deleted = False
 
     def previous(self, lstConstant):
         # プレイリスト再生中であれば
         if lstConstant == constants.PLAYLIST:
             #1曲前を再生
-            if self.deleted:
-                self.playIndex += 1
-                self.deleted = False
             if self.playIndex <= 0:
                 return errorCodes.END
             else:
@@ -24,7 +20,7 @@ class shuffle():
                     self.list.setPointer(self.list.index(self.history[self.playIndex]))
                     return globalVars.eventProcess.play()
                 else:
-                    self.delete(self.playIndex)
+                    self.history.pop(self.playIndex)
                     self.previous(lstConstant)
         else:
             # キューなどからの復帰
@@ -32,7 +28,7 @@ class shuffle():
                 self.list.setPointer(self.list.index(self.history[self.playIndex]))
                 return globalVars.eventProcess.play()
             else:
-                self.delete(self.playIndex)
+                self.history.pop(self.playIndex)
                 self.previous(constants.PLAYLIST)
 
     def next(self):
@@ -40,7 +36,6 @@ class shuffle():
         t = globalVars.app.hMainView.queueView.get()
         if t != None: return globalVars.eventProcess.play(constants.QUEUE)
         # キューが空の時はシャッフルを進める
-        self.deleted = False
         self.playIndex += 1
         if self.playIndex < len(self.history):
             if self.history[self.playIndex] in self.list:

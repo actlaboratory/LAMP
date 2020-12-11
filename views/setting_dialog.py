@@ -31,6 +31,8 @@ class settingDialog(baseDialog.BaseDialog):
         for i in range(len(dl)):
             if i == 0: self.deviceDic["default"] = _("規定の再生デバイス")
             elif dl[i] != None: self.deviceDic[dl[i]] = dl[i]
+        self.notificationDeviceDic = {"same": _("音楽再生の出力先と同じ")}
+        self.notificationDeviceDic.update(self.deviceDic)
         self.InstallControls()
         return True
 
@@ -42,7 +44,7 @@ class settingDialog(baseDialog.BaseDialog):
         tabCtrl = creator.tabCtrl(_("環境設定"))
 
         # 一般
-        generalCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("一般"))
+        generalCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("一般"), style=wx.ALL, margin=20)
         self.darkMode = generalCreator.checkbox(_("ダークモード（白黒反転）"))
         if globalVars.app.config.getstring("view", "colormode", "white", ("white", "dark")) == "white":
             self.darkMode.SetValue(False)
@@ -59,20 +61,20 @@ class settingDialog(baseDialog.BaseDialog):
         self.playlistInterruptCombo, fileInterruptLabel = generalCreator.combobox(_("新たなプレイリストにより開かれたとき"), self.getValueList(self.playlistInterruptDic), textLayout=wx.VERTICAL)
 
         # 通知
-        notificationCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("通知"))
+        notificationCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("通知"), style=wx.ALL, margin=20)
         self.readerCombo, readerLabel = notificationCreator.combobox(_("音声読み上げの出力先"), self.getValueList(self.readerDic), textLayout=wx.HORIZONTAL)
         self.notificationSound = notificationCreator.checkbox(_("効果音による通知を有効にする"))
         if globalVars.app.config.getboolean("notification", "sound", True):
             self.notificationSound.SetValue(True)
         else: self.notificationSound.SetValue(False)
-        self.notificationDeviceCombo, notificationDeviceLabel = notificationCreator.combobox(_("効果音出力先"), self.getValueList(self.deviceDic), textLayout=wx.HORIZONTAL)
+        self.notificationDeviceCombo, notificationDeviceLabel = notificationCreator.combobox(_("効果音出力先"), self.getValueList(self.notificationDeviceDic), textLayout=wx.HORIZONTAL)
         self.ignoreError = notificationCreator.checkbox(_("エラーを通知せず無視する"))
         if globalVars.app.config.getboolean("notification", "ignoreError", True):
             self.ignoreError.SetValue(True)
         else: self.ignoreError.SetValue(False)
 
         # 起動
-        startupCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("起動"))
+        startupCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("起動"), style=wx.ALL, margin=20)
         self.volumeSlider, self.volumeLabel = startupCreator.slider(_("規定の音量"), 0, 100,None, globalVars.app.config.getint("volume","default",default=100, min=0, max=100), textLayout=wx.HORIZONTAL)
         self.startupDeviceCombo, startupDeviceLabel = startupCreator.combobox(_("起動時出力先"), self.getValueList(self.deviceDic), textLayout=wx.HORIZONTAL)
         self.startupListLabel = startupCreator.staticText(_("起動時に読み込むプレイリスト"))
@@ -80,8 +82,23 @@ class settingDialog(baseDialog.BaseDialog):
         self.startupList, dummy = startupListCreator.inputbox(_("起動時に読み込むプレイリスト"), defaultValue=globalVars.app.config.getstring("player", "startupPlaylist", ""), x=600, textLayout=None)
         self.startupListSelectBtn = startupListCreator.button(_("参照"), self.onButton)
 
+        # ネットワーク
+        netCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("ネットワーク"), style=wx.ALL, margin=20)
+        self.updateCheck = netCreator.checkbox(_("起動時に更新を確認"))
+        if globalVars.app.config.getboolean("general", "update", True):
+            self.updateCheck.SetValue(True)
+        else: self.updateCheck.SetValue(False)
+        self.manualProxy = netCreator.checkbox(_("手動でプロキシ設定を行う"), self.onCheckBox)
+        if globalVars.app.config.getboolean("network", "manual_proxy", False):
+            self.manualProxy.SetValue(True)
+        else: self.manualProxy.SetValue(False)
+        self.proxyServer, self.proxyServerLabel = netCreator.inputbox(_("サーバ名"), defaultValue=globalVars.app.config.getstring("network", "proxy_server", ""), x=400, textLayout=wx.HORIZONTAL)
+        self.proxyPort, self.proxyPortLabel = netCreator.spinCtrl(_("ポート"), 0, 65535, None, globalVars.app.config.getint("network", "proxy_port", 8080, 0, 65535), textLayout=wx.HORIZONTAL)
+
+        self.onCheckBox()
+
         # フッター
-        footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, creator.GetSizer())
+        footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, creator.GetSizer(), style=wx.ALIGN_RIGHT | wx.ALL, margin=10)
         self.saveBtn = footerCreator.button(_("保存"), self.onSaveButton)
         cancelBtn = footerCreator.cancelbutton(_("破棄"))
 
@@ -96,11 +113,22 @@ class settingDialog(baseDialog.BaseDialog):
         globalVars.app.config["player"]["playlistInterrupt"] = self.getKey(self.playlistInterruptDic, self.playlistInterruptCombo.GetStringSelection())
         globalVars.app.config["speech"]["reader"] = self.getKey(self.readerDic, self.readerCombo.GetStringSelection())
         globalVars.app.config["notification"]["sound"] = self.notificationSound.IsChecked()
-        globalVars.app.config["notification"]["outputDevice"] = self.getKey(self.deviceDic, self.notificationDeviceCombo.GetStringSelection())
+        globalVars.app.config["notification"]["outputDevice"] = self.getKey(self.notificationDeviceDic, self.notificationDeviceCombo.GetStringSelection())
         globalVars.app.config["notification"]["ignoreError"] = self.ignoreError.IsChecked()
         globalVars.app.config["volume"]["default"] = str(int(self.volumeSlider.GetValue()))
         globalVars.app.config["player"]["outputDevice"] = self.getKey(self.deviceDic, self.startupDeviceCombo.GetStringSelection())
         globalVars.app.config["player"]["startupPlaylist"] = self.startupList.GetValue()
+        globalVars.app.config["general"]["update"] = self.updateCheck.IsChecked()
+        globalVars.app.config["network"]["manual_proxy"] = self.manualProxy.IsChecked()
+        globalVars.app.config["network"]["proxy_server"] = self.proxyServer.GetValue()
+        globalVars.app.config["network"]["proxy_port"] = self.proxyPort.GetValue()
+
+        # プロキシ即時反映
+        if self.manualProxy.IsChecked():
+            globalVars.app.proxyEnviron.set_environ(self.proxyServer.GetValue(), self.proxyPort.GetValue())
+        else: globalVars.app.proxyEnviron.set_environ()
+        
+
         self.wnd.EndModal(wx.ID_OK)
 
     def comboloader(self):
@@ -113,12 +141,23 @@ class settingDialog(baseDialog.BaseDialog):
         reader = globalVars.app.config["speech"]["reader"]
         selectionStr = self.readerDic[reader]
         self.readerCombo.SetStringSelection(selectionStr)
-        notificationDevice = globalVars.app.config.getstring("notification", "outputDevice", "default", self.getKeyList(self.deviceDic))
-        selectionStr = self.deviceDic[notificationDevice]
+        notificationDevice = globalVars.app.config.getstring("notification", "outputDevice", "default", self.getKeyList(self.notificationDeviceDic))
+        selectionStr = self.notificationDeviceDic[notificationDevice]
         self.notificationDeviceCombo.SetStringSelection(selectionStr)
         startupDevice = globalVars.app.config.getstring("player", "outputDevice", "default", self.getKeyList(self.deviceDic))
         selectionStr = self.deviceDic[startupDevice]
         self.startupDeviceCombo.SetStringSelection(selectionStr)
+
+    def onCheckBox(self, evt=None):
+        if evt == None: evtObject = None
+        else: evtObject = evt.GetEventObject()
+        if evtObject == self.manualProxy or evtObject == None:
+            if self.manualProxy.IsChecked():
+                self.proxyServer.GetParent().Enable()
+                self.proxyPort.GetParent().Enable()
+            else:
+                self.proxyServer.GetParent().Disable()
+                self.proxyPort.GetParent().Disable()
 
     def onButton(self, evt):
         if evt.GetEventObject() == self.startupListSelectBtn:

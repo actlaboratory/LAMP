@@ -6,6 +6,7 @@ from views import mkDialog
 from views import mkProgress
 from views import loadErrorDialog
 
+lock = threading.Lock()
 
 def getTuple(lstConstant, queueDelete=False):
     if lstConstant == constants.PLAYLIST:
@@ -51,6 +52,8 @@ def setTag(lstConstant):
 	
 
 def getTags(tupleList):
+	if len(tupleList) == 1 and len(tupleList[0]) > 3:
+		return tupleList
 	pl = multiprocessing.Pool()
 	result = pl.apply_async(getFileInfoProcess, (tupleList,))
 	while result.ready() == False: time.sleep(0.1)
@@ -64,6 +67,9 @@ def getFileInfoProcess(tuples):
 	rtn = []
 	for t in tuples:
 		l = list(t)
+		if len(l) > 3:
+			rtn.append(tuple(l))
+			continue
 		handle = pybass.BASS_StreamCreateFile(False, l[0], 0, 0, pybass.BASS_UNICODE)
 		if handle == 0:
 			handle = pybass.BASS_StreamCreateURL(l[0].encode(), 0, 0, 0, 0)
@@ -96,29 +102,30 @@ def addItems(flst, lcObj, id=-1):
 	t.start()
 
 def addItemsThread(progress, flst, lcObj, id=-1):
-	# 作業するファイルのリスト（ファイルパス）
-	pathList = []
-	errorList = []
-	notFoundList = []
-	# リストで受け取ってフォルダとファイルに分ける
-	for s in flst:
-		if progress.status == wx.CANCEL: break
-		if (os.path.isfile(s) and os.path.splitext(s)[1].lower() in globalVars.fileExpansions) or re.search("^https?://.+\..+", s)!=None:
-			pathList.append(s)
-		elif os.path.isdir(s):
-			_appendDirList(pathList, s, errorList)
-		elif os.path.isfile(s):
-			errorList.append(s)
-		else:
-			notFoundList.append(s)
-	# 作成したファイルパスのリストから追加
-	if len(lcObj) == 0: _append(pathList, lcObj, progress, -1)
-	else: _append(pathList, lcObj, progress, id)
-	view_manager.changeListLabel(lcObj)
-	if len(errorList) != 0 or len(notFoundList) != 0:
-		wx.CallAfter(loadErrorDialog.run, errorList, notFoundList)
-	fxManager.load()
-	wx.CallAfter(progress.Destroy)
+	with lock:
+		# 作業するファイルのリスト（ファイルパス）
+		pathList = []
+		errorList = []
+		notFoundList = []
+		# リストで受け取ってフォルダとファイルに分ける
+		for s in flst:
+			if progress.status == wx.CANCEL: break
+			if (os.path.isfile(s) and os.path.splitext(s)[1].lower() in globalVars.fileExpansions) or re.search("^https?://.+\..+", s)!=None:
+				pathList.append(s)
+			elif os.path.isdir(s):
+				_appendDirList(pathList, s, errorList)
+			elif os.path.isfile(s):
+				errorList.append(s)
+			else:
+				notFoundList.append(s)
+		# 作成したファイルパスのリストから追加
+		if len(lcObj) == 0: _append(pathList, lcObj, progress, -1)
+		else: _append(pathList, lcObj, progress, id)
+		view_manager.changeListLabel(lcObj)
+		if len(errorList) != 0 or len(notFoundList) != 0:
+			wx.CallAfter(loadErrorDialog.run, errorList, notFoundList)
+		fxManager.load()
+		wx.CallAfter(progress.Destroy)
 
 # ディレクトリパスからファイルリストを取得（ファイルパスリスト, ディレクトリパス, 非対応格納リスト）
 def _appendDirList(lst, dir, errorList):
@@ -155,7 +162,9 @@ def _append(paths, lcObj, progress, id):
 			#wx.YieldIfNeeded() #プログレスダイアログを強制更新
 		progPerTmp = progPer
 		globalVars.listInfo.itemCounter += 1
-		if progress.status == wx.CANCEL: return
+		if progress.status == wx.CANCEL: 
+			lcObj.extend(lst)
+			return
 	lcObj.extend(lst)
 
 def infoDialog(tuple):
@@ -169,7 +178,7 @@ def infoDialog(tuple):
 		size = str(round(tuple[constants.ITEM_SIZE] / 10**9, 2)) + "GB"
 	if tuple[constants.ITEM_LENGTH] == None or tuple[constants.ITEM_LENGTH] < 0: length = ""
 	else: length = str(int(tuple[constants.ITEM_LENGTH] // 60)) + ":" + format(int(tuple[constants.ITEM_LENGTH]) // 60, "02")
-	dict = {_("ァイルの場所"): tuple[constants.ITEM_PATH],
+	dict = {_("ファイルの場所"): tuple[constants.ITEM_PATH],
 		_("ファイル名"): tuple[constants.ITEM_NAME],
 		_( "ファイルサイズ"): size,
 		_("タイトル"): tuple[constants.ITEM_TITLE],

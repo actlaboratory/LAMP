@@ -11,6 +11,19 @@ import sys
 from views import updateDialog
 import time
 import threading
+import win32api
+
+def getUpdaterVersion():
+	""" return (pyVersion, exeVersion) """
+	return ["1.0.0", _getFileVersion("./updater.exe")]
+
+def _getFileVersion(filePath):
+	info = win32api.GetFileVersionInfo(filePath, os.sep)
+	ms = info['FileVersionMS']
+	ls = info['FileVersionLS']
+	version = '%d.%d.%d' % (win32api.HIWORD(ms), win32api.LOWORD(ms), win32api.HIWORD(ls))
+	return version
+
 
 class update(threading.Thread):
 	def __init__(self):
@@ -18,6 +31,15 @@ class update(threading.Thread):
 		self.needStop = False
 
 	def update(self, auto=False):
+		# アップデータチェック
+		updaterCheck = False
+		try:
+			if getUpdaterVersion()[0] == getUpdaterVersion()[1]: updaterCheck = True
+		except: pass
+		if not updaterCheck:
+			simpleDialog.dialog(_("アップデート"), _("アップデータが利用できません。お手数ですが、再度ソフトウェアをダウンロードしてください。"))
+			return
+		
 		params = {
 			"name": constants.APP_NAME,
 			"updater_version": constants.UPDATER_VERSION,

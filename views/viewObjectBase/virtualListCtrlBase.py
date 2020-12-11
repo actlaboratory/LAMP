@@ -3,9 +3,9 @@
 
 
 import wx
-from views.viewObjectBase import viewObjectUtil
+from views.viewObjectBase import viewObjectUtil, controlBase
 
-class virtualListCtrl(wx.ListCtrl):
+class virtualListCtrl(controlBase.controlBase, wx.ListCtrl):
     # listの機能を組み込み
     def __init__(self, *pArg, **kArg):
         lPArg = list(pArg)
@@ -20,9 +20,6 @@ class virtualListCtrl(wx.ListCtrl):
         super().RefreshItems(first, end)
         wx.YieldIfNeeded()
     
-    def AcceptFocusFromKeyboard(self):
-        return self.focusFromKbd
-
     def getList(self):
         return self.copy()
     
@@ -165,11 +162,20 @@ class virtualListCtrl(wx.ListCtrl):
             self.lst.pop(key)
             self.RefreshItems(0, len(self.lst)-1)
         else:
+            l = self.GetSelectedItems()
+            previousL = self.lst[0:self.GetFirstSelected() + 1]
+            fId = self.GetFocusedItem()
+            if self.GetFocusedItem() >= 0: f = self.lst[self.GetFocusedItem()]
+            else: f = None
+            top = self.GetTopItem()
+            self.Focus(0)
             for o in reversed(self.lst[key]):
                 i = self.lst.index(o)
                 self.DeleteItem(i)
                 self.lst.pop(i)
             self.RefreshItems(0, len(self.lst)-1)
+            self.__setFocus(f, fId, top, l, previousL)
+            self.__setSelectionFromList(l)
 
     def __iter__(self):
         return self.lst.__iter__()

@@ -38,6 +38,7 @@ class Main(AppBase.MainBase):
 
 
 	def initialize(self):
+		self.log.debug(str(sys.argv))
 		# 多重起動処理8
 		try: self.mutex = win32event.CreateMutex(None, 1, constants.PIPE_NAME)
 		except: pass
@@ -50,12 +51,12 @@ class Main(AppBase.MainBase):
 			lampPipe.startPipeServer()
 		
 		# プロキシの設定を適用
-		if self.config.getboolean("network", "auto_proxy"):
-			print("TRUE")
-			self.proxyEnviron = proxyUtil.virtualProxyEnviron()
-			self.proxyEnviron.set_environ()
-		else:
-			self.proxyEnviron = None
+		self.proxyEnviron = proxyUtil.virtualProxyEnviron()
+		if self.config.getboolean("network", "manual_proxy", False):
+			sv = self.config.getstring("network", "proxy_server", "")
+			pr = self.config.getint("network", "proxy_port", 8080, 0, 65535)
+			self.proxyEnviron.set_environ(sv, pr)
+		else: self.proxyEnviron.set_environ()
 
 		self.SetGlobalVars()
 		# update関係を準備
@@ -66,7 +67,7 @@ class Main(AppBase.MainBase):
 		if self.config.getboolean(self.hMainView.identifier,"maximized",False):
 			self.hMainView.hFrame.Maximize()
 		m3uloaded = False #条件に基づいてファイルの読み込み
-		if len(sys.argv) > 1 and os.path.isfile(sys.argv[1]):
+		if len(sys.argv) == 2 and os.path.isfile(sys.argv[1]):
 			if os.path.splitext(sys.argv[1])[1].lower() in globalVars.fileExpansions:
 				globalVars.eventProcess.forcePlay(sys.argv[1])
 			elif os.path.splitext(sys.argv[1])[1] == ".m3u" or os.path.splitext(sys.argv[1])[1] == ".m3u8":
@@ -81,7 +82,7 @@ class Main(AppBase.MainBase):
 		#設定の保存やリソースの開放など、終了前に行いたい処理があれば記述できる
 		#ビューへのアクセスや終了の抑制はできないので注意。
 
-		if globalVars.app.config.getboolean("player", "fadeOutOnExit", False):
+		if globalVars.app.config.getboolean("player", "fadeOutOnExit", False) and globalVars.play.getStatus() == PLAYER_STATUS_PLAYING:
 			while globalVars.play.setVolumeByDiff(-2):
 				time.sleep(0.07)
 		globalVars.play.exit()

@@ -23,6 +23,7 @@ from views.viewObjectBase import notebookBase
 from views.viewObjectBase import textCtrlBase
 from views.viewObjectBase import spinCtrlBase
 from views.viewObjectBase import sliderBase
+from views.viewObjects import clearSlider
 
 viewHelper=ctypes.cdll.LoadLibrary("viewHelper.dll")
 
@@ -53,7 +54,8 @@ class ViewCreatorBase():
 			"textCtrl": textCtrlBase.textCtrl,
 			"gauge": wx.Gauge,
 			"spinCtrl": spinCtrlBase.spinCtrl,
-			"slider": sliderBase.slider
+			"slider": sliderBase.slider,
+			"clear_slider": clearSlider.clearSlider
 		}
 		
 		#表示モード
@@ -77,6 +79,8 @@ class ViewCreatorBase():
 			self._setFace(self.parent)
 			parent.InsertPage(parent.GetPageCount(),self.parent,label)
 			label=""
+			parentSizer=self.BoxSizer(parentSizer,wx.VERTICAL,"",margin,style,proportion)
+
 		else:
 			raise ValueError("ViewCreatorの親はパネルまたはブックコントロールである必要があります。")
 
@@ -133,8 +137,8 @@ class ViewCreatorBase():
 		return sizer
 
 
-	def button(self,text, event=None, sizerFlag=wx.ALL, proportion=0,margin=5, enableTabFocus=True):
-		hButton=self.winObject["button"](self.parent, wx.ID_ANY,label=text, name=text, style=wx.BORDER_RAISED, enableTabFocus=enableTabFocus)
+	def button(self,text, event=None, style=wx.BORDER_RAISED, sizerFlag=wx.ALL, proportion=0,margin=5, enableTabFocus=True):
+		hButton=self.winObject["button"](self.parent, wx.ID_ANY,label=text, name=text, style=style, enableTabFocus=enableTabFocus)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self._setFace(hButton,mode=BUTTON_COLOUR)
 		Add(self.sizer,hButton,proportion,sizerFlag,margin)
@@ -142,7 +146,7 @@ class ViewCreatorBase():
 		return hButton
 
 	def okbutton(self,text, event=None, sizerFlag=wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT | wx.ALL,proportion=1,margin=5):
-		hButton=winObject["button"](self.parent, wx.ID_OK,label=text, name=text,style=wx.BORDER_RAISED)
+		hButton=self.winObject["button"](self.parent, wx.ID_OK,label=text, name=text,style=wx.BORDER_RAISED)
 		hButton.Bind(wx.EVT_BUTTON,event)
 		self._setFace(hButton,mode=BUTTON_COLOUR)
 		Add(self.sizer,hButton,proportion,sizerFlag,margin)
@@ -413,6 +417,19 @@ class ViewCreatorBase():
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
 		hSlider=self.winObject["slider"](parent, wx.ID_ANY, size=(x,-1),value=defaultValue, minValue=min, maxValue=max, style=style, enableTabFocus=enableTabFocus)
+		hSlider.Bind(wx.EVT_SCROLL_CHANGED,event)
+		self._setFace(hSlider)
+		if x==-1:	#幅を拡張
+			Add(sizer,hSlider,proportion,sizerFlag,margin,expandFlag=wx.HORIZONTAL)
+		else:
+			Add(sizer,hSlider,proportion,sizerFlag,margin)
+		self.AddSpace()
+		return hSlider,hStaticText
+
+	def clearSlider(self,text, min=0, max=100, event=None, defaultValue=0, style=0, x=-1, sizerFlag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, proportion=0,margin=5,textLayout=wx.DEFAULT, enableTabFocus=True):
+		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
+
+		hSlider=self.winObject["clear_slider"](parent, wx.ID_ANY, size=(x,-1),value=defaultValue, minValue=min, maxValue=max, style=style, enableTabFocus=enableTabFocus)
 		hSlider.Bind(wx.EVT_SCROLL_CHANGED,event)
 		self._setFace(hSlider)
 		if x==-1:	#幅を拡張

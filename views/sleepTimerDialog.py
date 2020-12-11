@@ -4,6 +4,7 @@
 from soundPlayer.constants import *
 import wx
 import os
+import globalVars
 from views import mkDialog
 
 import views.ViewCreator
@@ -11,6 +12,17 @@ from logging import getLogger
 from views.baseDialog import *
 
 class Dialog(BaseDialog):
+    def __init__(self, *pArg, **kArg):
+        super().__init__(*pArg, **kArg)
+        self.TIME_COUNTER = _("指定の時間が経過した")
+        self.PLAY_COUNTER = _("指定の曲数を再生した")
+        self.PLAY_END = _("すべての再生を完了した")
+        self.QUEUE_END = _("キューの再生が完了した")
+        self.DO_STOP = _("再生の停止")
+        self.DO_EXIT = _("LAMPの終了")
+        self.DO_SLEEP = _("コンピュータのスリープ")
+        self.DO_SHUTDOWN = _("コンピュータの電源を切る")
+
     def Initialize(self):
         self.log.debug("created")
         super().Initialize(self.app.hMainView.hFrame,_("スリープタイマー設定"))
@@ -20,12 +32,12 @@ class Dialog(BaseDialog):
 
     def InstallControls(self):
         """いろんなwidgetを設置する。"""
-        self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL)
+        self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL, style=wx.ALL, margin=20)
         # スリープの条件
-        choice = [_("次の時間が経過した"), _("次の曲数を再生した"), _("キューの再生を完了した"), _("すべての再生が完了した")]
+        choice = [self.TIME_COUNTER, self.PLAY_COUNTER,self.QUEUE_END, self.PLAY_END]
         self.conditionCombo, self.conditionLabel = self.creator.combobox(_("スリープの条件"), choice, self.onCombobox, 0, textLayout=wx.HORIZONTAL)
         #スリープの動作
-        choice = [_("再生の停止"), _("LAMPの終了"), _("コンピュータをスリープ"),_("コンピュータの電源を切る")]
+        choice = [self.DO_STOP, self.DO_EXIT, self.DO_SLEEP,self.DO_SHUTDOWN]
         self.motionCombo, self.motionLabel = self.creator.combobox(_("スリープの動作"), choice, self.onCombobox, 0, textLayout=wx.HORIZONTAL)
         #値の設定
         self.creator.AddSpace(20)
@@ -49,11 +61,11 @@ class Dialog(BaseDialog):
     def onCombobox(self, evt):
         evtObj = evt.GetEventObject()
         if evtObj == self.conditionCombo:
-            if evtObj.GetValue() == _("次の時間が経過した"):
+            if evtObj.GetValue() == self.TIME_COUNTER:
                 self.sizer.Show(self.timeValueCreator.GetSizer(), True, True)
                 self.sizer.Hide(self.countValueCreator.GetSizer(), True)
                 self.panel.Layout()
-            elif evtObj.GetValue() == _("次の曲数を再生した"):
+            elif evtObj.GetValue() == self.PLAY_COUNTER:
                 self.sizer.Hide(self.timeValueCreator.GetSizer(), True)
                 self.sizer.Show(self.countValueCreator.GetSizer(), True, True)
                 self.panel.Layout()
@@ -63,9 +75,9 @@ class Dialog(BaseDialog):
 
 
     def GetData(self):
-        if self.conditionCombo.GetValue() == _("次の時間が経過した"):
+        if self.conditionCombo.GetValue() == self.TIME_COUNTER:
             return (self.conditionCombo.GetValue(), self.motionCombo.GetValue(), self.hourSpin.GetValue(), self.minSpin.GetValue())
-        elif self.conditionCombo.GetValue() == _("次の曲数を再生した"):
+        elif self.conditionCombo.GetValue() == self.PLAY_COUNTER:
             return (self.conditionCombo.GetValue(), self.motionCombo.GetValue(), self.countSpin.GetValue())
         else:
             return (self.conditionCombo.GetValue(), self.motionCombo.GetValue())
@@ -80,23 +92,23 @@ class Dialog(BaseDialog):
 
     def check(self):
         #0分のタイマーは設定できない
-        if self.GetData()[0] == _("次の時間が経過した") and self.GetData()[2] == 0 and self.GetData()[3] == 0:
+        if self.GetData()[0] == self.TIME_COUNTER and self.GetData()[2] == 0 and self.GetData()[3] == 0:
             self.errorDialog(_("タイマーには１分以上の長さが必要です。"))
             return False
         #キューが消費済みであれば設定できない
-        elif self.GetData()[0] == _("キューの再生を完了した") and len(globalVars.queue.lst) == 0:
+        elif self.GetData()[0] == self.QUEUE_END and len(globalVars.app.hMainView.queueView.lst) == 0:
             self.errorDialog(_("キューにアイテムがないため、このタイマーを設定できません。"))
             return False
         #再生するアイテムがなければ設定できない
-        elif self.GetData()[0] == _("すべての再生が完了した") and len(globalVars.playlist.lst) == 0 and len(globalVars.queue.lst) == 0 and globalVars.play.getStatus() == PLAYER_STATUS_STOPPED:
+        elif self.GetData()[0] == self.PLAY_END and len(globalVars.app.hMainView.playlistView.lst) == 0 and len(globalVars.app.hMainView.queueView.lst) == 0 and globalVars.play.getStatus() == PLAYER_STATUS_STOPPED:
             self.errorDialog(_("再生する曲がないため、このタイマーを設定できません。"))
             return False
         worning = [] #警告の処理
-        if (self.GetData()[0] == _("次の曲数を再生した") or self.GetData()[0] == _("すべての再生が完了した")) and globalVars.eventProcess.shuffleCtrl != 0:
+        if (self.GetData()[0] == self.PLAY_COUNTER or self.GetData()[0] == self.PLAY_END) and globalVars.eventProcess.shuffleCtrl != None:
             worning.append(_("シャッフルが有効です。"))
-            if globalVars.eventProcess.repeatLoopFlag == 2:
-                worning.append(_("ループが有効です。"))
-        if self.GetData()[0] != _("次の時間が経過した") and globalVars.eventProcess.repeatLoopFlag == 1:
+        if globalVars.eventProcess.repeatLoopFlag == 2:
+            worning.append(_("ループが有効です。"))
+        if self.GetData()[0] != self.TIME_COUNTER and globalVars.eventProcess.repeatLoopFlag == 1:
             worning.append(_("リピートが有効です。"))
         if len(worning) == 0: return True
         else:
@@ -110,5 +122,5 @@ class Dialog(BaseDialog):
 
     def worningDialog(self, message):
         d = mkDialog.Dialog("sleepTimerWorningDialog")
-        d.Initialize(_("お知らせ"), message, (_("了解"),))
+        d.Initialize(_("お知らせ"), message, ("OK",))
         d.Show()

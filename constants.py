@@ -20,10 +20,15 @@ KEYMAP_FILE_NAME="keymap.ini"
 
 #アプリケーション基本情報
 APP_NAME="LAMP"
-APP_LONGNAME="Light And Accessible Music Player"
-APP_VERSION="0.0.1"
-APP_COPYRIGHT_YEAR="20XX"
-APP_DEVELOPERS="Ananimous"
+APP_FULL_NAME = "Light and Accessible Music Player"
+APP_VERSION="0.0.2"
+APP_ICON = "icon.ico"
+APP_COPYRIGHT_YEAR="2020"
+APP_LICENSE="Apache License 2.0"
+APP_DEVELOPERS="ACT Laboratory"
+APP_DEVELOPERS_URL="https://actlab.org/"
+APP_DETAILS_URL="https://actlab.org/software/LAMP"
+APP_COPYRIGHT_MESSAGE = "Copyright (c) %s %s All lights reserved." % (APP_COPYRIGHT_YEAR, APP_DEVELOPERS)
 
 #フォントの設定可能サイズ範囲
 FONT_MIN_SIZE=5
@@ -61,7 +66,7 @@ NOLIST = 103
 DIALOG_PE_CONTINUE = 0 #続行
 
 #build関連定数
-BASE_PACKAGE_URL = None#差分元のpackageのファイル名またはURL
-PACKAGE_CONTAIN_ITEMS = ("fx",)#パッケージに含めたいファイルやfolderがあれば指定
+BASE_PACKAGE_URL = "https://github.com/actlaboratory/LAMP/releases/download/0.0.1/LAMP-0.0.1.zip"#差分元のpackageのファイル名またはURL
+PACKAGE_CONTAIN_ITEMS = ("fx", "resources")#パッケージに含めたいファイルやfolderがあれば指定
 NEED_HOOKS = ()#pyinstallerのhookを追加したい場合は指定
 STARTUP_FILE = "lamp.py"#起動用ファイルを指定

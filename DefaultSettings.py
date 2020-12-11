@@ -44,7 +44,9 @@ class DefaultSettings:
 			"ignoreError": True
 		}
 		config["network"]={
-			"auto_proxy": False
+			"manual_proxy": False,
+			"proxy_server": "",
+			"proxy_port": 8080
 		}
 		return config
 

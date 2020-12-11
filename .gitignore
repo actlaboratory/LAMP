@@ -9,10 +9,13 @@ keymap.ini
 build/
 dist/
 *.obj
+*.m3u
+*.m3u8
 *.exp
 *.lib
 *.spec
 *.pyo
+*.mp3
 pl_auto_save
 /test.mp3
 /test.py

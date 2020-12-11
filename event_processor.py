@@ -66,7 +66,7 @@ class eventProcessor():
     def refreshTagInfo(self, evt=None):
         if evt == None: self.tagInfoProcess = 0
         if self.playingList == None:
-            globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") +  " : ")
+            globalVars.app.hMainView.viewTitle.SetLabel("")
             globalVars.app.hMainView.viewTagInfo.SetLabel("")
         else:
             if self.playingList == constants.PLAYLIST: t = listManager.getTuple(constants.PLAYLIST)
@@ -76,20 +76,20 @@ class eventProcessor():
             if self.tagInfoProcess == 0: # アルバム名表示
                 if t[constants.ITEM_ALBUM] == "": album = _("情報なし")
                 else: album = t[constants.ITEM_ALBUM]
-                globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") +  " : " + title)
-                globalVars.app.hMainView.viewTagInfo.SetLabel(_("アルバム") + " : " + album)
+                globalVars.app.hMainView.viewTitle.SetLabel(title)
+                globalVars.app.hMainView.viewTagInfo.SetLabel("💿　" + album)
                 self.tagInfoProcess = 1
             elif self.tagInfoProcess == 1: # アーティスト情報表示
                 if t[constants.ITEM_ARTIST] == "": artist = _("情報なし")
                 else: artist = t[constants.ITEM_ARTIST]
-                globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") +  " : " + title)
-                globalVars.app.hMainView.viewTagInfo.SetLabel(_("アーティスト") + " : " + artist)
+                globalVars.app.hMainView.viewTitle.SetLabel(title)
+                globalVars.app.hMainView.viewTagInfo.SetLabel("👤　" + artist)
                 self.tagInfoProcess = 2
             elif self.tagInfoProcess == 2: # アルバムアーティスト表示
                 if t[constants.ITEM_ALBUMARTIST] == "": albumArtist = _("情報なし")
                 else: albumArtist = t[constants.ITEM_ALBUMARTIST]
-                globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") +  " : " + title)
-                globalVars.app.hMainView.viewTagInfo.SetLabel(_("アルバムアーティスト") + " : " + albumArtist)
+                globalVars.app.hMainView.viewTitle.SetLabel(title)
+                globalVars.app.hMainView.viewTagInfo.SetLabel("💿👤　" + albumArtist)
                 self.tagInfoProcess = 0
 
     #経過時間表示を更新
@@ -112,14 +112,14 @@ class eventProcessor():
             globalVars.play.setVolume(0)
             self.muteFlag = True
             globalVars.app.hMainView.volumeSlider.Disable()
-            globalVars.app.hMainView.muteBtn.SetLabel("ﾐｭｰﾄ解除")
+            view_manager.buttonSetMuteOn()
             globalVars.app.hMainView.menu.hVolumeInOperationMenu.SetLabel(menuItemsStore.getRef("MUTE"), _("消音を解除"))
         elif self.muteFlag: #ミュート解除処理
             val = globalVars.app.hMainView.volumeSlider.GetValue()
             globalVars.play.setVolume(val)
             self.muteFlag = False
             globalVars.app.hMainView.volumeSlider.Enable()
-            globalVars.app.hMainView.muteBtn.SetLabel("ﾐｭｰﾄ")
+            view_manager.buttonSetMuteOff()
             globalVars.app.hMainView.menu.hVolumeInOperationMenu.SetLabel(menuItemsStore.getRef("MUTE"), _("消音に設定"))
 
     #音量変更（変更幅+-%=変更しない, %指定=無視）
@@ -137,6 +137,7 @@ class eventProcessor():
 
     # ファイルの新規再生
     def play(self, listPorQ=constants.PLAYLIST):
+        if not globalVars.play.isDeviceOk(): return False #デバイス異常時は処理を中止
         if globalVars.play.getStatus() == PLAYER_STATUS_DEVICEERROR:
             return False
         t = listManager.getTuple(listPorQ, True)
@@ -147,19 +148,20 @@ class eventProcessor():
         if ret:
             self.playingList = listPorQ
             if ret:
-                globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
+                view_manager.buttonSetPause()
                 listManager.setTag(listPorQ)
                 globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
                 self.refreshTagInfo()
                 globalVars.app.hMainView.tagInfoTimer.Start(10000)
             view_manager.setFileStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
         if not ret:
-            globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+            view_manager.buttonSetPlay()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
             view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
         return ret
 
     def forcePlay(self, source):
+        if not globalVars.play.isDeviceOk(): return False #デバイス異常時は処理を中止
         if globalVars.play.setSource(source):
             if globalVars.play.play():
                 ret = True
@@ -170,13 +172,13 @@ class eventProcessor():
             else: ret = False
         else: ret = False
         if ret:
-            globalVars.app.hMainView.playPauseBtn.SetLabel("一時停止")
+            view_manager.buttonSetPause()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
             self.refreshTagInfo()
             globalVars.app.hMainView.tagInfoTimer.Start(10000)
             view_manager.setFileStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
         else:
-            globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+            view_manager.buttonSetPlay()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
             view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
         return ret
@@ -191,9 +193,9 @@ class eventProcessor():
 
     def pause(self, pause=True, force=False):
         if pause == True: #一時停止
-            if globalVars.play.pause() or force: globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+            if globalVars.play.pause() or force: view_manager.buttonSetPlay()
         else: #一時停止解除
-            if globalVars.play.play(): globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
+            if globalVars.play.play(): view_manager.buttonSetPause()
 
     #削除（リストオブジェクト, インデックス）
     def delete(self, lcObj):
@@ -253,6 +255,7 @@ class eventProcessor():
         strVal = settings.getSkipInterval()[1]
         globalVars.app.hMainView.menu.hOperationMenu.SetLabel(menuItemsStore.getRef("SKIP"), strVal+" "+_("進む"))
         globalVars.app.hMainView.menu.hOperationMenu.SetLabel(menuItemsStore.getRef("REVERSE_SKIP"), strVal+" "+_("戻る"))
+        globalVars.app.hMainView.notification.show(strVal + _("スキップ"), 2)
         globalVars.app.say(strVal)
 
     #スキップ（秒, 方向=進む)
@@ -264,12 +267,14 @@ class eventProcessor():
             globalVars.play.setPosition(pos-sec)
     
     def previousBtn(self):
+        if globalVars.play.getStatus() == PLAYER_STATUS_STOPPED: return
         if globalVars.play.getPosition() <= 5:
             self.previousFile()
         else:
             globalVars.play.setPosition(0)
 
     def previousFile(self):
+        if not globalVars.play.isDeviceOk(): return False
         if self.shuffleCtrl == None:
             ret = listManager.previous(self.playingList)
         else:
@@ -281,12 +286,17 @@ class eventProcessor():
             else: self.stop()
             return False
         elif ret == errorCodes.END:
+            if self.repeatLoopFlag == 2 and len(globalVars.app.hMainView.playlistView) >= 1: #ループ再生
+                globalVars.app.hMainView.playlistView.setPointer(len(globalVars.app.hMainView.playlistView) - 1)
+                return self.play()
             return False
         else: return True
 
     def playButtonControl(self):
         # 再生・一時停止を実行
-        if globalVars.play.getStatus() == PLAYER_STATUS_PLAYING:
+        s = globalVars.play.getStatus()
+        if s == PLAYER_STATUS_DEVICEERROR: return
+        if s == PLAYER_STATUS_PLAYING:
             self.pause()
         elif globalVars.play.getStatus() == PLAYER_STATUS_PAUSED:
             self.pause(False)
@@ -294,10 +304,12 @@ class eventProcessor():
         elif globalVars.play.getStatus() == PLAYER_STATUS_STOPPED:
             self.nextFile()
         else:
-            if globalVars.play.play(): globalVars.app.hMainView.playPauseBtn.SetLabel(_("一時停止"))
-            else: globalVars.app.hMainView.playPauseBtn.SetLabel(_("再生"))
+            if globalVars.play.play(): view_manager.buttonSetPause()
+            else: view_manager.buttonSetPlay()
 
-    def nextFile(self):
+    def nextFile(self, button=False):
+        if button==True and globalVars.play.getStatus() == PLAYER_STATUS_STOPPED: return
+        if not globalVars.play.isDeviceOk(): return False
         if self.shuffleCtrl == None:
             ret = listManager.next(self.playingList)
         else:
@@ -309,6 +321,10 @@ class eventProcessor():
             else: self.stop()
             return False
         elif ret == errorCodes.END:
+            if self.repeatLoopFlag == 2 and len(globalVars.app.hMainView.playlistView) >= 1: #ループ再生
+                self.playingList = constants.PLAYLIST
+                globalVars.app.hMainView.playlistView.setPointer(0)
+                return self.play()
             return False
         else: return True
 
@@ -316,7 +332,7 @@ class eventProcessor():
         view_manager.clearStaticInfoView() #スクリーンリーダ用リストの更新
         globalVars.app.hMainView.playlistView.setPointer(-1)
         globalVars.play.stop()
-        globalVars.app.hMainView.playPauseBtn.SetLabel("再生")
+        view_manager.buttonSetPlay()
         globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
         globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") + " : ")
         globalVars.app.hMainView.viewTagInfo.SetLabel("")
@@ -325,11 +341,13 @@ class eventProcessor():
     def shuffleSw(self):
         if self.shuffleCtrl == None:
             self.shuffleCtrl = shuffle_ctrl.shuffle(listManager.getLCObject(constants.PLAYLIST))
-            globalVars.app.hMainView.shuffleBtn.SetLabel(_("ｼｬｯﾌﾙ解除"))
+            view_manager.buttonSetShuffleOn()
+            globalVars.app.say(_("シャッフル"))
             globalVars.app.hMainView.menu.hOperationMenu.Check(menuItemsStore.getRef("SHUFFLE"), True)
         else: #シャッフルを解除してプレイリストに復帰
             self.shuffleCtrl = None
-            globalVars.app.hMainView.shuffleBtn.SetLabel(_("ｼｬｯﾌﾙ"))
+            view_manager.buttonSetShuffleOff()
+            globalVars.app.say(_("オフ"))
             globalVars.app.hMainView.menu.hOperationMenu.Check(menuItemsStore.getRef("SHUFFLE"), False)
 
     #リピートﾙｰﾌﾟフラグを切り替え(モード=順次)
@@ -343,15 +361,18 @@ class eventProcessor():
             self.repeatLoopFlag = mode
         if self.repeatLoopFlag == 0:
             globalVars.play.setRepeat(False)
-            globalVars.app.hMainView.repeatLoopBtn.SetLabel("ﾘﾋﾟｰﾄ / ﾙｰﾌﾟ")
+            view_manager.buttonSetRepeatLoop()
+            globalVars.app.say(_("オフ"))
             globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("REPEAT_LOOP_NONE"), True)
         elif self.repeatLoopFlag == 1:
             globalVars.play.setRepeat(True)
-            globalVars.app.hMainView.repeatLoopBtn.SetLabel("只今: リピート")
+            view_manager.buttonSetRepeat()
+            globalVars.app.say(_("リピート"))
             globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("RL_REPEAT"), True)
         elif self.repeatLoopFlag == 2:
             globalVars.play.setRepeat(False)
-            globalVars.app.hMainView.repeatLoopBtn.SetLabel("只今: ループ")
+            view_manager.buttonSetLoop()
+            globalVars.app.say(_("ループ"))
             globalVars.app.hMainView.menu.hRepeatLoopInOperationMenu.Check(menuItemsStore.getRef("RL_LOOP"), True)
 
     def trackBarCtrl(self, bar):
@@ -364,6 +385,7 @@ class eventProcessor():
     
     # リストビューで選択されたアイテムの処理
     def listSelection(self, evtObj):
+        if not globalVars.play.isDeviceOk(): return False #デバイス異常時は処理を中止
         if evtObj == globalVars.app.hMainView.playlistView:
             lst = constants.PLAYLIST
         elif evtObj == globalVars.app.hMainView.queueView:
@@ -372,3 +394,14 @@ class eventProcessor():
         if evtObj.GetSelectedItemCount() == 1:
             evtObj.setPointer(evtObj.GetFirstSelected())
             p = self.play(lst)
+
+    def setSongFeed(self):
+        if globalVars.app.config.getboolean("player", "manualSongFeed", False):
+            globalVars.app.config["player"]["manualSongFeed"] = False
+            globalVars.app.hMainView.notification.show(_("曲送りは自動"), 2)
+            globalVars.app.say(_("曲送りは自動"))
+        else:
+            globalVars.app.config["player"]["manualSongFeed"] = True
+            globalVars.app.hMainView.notification.show(_("曲送りは手動"), 2)
+            globalVars.app.say(_("曲送りは手動"))
+        
