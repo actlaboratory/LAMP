@@ -83,8 +83,9 @@ class MainView(BaseView):
 		if globalVars.app.config.getstring("view","colorMode","white",("white","dark")) == "white":
 			view_manager.setBitmapButton(self.muteBtn, self.hPanel, wx.Bitmap("./resources/volume.dat", wx.BITMAP_TYPE_GIF), _("ミュートをオンにする"))
 		else: view_manager.setBitmapButton(self.muteBtn, self.hPanel, wx.Bitmap("./resources/volume_bk.dat", wx.BITMAP_TYPE_GIF), _("ミュートをオンにする"))
-		self.volumeSlider, dummy = self.horizontalCreator.clearSlider(_("音量"), 0, 100, self.events.onSlider,
+		self.volumeSlider, dummy = self.horizontalCreator.clearSlider(_("音量"), 0, 100, None,
 			globalVars.app.config.getint("volume","default",default=100, min=0, max=100), x=150, sizerFlag=wx.ALIGN_CENTER, textLayout=None)
+		self.volumeSlider.Bind(wx.EVT_SCROLL, self.events.onSlider)
 		self.volumeSlider.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
 		self.volumeSlider.SetThumbLength(25)
 		self.volumeSlider.setToolTip(self.val2vol)
