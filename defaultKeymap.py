@@ -56,7 +56,8 @@ defaultKeymap["playlist"]={
 	"POPUP_COPY": "ctrl+C",
 	"POPUP_PASTE": "ctrl+V",
 	"POPUP_DELETE": "delete",
-	"POPUP_SELECT_ALL": "ctrl+A"
+	"POPUP_SELECT_ALL": "ctrl+A",
+	"POPUP_ABOUT": "ctrl+i"
 }
 
 defaultKeymap["queue"]={
@@ -64,7 +65,8 @@ defaultKeymap["queue"]={
 	"POPUP_COPY": "ctrl+C",
 	"POPUP_PASTE": "ctrl+v",
 	"POPUP_DELETE": "delete",
-	"POPUP_SELECT_ALL": "ctrl+A"
+	"POPUP_SELECT_ALL": "ctrl+A",
+	"POPUP_ABOUT": "ctrl+i"
 }
 defaultKeymap["HOTKEY"]={
 	"EXIT": "",
