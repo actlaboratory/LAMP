@@ -182,7 +182,7 @@ class SettingDialogBase(BaseDialog):
 		self.edits=[None]*len(self.valueNames)
 
 	def Initialize(self,title):
-		super().Initialize(self.parent,title,style=wx.WS_EX_VALIDATE_RECURSIVELY )
+		super().Initialize(self.parent,title,style=wx.WS_EX_VALIDATE_RECURSIVELY|wx.DEFAULT_FRAME_STYLE)
 		self.InstallControls()
 		return True
 

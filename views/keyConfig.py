@@ -91,6 +91,7 @@ class Dialog(BaseDialog):
 				self.result=self.key
 			self.keyNameText.SetLabel(self.result)
 		else:									#キーが放されたら前の入力を検証する
+			self.bCancel.Enable()
 			if self.result!="":
 				if self.filter.Check(self.result):
 					self.wnd.EndModal(wx.ID_OK)		#正しい入力なのでダイアログを閉じる

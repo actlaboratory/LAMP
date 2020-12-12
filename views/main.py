@@ -375,7 +375,7 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("SET_SENDTO"):
 			sendToManager.sendToCtrl("LAMP")
 		elif selected==menuItemsStore.getRef("SET_KEYMAP"):
-			if self.setKeymap("MainView"):
+			if self.setKeymap("MainView",filter=keymap.KeyFilter().SetDefault(False,False)):
 				#ショートカットキーの変更適用とメニューバーの再描画
 				self.parent.menu.InitShortcut()
 				self.parent.menu.ApplyShortcut(self.parent.hFrame)
