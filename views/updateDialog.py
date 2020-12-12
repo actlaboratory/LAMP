@@ -19,7 +19,7 @@ class updateDialog(BaseDialog):
 
 	def Initialize(self):
 		self.log.debug("created")
-		super().Initialize(None,_("アップデート - %s") % constants.APP_NAME)
+		super().Initialize(None,_("アップデート - %s") % constants.APP_NAME,)
 		self.InstallControls()
 		return True
 

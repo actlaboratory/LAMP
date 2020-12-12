@@ -48,13 +48,14 @@ class Main(AppBase.MainBase):
 		else: self.proxyEnviron.set_environ()
 
 		self.SetGlobalVars()
-		# update関係を準備
-		if self.config.getboolean("general", "update"):
-			globalVars.update.update(True)
 		# メインビューを表示
 		self.hMainView=main.MainView()
 		if self.config.getboolean(self.hMainView.identifier,"maximized",False):
 			self.hMainView.hFrame.Maximize()
+		self.hMainView.Show()
+		# update関係を準備
+		if self.config.getboolean("general", "update"):
+			globalVars.update.update(True)
 		m3uloaded = False #条件に基づいてファイルの読み込み
 		if len(sys.argv) == 2 and os.path.isfile(sys.argv[1]):
 			if os.path.splitext(sys.argv[1])[1].lower() in globalVars.fileExpansions:
@@ -64,7 +65,6 @@ class Main(AppBase.MainBase):
 				m3uloaded = True
 		startupList = globalVars.app.config.getstring("player", "startupPlaylist", "")
 		if startupList != "" and m3uloaded == False: m3uManager.loadM3u(startupList, 1)
-		self.hMainView.Show()
 		return True
 
 	def OnExit(self):
@@ -81,7 +81,10 @@ class Main(AppBase.MainBase):
 			try: win32event.ReleaseMutex(self.mutex)
 			except: pass
 			self.mutex = 0
-		
+
+		# アップデート
+		globalVars.update.runUpdate()
+
 		#戻り値は無視される
 		return 0
 

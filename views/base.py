@@ -266,11 +266,11 @@ class BaseEvents(object):
 		if event == None or event.CanVeto():
 			winList = self.parent.hFrame.GetChildren()
 			for w in winList:
-				if w.IsTopLevel():
+				if w.IsTopLevel() and w.GetParent()!=None:
 					if not w.Close():
-						event.Veto()
+						if event != None: event.Veto()
 						return
-		self.parent.hFrame.Destroy()
+		if not self.parent.hFrame.IsBeingDeleted(): self.parent.hFrame.Destroy()
 
 	# wx.EVT_MOVE_END→wx.MoveEvent
 	def WindowMove(self,event):

@@ -18,6 +18,7 @@ import pywintypes
 
 import constants
 import errorCodes
+import update
 import globalVars
 import hotkeyHandler
 import menuItemsStore
@@ -389,7 +390,7 @@ class Events(BaseEvents):
 			d.Initialize()
 			d.Show()
 		elif selected==menuItemsStore.getRef("CHECK_UPDATE"):
-			globalVars.update.update()
+			update.checkUpdate()
 		elif selected==menuItemsStore.getRef("VERSION_INFO"):
 			versionDialog.versionDialog()
 
