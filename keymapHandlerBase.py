@@ -110,6 +110,7 @@ str2FunctionKey={
 	"F22":wx.WXK_F22,
 	"F23":wx.WXK_F23,
 	"F24":wx.WXK_F24,
+	"CLEAR":wx.WXK_CLEAR,					#テンキー5
 }
 
 #文字入力時に利用できない単独キー
@@ -149,7 +150,6 @@ str2StandaloneKey={
 	"UPARROW":wx.WXK_UP,
 	"RIGHTARROW":wx.WXK_RIGHT,
 	"DOWNARROW":wx.WXK_DOWN,
-	"CLEAR":wx.WXK_CLEAR,					#テンキー5
 }
 
 #単独または修飾キーとの組み合わせで利用できる
