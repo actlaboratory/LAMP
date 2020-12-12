@@ -125,7 +125,7 @@ class BaseMenu(object):
 	def Block(self,ref):
 		"""
 			メニュー項目の利用をブロックし、無効状態にする
-			refはリスト
+			refはlist(str)
 		"""
 		for i in ref:
 			try:
@@ -140,7 +140,7 @@ class BaseMenu(object):
 	def UnBlock(self,ref):
 		"""
 			メニュー項目のブロック事由が消滅したので、ブロックカウントを減らす。0になったら有効化する
-			refはリスト
+			refはlist(str)
 		"""
 		for i in ref:
 			try:
@@ -153,10 +153,14 @@ class BaseMenu(object):
 				self.hMenuBar.Enable(menuItemsStore.getRef(i),True)
 
 	def Enable(self,ref,enable):
+		"""
+			メニューの有効・無効を切り替える
+			ref=int
+		"""
 		if enable:
-			self.desableItems.add(ref)
-		else:
 			self.desableItems.discard(ref)
+		else:
+			self.desableItems.add(ref)
 		return self.hMenuBar.Enable(ref,self.blockCount[ref]==0 and ref not in self.desableItems)
 
 	def IsEnable(self,ref):
@@ -225,12 +229,15 @@ class BaseMenu(object):
 		shortcut=self.keymap.GetKeyString(self.keymap_identifier,ref_id)
 		s=label if shortcut is None else "%s\t%s" % (label,shortcut)
 		self.hMenuBar.SetLabel(menuItemsStore.getRef(ref_id), s)
-	
+
 	def CheckMenu(ref_id,state=True):
 		return self.menu.Check(menuItemsStore.getRef(ref_id),state)
 
 	def EnableMenu(self,ref_id,enable=True):
-		return self.Enable(menuItemsStore.getRef(ref_id),enable)
+		if type(ref_id)==int:
+			return self.Enable(ref_id,enable)
+		else:
+			return self.Enable(menuItemsStore.getRef(ref_id),enable)
 
 	def getItemInfo(self):
 		"""
