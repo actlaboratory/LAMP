@@ -59,7 +59,23 @@ class BaseDialog(object):
 
 	#closeイベントで呼ばれる。Alt+F4対策
 	def OnClose(self,event):
-		if self.wnd.GetWindowStyleFlag() | wx.CLOSE_BOX==wx.CLOSE_BOX:
-			self.wnd.Destroy()
+		dialogList = self.wnd.GetChildren()
+		for d in dialogList:
+			if d.IsTopLevel():
+				if not d.Close():
+					if self.wnd.CanVeto():
+						event.Veto
+						return
+		if event.CanVeto():
+			if self.wnd.GetWindowStyleFlag() | wx.CLOSE_BOX==wx.CLOSE_BOX:
+				self._destroy()
+				return
+			else:
+				event.Veto()
+				return
+
+	def _destroy(self):
+		if self.wnd.IsModal():
+			if self.wnd.IsBeingDeleted(): self.wnd.EndModal(wx.ID_CANCEL)
 		else:
-			event.Veto()
+			if self.wnd.IsBeingDeleted(): self.wnd.Destroy()

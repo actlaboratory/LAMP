@@ -3,7 +3,7 @@ pywin32
 winpaths
 pyinstaller
 pyperclip
-https://github.com/actlaboratory/named-pipe/archive/v1.0.1.zip
+https://github.com/actlaboratory/named-pipe/archive/v1.0.4.zip
 https://github.com/actlaboratory/proxyutil/archive/0.2.1.zip
 https://github.com/actlaboratory/history/archive/v1.0.3.zip
 https://github.com/actlaboratory/soundPlayer/archive/0.2.3.zip

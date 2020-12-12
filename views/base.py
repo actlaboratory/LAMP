@@ -263,6 +263,13 @@ class BaseEvents(object):
 		self.identifier=identifier
 
 	def Exit(self,event=None):
+		if event == None or event.CanVeto():
+			winList = self.parent.hFrame.GetChildren()
+			for w in winList:
+				if w.IsTopLevel():
+					if not w.Close():
+						event.Veto()
+						return
 		self.parent.hFrame.Destroy()
 
 	# wx.EVT_MOVE_END→wx.MoveEvent
