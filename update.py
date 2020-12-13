@@ -24,11 +24,16 @@ def _getFileVersion(filePath):
 	version = '%d.%d.%d' % (win32api.HIWORD(ms), win32api.LOWORD(ms), win32api.HIWORD(ls))
 	return version
 
+def checkUpdate():
+	""" アップデートダイアログを表示する """
+	globalVars.update = update()
+	globalVars.update.update()
 
 class update(threading.Thread):
 	def __init__(self):
 		super().__init__()
 		self.needStop = False
+		self.reserve = False
 
 	def update(self, auto=False):
 		# アップデータチェック
@@ -85,15 +90,25 @@ class update(threading.Thread):
 		webbrowser.open(self.info["URL"])
 		return
 
+	def runUpdate(self):
+		if not self.reserve: return #予約されていないアップデートはできない
+		if os.path.exists("updater.exe"):
+			pid = os.getpid()
+			subprocess.Popen(("updater.exe", sys.argv[0], constants.UPDATER_WAKE_WORD, self._file_name, self.info["updater_hash"], str(pid)))
+		else:
+			os.remove(self._file_name)			
+			self.dialog.updater_notFound()
+		
+
 	def run(self):
 		url = self.info["updater_url"]
-		file_name = "update_file.zip"
+		self._file_name = "update_file.zip"
 		response = requests.get(url, stream = True)
 		total_size = int(response.headers["Content-Length"])
 		wx.CallAfter(self.dialog.gauge.SetRange, (total_size))
 		now_size = 0
 		broken = False
-		with open(file_name, mode="wb") as f:
+		with open(self._file_name, mode="wb") as f:
 			for chunk in response.iter_content(chunk_size = 1024):
 				if self.needStop:
 					broken = True
@@ -105,18 +120,14 @@ class update(threading.Thread):
 				wx.YieldIfNeeded()
 		if broken:
 			print("canceled!")
-			os.remove(file_name)
+			os.remove(self._file_name)
 			wx.CallAfter(self.dialog.end)
 			return
 		print("downloaded!")
-		if os.path.exists("updater.exe"):
-			pid = os.getpid()
-			subprocess.Popen(("updater.exe", sys.argv[0], constants.UPDATER_WAKE_WORD, file_name, self.info["updater_hash"], str(pid)))
-			wx.CallAfter(sys.exit)
-		else:
-			os.remove(file_name)			
-			wx.CallAfter(self.dialog.updater_notFound)
-			return
+		wx.CallAfter(self.dialog.end)
+		self.reserve = True
+		simpleDialog.dialog(_("アップデート"), _("ダウンロードが完了しました。\nソフトウェア終了時に、自動でアップデートされます。"))
+		return
 
 	def exit(self):
 		self.needStop = True

@@ -19,7 +19,7 @@ class updateDialog(BaseDialog):
 
 	def Initialize(self):
 		self.log.debug("created")
-		super().Initialize(None,_("アップデート - %s") % constants.APP_NAME)
+		super().Initialize(None,_("アップデート - %s") % constants.APP_NAME,)
 		self.InstallControls()
 		return True
 
@@ -41,7 +41,7 @@ class updateDialog(BaseDialog):
 
 			creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.HORIZONTAL,20,style=wx.ALIGN_RIGHT)
 			self.openBtn = creator.button(_("お知らせページへ"), self.open_browser)
-		self.cancelBtn = creator.button(_("キャンセル"), self.cancel)
+		self.cancelBtn = creator.cancelbutton(_("キャンセル"), self.cancel)
 
 	def cancel(self, events):
 		if self.running:

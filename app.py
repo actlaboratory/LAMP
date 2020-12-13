@@ -1,43 +1,32 @@
 ﻿# -*- coding: utf-8 -*-
 #Application Main
 
-import AppBase
-import event_processor, listManager, lampPipe
-import accessible_output2.outputs.auto
-import sys
-import time
-import ConfigManager
-import gettext
+import sys, os, wx, time, _datetime
+import win32event, win32api, winerror
+import gettext, locale
 import logging
-import os
-import wx
-import locale
-import win32event
-import win32api
-import winerror
-import datetime
-import proxyUtil
-import globalVars
-import m3uManager
 from logging import getLogger, FileHandler, Formatter
+import proxyUtil
+import AppBase
 from simpleDialog import *
-import sleep_timer
 from soundPlayer import player, bassController
 from soundPlayer.constants import *
+import accessible_output2.outputs.auto
+import constants, errorCodes
+def _import():
+	global event_processor, listManager, lampPipe, ConfigManager, globalVars, m3uManager, sleep_timer, DefaultSettings, update, main
 
-import update
-import constants
-import DefaultSettings
-import errorCodes
-from views import main
+	import event_processor, listManager, lampPipe, ConfigManager, globalVars, m3uManager, sleep_timer, DefaultSettings
+	import update
+	from views import main
 
 class Main(AppBase.MainBase):
 	def __init__(self):
 		super().__init__()
 		self.mutex = 0
 
-
 	def initialize(self):
+		_import()
 		self.log.debug(str(sys.argv))
 		# 多重起動処理8
 		try: self.mutex = win32event.CreateMutex(None, 1, constants.PIPE_NAME)
@@ -59,13 +48,14 @@ class Main(AppBase.MainBase):
 		else: self.proxyEnviron.set_environ()
 
 		self.SetGlobalVars()
-		# update関係を準備
-		if self.config.getboolean("general", "update"):
-			globalVars.update.update(True)
 		# メインビューを表示
 		self.hMainView=main.MainView()
 		if self.config.getboolean(self.hMainView.identifier,"maximized",False):
 			self.hMainView.hFrame.Maximize()
+		self.hMainView.Show()
+		# update関係を準備
+		if self.config.getboolean("general", "update"):
+			globalVars.update.update(True)
 		m3uloaded = False #条件に基づいてファイルの読み込み
 		if len(sys.argv) == 2 and os.path.isfile(sys.argv[1]):
 			if os.path.splitext(sys.argv[1])[1].lower() in globalVars.fileExpansions:
@@ -75,7 +65,6 @@ class Main(AppBase.MainBase):
 				m3uloaded = True
 		startupList = globalVars.app.config.getstring("player", "startupPlaylist", "")
 		if startupList != "" and m3uloaded == False: m3uManager.loadM3u(startupList, 1)
-		self.hMainView.Show()
 		return True
 
 	def OnExit(self):
@@ -92,7 +81,10 @@ class Main(AppBase.MainBase):
 			try: win32event.ReleaseMutex(self.mutex)
 			except: pass
 			self.mutex = 0
-		
+
+		# アップデート
+		globalVars.update.runUpdate()
+
 		#戻り値は無視される
 		return 0
 

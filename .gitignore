@@ -21,3 +21,7 @@ pl_auto_save
 /test.py
 /m3u_history.dat
 /.vscode
+
+./update_file.zip
+./updater.exe
+./Ionic.Zip.dll

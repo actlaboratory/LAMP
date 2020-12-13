@@ -48,7 +48,7 @@ class BaseDialog(object):
 
 	def Destroy(self):
 		self.log.debug("destroy")
-		self.wnd.Destroy()
+		if not self.wnd.IsBeingDeleted(): self.wnd.Destroy()
 
 	def GetValue(self):
 		self.log.debug("Value:%s" % str(self.value))
@@ -59,7 +59,23 @@ class BaseDialog(object):
 
 	#closeイベントで呼ばれる。Alt+F4対策
 	def OnClose(self,event):
-		if self.wnd.GetWindowStyleFlag() | wx.CLOSE_BOX==wx.CLOSE_BOX:
-			self.wnd.Destroy()
+		if event.CanVeto():
+			winList = self.wnd.GetChildren()
+			for w in winList:
+				if w.IsTopLevel():
+					if not w.Close():
+						event.Veto()
+						return
+			if self.wnd.GetWindowStyleFlag() | wx.CLOSE_BOX==wx.CLOSE_BOX:
+				self._destroy()
+				return
+			else:
+				event.Veto()
+				return
+
+	def _destroy(self):
+		if self.wnd.IsModal():
+			if not self.wnd.IsBeingDeleted():
+				self.wnd.EndModal(wx.ID_CANCEL)
 		else:
-			event.Veto()
+			if not self.wnd.IsBeingDeleted(): self.wnd.Destroy()
