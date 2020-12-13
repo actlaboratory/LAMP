@@ -21,7 +21,7 @@ KEYMAP_FILE_NAME="keymap.ini"
 #アプリケーション基本情報
 APP_NAME="LAMP"
 APP_FULL_NAME = "Light and Accessible Music Player"
-APP_VERSION="0.0.0"
+APP_VERSION="0.0.3"
 APP_ICON = "icon.ico"
 APP_COPYRIGHT_YEAR="2020"
 APP_LICENSE="Apache License 2.0"
