@@ -69,7 +69,7 @@ defaultKeymap["queue"]={
 	"POPUP_ABOUT": "ctrl+i"
 }
 defaultKeymap["HOTKEY"]={
-	"EXIT": "",
+	#"EXIT": "",
 	"VOLUME_UP": "",
 	"VOLUME_DOWN": "",
 	"VOLUME_100": "",

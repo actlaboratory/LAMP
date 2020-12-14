@@ -34,7 +34,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.VERTICAL,20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
 		self.hListCtrl, dammy=self.creator.listCtrl(_("現在の登録内容"), proportion=0, sizerFlag=wx.ALL|wx.ALIGN_CENTER_HORIZONTAL,size=(750,300),style=wx.LC_REPORT | wx.LC_NO_HEADER | wx.LC_SINGLE_SEL)
 
 		for i,info in enumerate(self.columnInfo):
@@ -52,7 +52,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.ItemSelected)
 
 		#処理ボタン
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.creator.GetSizer(),wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
 		self.addButton=self.creator.button(_("追加"),self.add)
 		self.editButton=self.creator.button(_("変更"),self.edit)
 		self.editButton.Enable(False)
@@ -60,7 +60,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 		self.deleteButton.Enable(False)
 
 		#ボタンエリア
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),self.OkButtonEvent)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 
@@ -188,22 +188,21 @@ class SettingDialogBase(BaseDialog):
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.baseCreator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.VERTICAL,20)
+		self.baseCreator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
 
 		for i,name in enumerate(self.valueNames):
-			self.creator=views.ViewCreator.ViewCreator(1,self.baseCreator.GetPanel(),self.baseCreator.GetSizer(),wx.HORIZONTAL,10)
+			self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.baseCreator.GetPanel(),self.baseCreator.GetSizer(),wx.HORIZONTAL,10)
 			if name[1]:
 				self.edits[i],dummy=self.creator.inputbox(name[0],x=500,defaultValue=self.values[i], textLayout=wx.VERTICAL)
 			else:
 				self.edits[i],dummy=self.creator.inputbox(name[0],x=500,defaultValue=self.values[i],style=wx.TE_READONLY, textLayout=wx.VERTICAL)
 			if name[1]==None:
-				dummy.Hide()
-				self.edits[i].Hide()
+				self.edits[i].GetParent().Hide()
 			if self.buttons[i]:
 				dummy=self.creator.button(self.buttons[i][0],self.buttons[i][1],sizerFlag=wx.ALIGN_BOTTOM | wx.BOTTOM, margin=10)
 
 		#ボタンエリア
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.TOP, 10)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),self.OkButtonEvent)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 

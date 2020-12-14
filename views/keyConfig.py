@@ -36,13 +36,13 @@ class Dialog(BaseDialog):
 		"""いろんなwidgetを設置する。"""
 		self.mainArea=views.ViewCreator.BoxSizer(self.sizer,wx.HORIZONTAL,wx.ALIGN_CENTER)
 
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.mainArea,wx.VERTICAL,20)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.mainArea,wx.VERTICAL,20)
 		self.creator.staticText(_("設定するには、使用したいキーの組み合わせを押します。\n設定を解除するには、Escキーを押します。"))
 		self.keyNameText=self.creator.staticText("")
 		self.errorText=self.creator.staticText("")
 
 
-		self.creator=views.ViewCreator.ViewCreator(1,self.panel,self.sizer,wx.HORIZONTAL,20,style=wx.ALIGN_RIGHT)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,style=wx.ALIGN_RIGHT)
 		self.bCancel=self.creator.cancelbutton(_("設定解除"),None)
 
 	def Show(self):
