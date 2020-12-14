@@ -185,6 +185,9 @@ class Menu(BaseMenu):
 	def Apply(self,target):
 		"""指定されたウィンドウに、メニューを適用する。"""
 
+		#メニュー内容をいったんクリア
+		self.hMenuBar=wx.MenuBar()
+
 		#メニューの大項目を作る
 		self.hFileMenu=wx.Menu()
 		self.hFunctionMenu = wx.Menu()
@@ -300,7 +303,7 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("M3U_CLOSE"):
 			m3uManager.closeM3u()
 		elif selected == menuItemsStore.getRef("EXIT"):
-			self.Exit()
+			self.parent.hFrame.Close()
 		#機能メニューのイベント
 		elif selected == menuItemsStore.getRef("SET_SLEEPTIMER"):
 			globalVars.sleepTimer.set()
