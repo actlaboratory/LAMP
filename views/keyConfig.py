@@ -54,6 +54,8 @@ class Dialog(BaseDialog):
 		result=self.wnd.ShowModal()
 		if result!=wx.ID_CANCEL:
 			self.value=self.GetData()
+		else:
+			self.value=_("なし")
 		self.Destroy()
 		return result
 
