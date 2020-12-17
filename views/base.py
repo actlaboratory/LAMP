@@ -164,7 +164,11 @@ class BaseMenu(object):
 		return self.hMenuBar.Enable(ref,self.blockCount[ref]==0 and ref not in self.desableItems)
 
 	def IsEnable(self,ref):
-		return self.blockCount[menuItemsStore.getRef(ref)]<=0
+		if type(ref)==str:
+			ref=menuItemsStore.getRef(ref)
+		if ref not in self.blockCount:
+			self.blockCount[ref]=0
+		return self.blockCount[ref]<=0 and (ref not in self.desableItems)
 
 	def RegisterMenuCommand(self,menu_handle,ref_id,title="",subMenu=None,index=-1):
 		if type(ref_id)==dict:
@@ -270,14 +274,7 @@ class BaseEvents(object):
 		self.identifier=identifier
 
 	def Exit(self,event=None):
-		if event == None or event.CanVeto():
-			winList = self.parent.hFrame.GetChildren()
-			for w in winList:
-				if w.IsTopLevel() and w.GetParent()!=None:
-					if not w.Close():
-						if event != None: event.Veto()
-						return
-		if not self.parent.hFrame.IsBeingDeleted(): self.parent.hFrame.Destroy()
+		event.Skip()
 
 	# wx.EVT_MOVE_END→wx.MoveEvent
 	def WindowMove(self,event):
