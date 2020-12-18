@@ -61,7 +61,7 @@ def getTags(tupleList):
 
 def getFileInfoProcess(tuples):
 	pybass.BASS_Init(0, 44100, 0, 0, 0)
-	pytags.TAGS_SetUTF8(True)
+	#pytags.TAGS_SetUTF8(True)
 	#必要なプラグインを適用
 	pybass.BASS_PluginLoad(b"basshls.dll", 0)
 	rtn = []
@@ -81,12 +81,12 @@ def getFileInfoProcess(tuples):
 			size = os.path.getsize(l[0])
 		else:
 			size = 0
-		title = pytags.TAGS_Read(handle, b"%TITL").decode("utf-8")
+		title = pytags.TAGS_Read(handle, b"%TITL").decode("shift-jis")
 		lengthb = pybass.BASS_ChannelGetLength(handle, pybass.BASS_POS_BYTE)
 		length = pybass.BASS_ChannelBytes2Seconds(handle, lengthb)
-		artist = pytags.TAGS_Read(handle, b"%ARTI").decode("utf-8")
-		album = pytags.TAGS_Read(handle, b"%ALBM").decode("utf-8")
-		albumArtist = pytags.TAGS_Read(handle, b"%AART").decode("utf-8")
+		artist = pytags.TAGS_Read(handle, b"%ARTI").decode("shift-jis")
+		album = pytags.TAGS_Read(handle, b"%ALBM").decode("shift-jis")
+		albumArtist = pytags.TAGS_Read(handle, b"%AART").decode("shift-jis")
 		pybass.BASS_StreamFree(handle)
 		l.extend([size, title, length, artist, album, albumArtist])
 		rtn.append(tuple(l))
