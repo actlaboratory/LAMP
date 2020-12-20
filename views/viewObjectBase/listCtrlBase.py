@@ -5,11 +5,10 @@
 import globalVars
 import json
 import wx
-from views.viewObjectBase import viewObjectUtil, controlBase
+from views.viewObjectBase import viewObjectUtil, controlBase,listCtrlBase
 
 class listCtrl(controlBase.controlBase, wx.ListCtrl):
 	def __init__(self, *pArg, **kArg):
-		self.focusFromKbd = viewObjectUtil.popArg(kArg, "enableTabFocus", True) #キーボードフォーカスの初期値
 		self._needSaveColumnInfo = False
 		self.sectionName = ""
 		self.keyName = ""
@@ -17,6 +16,7 @@ class listCtrl(controlBase.controlBase, wx.ListCtrl):
 
 	#ポップアップメニューの表示位置をクライアント座標のwx.Pointで返す
 	def getPopupMenuPosition(self):
+		print("きた")
 		if  self.GetFocusedItem()>=0:
 			rect=self.GetItemRect(self.GetFocusedItem(),wx.LIST_RECT_LABEL)
 			return rect.GetBottomRight()
