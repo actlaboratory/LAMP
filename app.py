@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 #Application Main
 
+import threading
 import sys, os, wx, time, _datetime
 import win32event, win32api, winerror
 import gettext, locale
@@ -77,6 +78,8 @@ class Main(AppBase.MainBase):
 		globalVars.play.exit()
 		m3uManager.dumpHistory()
 		globalVars.app.config.write()
+		try: lampPipe.stopPipeServer()
+		except: pass
 		if self.mutex != 0:
 			try: win32event.ReleaseMutex(self.mutex)
 			except: pass
@@ -105,6 +108,8 @@ class Main(AppBase.MainBase):
 		globalVars.listInfo = listManager.listInfo()
 
 	def __del__(self):
+		try: lampPipe.stopPipeServer()
+		except: pass
 		if self.mutex != 0:
 			try: win32event.ReleaseMutex(self.mutex)
 			except: pass
