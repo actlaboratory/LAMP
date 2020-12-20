@@ -124,7 +124,7 @@ class queue(virtualListCtrlBase.virtualListCtrl):
         return self.pointer
 
     def setPointer(self, index):
-        self.lst[index]
+        if index != -1: self.lst[index] #リセットは可能
         self.pointer = index
 
     def onContextMenu(self, evt):
@@ -172,16 +172,19 @@ class Events(BaseEvents):
                 globalVars.eventProcess.listSelection(self.parent)
         elif selected==menuItemsStore.getRef("POPUP_ADD_QUEUE_HEAD"):
             if self.parent.GetSelectedItemCount() != 0:
-                t = self.parent[self.parent.GetFirstSelected()]
-                listManager.addItems((t[0],), globalVars.app.hMainView.queueView, 0)
+                t = []
+                for i in self.parent.getItemSelections(): t.append(self.parent[i][0])
+                listManager.addItems(t, globalVars.app.hMainView.queueView, 0)
         elif selected==menuItemsStore.getRef("POPUP_ADD_QUEUE"):
             if self.parent.GetSelectedItemCount() != 0:
-                t = self.parent[self.parent.GetFirstSelected()]
-                listManager.addItems((t[0],), globalVars.app.hMainView.queueView)
+                t = []
+                for i in self.parent.getItemSelections(): t.append(self.parent[i][0])
+                listManager.addItems(t, globalVars.app.hMainView.queueView)
         elif selected==menuItemsStore.getRef("POPUP_ADD_PLAYLIST"):
             if self.parent.GetSelectedItemCount() != 0:
-                t = self.parent[self.parent.GetFirstSelected()]
-                listManager.addItems((t[0],), globalVars.app.hMainView.playlistView)
+                t = []
+                for i in self.parent.getItemSelections(): t.append(self.parent[i][0])
+                listManager.addItems(t, globalVars.app.hMainView.playlistView)
         elif selected==menuItemsStore.getRef("POPUP_COPY"):
             if self.parent.GetSelectedItemCount() != 0:
                 fList = []
