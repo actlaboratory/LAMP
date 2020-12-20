@@ -93,7 +93,7 @@ class playlist(virtualListCtrlBase.virtualListCtrl):
 
     def onContextMenu(self, evt):
         self.menu.Apply(self, self.identifier)
-        evt.GetEventObject().PopupMenu(self.menu.hPopupMenu)
+        evt.GetEventObject().PopupMenu(self.menu.hPopupMenu, evt)
 
 class queue(virtualListCtrlBase.virtualListCtrl):
     def __init__(self, *pArg, **kArg):
