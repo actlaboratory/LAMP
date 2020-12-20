@@ -158,6 +158,8 @@ class eventProcessor():
             view_manager.buttonSetPlay()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
             view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
+        view_manager.changeListLabel(globalVars.app.hMainView.playlistView)
+        view_manager.changeListLabel(globalVars.app.hMainView.queueView)
         return ret
 
     def forcePlay(self, source):
@@ -181,6 +183,8 @@ class eventProcessor():
             view_manager.buttonSetPlay()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
             view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
+        view_manager.changeListLabel(globalVars.app.hMainView.playlistView)
+        view_manager.changeListLabel(globalVars.app.hMainView.queueView)
         return ret
 
     def playError(self):
