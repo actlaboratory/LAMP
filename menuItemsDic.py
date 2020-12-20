@@ -47,7 +47,6 @@ dic={
 	"SET_DEVICE_SUB": _("再生出力先の変更"),
 	"FILE_ASSOCIATE": _("ファイルの関連付け"),
 	"SET_SENDTO": _("送るメニューに登録"),
-	"SET_FONT": _("フォント設定"),
 	"SET_KEYMAP": _("ショートカットキー設定"),
 	"SET_HOTKEY": _("グローバルホットキー設定"),
 	"ENVIRONMENT": _("環境設定"),

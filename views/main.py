@@ -235,7 +235,7 @@ class Menu(BaseMenu):
 		self.hDeviceSubMenu = wx.Menu()
 		self.RegisterMenuCommand(self.hSettingsMenu, "SET_DEVICE_SUB", _("再生出力先の変更"), self.hDeviceSubMenu)
 		self.RegisterMenuCommand(self.hSettingsMenu,
-			["FILE_ASSOCIATE", "SET_SENDTO", "SET_FONT", "SET_KEYMAP", "SET_HOTKEY", "ENVIRONMENT"])
+			["FILE_ASSOCIATE", "SET_SENDTO", "SET_KEYMAP", "SET_HOTKEY", "ENVIRONMENT"])
 
 		#ヘルプメニューの中身
 		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "CHECK_UPDATE", "VERSION_INFO"])
