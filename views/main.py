@@ -394,7 +394,7 @@ class Events(BaseEvents):
 			d.Initialize()
 			d.Show()
 		elif selected==menuItemsStore.getRef("HELP"):
-			if os.path.exists("./readme.txt"): subprocess.open("./readme.txt")
+			if os.path.exists("./readme.txt"): subprocess.Popen("start ./readme.txt", shell=True)
 			else: dialog(_("ヘルプ"), _("ヘルプファイルが見つかりません。"))
 		elif selected==menuItemsStore.getRef("CHECK_UPDATE"):
 			update.checkUpdate()
