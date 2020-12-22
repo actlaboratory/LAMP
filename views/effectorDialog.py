@@ -24,24 +24,24 @@ class Dialog(BaseDialog):
         """いろんなwidgetを設置する。"""
         # 増幅設定
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,views.ViewCreator.FlexGridSizer,20,4,wx.ALL)
-        self.ampSlider, dummy = self.creator.slider(_("増幅"), 0, 400, self.onSlider, globalVars.play.getConfig(PLAYER_CONFIG_AMP), x=150)
-        self.ampSpin, dummy = self.creator.spinCtrl(_("増幅"), 0, 400, self.onSpin, globalVars.play.getConfig(PLAYER_CONFIG_AMP), textLayout=None)
+        self.ampSlider, dummy = self.creator.slider(_("増幅(&A)"), 0, 400, self.onSlider, globalVars.play.getConfig(PLAYER_CONFIG_AMP), x=150)
+        self.ampSpin, dummy = self.creator.spinCtrl(_("増幅(&A)"), 0, 400, self.onSpin, globalVars.play.getConfig(PLAYER_CONFIG_AMP), textLayout=None)
         # 速さ設定
         #self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",)
-        self.tempoSlider, dummy = self.creator.slider(_("速さ"),15, 500,self.onSlider, globalVars.play.getConfig(PLAYER_CONFIG_SPEED), x=150)
-        self.tempoSpin, dummy = self.creator.spinCtrl(_("速さ"), 15, 500, self.onSpin, globalVars.play.getConfig(PLAYER_CONFIG_SPEED), textLayout=None)
+        self.tempoSlider, dummy = self.creator.slider(_("速さ(&S)"),15, 500,self.onSlider, globalVars.play.getConfig(PLAYER_CONFIG_SPEED), x=150)
+        self.tempoSpin, dummy = self.creator.spinCtrl(_("速さ(&S)"), 15, 500, self.onSpin, globalVars.play.getConfig(PLAYER_CONFIG_SPEED), textLayout=None)
         # ピッチ変更
         #self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",)
-        self.pitchSlider, dummy = self.creator.slider(_("キー"), -60, 60, self.onSlider, globalVars.play.getConfig(PLAYER_CONFIG_KEY), x=150)
-        self.pitchSpin, dummy = self.creator.spinCtrl(_("キー"), -60, 60, self.onSpin, globalVars.play.getConfig(PLAYER_CONFIG_KEY), textLayout=None)
+        self.pitchSlider, dummy = self.creator.slider(_("キー(&K)"), -60, 60, self.onSlider, globalVars.play.getConfig(PLAYER_CONFIG_KEY), x=150)
+        self.pitchSpin, dummy = self.creator.spinCtrl(_("キー(&K)"), -60, 60, self.onSpin, globalVars.play.getConfig(PLAYER_CONFIG_KEY), textLayout=None)
         # 周波数変更
         #self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",)
-        self.freqSlider, dummy = self.creator.slider(_("周波数"), 6, 400, self.onSlider, globalVars.play.getConfig(PLAYER_CONFIG_FREQ), x=150)
-        self.freqSpin, dummy = self.creator.spinCtrl(_("周波数"), 6, 400, self.onSpin, globalVars.play.getConfig(PLAYER_CONFIG_FREQ), textLayout=None)
+        self.freqSlider, dummy = self.creator.slider(_("周波数(&F)"), 6, 400, self.onSlider, globalVars.play.getConfig(PLAYER_CONFIG_FREQ), x=150)
+        self.freqSpin, dummy = self.creator.spinCtrl(_("周波数(&F)"), 6, 400, self.onSpin, globalVars.play.getConfig(PLAYER_CONFIG_FREQ), textLayout=None)
         # フッタ
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"", wx.ALIGN_RIGHT)
         self.bClose = self.creator.button(_("閉じる"),self.onButtonClick)
-        self.bReset = self.creator.button(_("リセット"), self.onButtonClick)
+        self.bReset = self.creator.button(_("リセット(&R)"), self.onButtonClick)
 
     def GetData(self):
         return (self.ampSlider.GetValidator(), self.tempoSlider.GetValue(), self.pitchSlider.GetValue(), self.freqSlider.GetValue())
