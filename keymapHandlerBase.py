@@ -73,7 +73,6 @@ str2UnknownKey={
 	"SCROLL":wx.WXK_SCROLL,					#ScrLk
 	"COMMAND":wx.WXK_COMMAND,				#CONTROLと同じ
 	"RAW_CONTROL":wx.WXK_RAW_CONTROL,		#CONTROLと同じ
-	"CLEAR":wx.WXK_CLEAR,					#テンキー5
 
 	#記号キー 動作しない
 	"MULTIPLY":wx.WXK_MULTIPLY,
@@ -150,6 +149,7 @@ str2StandaloneKey={
 	"UPARROW":wx.WXK_UP,
 	"RIGHTARROW":wx.WXK_RIGHT,
 	"DOWNARROW":wx.WXK_DOWN,
+	"CLEAR":wx.WXK_CLEAR,					#テンキー5
 }
 
 #単独または修飾キーとの組み合わせで利用できる
@@ -316,31 +316,43 @@ class KeymapHandlerBase():
 		"""
 		self.log=logging.getLogger("%s.keymapHandler" % constants.LOG_PREFIX)
 		self.errors={}
-		self.entries={}		#生成したAcceleratorEntry
-		self.map={}			#ref番号→ショートカットキーに変換
-		self.refMap={}		#キーの重複によりこのインスタンスで処理する必要のあるメニューと、そのとび先の本来のref
+		self.entries={}				#生成したAcceleratorEntry
+		self.map={}					#ref番号→ショートカットキーに変換
+		self.refMap={}				#キーの重複によりこのインスタンスで処理する必要のあるメニューと、そのとび先の本来のref
 		self.permitConfrict=permitConfrict
-		self.filter=filter	#指定の妥当性をチェックするフィルタ
+		self.filter=filter			#指定の妥当性をチェックするフィルタ
 
 		if dict:
 			self.addDict(dict)
 
 
-	def addDict(self,dict):
+	def addDict(self,dict,sections=None):
+		"""
+			sectionsにlistまたはsetを指定すると、読み込むセクションを指定したもののみに制限できる。大文字で指定する。
+			sectionsを指定しない場合、セクション名にHOTKEYが含まれるものはスキップされる
+		"""
 		read=configparser.ConfigParser()
 		read.read_dict(dict)
 		for identifier in read.sections():
+			if (sections and (identifier.upper() not in sections)) or ((not sections) and "HOTKEY" in identifier):
+				self.log.debug("skip section %s" % identifier)
+				continue
+
+			self.log.debug("read section %s" % identifier)
 			for elem in read.items(identifier):
 				if elem[1]!="":						#空白のものは無視する
 					self.add(identifier,elem[0],elem[1])
 
-	def addFile(self, filename):
+	def addFile(self, filename,sections=None):
 		"""
 			指定されたファイルからキーマップを読もうと試みる。
 			ファイルが見つからなかった場合は、FILE_NOT_FOUND を返す。
 			ファイルがパースできなかった場合は、PARSING_FAILED を返す。
 			 errorCodes.OKが返された場合であっても、キーの重複などで追加できなかったものがあった可能性があり、これについては、その情報がself.errorsに格納されるので呼出元で検証する必要がある。
+			sectionsにlistまたはsetを指定すると、読み込むセクションを指定したもののみに制限できる。大文字で指定する。
+			sectionsを指定しない場合、セクション名にHOTKEYが含まれるものはスキップされる
 		"""
+		self.log.debug("read file %s sections=%s" % (filename,str(sections)))
 		if not os.path.exists(filename):
 			self.log.warning("Cannot find %s" % filename)
 			return errorCodes.FILE_NOT_FOUND
@@ -353,6 +365,11 @@ class KeymapHandlerBase():
 
 		#newKeysの情報を、検証しながらaddしていく
 		for identifier in newKeys.sections():
+			if (sections and (identifier.upper() not in sections)) or ((not sections) and "HOTKEY" in identifier):
+				self.log.debug("skip section %s" % identifier)
+				continue
+
+			self.log.debug("read section %s" % identifier)
 			for elem in newKeys.items(identifier):
 				if elem[1]!="":				#空白のものは無視する
 					self.add(identifier,elem[0],elem[1])
@@ -360,12 +377,15 @@ class KeymapHandlerBase():
 
 	def SaveFile(self,fileName):
 		"""
-			指定した名前でキーマップの保存を試みます
+			指定した名前でキーマップの保存を試みる
+			成功時はerrorCodes.OKを、失敗時は理由に関わらずerrorCodes.ACCESS_DENIEDを返す
 		"""
 		c=configparser.ConfigParser()
 		try:
+			別セクションがあればそれを残せるので一応読み込んでおく
 			c.read(fileName)
 		except:
+			#ファイル不存在等だが問題なし
 			pass
 		for section in self.entries.keys():
 			c.add_section(section)
@@ -374,7 +394,8 @@ class KeymapHandlerBase():
 		try:
 			with open(fileName,"w", encoding='UTF-8') as f: return c.write(f)
 			return errorCodes.OK
-		except:
+		except Exception as e:
+			self.log.warning("keymap save (fn=%s) failed. %s" % (fileName,str(e)))
 			return errorCodes.ACCESS_DENIED
 
 	def GetError(self,identifier):
@@ -387,8 +408,52 @@ class KeymapHandlerBase():
 		self.errors[identifier]={}
 		return ret
 
+	def GetKeyString(self,identifier,ref):
+		"""指定されたコマンドのショートカットキー文字列を取得する"""
+		ref=ref.upper()
+		identifier=identifier.upper()
+
+		try:
+			return self.map[identifier][ref]
+		except KeyError:
+			#他のビューを検索
+			for i in self.map:
+				if ref in self.map[i]:
+					return self.map[i][ref]
+			return None
+		#end except
+
+
+	def GetTable(self, identifier):
+		"""
+			アクセラレーターテーブルを取得する。
+			identifier で、どのビューでのテーブルを取得するかを指定する。
+		"""
+		return wx.AcceleratorTable(self.entries[identifier.upper()])
+
+	def GetEntries(self,identifier):
+		"""
+			登録されているエントリーの一覧を取得する。
+			identifier で、どのビューでのテーブルを取得するかを指定する。
+		"""
+		return self.entries[identifier.upper()]
+
+	def Set(self,identifier,window,eventHandler=None):
+		"""
+			アクセラレータテーブルを指定されたウィンドウに登録する
+			identifier で、どのビューでのテーブルを取得するかを指定する。
+			windowには、登録先としてwx.windowを継承したインスタンスを指定する
+			eventHandlerを指定すると、EVT_MENUをBindする
+		"""
+		if eventHandler:
+			window.Bind(wx.EVT_MENU,eventHandler)
+		return window.SetAcceleratorTable(self.GetTable(identifier))
+
+	def makeEntry(self,*pArgs, **kArgs):
+		return makeEntry(*pArgs,*kArgs)
+
 	def add(self,identifier,ref,key):
-		"""重複をチェックしながらキーマップにショートカットを追加します。"""
+		"""重複をチェックしながらキーマップにショートカットを追加する"""
 		#refとidentifierは大文字・小文字の区別をしないので大文字に統一
 		ref=ref.upper()
 		identifier=identifier.upper()
@@ -400,7 +465,7 @@ class KeymapHandlerBase():
 
 		#エントリーの作成・追加
 		for e in key.split("/"):
-			entry=makeEntry(ref,e,self.filter,self.log)
+			entry=self.makeEntry(ref,e,self.filter,self.log)
 			if entry==False:
 				self.addError(identifier,ref,key,"make entry failed")
 				continue
@@ -434,39 +499,13 @@ class KeymapHandlerBase():
 		return
 
 	def addError(self,identifier,ref,key,reason=""):
-		"""エラー発生時、情報を記録します。"""
+		"""エラー発生時、情報を記録する。"""
 		self.log.warning("Cannot add %s=%s in %s reason=%s" % (ref,key,identifier,reason))
 		try:
 			self.errors[identifier][ref]=key
 		except KeyError:
 			self.errors[identifier]={}
 			self.errors[identifier][ref]=key
-
-	def GetKeyString(self,identifier,ref):
-		"""指定されたコマンドのショートカットキー文字列を取得します。"""
-		ref=ref.upper()
-		identifier=identifier.upper()
-
-		try:
-			r=self.map[identifier][ref]
-		except KeyError:
-			r=None
-		#end except
-		return r
-
-	def GetTable(self, identifier):
-		"""
-			アクセラレーターテーブルを取得する。
-			identifier で、どのビューでのテーブルを取得するかを指定する。
-		"""
-		return wx.AcceleratorTable(self.entries[identifier.upper()])
-
-	def GetEntries(self,identifier):
-		"""
-			登録されているエントリーの一覧を取得する。
-			identifier で、どのビューでのテーブルを取得するかを指定する。
-		"""
-		return self.entries[identifier.upper()]
 
 	def replaceOriginalRef(self,items,identifier):
 		"""
@@ -500,24 +539,23 @@ def makeEntry(ref,key,filter,log):
 	"""ref(String)と、/区切りでない単一のkey(String)からwx.AcceleratorEntryを生成"""
 	key=key.upper()					#大文字に統一して処理
 
-	#修飾キーの確認
-	ctrl="CTRL+" in key
-	alt="ALT+" in key
-	shift="SHIFT+" in key
-	codestr=key.split("+")
+	modifireKeys ={
+		"CTRL":wx.ACCEL_CTRL,
+		"ALT":wx.ACCEL_ALT,
+		"SHIFT":wx.ACCEL_SHIFT
+	}
+
+	if filter and ("WINDOWS" in filter.modifierKey):
+		modifireKeys["WINDOWS"]=wx.MOD_WIN
+
 	flags=0
 	flagCount=0
-	if ctrl:
-		flags=wx.ACCEL_CTRL
-		flagCount+=1
-	if alt:
-		flags=flags|wx.ACCEL_ALT
-		flagCount+=1
-	if shift:
-		flags=flags|wx.ACCEL_SHIFT
-		flagCount+=1
-
+	for name,value in modifireKeys.items():
+		if name+"+" in key:
+			flags|=value
+			flagCount+=1
 	#修飾キーのみのもの、修飾キーでないキーが複数含まれるものはダメ
+	codestr=key.split("+")
 	if not len(codestr)-flagCount==1:
 		log.warning("%s is invalid pattern." % key)
 		return False
@@ -532,7 +570,6 @@ def makeEntry(ref,key,filter,log):
 		log.warning("%s(%s): %s" % (ref,key,filter.GetLastError()))
 		return False
 	return AcceleratorEntry(flags,str2key[codestr],menuItemsStore.getRef(ref.upper()),ref.upper())
-
 
 
 class AcceleratorEntry(wx.AcceleratorEntry):
@@ -559,6 +596,7 @@ class AcceleratorEntry(wx.AcceleratorEntry):
 	def __str__(self):
 		return "<AcceleratorEntry %s>" % self.GetRefName()
 
+
 class KeyFilterBase:
 	"""
 		利用できるショートカットキーを制限するためのフィルタ
@@ -566,7 +604,7 @@ class KeyFilterBase:
 
 	def __init__(self):
 		"""
-			必用な変数を作成し、OSが利用するコマンドとの重複は設定できないようブロックします。
+			必用な変数を作成し、OSが利用するコマンドとの重複は設定できないようブロックする
 		"""
 		self.errorString=""									#最後に検知したエラーの原因を格納
 		self.modifierKey=set()								#有効な修飾キー
@@ -574,27 +612,30 @@ class KeyFilterBase:
 		self.enableKey=set()								#修飾キーとの組み合わせで利用可能
 		self.noShiftEnableKey=set()							#SHIFTキー以外の修飾キーとの組み合わせで利用可能(modifierKeyにSHIFTを指定していない場合は無視される)
 		self.disablePattern=[]								#無効なキーの組み合わせ
-		self.AddDisablePattern("CTRL+ESCAPE")			#スタートメニュー
-		self.AddDisablePattern("CTRL+SHIFT+ESCAPE")		#タスクマネージャ
-		self.AddDisablePattern("CTRL+WINDOWS+RETURN")#ナレーターの起動と終了
+		self.AddDisablePattern("CTRL+ESCAPE")				#スタートメニュー
+		self.AddDisablePattern("CTRL+SHIFT+ESCAPE")			#タスクマネージャ
+		self.AddDisablePattern("CTRL+WINDOWS+RETURN")		#ナレーターの起動と終了
 		self.AddDisablePattern("ALT+SHIFT+PRINTSCREEN")		#ハイコントラストの切り替え
 		self.AddDisablePattern("ALT+ESCAPE")				#最前面ウィンドウの最小化
+		self.AddDisablePattern("ALT+TAB")					#ウィンドウ間の移動
+		self.AddDisablePattern("ALT+SHIFT+TAB")				#ウィンドウ間の移動
+		self.AddDisablePattern("ALT+ESCAPE")				#ウィンドウの最小化
 
 	def SetDefault(self,supportInputChar,isSystem,arrowCharKey=False):
 		"""
-			フィルタを一般的な設定に構成します。
+			フィルタを一般的な設定に構成する。
 
-			supportInputCharには、そのウィンドウでの文字入力の可否を設定します。
-			ここでTrueを設定すると、Home,BS,Enterなど文字入力と競合する修飾キーを単体でショートカットとして利用可能になります。
+			supportInputCharには、そのウィンドウでの文字入力の可否を設定する。
+			ここでTrueを設定すると、Home,BS,Enterなど文字入力と競合する修飾キーを単体でショートカットとして利用可能になる
 
-			isSystemには、システム内部で設定する場合にはTrue、ユーザが独自で設定する場合にはFalseを指定します。
-			ユーザが独自にキーをカスタマイズする場合に、指定することが望ましくないキーの組み合わせをブロックします。
-			将来、開発者が機能拡張する際の問題を和らげることを目的としています。
-			なお、開発者であってもコメントで記した目的以外に利用することは避けるべきです。
+			isSystemには、システム内部で設定する場合にはTrue、ユーザが独自で設定する場合にはFalseを指定する。
+			ユーザが独自にキーをカスタマイズする場合に、指定することが望ましくないキーの組み合わせをブロックする。
+			将来、開発者が機能拡張する際の問題を和らげることを目的としている。
+			なお、開発者であってもコメントで記した目的以外に利用することは避けるべきである。
 
-			arrowCharKeyには、原則Falseを指定します。
-			ここでTrueを設定すると英数字や各種記号文字のキーを単体でショートカットキーとして利用可能になります。
-			ただし、各種コントロールのインクリメンタルサーチ等と競合するため、この設定は推奨されません。
+			arrowCharKeyには、原則Falseを指定する。
+			ここでTrueを設定すると英数字や各種記号文字のキーを単体でショートカットキーとして利用可能になる。
+			ただし、各種コントロールのインクリメンタルサーチ等と競合するため、この設定は推奨されない。
 		"""
 		self.modifierKey.add("CTRL")
 		self.modifierKey.add("ALT")
@@ -650,25 +691,25 @@ class KeyFilterBase:
 
 	def AddEnableKey(self,keys):
 		if type(keys)==str:
-			return self.SetKeyGroup(keys,self.enableKey)
+			return self._SetKeyGroup(keys,self.enableKey)
 		for key in keys:
 			self._SetKeyGroup(key,self.enableKey)
  
 	def AddFunctionKey(self,keys):
 		if type(keys)==str:
-			return self.SetKeyGroup(keys,self.functionKey)
+			return self._SetKeyGroup(keys,self.functionKey)
 		for key in keys:
 			self._SetKeyGroup(key,self.functionKey)
  
 	def AddModifierKey(self,keys):
 		if type(keys)==str:
-			return self.SetKeyGroup(keys,self.modifierKey)
+			return self._SetKeyGroup(keys,self.modifierKey)
 		for key in keys:
 			self._SetKeyGroup(key,self.modifierKey)
  
 	def AddNoShiftEnableKey(self,keys):
 		if type(keys)==str:
-			return self.SetKeyGroup(keys,noShiftEnableKey)
+			return self._SetKeyGroup(keys,noShiftEnableKey)
 		for key in keys:
 			self._SetKeyGroup(key,self.noShiftEnableKey)
  
@@ -692,7 +733,7 @@ class KeyFilterBase:
 			return False
 
 		self.errorString=""
-		keys=keyString.split("+")
+		keys=keyString.upper().split("+")
 		modFlg=False
 		shiftFlg=False
 		funcCount=0
@@ -737,7 +778,7 @@ class KeyFilterBase:
 		elif modFlg==False and shiftFlg==False and funcCount==0:
 			self.errorString=_("このキーは、SHIFTキー以外の修飾キーと合わせて指定する必要があります。")
 			return
-		elif funcCount==0 and noShiftCount==0:
+		elif funcCount==0 and noShiftCount==0 and enableCount==0:
 			self.errorString=_("修飾キーのみの組み合わせは指定できません。")
 			return False
 		if enableCount>0 and modFlg==False and shiftFlg==False:
@@ -755,3 +796,7 @@ class KeyFilterBase:
 	def GetLastError(self):
 			return self.errorString
 
+	def GetUsableKeys(self):
+		ret=[]
+		ret.extend([*self.modifierKey,*self.functionKey,*self.enableKey,*self.noShiftEnableKey])
+		return ret

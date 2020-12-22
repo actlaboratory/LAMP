@@ -4,7 +4,7 @@
 
 defaultKeymap={}
 
-defaultKeymap["mainView"]={
+defaultKeymap["MAINVIEW"]={
 	# ファイルメニュー
 	"FILE_OPEN": "ctrl+shift+F",
 	"DIR_OPEN": "ctrl+shift+O",
@@ -22,7 +22,7 @@ defaultKeymap["mainView"]={
 	# 操作メニュー
 	"VOLUME_UP": "ctrl+uparrow",
 	"VOLUME_DOWN": "ctrl+downarrow",
-	"VOLUME_DEFAULT": "ctrl+shift+uparrow",
+	"VOLUME_100": "ctrl+shift+uparrow",
 	"MUTE": "ctrl+shift+downarrow",
 	"PLAY_PAUSE": "ctrl+P/space",
 	"STOP": "ctrl+Space",
@@ -30,7 +30,6 @@ defaultKeymap["mainView"]={
 	"PREVIOUS_TRACK": "ctrl+B",
 	"FAST_FORWARD": "ctrl+rightarrow",
 	"REWIND": "ctrl+leftarrow",
-	"SAY_TIME": "ctrl+T",
 	"SKIP": "alt+leftarrow",
 	"REVERSE_SKIP": "alt+rightarrow",
 	"SKIP_INTERVAL_INCREASE": "alt+uparrow",
@@ -38,14 +37,17 @@ defaultKeymap["mainView"]={
 	"REPEAT_LOOP": "ctrl+L",
 	"SHUFFLE": "ctrl+H",
 	"MANUAL_SONG_FEED": "ctrl+shift+H",
+	# 設定メニュー
 	"SET_FONT": "",
 	"SET_KEYMAP": "",
 	"SET_HOTKEY": "",
 	"ENVIRONMENT": "ctrl+shift+E",
+	# ヘルプメニュー
 	"HELP": "F1",
 	"CHECK_UPDATE": "ctrl+shift+U",
-	"VERSION_INFO": "ctrl+shift+V"
-
+	"VERSION_INFO": "ctrl+shift+V",
+	# その他
+	"SAY_TIME": "ctrl+T",
 }
 
 defaultKeymap["playlist"]={
@@ -54,7 +56,8 @@ defaultKeymap["playlist"]={
 	"POPUP_COPY": "ctrl+C",
 	"POPUP_PASTE": "ctrl+V",
 	"POPUP_DELETE": "delete",
-	"POPUP_SELECT_ALL": "ctrl+A"
+	"POPUP_SELECT_ALL": "ctrl+A",
+	"POPUP_ABOUT": "ctrl+i"
 }
 
 defaultKeymap["queue"]={
@@ -62,5 +65,27 @@ defaultKeymap["queue"]={
 	"POPUP_COPY": "ctrl+C",
 	"POPUP_PASTE": "ctrl+v",
 	"POPUP_DELETE": "delete",
-	"POPUP_SELECT_ALL": "ctrl+A"
+	"POPUP_SELECT_ALL": "ctrl+A",
+	"POPUP_ABOUT": "ctrl+i"
+}
+defaultKeymap["HOTKEY"]={
+	#"EXIT": "",
+	"VOLUME_UP": "",
+	"VOLUME_DOWN": "",
+	"VOLUME_100": "",
+	"MUTE": "",
+	"PLAY_PAUSE": "",
+	"STOP": "",
+	"NEXT_TRACK": "",
+	"PREVIOUS_TRACK": "",
+	"FAST_FORWARD": "",
+	"REWIND": "",
+	"SKIP": "",
+	"REVERSE_SKIP": "",
+	"SKIP_INTERVAL_INCREASE": "",
+	"SKIP_INTERVAL_DECREASE": "",
+	"REPEAT_LOOP": "",
+	"SHUFFLE": "",
+	"MANUAL_SONG_FEED": "",
+	"SAY_TIME": "",
 }

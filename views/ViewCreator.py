@@ -7,7 +7,6 @@ import wx
 import win32api
 import _winxptheme
 
-import views.lampViewObject
 
 from views import ViewCreatorBase
 from views.ViewCreatorBase import *
