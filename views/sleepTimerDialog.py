@@ -53,6 +53,7 @@ class Dialog(BaseDialog):
         label = self.countValueCreator.staticText(_("曲"))
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"", wx.ALIGN_RIGHT)
         self.bStart = self.creator.button(_("開始"),self.onButtonClick)
+        self.bStart.SetDefault()
         self.bCancel = self.creator.cancelbutton(_("キャンセル"), self.onButtonClick)
 
         self.sizer.Hide(self.countValueCreator.GetSizer(), True)
