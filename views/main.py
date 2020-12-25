@@ -3,6 +3,7 @@
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 #Copyright (C) 2019-2020 yamahubuki <itiro.ishino@gmail.com>
 
+import subprocess
 from views import lampViewObject
 from views import setting_dialog
 from views import notificationText
@@ -263,33 +264,33 @@ class Events(BaseEvents):
 		selected=event.GetId()#メニュー識別しの数値が出る
 
 		if selected==menuItemsStore.getRef("FILE_OPEN"):
-			dialog= views.mkOpenDialog.Dialog("fileOpenDialog")
-			dialog.Initialize(0) #0=ファイルダイアログ
-			rtnCode = dialog.Show()
-			if rtnCode == dialog.PLAYLIST:
-				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.playlistView)
-			elif rtnCode == dialog.QUEUE:
-				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.queueView)
+			d = views.mkOpenDialog.Dialog("fileOpenDialog")
+			d.Initialize(0) #0=ファイルダイアログ
+			rtnCode = d.Show()
+			if rtnCode == d.PLAYLIST:
+				listManager.addItems([d.GetValue()], globalVars.app.hMainView.playlistView)
+			elif rtnCode == d.QUEUE:
+				listManager.addItems([d.GetValue()], globalVars.app.hMainView.queueView)
 			else:
 				return
 		elif selected==menuItemsStore.getRef("DIR_OPEN"):
-			dialog= views.mkOpenDialog.Dialog("directoryOpenDialog")
-			dialog.Initialize(1) #1=フォルダダイアログ
-			rtnCode = dialog.Show()
-			if rtnCode == dialog.PLAYLIST:
-				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.playlistView)
+			d = views.mkOpenDialog.Dialog("directoryOpenDialog")
+			d.Initialize(1) #1=フォルダダイアログ
+			rtnCode = d.Show()
+			if rtnCode == d.PLAYLIST:
+				listManager.addItems([d.GetValue()], globalVars.app.hMainView.playlistView)
 			elif rtnCode == dialog.QUEUE:
-				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.queueView)
+				listManager.addItems([d.GetValue()], globalVars.app.hMainView.queueView)
 			else:
 				return
 		elif selected==menuItemsStore.getRef("URL_OPEN"):
-			dialog= views.mkOpenDialog.Dialog("urlOpenDialog")
-			dialog.Initialize(2) #2=URLダイアログ
-			rtnCode = dialog.Show()
-			if rtnCode == dialog.PLAYLIST:
-				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.playlistView)
-			elif rtnCode == dialog.QUEUE:
-				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.queueView)
+			d= views.mkOpenDialog.Dialog("urlOpenDialog")
+			d.Initialize(2) #2=URLダイアログ
+			rtnCode = d.Show()
+			if rtnCode == d.PLAYLIST:
+				listManager.addItems([d.GetValue()], globalVars.app.hMainView.playlistView)
+			elif rtnCode == d.QUEUE:
+				listManager.addItems([d.GetValue()], globalVars.app.hMainView.queueView)
 			else:
 				return
 		elif selected==menuItemsStore.getRef("M3U_OPEN"):
@@ -392,6 +393,9 @@ class Events(BaseEvents):
 			d = setting_dialog.settingDialog("environment_dialog")
 			d.Initialize()
 			d.Show()
+		elif selected==menuItemsStore.getRef("HELP"):
+			if os.path.exists("./readme.txt"): subprocess.Popen("start ./readme.txt", shell=True)
+			else: dialog(_("ヘルプ"), _("ヘルプファイルが見つかりません。"))
 		elif selected==menuItemsStore.getRef("CHECK_UPDATE"):
 			update.checkUpdate()
 		elif selected==menuItemsStore.getRef("VERSION_INFO"):

@@ -1,5 +1,6 @@
 import wx, namedPipe, globalVars, constants, sys, os, m3uManager, listManager
 
+pipeServer = None
 
 def sendPipe():
     pipeClient = namedPipe.Client(constants.PIPE_NAME)
@@ -11,9 +12,17 @@ def sendPipe():
         except namedPipe.PipeServerNotFoundError as e:
             pass
 def startPipeServer():
+    global pipeServer
     pipeServer = namedPipe.Server(constants.PIPE_NAME)
     pipeServer.setReceiveCallback(onReceive)
     pipeServer.start()
+
+def stopPipeServer():
+    global pipeServer
+    if pipeServer != None:
+        pipeServer.exit()
+        pipeServer.close()
+        pipeServer = None
 
 def onReceive(msg):
     if os.path.exists(msg):

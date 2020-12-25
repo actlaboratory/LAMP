@@ -100,6 +100,7 @@ class settingDialog(baseDialog.BaseDialog):
         # フッター
         footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, creator.GetSizer(), style=wx.ALIGN_RIGHT | wx.ALL, margin=10)
         self.saveBtn = footerCreator.button(_("保存"), self.onSaveButton)
+        self.saveBtn.SetDefault()
         cancelBtn = footerCreator.cancelbutton(_("破棄"))
 
         self.comboloader()

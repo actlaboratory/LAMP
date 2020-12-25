@@ -23,7 +23,7 @@ class Dialog(BaseDialog):
     def InstallControls(self):
         """いろんなwidgetを設置する。"""
         # 増幅設定
-        self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,views.ViewCreator.FlexGridSizer,20,4,wx.ALL)
+        self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,views.ViewCreator.FlexGridSizer,20,3,wx.ALL)
         self.ampSlider, dummy = self.creator.slider(_("増幅"), 0, 400, self.onSlider, globalVars.play.getConfig(PLAYER_CONFIG_AMP), x=150)
         self.ampSpin, dummy = self.creator.spinCtrl(_("増幅"), 0, 400, self.onSpin, globalVars.play.getConfig(PLAYER_CONFIG_AMP), textLayout=None)
         # 速さ設定
@@ -40,7 +40,8 @@ class Dialog(BaseDialog):
         self.freqSpin, dummy = self.creator.spinCtrl(_("周波数"), 6, 400, self.onSpin, globalVars.play.getConfig(PLAYER_CONFIG_FREQ), textLayout=None)
         # フッタ
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"", wx.ALIGN_RIGHT)
-        self.bClose = self.creator.button(_("閉じる"),self.onButtonClick)
+        self.bClose = self.creator.cancelbutton(_("閉じる"),self.onButtonClick)
+        self.bClose.SetDefault()
         self.bReset = self.creator.button(_("リセット"), self.onButtonClick)
 
     def GetData(self):
