@@ -29,7 +29,6 @@ if len(sys.argv)==2 and sys.argv[1]=="--appveyor":
 	appveyor=True
 print("Starting build for %s(appveyor mode=%s)" % (constants.APP_NAME, appveyor))
 build_filename=os.environ['APPVEYOR_REPO_TAG_NAME'] if 'APPVEYOR_REPO_TAG_NAME' in os.environ else 'snapshot'
-build_filename = "0.0.5"
 print("Will be built as %s" % build_filename)
 
 pyinstaller_path="pyinstaller.exe" if appveyor is False else "%PYTHON%\\Scripts\\pyinstaller.exe"
