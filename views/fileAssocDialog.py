@@ -59,7 +59,7 @@ class dialog(baseDialog.BaseDialog):
         footerCreator = ViewCreator.ViewCreator(self.viewMode, self.panel, self.sizer, style=wx.ALL | wx.ALIGN_RIGHT, margin=20)
         self.okBtn = footerCreator.okbutton(_("登録"), self.onOkBtn)
         cancelBtn = footerCreator.cancelbutton(_("中止"))
-        unsetBtn = footerCreator.button(_("全関連付け解除"), self.onUnsetBtn)
+        unsetBtn = footerCreator.button(_("全関連付け解除(&A)"), self.onUnsetBtn)
 
 
     def onOkBtn(self, evt):

@@ -21,7 +21,7 @@ def sendToCtrl(label):
             except OSError:
                 _error(_("登録の解除に失敗しました。"))
     else:
-        if _makeSendTo(label): _ok(_("%sを、送るメニューに登録しました。\n実行するには、「%s」を選択します。" %(constants.APP_NAME, label)))
+        if _makeSendTo(label): _ok(_("%(app)sを、送るメニューに登録しました。\n実行するには、「%(label)s」を選択します。") %{"app": constants.APP_NAME, "label": label})
         else: _error(_("登録に失敗しました。"))
             
 
