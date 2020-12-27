@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: application\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-22 20:33+0900\n"
+"POT-Creation-Date: 2020-12-27 18:27+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -456,8 +456,8 @@ msgstr ""
 #: sendToManager.py:24
 #, python-format
 msgid ""
-"%sを、送るメニューに登録しました。\n"
-"実行するには、「%s」を選択します。"
+"%(app)sを、送るメニューに登録しました。\n"
+"実行するには、「%(label)s」を選択します。"
 msgstr ""
 
 #: sendToManager.py:25
@@ -792,9 +792,9 @@ msgstr ""
 #: views\globalKeyConfig.py:61
 #, python-format
 msgid ""
-"以下の項目において、重複するキー %s が設定されています。\n"
+"以下の項目において、重複するキー %(key)s が設定されています。\n"
 "\n"
-"%s"
+"%(names)s"
 msgstr ""
 
 #: views\globalKeyConfig.py:74
@@ -893,12 +893,14 @@ msgstr ""
 
 #: views\KeyValueSettingDialogBase.py:264
 #, python-format
-msgid "%sと%sに同じショートカットキー%sが設定されています。\n"
+msgid "%(v1)sと%(v2)sに同じショートカットキー%(key)sが設定されています。\n"
 msgstr ""
 
 #: views\KeyValueSettingDialogBase.py:267
 #, python-format
-msgid "%s、%sなど計%d箇所に同じショートカットキー%sが設定されています。\n"
+msgid ""
+"%(v1)s、%(v2)sなど計%(count)d箇所に同じショートカットキー%(key)sが設定されて"
+"います。\n"
 msgstr ""
 
 #: views\KeyValueSettingDialogBase.py:271
@@ -910,7 +912,9 @@ msgstr ""
 
 #: views\KeyValueSettingDialogBase.py:273
 #, python-format
-msgid "%sに設定されたショートカットキー%sは、別の場所で利用されています。\n"
+msgid ""
+"%(name)sに設定されたショートカットキー%(key)sは、別の場所で利用されていま"
+"す。\n"
 msgstr ""
 
 #: views\lampViewObject.py:146
@@ -1349,6 +1353,5 @@ msgstr ""
 
 #: views\versionDialog.py:34
 msgid ""
-"本ソフトウェアには、他の団体または個人の成果物が含まれている場合があります。"
-"ライセンス情報の詳細については、同梱の license.txt を参照してください。"
+"ライセンス/著作権情報については、同梱の license.txt を参照してください。"
 msgstr ""

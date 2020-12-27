@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: application\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-22 20:51+0900\n"
-"PO-Revision-Date: 2020-12-22 23:22+0900\n"
+"POT-Creation-Date: 2020-12-27 18:34+0900\n"
+"PO-Revision-Date: 2020-12-27 18:35+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -194,7 +194,7 @@ msgid ""
 "m3u8ファイルに変換して保存しますか？"
 msgstr ""
 "This playlist is modified.\n"
-"Save as m3u8 playlist file?"
+"Do you wish to save as an m3u8?"
 
 #: m3uManager.py:75 m3uManager.py:86 views\setting_dialog.py:102
 msgid "保存"
@@ -222,7 +222,7 @@ msgid ""
 "上書き保存しますか？"
 msgstr ""
 "This playlist is modified.\n"
-"Overwrite?"
+"Do you wish to overwrite?"
 
 #: m3uManager.py:79
 msgid "上書き"
@@ -238,7 +238,7 @@ msgid ""
 "保存しますか？"
 msgstr ""
 "This playlist is modified.\n"
-"Save as playlist file?"
+"Do you wish to save as playlist file?"
 
 #: m3uManager.py:106
 msgid "プレイリストファイル保存"
@@ -294,7 +294,7 @@ msgstr "E&ffector"
 
 #: menuItemsDic.py:16
 msgid "再生中のファイルについて(&A)"
-msgstr "&About Now Playing"
+msgstr "&About the file currently playing"
 
 #: menuItemsDic.py:19
 msgid "再生 / 一時停止(&P)"
@@ -306,7 +306,7 @@ msgstr "&Stop"
 
 #: menuItemsDic.py:21
 msgid "早送り(&F)"
-msgstr "Stop"
+msgstr "&Fast-forward"
 
 #: menuItemsDic.py:22
 msgid "巻き戻し(&B)"
@@ -594,11 +594,14 @@ msgstr "This is the latest version."
 
 #: update.py:77
 msgid "リクエストパラメーターが不正です。開発者まで連絡してください"
-msgstr "Request parameter is invalid. Contact to the developer."
+msgstr ""
+"Request parameter is invalid. Contact to the developer for further "
+"assistance."
 
 #: update.py:81
 msgid "アップデーターが登録されていません。開発者に連絡してください。"
-msgstr "Updater is not registered. Contact to the developer."
+msgstr ""
+"Updater is not registered. Contact to the developer for further assistance."
 
 #: update.py:129
 msgid ""
@@ -814,7 +817,7 @@ msgid "なし"
 msgstr "No Information"
 
 #: views\globalKeyConfig.py:61
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "以下の項目において、重複するキー %(key)s が設定されています。\n"
 "\n"
@@ -849,7 +852,6 @@ msgid "設定"
 msgstr "settings"
 
 #: views\globalKeyConfig.py:80
-#, fuzzy
 msgid "登録内容の入力"
 msgstr "register set contents"
 
@@ -871,7 +873,6 @@ msgid "キー設定"
 msgstr "Key Configuration"
 
 #: views\keyConfig.py:40
-#, fuzzy
 msgid ""
 "設定するには、使用したいキーの組み合わせを押します。\n"
 "設定を解除するには、Escキーを押します。"
@@ -880,13 +881,8 @@ msgstr ""
 "Press Esc to remove configuration."
 
 #: views\keyConfig.py:46
-#, fuzzy
 msgid "設定解除"
 msgstr "remove registered configuration"
-
-#: views\KeyValueSettingDialogBase.py:24
-msgid "パラメータの個数が不正です。"
-msgstr "Parameter count is invalid."
 
 #: views\KeyValueSettingDialogBase.py:38
 msgid "現在の登録内容"
@@ -908,20 +904,16 @@ msgstr "OK"
 #: views\KeyValueSettingDialogBase.py:94 views\KeyValueSettingDialogBase.py:121
 #, python-format
 msgid "この%sは既に登録されています。登録を上書きしますか？"
-msgstr "This %s is already registered. Overwrite?"
+msgstr "This %s is already registered. Do you wish to overwrite?"
 
 #: views\KeyValueSettingDialogBase.py:94 views\KeyValueSettingDialogBase.py:121
 msgid "上書き確認"
 msgstr "Overwriting Confirmation"
 
-#: views\KeyValueSettingDialogBase.py:177
-msgid "項目名と初期値の指定件数が一致しません。"
-msgstr ""
-
 #: views\KeyValueSettingDialogBase.py:224
 #, python-format
 msgid "%sを空白や半角の=を含む値に設定することはできません。"
-msgstr ""
+msgstr "%s cannot include space and equals sign."
 
 #: views\KeyValueSettingDialogBase.py:264
 #, python-format
@@ -933,7 +925,7 @@ msgstr "%(v1)s and %(v2)s has same shortcut key %(key)s.\n"
 msgid ""
 "%(v1)s、%(v2)sなど計%(count)d箇所に同じショートカットキー%(key)sが設定されて"
 "います。\n"
-msgstr ""
+msgstr "%(key)s is registered at %(count)i items, %(v1)s, %(v2)s and more.\n"
 
 #: views\KeyValueSettingDialogBase.py:271
 #, python-format
@@ -943,7 +935,7 @@ msgid ""
 msgstr "Configured shortcut %s cannot be recognized. Contact to developer.\n"
 
 #: views\KeyValueSettingDialogBase.py:273
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(name)sに設定されたショートカットキー%(key)sは、別の場所で利用されていま"
 "す。\n"
@@ -1164,11 +1156,11 @@ msgstr "&Manual Track Advance"
 
 #: views\setting_dialog.py:60
 msgid "新たなファイルにより開かれたとき(&F)"
-msgstr ""
+msgstr "when opend by new &File"
 
 #: views\setting_dialog.py:61
 msgid "新たなプレイリストにより開かれたとき(&P)"
-msgstr ""
+msgstr "when opend by new &Playlist"
 
 #: views\setting_dialog.py:64
 msgid "通知"
@@ -1276,7 +1268,7 @@ msgstr "&Minutes"
 
 #: views\sleepTimerDialog.py:51
 msgid "曲数指定"
-msgstr "set amount of tracks"
+msgstr "set number of tracks"
 
 #: views\sleepTimerDialog.py:52
 msgid "曲数(&N)"
@@ -1300,7 +1292,7 @@ msgstr "No items are found in playback queue."
 
 #: views\sleepTimerDialog.py:104
 msgid "再生する曲がないため、このタイマーを設定できません。"
-msgstr "playback tracks is not found."
+msgstr "There are no tracks to play."
 
 #: views\sleepTimerDialog.py:108
 msgid "シャッフルが有効です。"
@@ -1360,7 +1352,7 @@ msgstr "Downloading update..."
 #: views\updateDialog.py:65
 msgid ""
 "updater.exeが見つかりませんでした。誤って削除したかなどをご確認ください。"
-msgstr "Updater.exe is not found."
+msgstr "Updater.exe could not be found."
 
 #: views\versionDialog.py:18
 msgid "バージョン情報"
@@ -1380,7 +1372,7 @@ msgstr "license"
 
 #: views\versionDialog.py:31
 msgid "開発元"
-msgstr "developer"
+msgstr "developers"
 
 #: views\versionDialog.py:32
 msgid "ソフトウェア詳細情報"
@@ -1388,9 +1380,11 @@ msgstr "software details"
 
 #: views\versionDialog.py:34
 msgid ""
-"本ソフトウェアには、他の団体または個人の成果物が含まれている場合があります。"
-"ライセンス情報の詳細については、同梱の license.txt を参照してください。"
-msgstr ""
+"ライセンス/著作権情報については、同梱の license.txt を参照してください。"
+msgstr "See the included license.txt for licensing / copyright information."
+
+#~ msgid "パラメータの個数が不正です。"
+#~ msgstr "Parameter count is invalid."
 
 #~ msgid "機能"
 #~ msgstr "functions"

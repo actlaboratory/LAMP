@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: application\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-22 20:51+0900\n"
+"POT-Creation-Date: 2020-12-27 18:34+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -852,10 +852,6 @@ msgstr ""
 msgid "設定解除"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:24
-msgid "パラメータの個数が不正です。"
-msgstr ""
-
 #: views\KeyValueSettingDialogBase.py:38
 msgid "現在の登録内容"
 msgstr ""
@@ -880,10 +876,6 @@ msgstr ""
 
 #: views\KeyValueSettingDialogBase.py:94 views\KeyValueSettingDialogBase.py:121
 msgid "上書き確認"
-msgstr ""
-
-#: views\KeyValueSettingDialogBase.py:177
-msgid "項目名と初期値の指定件数が一致しません。"
 msgstr ""
 
 #: views\KeyValueSettingDialogBase.py:224
@@ -1353,6 +1345,5 @@ msgstr ""
 
 #: views\versionDialog.py:34
 msgid ""
-"本ソフトウェアには、他の団体または個人の成果物が含まれている場合があります。"
-"ライセンス情報の詳細については、同梱の license.txt を参照してください。"
+"ライセンス/著作権情報については、同梱の license.txt を参照してください。"
 msgstr ""
