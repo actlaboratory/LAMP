@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: application\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-27 18:34+0900\n"
-"PO-Revision-Date: 2020-12-27 18:35+0900\n"
+"POT-Creation-Date: 2020-12-27 23:37+0900\n"
+"PO-Revision-Date: 2020-12-27 23:40+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -29,60 +29,60 @@ msgstr "unmute"
 msgid "消音に設定"
 msgstr "mute"
 
-#: event_processor.py:191
+#: event_processor.py:195
 msgid "再生時エラー"
 msgstr "playback error"
 
-#: event_processor.py:191
+#: event_processor.py:195
 msgid "このファイルは再生できません。"
 msgstr "This file is not supported."
 
-#: event_processor.py:191
+#: event_processor.py:195
 msgid "継続"
 msgstr "continue"
 
-#: event_processor.py:191 sleep_timer.py:42 views\main.py:80
+#: event_processor.py:195 sleep_timer.py:42 views\main.py:81
 msgid "停止"
 msgstr "stop"
 
-#: event_processor.py:256 views\main.py:216
+#: event_processor.py:260 views\main.py:217
 msgid "進む"
 msgstr "forward"
 
-#: event_processor.py:257 views\main.py:216
+#: event_processor.py:261 views\main.py:217
 msgid "戻る"
 msgstr "backward"
 
-#: event_processor.py:258
+#: event_processor.py:262
 msgid "スキップ"
 msgstr "skip"
 
-#: event_processor.py:337 listManager.py:184 view_manager.py:49
+#: event_processor.py:341 listManager.py:185 view_manager.py:49
 #: view_manager.py:62 view_manager.py:86
 msgid "タイトル"
 msgstr "title"
 
-#: event_processor.py:345
+#: event_processor.py:349
 msgid "シャッフル"
 msgstr "shuffle"
 
-#: event_processor.py:350 event_processor.py:365
+#: event_processor.py:354 event_processor.py:369
 msgid "オフ"
 msgstr "off"
 
-#: event_processor.py:370
+#: event_processor.py:374
 msgid "リピート"
 msgstr "repeat"
 
-#: event_processor.py:375
+#: event_processor.py:379
 msgid "ループ"
 msgstr "loop"
 
-#: event_processor.py:401 event_processor.py:402
+#: event_processor.py:405 event_processor.py:406
 msgid "曲送りは自動"
 msgstr "auto track advance"
 
-#: event_processor.py:405 event_processor.py:406
+#: event_processor.py:409 event_processor.py:410
 msgid "曲送りは手動"
 msgstr "manual track advance"
 
@@ -120,51 +120,51 @@ msgstr "Keystroke which consists of only modifier keys cannot be added."
 msgid "この組み合わせは別の用途で予約されているため、利用できません。"
 msgstr "This keystroke is already reserved."
 
-#: listManager.py:99
+#: listManager.py:100
 msgid "ファイルを集めています..."
 msgstr "processing files..."
 
-#: listManager.py:99
+#: listManager.py:100
 msgid "読み込み中..."
 msgstr "loading..."
 
-#: listManager.py:160
+#: listManager.py:161
 msgid "読み込み中"
 msgstr "loading"
 
-#: listManager.py:181
+#: listManager.py:182
 msgid "ファイルの場所"
 msgstr "files location"
 
-#: listManager.py:182 view_manager.py:47 view_manager.py:60 view_manager.py:84
+#: listManager.py:183 view_manager.py:47 view_manager.py:60 view_manager.py:84
 msgid "ファイル名"
 msgstr "file name"
 
-#: listManager.py:183
+#: listManager.py:184
 msgid "ファイルサイズ"
 msgstr "file size"
 
-#: listManager.py:185
+#: listManager.py:186
 msgid "長さ"
 msgstr "length"
 
-#: listManager.py:186 view_manager.py:51 view_manager.py:64 view_manager.py:88
+#: listManager.py:187 view_manager.py:51 view_manager.py:64 view_manager.py:88
 msgid "アーティスト"
 msgstr "artist"
 
-#: listManager.py:187 view_manager.py:50 view_manager.py:63 view_manager.py:87
+#: listManager.py:188 view_manager.py:50 view_manager.py:63 view_manager.py:87
 msgid "アルバム"
 msgstr "album"
 
-#: listManager.py:188 view_manager.py:52 view_manager.py:65 view_manager.py:89
+#: listManager.py:189 view_manager.py:52 view_manager.py:65 view_manager.py:89
 msgid "アルバムアーティスト"
 msgstr "album artist"
 
-#: m3uManager.py:21 views\setting_dialog.py:164
+#: m3uManager.py:21 views\setting_dialog.py:165
 msgid "プレイリストファイル選択"
 msgstr "select playlist file"
 
-#: m3uManager.py:21 views\setting_dialog.py:164
+#: m3uManager.py:21 views\setting_dialog.py:165
 msgid "プレイリストファイル (.m3u8/.m3u)"
 msgstr "playlist files (.m3u8/.m3u)"
 
@@ -201,13 +201,13 @@ msgid "保存"
 msgstr "save"
 
 #: m3uManager.py:75 m3uManager.py:79 m3uManager.py:86
-#: views\setting_dialog.py:103
+#: views\setting_dialog.py:104
 msgid "破棄"
 msgstr "discard"
 
 #: m3uManager.py:75 m3uManager.py:79 m3uManager.py:86
 #: views\KeyValueSettingDialogBase.py:65 views\KeyValueSettingDialogBase.py:207
-#: views\mkDialog.py:30 views\mkOpenDialog.py:46 views\sleepTimerDialog.py:56
+#: views\mkDialog.py:30 views\mkOpenDialog.py:46 views\sleepTimerDialog.py:57
 #: views\updateDialog.py:44
 msgid "キャンセル"
 msgstr "cancel"
@@ -403,34 +403,30 @@ msgid "送るメニューに登録(&S)"
 msgstr "Add to &Send to"
 
 #: menuItemsDic.py:50
-msgid "フォント設定(&F)"
-msgstr "&Font settings"
-
-#: menuItemsDic.py:51
 msgid "ショートカットキー設定(&K)"
 msgstr "Shortcut &Key Settings"
 
-#: menuItemsDic.py:52
+#: menuItemsDic.py:51
 msgid "グローバルホットキー設定(&G)"
 msgstr "&Global Hot Key Settings"
 
-#: menuItemsDic.py:53
+#: menuItemsDic.py:52
 msgid "環境設定(&P)"
 msgstr "&Preferences"
 
-#: menuItemsDic.py:56 views\main.py:249
+#: menuItemsDic.py:55 views\main.py:250
 msgid "ヘルプ(&H)"
 msgstr "&Help"
 
-#: menuItemsDic.py:57
+#: menuItemsDic.py:56
 msgid "更新の確認(&U)"
 msgstr "Check for &Update"
 
-#: menuItemsDic.py:58
+#: menuItemsDic.py:57
 msgid "バージョン情報(&V)"
 msgstr "&Version Info"
 
-#: menuItemsDic.py:60
+#: menuItemsDic.py:59
 msgid "経過時間の読み上げ"
 msgstr "Say Elapsed Time"
 
@@ -480,8 +476,8 @@ msgstr "Failed to register."
 #: views\fileAssocDialog.py:31 views\fileAssocDialog.py:68
 #: views\fontManager.py:25 views\fontManager.py:50 views\globalKeyConfig.py:61
 #: views\globalKeyConfig.py:120 views\KeyValueSettingDialogBase.py:224
-#: views\KeyValueSettingDialogBase.py:275 views\main.py:160
-#: views\sleepTimerDialog.py:120 views\updateDialog.py:65
+#: views\KeyValueSettingDialogBase.py:275 views\main.py:161
+#: views\sleepTimerDialog.py:121 views\updateDialog.py:65
 msgid "エラー"
 msgstr "error"
 
@@ -489,11 +485,11 @@ msgstr "error"
 msgid "完了"
 msgstr "Finish"
 
-#: settings.py:16 view_manager.py:76 views\main.py:349
+#: settings.py:16 view_manager.py:76 views\main.py:350
 msgid "秒"
 msgstr "seconds"
 
-#: settings.py:18 view_manager.py:74 views\main.py:348
+#: settings.py:18 view_manager.py:74 views\main.py:349
 #: views\sleepTimerDialog.py:49
 msgid "分"
 msgstr "minutes"
@@ -611,16 +607,16 @@ msgstr ""
 "Download has finished.\n"
 "When you close this application, update will be installed."
 
-#: view_manager.py:26 views\main.py:130
+#: view_manager.py:26 views\main.py:131
 msgid "プレイリスト"
 msgstr "playlist"
 
 #: view_manager.py:26 view_manager.py:28 views\loadErrorDialog.py:34
-#: views\loadErrorDialog.py:35 views\main.py:130 views\main.py:133
+#: views\loadErrorDialog.py:35 views\main.py:131 views\main.py:134
 msgid "件"
 msgstr "items"
 
-#: view_manager.py:28 views\main.py:133
+#: view_manager.py:28 views\main.py:134
 msgid "キュー"
 msgstr "queue"
 
@@ -636,11 +632,11 @@ msgstr "total"
 msgid "経過時間を確認するには Ctrl + T を押します"
 msgstr "To check elapsed time, press Ctrl+T."
 
-#: view_manager.py:72 views\main.py:346 views\sleepTimerDialog.py:47
+#: view_manager.py:72 views\main.py:347 views\sleepTimerDialog.py:47
 msgid "時間"
 msgstr "hours"
 
-#: view_manager.py:96 views\lampViewObject.py:142 views\main.py:76
+#: view_manager.py:96 views\lampViewObject.py:142 views\main.py:77
 msgid "再生"
 msgstr "play"
 
@@ -648,7 +644,7 @@ msgstr "play"
 msgid "一時停止"
 msgstr "pause"
 
-#: view_manager.py:102 views\main.py:82
+#: view_manager.py:102 views\main.py:83
 msgid "リピートに切り替える"
 msgstr "repeat"
 
@@ -660,7 +656,7 @@ msgstr "loop"
 msgid "リピートとループを解除する"
 msgstr "disable repeat and loop"
 
-#: view_manager.py:111 views\main.py:84
+#: view_manager.py:111 views\main.py:85
 msgid "シャッフルをオンにする"
 msgstr "enable shuffle"
 
@@ -668,7 +664,7 @@ msgstr "enable shuffle"
 msgid "シャッフルをオフにする"
 msgstr "disable shuffle"
 
-#: view_manager.py:118 view_manager.py:119 views\main.py:88 views\main.py:89
+#: view_manager.py:118 view_manager.py:119 views\main.py:89 views\main.py:90
 msgid "ミュートをオンにする"
 msgstr "mute"
 
@@ -710,7 +706,7 @@ msgstr "&Key"
 msgid "周波数(&F)"
 msgstr "&Frequency"
 
-#: views\effectorDialog.py:44
+#: views\effectorDialog.py:45
 msgid "リセット(&R)"
 msgstr "&Reset"
 
@@ -805,14 +801,14 @@ msgstr "shortcut"
 msgid "識別子"
 msgstr "identifier"
 
-#: views\globalKeyConfig.py:32
+#: views\globalKeyConfig.py:31 views\main.py:382
 msgid "ショートカットキーの設定"
 msgstr "Shortcut Key Configuration"
 
 #: views\globalKeyConfig.py:54 views\globalKeyConfig.py:71
 #: views\globalKeyConfig.py:102 views\globalKeyConfig.py:118
-#: views\globalKeyConfig.py:126 views\keyConfig.py:58
-#: views\KeyValueSettingDialogBase.py:260 views\main.py:438
+#: views\globalKeyConfig.py:126 views\keyConfig.py:56
+#: views\KeyValueSettingDialogBase.py:260 views\main.py:442
 msgid "なし"
 msgstr "No Information"
 
@@ -859,6 +855,10 @@ msgstr "register set contents"
 msgid "このショートカットは変更できません。"
 msgstr "This shortcut cannot be modified."
 
+#: views\globalKeyConfig.py:125 views\globalKeyConfig.py:128
+msgid "設定完了"
+msgstr "Setup has been completed"
+
 #: views\globalKeyConfig.py:125
 msgid "解除しました。"
 msgstr "unregistered."
@@ -872,7 +872,7 @@ msgstr "Registered as %s."
 msgid "キー設定"
 msgstr "Key Configuration"
 
-#: views\keyConfig.py:40
+#: views\keyConfig.py:38
 msgid ""
 "設定するには、使用したいキーの組み合わせを押します。\n"
 "設定を解除するには、Escキーを押します。"
@@ -880,7 +880,7 @@ msgstr ""
 "Press preferred key combination to register.\n"
 "Press Esc to remove configuration."
 
-#: views\keyConfig.py:46
+#: views\keyConfig.py:44
 msgid "設定解除"
 msgstr "remove registered configuration"
 
@@ -983,27 +983,27 @@ msgstr "unsupported files"
 msgid "見つからなかったファイル"
 msgstr "unfound files"
 
-#: views\main.py:74
+#: views\main.py:75
 msgid "前へ"
 msgstr "go back"
 
-#: views\main.py:78
+#: views\main.py:79
 msgid "次へ"
 msgstr "go ahead"
 
-#: views\main.py:90
+#: views\main.py:91
 msgid "音量"
 msgstr "volume"
 
-#: views\main.py:120
+#: views\main.py:121
 msgid "トラックバー"
 msgstr "track bar"
 
-#: views\main.py:138
+#: views\main.py:139
 msgid "状況"
 msgstr "status"
 
-#: views\main.py:157
+#: views\main.py:158
 msgid ""
 "で設定されたホットキーが正しくありません。キーの重複、存在しないキー名の指"
 "定、使用できないキーパターンの指定などが考えられます。以下のキーの設定内容を"
@@ -1014,39 +1014,51 @@ msgstr ""
 "and key names.\n"
 "\n"
 
-#: views\main.py:210
+#: views\main.py:211
 msgid "履歴（20件まで）"
 msgstr "history(less than 20 items)"
 
-#: views\main.py:236
+#: views\main.py:237
 msgid "再生出力先の変更"
 msgstr "change output device"
 
-#: views\main.py:244
+#: views\main.py:245
 msgid "ファイル(&F)"
 msgstr "&File"
 
-#: views\main.py:245
+#: views\main.py:246
 msgid "機能(&U)"
 msgstr "F&unctions"
 
-#: views\main.py:246
+#: views\main.py:247
 msgid "プレイリスト(&P)"
 msgstr "&Playlist"
 
-#: views\main.py:247
+#: views\main.py:248
 msgid "操作(&O)"
 msgstr "&Operations"
 
-#: views\main.py:248
+#: views\main.py:249
 msgid "設定(&S)"
 msgstr "&Settings"
 
-#: views\main.py:340
+#: views\main.py:341
 msgid "情報がありません"
 msgstr "no information"
 
-#: views\main.py:457
+#: views\main.py:388
+msgid "グローバルホットキーの設定"
+msgstr "Global Hot Keys Settings"
+
+#: views\main.py:398
+msgid "ヘルプ"
+msgstr "help"
+
+#: views\main.py:398
+msgid "ヘルプファイルが見つかりません。"
+msgstr "Help file could not be found."
+
+#: views\main.py:461
 msgid "規定の出力先"
 msgstr "default output device"
 
@@ -1282,39 +1294,39 @@ msgstr "tracks"
 msgid "開始"
 msgstr "start"
 
-#: views\sleepTimerDialog.py:96
+#: views\sleepTimerDialog.py:97
 msgid "タイマーには１分以上の長さが必要です。"
 msgstr "Timer requires more than one minute."
 
-#: views\sleepTimerDialog.py:100
+#: views\sleepTimerDialog.py:101
 msgid "キューにアイテムがないため、このタイマーを設定できません。"
 msgstr "No items are found in playback queue."
 
-#: views\sleepTimerDialog.py:104
+#: views\sleepTimerDialog.py:105
 msgid "再生する曲がないため、このタイマーを設定できません。"
 msgstr "There are no tracks to play."
 
-#: views\sleepTimerDialog.py:108
+#: views\sleepTimerDialog.py:109
 msgid "シャッフルが有効です。"
 msgstr "Shuffle is enabled."
 
-#: views\sleepTimerDialog.py:110
+#: views\sleepTimerDialog.py:111
 msgid "ループが有効です。"
 msgstr "Loop is enabled."
 
-#: views\sleepTimerDialog.py:112
+#: views\sleepTimerDialog.py:113
 msgid "リピートが有効です。"
 msgstr "Repeat is enabled."
 
-#: views\sleepTimerDialog.py:115
+#: views\sleepTimerDialog.py:116
 msgid "以下の理由により、このままではタイマーが終了しません。"
 msgstr "Timer will not be ended for following reasons."
 
-#: views\sleepTimerDialog.py:120
+#: views\sleepTimerDialog.py:121
 msgid "やり直す"
 msgstr "redo"
 
-#: views\sleepTimerDialog.py:125
+#: views\sleepTimerDialog.py:126
 msgid "お知らせ"
 msgstr "notification"
 
@@ -1383,6 +1395,9 @@ msgid ""
 "ライセンス/著作権情報については、同梱の license.txt を参照してください。"
 msgstr "See the included license.txt for licensing / copyright information."
 
+#~ msgid "フォント設定(&F)"
+#~ msgstr "&Font settings"
+
 #~ msgid "パラメータの個数が不正です。"
 #~ msgstr "Parameter count is invalid."
 
@@ -1391,9 +1406,6 @@ msgstr "See the included license.txt for licensing / copyright information."
 
 #~ msgid "操作"
 #~ msgstr "operations"
-
-#~ msgid "ヘルプ"
-#~ msgstr "help"
 
 #~ msgid "増幅"
 #~ msgstr "amplify"
