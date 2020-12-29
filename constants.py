@@ -9,6 +9,7 @@ SUPPORTING_LANGUAGE={"ja-JP": "日本語","en-US": "English"}
 
 # update情報
 UPDATE_URL = "https://actlab.org/api/checkUpdate"
+UPDATER_URL = "https://github.com/actlaboratory/updater/releases/download/1.0.0/updater.zip"
 UPDATER_VERSION = "1.0.0"
 UPDATER_WAKE_WORD = "hello"
 
@@ -70,3 +71,4 @@ BASE_PACKAGE_URL = "https://github.com/actlaboratory/LAMP/releases/download/0.0.
 PACKAGE_CONTAIN_ITEMS = ("fx", "resources")#パッケージに含めたいファイルやfolderがあれば指定
 NEED_HOOKS = ()#pyinstallerのhookを追加したい場合は指定
 STARTUP_FILE = "lamp.py"#起動用ファイルを指定
+
