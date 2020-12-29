@@ -31,7 +31,7 @@ class dialog(baseDialog.BaseDialog):
         textList.append(_("開発元") + ": %s - %s" %(constants.APP_DEVELOPERS, constants.APP_DEVELOPERS_URL))
         textList.append(_("ソフトウェア詳細情報") + ": " + constants.APP_DETAILS_URL)
         textList.append("")
-        textList.append(_("本ソフトウェアには、他の団体または個人の成果物が含まれている場合があります。ライセンス情報の詳細については、同梱の license.txt を参照してください。"))
+        textList.append(_("ライセンス/著作権情報については、同梱の license.txt を参照してください。"))
         textList.append("")
         textList.append(constants.APP_COPYRIGHT_MESSAGE)
 

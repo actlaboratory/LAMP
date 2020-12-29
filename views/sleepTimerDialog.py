@@ -35,24 +35,25 @@ class Dialog(BaseDialog):
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL, style=wx.ALL, margin=20)
         # スリープの条件
         choice = [self.TIME_COUNTER, self.PLAY_COUNTER,self.QUEUE_END, self.PLAY_END]
-        self.conditionCombo, self.conditionLabel = self.creator.combobox(_("スリープの条件"), choice, self.onCombobox, 0, textLayout=wx.HORIZONTAL)
+        self.conditionCombo, self.conditionLabel = self.creator.combobox(_("スリープの条件(&S)"), choice, self.onCombobox, 0, textLayout=wx.HORIZONTAL)
         #スリープの動作
         choice = [self.DO_STOP, self.DO_EXIT, self.DO_SLEEP,self.DO_SHUTDOWN]
-        self.motionCombo, self.motionLabel = self.creator.combobox(_("スリープの動作"), choice, self.onCombobox, 0, textLayout=wx.HORIZONTAL)
+        self.motionCombo, self.motionLabel = self.creator.combobox(_("スリープの動作(&O)"), choice, self.onCombobox, 0, textLayout=wx.HORIZONTAL)
         #値の設定
         self.creator.AddSpace(20)
         self.timeValueCreator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.sizer,views.ViewCreator.wx.HORIZONTAL)
         timeLabel = self.timeValueCreator.staticText(_("時間と分の指定"))
-        self.hourSpin, dummy = self.timeValueCreator.spinCtrl(_("時間"), 0, 24, self.onSpin, 0, textLayout=None)
+        self.hourSpin, dummy = self.timeValueCreator.spinCtrl(_("時間(&H)"), 0, 24, self.onSpin, 0, textLayout=None)
         label = self.timeValueCreator.staticText(_("時間") + " ")
-        self.minSpin, dummy = self.timeValueCreator.spinCtrl(_("分"), 0, 59, self.onSpin, 0, textLayout=None)
+        self.minSpin, dummy = self.timeValueCreator.spinCtrl(_("分(&M)"), 0, 59, self.onSpin, 0, textLayout=None)
         label = self.timeValueCreator.staticText(_("分"))
         self.countValueCreator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.sizer,views.ViewCreator.wx.HORIZONTAL)
         countLabel = self.countValueCreator.staticText(_("曲数指定"))
-        self.countSpin, dummy = self.countValueCreator.spinCtrl(_("曲数"), 0, 999, self.onSpin, 0, textLayout=None)
+        self.countSpin, dummy = self.countValueCreator.spinCtrl(_("曲数(&N)"), 0, 999, self.onSpin, 0, textLayout=None)
         label = self.countValueCreator.staticText(_("曲"))
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"", wx.ALIGN_RIGHT)
         self.bStart = self.creator.button(_("開始"),self.onButtonClick)
+        self.bStart.SetDefault()
         self.bCancel = self.creator.cancelbutton(_("キャンセル"), self.onButtonClick)
 
         self.sizer.Hide(self.countValueCreator.GetSizer(), True)

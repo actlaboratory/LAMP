@@ -17,8 +17,8 @@ from simpleDialog import dialog
 class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 	def __init__(self,keyConfig,menuIds,checkEntries=[],filter=None):
 		info=[
-			(_("名前"),wx.LIST_FORMAT_LEFT,200),
-			(_("ショートカット"),wx.LIST_FORMAT_LEFT,350),
+			(_("名前"),wx.LIST_FORMAT_LEFT,350),
+			(_("ショートカット"),wx.LIST_FORMAT_LEFT,370),
 			(_("識別子"),wx.LIST_FORMAT_LEFT,200)
 		]
 		super().__init__("globalKeyConfigDialog",SettingDialog,info,keyConfig,menuIds)
@@ -28,8 +28,8 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		if filter==None:
 			self.filter=globalVars.app.hMainView.menu.keymap.filter
 
-	def Initialize(self):
-		super().Initialize(self.app.hMainView.hFrame,_("ショートカットキーの設定"))
+	def Initialize(self,title=_("ショートカットキーの設定")):
+		super().Initialize(self.app.hMainView.hFrame,title)
 		self.addButton.Hide()
 		self.deleteButton.Hide()
 		return
@@ -58,7 +58,7 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 				for name in names:
 					entries.append(keymap.makeEntry(self.values[1][name],key,None,self.log))
 				if not keymap.permitConfrict(entries,self.log):
-					dialog(_("エラー"),_("以下の項目において、重複するキー %s が設定されています。\n\n%s") % (key,names))
+					dialog(_("エラー"),_("以下の項目において、重複するキー %(key)s が設定されています。\n\n%(names)s") % {"key": key,"names": names})
 					return
 		event.Skip()
 
@@ -122,9 +122,9 @@ class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 		d=views.keyConfig.Dialog(self.wnd,self.filter)
 		d.Initialize()
 		if d.Show()==wx.ID_CANCEL:
-			globalVars.app.say(_("解除しました。"))
+			dialog(_("設定完了"), _("解除しました。"))
 			self.edits[no].SetValue(_("なし"))
 		else:
-			globalVars.app.say(_("%s に設定しました。") % (d.GetValue()))
+			dialog(_("設定完了"), _("%s に設定しました。") % (d.GetValue()))
 			self.edits[no].SetValue(d.GetValue())
 		return

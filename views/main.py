@@ -3,6 +3,7 @@
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 #Copyright (C) 2019-2020 yamahubuki <itiro.ishino@gmail.com>
 
+import subprocess
 from views import lampViewObject
 from views import setting_dialog
 from views import notificationText
@@ -185,6 +186,9 @@ class Menu(BaseMenu):
 	def Apply(self,target):
 		"""指定されたウィンドウに、メニューを適用する。"""
 
+		#メニュー内容をいったんクリア
+		self.hMenuBar=wx.MenuBar()
+
 		#メニューの大項目を作る
 		self.hFileMenu=wx.Menu()
 		self.hFunctionMenu = wx.Menu()
@@ -232,18 +236,18 @@ class Menu(BaseMenu):
 		self.hDeviceSubMenu = wx.Menu()
 		self.RegisterMenuCommand(self.hSettingsMenu, "SET_DEVICE_SUB", _("再生出力先の変更"), self.hDeviceSubMenu)
 		self.RegisterMenuCommand(self.hSettingsMenu,
-			["FILE_ASSOCIATE", "SET_SENDTO", "SET_FONT", "SET_KEYMAP", "SET_HOTKEY", "ENVIRONMENT"])
+			["FILE_ASSOCIATE", "SET_SENDTO", "SET_KEYMAP", "SET_HOTKEY", "ENVIRONMENT"])
 
 		#ヘルプメニューの中身
 		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "CHECK_UPDATE", "VERSION_INFO"])
 
 		#メニューバーの生成
-		self.hMenuBar.Append(self.hFileMenu,_("ファイル") + " (&F)")
-		self.hMenuBar.Append(self.hFunctionMenu, _("機能") + " (&U)")
-		self.hMenuBar.Append(self.hPlaylistMenu,_("プレイリスト") + " (&P)")
-		self.hMenuBar.Append(self.hOperationMenu,_("操作") + " (&O)")
-		self.hMenuBar.Append(self.hSettingsMenu,_("設定") + "(&S)")
-		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ") + " (&H)")
+		self.hMenuBar.Append(self.hFileMenu,_("ファイル(&F)"))
+		self.hMenuBar.Append(self.hFunctionMenu, _("機能(&U)"))
+		self.hMenuBar.Append(self.hPlaylistMenu,_("プレイリスト(&P)"))
+		self.hMenuBar.Append(self.hOperationMenu,_("操作(&O)"))
+		self.hMenuBar.Append(self.hSettingsMenu,_("設定(&S)"))
+		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ(&H)"))
 		target.SetMenuBar(self.hMenuBar)
 
 		# イベント
@@ -260,33 +264,33 @@ class Events(BaseEvents):
 		selected=event.GetId()#メニュー識別しの数値が出る
 
 		if selected==menuItemsStore.getRef("FILE_OPEN"):
-			dialog= views.mkOpenDialog.Dialog("fileOpenDialog")
-			dialog.Initialize(0) #0=ファイルダイアログ
-			rtnCode = dialog.Show()
-			if rtnCode == dialog.PLAYLIST:
-				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.playlistView)
-			elif rtnCode == dialog.QUEUE:
-				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.queueView)
+			d = views.mkOpenDialog.Dialog("fileOpenDialog")
+			d.Initialize(0) #0=ファイルダイアログ
+			rtnCode = d.Show()
+			if rtnCode == d.PLAYLIST:
+				listManager.addItems([d.GetValue()], globalVars.app.hMainView.playlistView)
+			elif rtnCode == d.QUEUE:
+				listManager.addItems([d.GetValue()], globalVars.app.hMainView.queueView)
 			else:
 				return
 		elif selected==menuItemsStore.getRef("DIR_OPEN"):
-			dialog= views.mkOpenDialog.Dialog("directoryOpenDialog")
-			dialog.Initialize(1) #1=フォルダダイアログ
-			rtnCode = dialog.Show()
-			if rtnCode == dialog.PLAYLIST:
-				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.playlistView)
+			d = views.mkOpenDialog.Dialog("directoryOpenDialog")
+			d.Initialize(1) #1=フォルダダイアログ
+			rtnCode = d.Show()
+			if rtnCode == d.PLAYLIST:
+				listManager.addItems([d.GetValue()], globalVars.app.hMainView.playlistView)
 			elif rtnCode == dialog.QUEUE:
-				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.queueView)
+				listManager.addItems([d.GetValue()], globalVars.app.hMainView.queueView)
 			else:
 				return
 		elif selected==menuItemsStore.getRef("URL_OPEN"):
-			dialog= views.mkOpenDialog.Dialog("urlOpenDialog")
-			dialog.Initialize(2) #2=URLダイアログ
-			rtnCode = dialog.Show()
-			if rtnCode == dialog.PLAYLIST:
-				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.playlistView)
-			elif rtnCode == dialog.QUEUE:
-				listManager.addItems([dialog.GetValue()], globalVars.app.hMainView.queueView)
+			d= views.mkOpenDialog.Dialog("urlOpenDialog")
+			d.Initialize(2) #2=URLダイアログ
+			rtnCode = d.Show()
+			if rtnCode == d.PLAYLIST:
+				listManager.addItems([d.GetValue()], globalVars.app.hMainView.playlistView)
+			elif rtnCode == d.QUEUE:
+				listManager.addItems([d.GetValue()], globalVars.app.hMainView.queueView)
 			else:
 				return
 		elif selected==menuItemsStore.getRef("M3U_OPEN"):
@@ -300,7 +304,7 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("M3U_CLOSE"):
 			m3uManager.closeM3u()
 		elif selected == menuItemsStore.getRef("EXIT"):
-			self.Exit()
+			self.parent.hFrame.Close()
 		#機能メニューのイベント
 		elif selected == menuItemsStore.getRef("SET_SLEEPTIMER"):
 			globalVars.sleepTimer.set()
@@ -375,13 +379,13 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("SET_SENDTO"):
 			sendToManager.sendToCtrl("LAMP")
 		elif selected==menuItemsStore.getRef("SET_KEYMAP"):
-			if self.setKeymap("MainView",filter=keymap.KeyFilter().SetDefault(False,False)):
+			if self.setKeymap("MainView",_("ショートカットキーの設定"),filter=keymap.KeyFilter().SetDefault(False,False)):
 				#ショートカットキーの変更適用とメニューバーの再描画
 				self.parent.menu.InitShortcut()
 				self.parent.menu.ApplyShortcut(self.parent.hFrame)
 				self.parent.menu.Apply(self.parent.hFrame)
 		elif selected==menuItemsStore.getRef("SET_HOTKEY"):
-			if self.setKeymap("HOTKEY",self.parent.hotkey,filter=self.parent.hotkey.filter):
+			if self.setKeymap("HOTKEY",_("グローバルホットキーの設定"),self.parent.hotkey,filter=self.parent.hotkey.filter):
 				#変更適用
 				self.parent.hotkey.UnSet("HOTKEY",self.parent.hFrame)
 				self.parent.applyHotKey()
@@ -389,12 +393,15 @@ class Events(BaseEvents):
 			d = setting_dialog.settingDialog("environment_dialog")
 			d.Initialize()
 			d.Show()
+		elif selected==menuItemsStore.getRef("HELP"):
+			if os.path.exists("./readme.txt"): subprocess.Popen("start ./readme.txt", shell=True)
+			else: dialog(_("ヘルプ"), _("ヘルプファイルが見つかりません。"))
 		elif selected==menuItemsStore.getRef("CHECK_UPDATE"):
 			update.checkUpdate()
 		elif selected==menuItemsStore.getRef("VERSION_INFO"):
 			versionDialog.versionDialog()
 
-	def setKeymap(self, identifier,keymap=None,filter=None):
+	def setKeymap(self, identifier,ttl,keymap=None,filter=None):
 		if keymap:
 			try:
 				keys=keymap.map[identifier.upper()]
@@ -422,7 +429,7 @@ class Events(BaseEvents):
 					entries.extend(map.entries[i])
 
 		d=views.globalKeyConfig.Dialog(keyData,menuData,entries,filter)
-		d.Initialize()
+		d.Initialize(ttl)
 		if d.Show()==wx.ID_CANCEL: return False
 
 		result={}
@@ -497,7 +504,7 @@ class Events(BaseEvents):
 	def timerEvent(self, evt):
 		globalVars.eventProcess.refreshView()
 
-	def Exit(self, evt=None):
+	def Exit(self, event=None):
 		globalVars.app.hMainView.timer.Stop()
 		globalVars.app.hMainView.tagInfoTimer.Stop()
-		super().Exit()
+		super().Exit(event)

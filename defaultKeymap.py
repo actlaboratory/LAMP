@@ -38,7 +38,6 @@ defaultKeymap["MAINVIEW"]={
 	"SHUFFLE": "ctrl+H",
 	"MANUAL_SONG_FEED": "ctrl+shift+H",
 	# 設定メニュー
-	"SET_FONT": "",
 	"SET_KEYMAP": "",
 	"SET_HOTKEY": "",
 	"ENVIRONMENT": "ctrl+shift+E",
@@ -69,7 +68,7 @@ defaultKeymap["queue"]={
 	"POPUP_ABOUT": "ctrl+i"
 }
 defaultKeymap["HOTKEY"]={
-	"EXIT": "",
+	#"EXIT": "",
 	"VOLUME_UP": "",
 	"VOLUME_DOWN": "",
 	"VOLUME_100": "",

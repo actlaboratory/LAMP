@@ -1,0 +1,1361 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the application package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: application\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-27 23:33+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: event_processor.py:77 event_processor.py:83 event_processor.py:89
+msgid "情報なし"
+msgstr ""
+
+#: event_processor.py:116
+msgid "消音を解除"
+msgstr ""
+
+#: event_processor.py:123
+msgid "消音に設定"
+msgstr ""
+
+#: event_processor.py:195
+msgid "再生時エラー"
+msgstr ""
+
+#: event_processor.py:195
+msgid "このファイルは再生できません。"
+msgstr ""
+
+#: event_processor.py:195
+msgid "継続"
+msgstr ""
+
+#: event_processor.py:195 sleep_timer.py:42 views\main.py:81
+msgid "停止"
+msgstr ""
+
+#: event_processor.py:260 views\main.py:217
+msgid "進む"
+msgstr ""
+
+#: event_processor.py:261 views\main.py:217
+msgid "戻る"
+msgstr ""
+
+#: event_processor.py:262
+msgid "スキップ"
+msgstr ""
+
+#: event_processor.py:341 listManager.py:185 view_manager.py:49
+#: view_manager.py:62 view_manager.py:86
+msgid "タイトル"
+msgstr ""
+
+#: event_processor.py:349
+msgid "シャッフル"
+msgstr ""
+
+#: event_processor.py:354 event_processor.py:369
+msgid "オフ"
+msgstr ""
+
+#: event_processor.py:374
+msgid "リピート"
+msgstr ""
+
+#: event_processor.py:379
+msgid "ループ"
+msgstr ""
+
+#: event_processor.py:405 event_processor.py:406
+msgid "曲送りは自動"
+msgstr ""
+
+#: event_processor.py:409 event_processor.py:410
+msgid "曲送りは手動"
+msgstr ""
+
+#: keymapHandlerBase.py:689 keymapHandlerBase.py:719
+#, python-format
+msgid "%s は存在しないキーです。"
+msgstr ""
+
+#: keymapHandlerBase.py:760
+#, python-format
+msgid "%s は使用できないキーです。"
+msgstr ""
+
+#: keymapHandlerBase.py:769
+msgid "修飾キーのみのパターンは設定できません。"
+msgstr ""
+
+#: keymapHandlerBase.py:771
+msgid "このキーは修飾キーと合わせて指定する必要があります。"
+msgstr ""
+
+#: keymapHandlerBase.py:776
+msgid "修飾キーでないキーを複数指定することはできません。"
+msgstr ""
+
+#: keymapHandlerBase.py:779 keymapHandlerBase.py:787
+msgid "このキーは、SHIFTキー以外の修飾キーと合わせて指定する必要があります。"
+msgstr ""
+
+#: keymapHandlerBase.py:782
+msgid "修飾キーのみの組み合わせは指定できません。"
+msgstr ""
+
+#: keymapHandlerBase.py:791
+msgid "この組み合わせは別の用途で予約されているため、利用できません。"
+msgstr ""
+
+#: listManager.py:100
+msgid "ファイルを集めています..."
+msgstr ""
+
+#: listManager.py:100
+msgid "読み込み中..."
+msgstr ""
+
+#: listManager.py:161
+msgid "読み込み中"
+msgstr ""
+
+#: listManager.py:182
+msgid "ファイルの場所"
+msgstr ""
+
+#: listManager.py:183 view_manager.py:47 view_manager.py:60 view_manager.py:84
+msgid "ファイル名"
+msgstr ""
+
+#: listManager.py:184
+msgid "ファイルサイズ"
+msgstr ""
+
+#: listManager.py:186
+msgid "長さ"
+msgstr ""
+
+#: listManager.py:187 view_manager.py:51 view_manager.py:64 view_manager.py:88
+msgid "アーティスト"
+msgstr ""
+
+#: listManager.py:188 view_manager.py:50 view_manager.py:63 view_manager.py:87
+msgid "アルバム"
+msgstr ""
+
+#: listManager.py:189 view_manager.py:52 view_manager.py:65 view_manager.py:89
+msgid "アルバムアーティスト"
+msgstr ""
+
+#: m3uManager.py:21 views\setting_dialog.py:165
+msgid "プレイリストファイル選択"
+msgstr ""
+
+#: m3uManager.py:21 views\setting_dialog.py:165
+msgid "プレイリストファイル (.m3u8/.m3u)"
+msgstr ""
+
+#: m3uManager.py:37 views\loadErrorDialog.py:21
+msgid "読み込みエラー"
+msgstr ""
+
+#: m3uManager.py:37
+msgid "プレイリストファイルの読み込みに失敗しました。"
+msgstr ""
+
+#: m3uManager.py:52
+msgid "UTF-8プレイリストに変換"
+msgstr ""
+
+#: m3uManager.py:56 m3uManager.py:95
+msgid "プレイリストを上書き保存"
+msgstr ""
+
+#: m3uManager.py:75
+msgid "プレイリスト変換確認"
+msgstr ""
+
+#: m3uManager.py:75
+msgid ""
+"このプレイリストは変更されています。\n"
+"m3u8ファイルに変換して保存しますか？"
+msgstr ""
+
+#: m3uManager.py:75 m3uManager.py:86 views\setting_dialog.py:102
+msgid "保存"
+msgstr ""
+
+#: m3uManager.py:75 m3uManager.py:79 m3uManager.py:86
+#: views\setting_dialog.py:104
+msgid "破棄"
+msgstr ""
+
+#: m3uManager.py:75 m3uManager.py:79 m3uManager.py:86
+#: views\KeyValueSettingDialogBase.py:65 views\KeyValueSettingDialogBase.py:207
+#: views\mkDialog.py:30 views\mkOpenDialog.py:46 views\sleepTimerDialog.py:57
+#: views\updateDialog.py:44
+msgid "キャンセル"
+msgstr ""
+
+#: m3uManager.py:79
+msgid "プレイリスト上書き保存の確認"
+msgstr ""
+
+#: m3uManager.py:79
+msgid ""
+"このプレイリストは変更されています。\n"
+"上書き保存しますか？"
+msgstr ""
+
+#: m3uManager.py:79
+msgid "上書き"
+msgstr ""
+
+#: m3uManager.py:86
+msgid "プレイリスト保存の確認"
+msgstr ""
+
+#: m3uManager.py:86
+msgid ""
+"このプレイリストは変更されています。\n"
+"保存しますか？"
+msgstr ""
+
+#: m3uManager.py:106
+msgid "プレイリストファイル保存"
+msgstr ""
+
+#: m3uManager.py:106
+msgid "m3u8ファイル (.m3u8)"
+msgstr ""
+
+#: menuItemsDic.py:3
+msgid "ファイルを開く(&O)"
+msgstr ""
+
+#: menuItemsDic.py:4
+msgid "フォルダを開く(&F)"
+msgstr ""
+
+#: menuItemsDic.py:5
+msgid "URLを開く(&U)"
+msgstr ""
+
+#: menuItemsDic.py:6
+msgid "プレイリストを開く(&P)"
+msgstr ""
+
+#: menuItemsDic.py:7
+msgid "名前を付けてプレイリストを保存(&A)"
+msgstr ""
+
+#: menuItemsDic.py:8
+msgid "プレイリストを上書き保存(&S)"
+msgstr ""
+
+#: menuItemsDic.py:9
+msgid "プレイリストから読み込む(&L)"
+msgstr ""
+
+#: menuItemsDic.py:10
+msgid "プレイリストを閉じる(&C)"
+msgstr ""
+
+#: menuItemsDic.py:11
+msgid "終了(&X)"
+msgstr ""
+
+#: menuItemsDic.py:14
+msgid "スリープタイマーを設定(&S)"
+msgstr ""
+
+#: menuItemsDic.py:15
+msgid "エフェクター(&F)"
+msgstr ""
+
+#: menuItemsDic.py:16
+msgid "再生中のファイルについて(&A)"
+msgstr ""
+
+#: menuItemsDic.py:19
+msgid "再生 / 一時停止(&P)"
+msgstr ""
+
+#: menuItemsDic.py:20
+msgid "停止(&S)"
+msgstr ""
+
+#: menuItemsDic.py:21
+msgid "早送り(&F)"
+msgstr ""
+
+#: menuItemsDic.py:22
+msgid "巻き戻し(&B)"
+msgstr ""
+
+#: menuItemsDic.py:23
+msgid "前へ / 頭出し(&R)"
+msgstr ""
+
+#: menuItemsDic.py:24
+msgid "次へ(&N)"
+msgstr ""
+
+#: menuItemsDic.py:25
+msgid "スキップ(&K)"
+msgstr ""
+
+#: menuItemsDic.py:26
+msgid "逆スキップ(&E)"
+msgstr ""
+
+#: menuItemsDic.py:28
+msgid "スキップ間隔設定(&C)"
+msgstr ""
+
+#: menuItemsDic.py:29
+msgid "スキップ間隔を大きくする(&I)"
+msgstr ""
+
+#: menuItemsDic.py:30
+msgid "スキップ間隔を小さくする(&D)"
+msgstr ""
+
+#: menuItemsDic.py:32
+msgid "音量(&V)"
+msgstr ""
+
+#: menuItemsDic.py:33
+msgid "音量を10&0%に設定"
+msgstr ""
+
+#: menuItemsDic.py:34
+msgid "音量を上げる(&U)"
+msgstr ""
+
+#: menuItemsDic.py:35
+msgid "音量を下げる(&D)"
+msgstr ""
+
+#: menuItemsDic.py:36
+msgid "ミュート(&M)"
+msgstr ""
+
+#: menuItemsDic.py:38
+msgid "リピート・ループ(&L)"
+msgstr ""
+
+#: menuItemsDic.py:39
+msgid "リピート・ループ切り替え"
+msgstr ""
+
+#: menuItemsDic.py:40
+msgid "解除する(&N)"
+msgstr ""
+
+#: menuItemsDic.py:41
+msgid "リピート(&R)"
+msgstr ""
+
+#: menuItemsDic.py:42
+msgid "ループ(&L)"
+msgstr ""
+
+#: menuItemsDic.py:43
+msgid "シャッフル再生(&H)"
+msgstr ""
+
+#: menuItemsDic.py:44
+msgid "手動で曲送り(&M)"
+msgstr ""
+
+#: menuItemsDic.py:47
+msgid "再生出力先の変更(&O)"
+msgstr ""
+
+#: menuItemsDic.py:48
+msgid "ファイルの関連付け(&A)"
+msgstr ""
+
+#: menuItemsDic.py:49
+msgid "送るメニューに登録(&S)"
+msgstr ""
+
+#: menuItemsDic.py:50
+msgid "ショートカットキー設定(&K)"
+msgstr ""
+
+#: menuItemsDic.py:51
+msgid "グローバルホットキー設定(&G)"
+msgstr ""
+
+#: menuItemsDic.py:52
+msgid "環境設定(&P)"
+msgstr ""
+
+#: menuItemsDic.py:55 views\main.py:250
+msgid "ヘルプ(&H)"
+msgstr ""
+
+#: menuItemsDic.py:56
+msgid "更新の確認(&U)"
+msgstr ""
+
+#: menuItemsDic.py:57
+msgid "バージョン情報(&V)"
+msgstr ""
+
+#: menuItemsDic.py:59
+msgid "経過時間の読み上げ"
+msgstr ""
+
+#: sendToManager.py:14
+msgid "確認"
+msgstr ""
+
+#: sendToManager.py:14
+#, python-format
+msgid ""
+"%sは、送るメニューに登録されています。\n"
+"登録を解除しますか。"
+msgstr ""
+
+#: sendToManager.py:14
+msgid "はい"
+msgstr ""
+
+#: sendToManager.py:14
+msgid "いいえ"
+msgstr ""
+
+#: sendToManager.py:20
+msgid "送るメニューの登録を解除しました。"
+msgstr ""
+
+#: sendToManager.py:22
+msgid "登録の解除に失敗しました。"
+msgstr ""
+
+#: sendToManager.py:24
+#, python-format
+msgid ""
+"%(app)sを、送るメニューに登録しました。\n"
+"実行するには、「%(label)s」を選択します。"
+msgstr ""
+
+#: sendToManager.py:25
+msgid "登録に失敗しました。"
+msgstr ""
+
+#: sendToManager.py:44 views\base.py:114 views\fileAssocDialog.py:17
+#: views\fileAssocDialog.py:31 views\fileAssocDialog.py:68
+#: views\fontManager.py:25 views\fontManager.py:50 views\globalKeyConfig.py:61
+#: views\globalKeyConfig.py:120 views\KeyValueSettingDialogBase.py:224
+#: views\KeyValueSettingDialogBase.py:275 views\main.py:161
+#: views\sleepTimerDialog.py:121 views\updateDialog.py:65
+msgid "エラー"
+msgstr ""
+
+#: sendToManager.py:49
+msgid "完了"
+msgstr ""
+
+#: settings.py:16 view_manager.py:76 views\main.py:350
+msgid "秒"
+msgstr ""
+
+#: settings.py:18 view_manager.py:74 views\main.py:349
+#: views\sleepTimerDialog.py:49
+msgid "分"
+msgstr ""
+
+#: sleep_timer.py:33
+#, python-format
+msgid "あと%sで発動し、以下を実行します。\n"
+msgstr ""
+
+#: sleep_timer.py:35
+#, python-format
+msgid "あと、%d曲で、以下を実行します。\n"
+msgstr ""
+
+#: sleep_timer.py:37
+msgid "すべての再生が完了したとき、以下を実行します。\n"
+msgstr ""
+
+#: sleep_timer.py:39
+msgid "キューの再生が完了したとき、以下を実行します。\n"
+msgstr ""
+
+#: sleep_timer.py:40
+#, python-format
+msgid "動作: %s"
+msgstr ""
+
+#: sleep_timer.py:42
+msgid "作動状況"
+msgstr ""
+
+#: sleep_timer.py:42 views\KeyValueSettingDialogBase.py:57
+msgid "変更"
+msgstr ""
+
+#: sleep_timer.py:42 views\effectorDialog.py:43 views\versionDialog.py:46
+msgid "閉じる"
+msgstr ""
+
+#: sleep_timer.py:60
+#, python-format
+msgid "%d時間"
+msgstr ""
+
+#: sleep_timer.py:61
+#, python-format
+msgid "%d分"
+msgstr ""
+
+#: sleep_timer.py:62
+#, python-format
+msgid "%d秒"
+msgstr ""
+
+#: sleep_timer.py:110 views\sleepTimerDialog.py:21
+msgid "再生の停止"
+msgstr ""
+
+#: sleep_timer.py:113 views\sleepTimerDialog.py:22
+msgid "LAMPの終了"
+msgstr ""
+
+#: sleep_timer.py:115
+msgid "コンピュータをスリープ"
+msgstr ""
+
+#: sleep_timer.py:119 views\sleepTimerDialog.py:24
+msgid "コンピュータの電源を切る"
+msgstr ""
+
+#: update.py:45 update.py:58 update.py:63 update.py:67 update.py:73
+#: update.py:77 update.py:81 update.py:129 views\updateDialog.py:38
+msgid "アップデート"
+msgstr ""
+
+#: update.py:45
+msgid ""
+"アップデータが利用できません。お手数ですが、再度ソフトウェアをダウンロードし"
+"てください。"
+msgstr ""
+
+#: update.py:58
+msgid "サーバーへの通信がタイムアウトしました。"
+msgstr ""
+
+#: update.py:63
+msgid "サーバーへの接続に失敗しました。インターネット接続などをご確認ください"
+msgstr ""
+
+#: update.py:67
+msgid "サーバーとの通信に失敗しました。"
+msgstr ""
+
+#: update.py:73
+msgid "現在のバージョンが最新です。アップデートの必要はありません。"
+msgstr ""
+
+#: update.py:77
+msgid "リクエストパラメーターが不正です。開発者まで連絡してください"
+msgstr ""
+
+#: update.py:81
+msgid "アップデーターが登録されていません。開発者に連絡してください。"
+msgstr ""
+
+#: update.py:129
+msgid ""
+"ダウンロードが完了しました。\n"
+"ソフトウェア終了時に、自動でアップデートされます。"
+msgstr ""
+
+#: view_manager.py:26 views\main.py:131
+msgid "プレイリスト"
+msgstr ""
+
+#: view_manager.py:26 view_manager.py:28 views\loadErrorDialog.py:34
+#: views\loadErrorDialog.py:35 views\main.py:131 views\main.py:134
+msgid "件"
+msgstr ""
+
+#: view_manager.py:28 views\main.py:134
+msgid "キュー"
+msgstr ""
+
+#: view_manager.py:48 view_manager.py:61 view_manager.py:85
+msgid "場所"
+msgstr ""
+
+#: view_manager.py:53 view_manager.py:78 view_manager.py:90
+msgid "合計"
+msgstr ""
+
+#: view_manager.py:54
+msgid "経過時間を確認するには Ctrl + T を押します"
+msgstr ""
+
+#: view_manager.py:72 views\main.py:347 views\sleepTimerDialog.py:47
+msgid "時間"
+msgstr ""
+
+#: view_manager.py:96 views\lampViewObject.py:142 views\main.py:77
+msgid "再生"
+msgstr ""
+
+#: view_manager.py:99
+msgid "一時停止"
+msgstr ""
+
+#: view_manager.py:102 views\main.py:83
+msgid "リピートに切り替える"
+msgstr ""
+
+#: view_manager.py:105
+msgid "ループに切り替える"
+msgstr ""
+
+#: view_manager.py:108
+msgid "リピートとループを解除する"
+msgstr ""
+
+#: view_manager.py:111 views\main.py:85
+msgid "シャッフルをオンにする"
+msgstr ""
+
+#: view_manager.py:114
+msgid "シャッフルをオフにする"
+msgstr ""
+
+#: view_manager.py:118 view_manager.py:119 views\main.py:89 views\main.py:90
+msgid "ミュートをオンにする"
+msgstr ""
+
+#: view_manager.py:123 view_manager.py:124
+msgid "ミュートをオフにする"
+msgstr ""
+
+#: views\base.py:64
+msgid "現在メニューは操作できません"
+msgstr ""
+
+#: views\base.py:111
+msgid ""
+"で設定されたショートカットキーが正しくありません。キーの重複、存在しないキー"
+"名の指定、使用できないキーパターンの指定などが考えられます。以下のキーの設定"
+"内容をご確認ください。\n"
+"\n"
+msgstr ""
+
+#: views\effectorDialog.py:18
+msgid "エフェクト設定"
+msgstr ""
+
+#: views\effectorDialog.py:27 views\effectorDialog.py:28
+msgid "増幅(&A)"
+msgstr ""
+
+#: views\effectorDialog.py:31 views\effectorDialog.py:32
+msgid "速さ(&S)"
+msgstr ""
+
+#: views\effectorDialog.py:35 views\effectorDialog.py:36
+msgid "キー(&K)"
+msgstr ""
+
+#: views\effectorDialog.py:39 views\effectorDialog.py:40
+msgid "周波数(&F)"
+msgstr ""
+
+#: views\effectorDialog.py:45
+msgid "リセット(&R)"
+msgstr ""
+
+#: views\fileAssocDialog.py:17
+msgid "ファイル関連付け情報の書き込みに失敗しました。"
+msgstr ""
+
+#: views\fileAssocDialog.py:22
+msgid "拡張子関連付け完了"
+msgstr ""
+
+#: views\fileAssocDialog.py:22
+msgid ""
+"ファイルの関連付け情報を書き込みました。\r\n"
+"ファイルのコンテキストメニュー内、\r\n"
+"[プログラムから開く] > [別のプログラムを選択]\r\n"
+"に表示されます。"
+msgstr ""
+
+#: views\fileAssocDialog.py:27
+msgid "関連付け解除完了"
+msgstr ""
+
+#: views\fileAssocDialog.py:27
+msgid "ファイルの関連付けを解除しました。"
+msgstr ""
+
+#: views\fileAssocDialog.py:31
+msgid "ファイルの関連付けを解除できませんでした。"
+msgstr ""
+
+#: views\fileAssocDialog.py:38
+msgid "拡張子関連付け設定"
+msgstr ""
+
+#: views\fileAssocDialog.py:46
+msgid ""
+"規定のアプリとして登録したいファイル形式に\n"
+"チェックを入れ、登録ボタンを選択します。\n"
+"解除するには、全関連付け解除を選択します。"
+msgstr ""
+
+#: views\fileAssocDialog.py:48
+msgid "音声ファイル"
+msgstr ""
+
+#: views\fileAssocDialog.py:53
+msgid "プレイリストファイル"
+msgstr ""
+
+#: views\fileAssocDialog.py:60
+msgid "登録"
+msgstr ""
+
+#: views\fileAssocDialog.py:61 views\mkProgress.py:24
+msgid "中止"
+msgstr ""
+
+#: views\fileAssocDialog.py:62
+msgid "全関連付け解除(&A)"
+msgstr ""
+
+#: views\fileAssocDialog.py:68
+msgid "1つ以上のファイル形式を選択してください。"
+msgstr ""
+
+#: views\fontManager.py:25
+msgid ""
+"設定されているフォント情報が不正です。デフォルトのフォントを適用します。"
+msgstr ""
+
+#: views\fontManager.py:50
+msgid "原因不明のエラーにより、フォントの変更に失敗しました。"
+msgstr ""
+
+#: views\globalKeyConfig.py:20 views\globalKeyConfig.py:74
+msgid "名前"
+msgstr ""
+
+#: views\globalKeyConfig.py:21
+msgid "ショートカット"
+msgstr ""
+
+#: views\globalKeyConfig.py:22 views\globalKeyConfig.py:74
+msgid "識別子"
+msgstr ""
+
+#: views\globalKeyConfig.py:31 views\main.py:382
+msgid "ショートカットキーの設定"
+msgstr ""
+
+#: views\globalKeyConfig.py:54 views\globalKeyConfig.py:71
+#: views\globalKeyConfig.py:102 views\globalKeyConfig.py:118
+#: views\globalKeyConfig.py:126 views\keyConfig.py:56
+#: views\KeyValueSettingDialogBase.py:260 views\main.py:442
+msgid "なし"
+msgstr ""
+
+#: views\globalKeyConfig.py:61
+#, python-format
+msgid ""
+"以下の項目において、重複するキー %s が設定されています。\n"
+"\n"
+"%s"
+msgstr ""
+
+#: views\globalKeyConfig.py:74
+msgid "ショートカット1"
+msgstr ""
+
+#: views\globalKeyConfig.py:74
+msgid "ショートカット2"
+msgstr ""
+
+#: views\globalKeyConfig.py:74
+msgid "ショートカット3"
+msgstr ""
+
+#: views\globalKeyConfig.py:74
+msgid "ショートカット4"
+msgstr ""
+
+#: views\globalKeyConfig.py:74
+msgid "ショートカット5"
+msgstr ""
+
+#: views\globalKeyConfig.py:75
+msgid "設定"
+msgstr ""
+
+#: views\globalKeyConfig.py:80
+msgid "登録内容の入力"
+msgstr ""
+
+#: views\globalKeyConfig.py:120
+msgid "このショートカットは変更できません。"
+msgstr ""
+
+#: views\globalKeyConfig.py:125 views\globalKeyConfig.py:128
+msgid "設定完了"
+msgstr ""
+
+#: views\globalKeyConfig.py:125
+msgid "解除しました。"
+msgstr ""
+
+#: views\globalKeyConfig.py:128
+#, python-format
+msgid "%s に設定しました。"
+msgstr ""
+
+#: views\keyConfig.py:30
+msgid "キー設定"
+msgstr ""
+
+#: views\keyConfig.py:38
+msgid ""
+"設定するには、使用したいキーの組み合わせを押します。\n"
+"設定を解除するには、Escキーを押します。"
+msgstr ""
+
+#: views\keyConfig.py:44
+msgid "設定解除"
+msgstr ""
+
+#: views\KeyValueSettingDialogBase.py:38
+msgid "現在の登録内容"
+msgstr ""
+
+#: views\KeyValueSettingDialogBase.py:56
+msgid "追加"
+msgstr ""
+
+#: views\KeyValueSettingDialogBase.py:59 views\lampViewObject.py:157
+msgid "削除"
+msgstr ""
+
+#: views\KeyValueSettingDialogBase.py:64 views\KeyValueSettingDialogBase.py:206
+#: views\objectDetail.py:29
+msgid "ＯＫ"
+msgstr ""
+
+#: views\KeyValueSettingDialogBase.py:94 views\KeyValueSettingDialogBase.py:121
+#, python-format
+msgid "この%sは既に登録されています。登録を上書きしますか？"
+msgstr ""
+
+#: views\KeyValueSettingDialogBase.py:94 views\KeyValueSettingDialogBase.py:121
+msgid "上書き確認"
+msgstr ""
+
+#: views\KeyValueSettingDialogBase.py:224
+#, python-format
+msgid "%sを空白や半角の=を含む値に設定することはできません。"
+msgstr ""
+
+#: views\KeyValueSettingDialogBase.py:264
+#, python-format
+msgid "%(v1)sと%(v2)sに同じショートカットキー%(key)sが設定されています。\n"
+msgstr ""
+
+#: views\KeyValueSettingDialogBase.py:267
+#, python-format
+msgid ""
+"%(v1)s、%(v2)sなど計%(count)d箇所に同じショートカットキー%(key)sが設定されて"
+"います。\n"
+msgstr ""
+
+#: views\KeyValueSettingDialogBase.py:271
+#, python-format
+msgid ""
+"設定されたショートカット%sが認識できません。お手数ですが、このエラーメッセー"
+"ジを作者へご連絡ください。\n"
+msgstr ""
+
+#: views\KeyValueSettingDialogBase.py:273
+#, python-format
+msgid ""
+"%(name)sに設定されたショートカットキー%(key)sは、別の場所で利用されていま"
+"す。\n"
+msgstr ""
+
+#: views\lampViewObject.py:146
+msgid "キューの先頭に割り込み"
+msgstr ""
+
+#: views\lampViewObject.py:147 views\mkOpenDialog.py:45
+#: views\setting_dialog.py:22
+msgid "キューに追加"
+msgstr ""
+
+#: views\lampViewObject.py:152 views\mkOpenDialog.py:43
+#: views\setting_dialog.py:21
+msgid "プレイリストに追加"
+msgstr ""
+
+#: views\lampViewObject.py:155
+msgid "コピー"
+msgstr ""
+
+#: views\lampViewObject.py:156
+msgid "貼り付け"
+msgstr ""
+
+#: views\lampViewObject.py:158
+msgid "すべてを選択"
+msgstr ""
+
+#: views\lampViewObject.py:159 views\objectDetail.py:16
+msgid "このファイルについて"
+msgstr ""
+
+#: views\loadErrorDialog.py:33
+msgid "以下のファイルは、読み込むことができませんでした。"
+msgstr ""
+
+#: views\loadErrorDialog.py:34
+msgid "対応していないファイル"
+msgstr ""
+
+#: views\loadErrorDialog.py:35
+msgid "見つからなかったファイル"
+msgstr ""
+
+#: views\main.py:75
+msgid "前へ"
+msgstr ""
+
+#: views\main.py:79
+msgid "次へ"
+msgstr ""
+
+#: views\main.py:91
+msgid "音量"
+msgstr ""
+
+#: views\main.py:121
+msgid "トラックバー"
+msgstr ""
+
+#: views\main.py:139
+msgid "状況"
+msgstr ""
+
+#: views\main.py:158
+msgid ""
+"で設定されたホットキーが正しくありません。キーの重複、存在しないキー名の指"
+"定、使用できないキーパターンの指定などが考えられます。以下のキーの設定内容を"
+"ご確認ください。\n"
+"\n"
+msgstr ""
+
+#: views\main.py:211
+msgid "履歴（20件まで）"
+msgstr ""
+
+#: views\main.py:237
+msgid "再生出力先の変更"
+msgstr ""
+
+#: views\main.py:245
+msgid "ファイル(&F)"
+msgstr ""
+
+#: views\main.py:246
+msgid "機能(&U)"
+msgstr ""
+
+#: views\main.py:247
+msgid "プレイリスト(&P)"
+msgstr ""
+
+#: views\main.py:248
+msgid "操作(&O)"
+msgstr ""
+
+#: views\main.py:249
+msgid "設定(&S)"
+msgstr ""
+
+#: views\main.py:341
+msgid "情報がありません"
+msgstr ""
+
+#: views\main.py:388
+msgid "グローバルホットキーの設定"
+msgstr ""
+
+#: views\main.py:398
+msgid "ヘルプ"
+msgstr ""
+
+#: views\main.py:398
+msgid "ヘルプファイルが見つかりません。"
+msgstr ""
+
+#: views\main.py:461
+msgid "規定の出力先"
+msgstr ""
+
+#: views\mkOpenDialog.py:19
+msgid "ファイルを開く"
+msgstr ""
+
+#: views\mkOpenDialog.py:21
+msgid "フォルダを開く"
+msgstr ""
+
+#: views\mkOpenDialog.py:23
+msgid "URLを開く"
+msgstr ""
+
+#: views\mkOpenDialog.py:34
+msgid "ファイルの場所を指定"
+msgstr ""
+
+#: views\mkOpenDialog.py:34
+msgid "フォルダの場所を指定"
+msgstr ""
+
+#: views\mkOpenDialog.py:34
+msgid "URLを指定"
+msgstr ""
+
+#: views\mkOpenDialog.py:39 views\setting_dialog.py:83
+msgid "参照"
+msgstr ""
+
+#: views\mkOpenDialog.py:55
+msgid "ファイルを選択"
+msgstr ""
+
+#: views\mkOpenDialog.py:58
+msgid "フォルダを選択"
+msgstr ""
+
+#: views\mkOpenDialog.py:65 views\mkOpenDialog.py:71
+msgid "パスエラー"
+msgstr ""
+
+#: views\mkOpenDialog.py:65
+msgid "入力されたパスは存在しません。"
+msgstr ""
+
+#: views\mkOpenDialog.py:71
+msgid "入力されたURLに問題があります。"
+msgstr ""
+
+#: views\setting_dialog.py:9 views\setting_dialog.py:44
+msgid "環境設定"
+msgstr ""
+
+#: views\setting_dialog.py:11
+msgid "自動選択"
+msgstr ""
+
+#: views\setting_dialog.py:16
+msgid "クリップボード出力"
+msgstr ""
+
+#: views\setting_dialog.py:17
+msgid "読み上げなし"
+msgstr ""
+
+#: views\setting_dialog.py:20
+msgid "割り込み再生"
+msgstr ""
+
+#: views\setting_dialog.py:23
+msgid "キューの先頭に追加"
+msgstr ""
+
+#: views\setting_dialog.py:26
+msgid "新たにプレイリストを開く"
+msgstr ""
+
+#: views\setting_dialog.py:27
+msgid "現在のプレイリストに追加"
+msgstr ""
+
+#: views\setting_dialog.py:32
+msgid "規定の再生デバイス"
+msgstr ""
+
+#: views\setting_dialog.py:34
+msgid "音楽再生の出力先と同じ"
+msgstr ""
+
+#: views\setting_dialog.py:47
+msgid "一般"
+msgstr ""
+
+#: views\setting_dialog.py:48
+msgid "ダークモード（白黒反転）(&D)"
+msgstr ""
+
+#: views\setting_dialog.py:52
+msgid "終了時に曲をフェードアウトする(&C)"
+msgstr ""
+
+#: views\setting_dialog.py:56
+msgid "曲送りを手動で行う(&M)"
+msgstr ""
+
+#: views\setting_dialog.py:60
+msgid "新たなファイルにより開かれたとき(&F)"
+msgstr ""
+
+#: views\setting_dialog.py:61
+msgid "新たなプレイリストにより開かれたとき(&P)"
+msgstr ""
+
+#: views\setting_dialog.py:64
+msgid "通知"
+msgstr ""
+
+#: views\setting_dialog.py:65
+msgid "音声読み上げの出力先(&S)"
+msgstr ""
+
+#: views\setting_dialog.py:66
+msgid "効果音による通知を有効にする(&I)"
+msgstr ""
+
+#: views\setting_dialog.py:70
+msgid "効果音出力先(&D)"
+msgstr ""
+
+#: views\setting_dialog.py:71
+msgid "エラーを通知せず無視する(&E)"
+msgstr ""
+
+#: views\setting_dialog.py:77
+msgid "起動"
+msgstr ""
+
+#: views\setting_dialog.py:78
+msgid "規定の音量(&V)"
+msgstr ""
+
+#: views\setting_dialog.py:79
+msgid "起動時出力先(&D)"
+msgstr ""
+
+#: views\setting_dialog.py:80
+msgid "起動時に読み込むプレイリスト"
+msgstr ""
+
+#: views\setting_dialog.py:82
+msgid "起動時に読み込むプレイリスト(&P)"
+msgstr ""
+
+#: views\setting_dialog.py:86
+msgid "ネットワーク"
+msgstr ""
+
+#: views\setting_dialog.py:87
+msgid "起動時に更新を確認(&U)"
+msgstr ""
+
+#: views\setting_dialog.py:91
+msgid "手動でプロキシ設定を行う(&M)"
+msgstr ""
+
+#: views\setting_dialog.py:95
+msgid "サーバ名(&S)"
+msgstr ""
+
+#: views\setting_dialog.py:96
+msgid "ポート(&P)"
+msgstr ""
+
+#: views\sleepTimerDialog.py:17
+msgid "指定の時間が経過した"
+msgstr ""
+
+#: views\sleepTimerDialog.py:18
+msgid "指定の曲数を再生した"
+msgstr ""
+
+#: views\sleepTimerDialog.py:19
+msgid "すべての再生を完了した"
+msgstr ""
+
+#: views\sleepTimerDialog.py:20
+msgid "キューの再生が完了した"
+msgstr ""
+
+#: views\sleepTimerDialog.py:23
+msgid "コンピュータのスリープ"
+msgstr ""
+
+#: views\sleepTimerDialog.py:28
+msgid "スリープタイマー設定"
+msgstr ""
+
+#: views\sleepTimerDialog.py:38
+msgid "スリープの条件(&S)"
+msgstr ""
+
+#: views\sleepTimerDialog.py:41
+msgid "スリープの動作(&O)"
+msgstr ""
+
+#: views\sleepTimerDialog.py:45
+msgid "時間と分の指定"
+msgstr ""
+
+#: views\sleepTimerDialog.py:46
+msgid "時間(&H)"
+msgstr ""
+
+#: views\sleepTimerDialog.py:48
+msgid "分(&M)"
+msgstr ""
+
+#: views\sleepTimerDialog.py:51
+msgid "曲数指定"
+msgstr ""
+
+#: views\sleepTimerDialog.py:52
+msgid "曲数(&N)"
+msgstr ""
+
+#: views\sleepTimerDialog.py:53
+msgid "曲"
+msgstr ""
+
+#: views\sleepTimerDialog.py:55
+msgid "開始"
+msgstr ""
+
+#: views\sleepTimerDialog.py:97
+msgid "タイマーには１分以上の長さが必要です。"
+msgstr ""
+
+#: views\sleepTimerDialog.py:101
+msgid "キューにアイテムがないため、このタイマーを設定できません。"
+msgstr ""
+
+#: views\sleepTimerDialog.py:105
+msgid "再生する曲がないため、このタイマーを設定できません。"
+msgstr ""
+
+#: views\sleepTimerDialog.py:109
+msgid "シャッフルが有効です。"
+msgstr ""
+
+#: views\sleepTimerDialog.py:111
+msgid "ループが有効です。"
+msgstr ""
+
+#: views\sleepTimerDialog.py:113
+msgid "リピートが有効です。"
+msgstr ""
+
+#: views\sleepTimerDialog.py:116
+msgid "以下の理由により、このままではタイマーが終了しません。"
+msgstr ""
+
+#: views\sleepTimerDialog.py:121
+msgid "やり直す"
+msgstr ""
+
+#: views\sleepTimerDialog.py:126
+msgid "お知らせ"
+msgstr ""
+
+#: views\updateDialog.py:22
+#, python-format
+msgid "アップデート - %s"
+msgstr ""
+
+#: views\updateDialog.py:31
+#, python-format
+msgid "version %s にアップデートできます。"
+msgstr ""
+
+#: views\updateDialog.py:32
+msgid "進行状況"
+msgstr ""
+
+#: views\updateDialog.py:34
+#, python-format
+msgid "version %s アップデート情報"
+msgstr ""
+
+#: views\updateDialog.py:40
+msgid "緊急のお知らせがあります。"
+msgstr ""
+
+#: views\updateDialog.py:43
+msgid "お知らせページへ"
+msgstr ""
+
+#: views\updateDialog.py:58
+msgid "アップデートをダウンロード中..."
+msgstr ""
+
+#: views\updateDialog.py:65
+msgid ""
+"updater.exeが見つかりませんでした。誤って削除したかなどをご確認ください。"
+msgstr ""
+
+#: views\versionDialog.py:18
+msgid "バージョン情報"
+msgstr ""
+
+#: views\versionDialog.py:27
+msgid "ソフトウェアバージョン"
+msgstr ""
+
+#: views\versionDialog.py:28
+msgid "アップデータバージョン"
+msgstr ""
+
+#: views\versionDialog.py:30
+msgid "ライセンス"
+msgstr ""
+
+#: views\versionDialog.py:31
+msgid "開発元"
+msgstr ""
+
+#: views\versionDialog.py:32
+msgid "ソフトウェア詳細情報"
+msgstr ""
+
+#: views\versionDialog.py:34
+msgid ""
+"ライセンス/著作権情報については、同梱の license.txt を参照してください。"
+msgstr ""
