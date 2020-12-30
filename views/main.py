@@ -23,6 +23,7 @@ import update
 import globalVars
 import hotkeyHandler
 import menuItemsStore
+import menuItemsDic
 import settings
 import ConfigManager
 import m3uManager
@@ -415,7 +416,7 @@ class Events(BaseEvents):
 		keyData={}
 		menuData={}
 		for refName in defaultKeymap.defaultKeymap[identifier.upper()].keys():
-			title=menuItemsDic.dic[refName]
+			title=menuItemsDic.getValueString(refName)
 			if refName in keys:
 				keyData[title]=keys[refName]
 			else:
