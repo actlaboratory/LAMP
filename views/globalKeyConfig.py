@@ -28,8 +28,8 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		if filter==None:
 			self.filter=globalVars.app.hMainView.menu.keymap.filter
 
-	def Initialize(self):
-		super().Initialize(self.app.hMainView.hFrame,_("ショートカットキーの設定"))
+	def Initialize(self,title=_("ショートカットキーの設定")):
+		super().Initialize(self.app.hMainView.hFrame,title)
 		self.addButton.Hide()
 		self.deleteButton.Hide()
 		return
@@ -49,7 +49,7 @@ class Dialog(views.KeyValueSettingDialogBase.KeyValueSettingDialogBase):
 		newKeys={}
 		for name,keys in self.values[0].items():
 			for key in keys.split("/"):
-				newKeys.setdefault(key, set()).add(name)
+				newKeys.setdefault(key.upper(), set()).add(name)
 		for key,names in newKeys.items():
 			if key==_("なし"):
 				continue
@@ -122,9 +122,9 @@ class SettingDialog(views.KeyValueSettingDialogBase.SettingDialogBase):
 		d=views.keyConfig.Dialog(self.wnd,self.filter)
 		d.Initialize()
 		if d.Show()==wx.ID_CANCEL:
-			globalVars.app.say(_("解除しました。"))
+			dialog(_("設定完了"), _("解除しました。"))
 			self.edits[no].SetValue(_("なし"))
 		else:
-			globalVars.app.say(_("%s に設定しました。") % (d.GetValue()))
+			dialog(_("設定完了"), _("%s に設定しました。") % (d.GetValue()))
 			self.edits[no].SetValue(d.GetValue())
 		return

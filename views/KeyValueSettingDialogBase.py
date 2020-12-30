@@ -6,6 +6,7 @@
 import wx
 
 import globalVars
+import constants
 import keymap
 import views.ViewCreator
 
@@ -26,41 +27,56 @@ class KeyValueSettingDialogBase(BaseDialog):
 		self.columnInfo=columnInfo
 		self.values=values
 		self.columnNames=[]
+		self.checkResultValueString=[("○","×")]*len(columnInfo)
+		self.initialized=False
+		self.specialButtons=[]
+
+	def SetCheckResultValueString(self,column,t,f):
+		assert not self.initialized		#Initialized()呼び出し後の変更は不可
+		self.checkResultValueString[column]=(t,f)
+
+	def AddSpecialButton(self,name,event):
+		assert not self.initialized		#Initialized()呼び出し後の変更は不可
+		self.specialButtons.append((name,event))
 
 	def Initialize(self,parent,title):
 		super().Initialize(parent,title)
 		self.InstallControls()
 		return True
+		self.initialized=True
 
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20)
-		self.hListCtrl, dammy=self.creator.listCtrl(_("現在の登録内容"), proportion=0, sizerFlag=wx.ALL|wx.ALIGN_CENTER_HORIZONTAL,size=(750,300),style=wx.LC_REPORT | wx.LC_NO_HEADER | wx.LC_SINGLE_SEL)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.ALL,proportion=20)
+		self.hListCtrl, dummy=self.creator.listCtrl(_("現在の登録内容"), proportion=0, sizerFlag=wx.ALL|wx.ALIGN_CENTER_HORIZONTAL,size=(750,300),style=wx.LC_REPORT | wx.LC_SINGLE_SEL)
 
 		for i,info in enumerate(self.columnInfo):
 			self.hListCtrl.InsertColumn(i,info[0],format=info[1],width=info[2])
 			self.columnNames.append(info[0])
 
-		for i in self.values[0]:
-			l=[]
-			l.append(i)
-			for v in self.values:
-				l.append(v[i])
-			self.hListCtrl.Append(l)
+		for key in self.values[0]:
+			self._SetItem(-1,0,key)
+			for i in range(0,len(self.values)):
+				self._SetItem(-1,i+1,self.values[i][key])
 
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED,self.ItemSelected)
 		self.hListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED,self.ItemSelected)
 
 		#処理ボタン
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
-		self.addButton=self.creator.button(_("追加"),self.add)
-		self.editButton=self.creator.button(_("変更"),self.edit)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.creator.GetSizer(),wx.HORIZONTAL,20,"",wx.EXPAND)
+		for i in range(len(self.specialButtons)):
+			self.specialButtons[i] = self.creator.button(self.specialButtons[i][0],self.specialButtons[i][1])
+			self.specialButtons[i].Enable(False)
+
+		self.creator.AddSpace(-1)
+		self.addButton=self.creator.button(_("追加(&A)"),self.add)
+		self.editButton=self.creator.button(_("変更(&M)"),self.edit)
 		self.editButton.Enable(False)
-		self.deleteButton=self.creator.button(_("削除"),self.delete)
+		self.deleteButton=self.creator.button(_("削除(&D)"),self.delete)
 		self.deleteButton.Enable(False)
 
 		#ボタンエリア
-		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
+		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT | wx.ALL,margin=20)
 		self.bOk=self.creator.okbutton(_("ＯＫ"),self.OkButtonEvent)
 		self.bCancel=self.creator.cancelbutton(_("キャンセル"),None)
 
@@ -68,10 +84,14 @@ class KeyValueSettingDialogBase(BaseDialog):
 		if self.hListCtrl.GetFocusedItem()<0:	#選択解除の通知
 			self.editButton.Enable(False)
 			self.deleteButton.Enable(False)
+			for i in range(len(self.specialButtons)):
+				self.specialButtons[i].Enable(False)
 		else:									#選択追加の通知
 			self.editButton.Enable(True)
 			key=self.hListCtrl.GetItemText(self.hListCtrl.GetFocusedItem(),0)
 			self.deleteButton.Enable(self.DeleteValidation(key))
+			for i in range(len(self.specialButtons)):
+				self.specialButtons[i].Enable(self.SpecialButtonValidation(key))
 
 	def DeleteValidation(self,key):
 		"""
@@ -80,6 +100,13 @@ class KeyValueSettingDialogBase(BaseDialog):
 		"""
 		return True
 
+	def SpecialButtonValidation(self,key):
+		"""
+			指定されたキー(String)のデータに対してSpecialButtonが有効か否かを返す
+			デフォルトではキーに関係なく有効なので、制限したい場合はオーバーライドする。
+		"""
+		return True
+		
 	def GetData(self):
 		return self.values
 
@@ -88,6 +115,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 		d.Initialize()
 		self.SettingDialogHook(d)
 		if d.Show()==wx.ID_CANCEL:
+			self.hListCtrl.SetFocus()
 			return
 		v=d.GetValue()
 		if v[0] in self.values[0]:
@@ -95,12 +123,14 @@ class KeyValueSettingDialogBase(BaseDialog):
 			if dlg.ShowModal()==wx.ID_NO:
 				return
 			index=self.hListCtrl.FindItem(-1,v[0])
-			for i in range(1,len(self.values)):
-				self.hListCtrl.SetItem(index,i,v[i])
+			for i in range(0,len(v)):
+				self._SetItem(index,i,v[i])
 		else:
-			self.hListCtrl.Append(v)
+			for i in range(0,len(v)):
+				self._SetItem(-1,i,v[i])
 		for i in range(0,len(self.values)):
 			self.values[i][v[0]]=v[i+1]
+		self.hListCtrl.SetFocus()
 
 	def edit(self,event):
 		index=self.hListCtrl.GetFocusedItem()
@@ -114,6 +144,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 		d.Initialize()
 		self.SettingDialogHook(d)
 		if d.Show()==wx.ID_CANCEL:
+			self.hListCtrl.SetFocus()
 			return
 		v=d.GetValue()
 		if oldKey!=v[0]:
@@ -134,11 +165,12 @@ class KeyValueSettingDialogBase(BaseDialog):
 
 		#新たなデータをビューに反映(古いデータに上書き)
 		for i in range(len(v)):
-			self.hListCtrl.SetItem(index,i,v[i])
+			self._SetItem(index,i,v[i])
 
 		#新たなデータを登録
 		for i in range(len(self.values)):
 			self.values[i][v[0]]=v[i+1]
+		self.hListCtrl.SetFocus()
 
 	def delete(self,event):
 		index=self.hListCtrl.GetFocusedItem()
@@ -146,6 +178,24 @@ class KeyValueSettingDialogBase(BaseDialog):
 		for i in range(len(self.values)):
 			del self.values[i][key]
 		self.hListCtrl.DeleteItem(index)
+		self.hListCtrl.SetFocus()
+
+	def _SetItem(self,index,column,data):
+		"""
+			画面上のリストを更新
+			index=-1で末尾に追加
+		"""
+		if isinstance(data,bool):
+			if data:
+				data=self.checkResultValueString[column][0]
+			else:
+				data=self.checkResultValueString[column][1]
+		#print("%d,%d,%s" %(index,column,data))
+		if index==-1:
+			index=self.hListCtrl.GetItemCount()-1
+			if column==0:
+				return self.hListCtrl.InsertItem(index+1,data)
+		return self.hListCtrl.SetItem(index,column,data)
 
 	def SettingDialogHook(self,dialog):
 		"""
@@ -192,7 +242,9 @@ class SettingDialogBase(BaseDialog):
 
 		for i,name in enumerate(self.valueNames):
 			self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.baseCreator.GetPanel(),self.baseCreator.GetSizer(),wx.HORIZONTAL,10)
-			if name[1]:
+			if type(name[1])==str:
+				self.edits[i]=self.creator.checkbox(name[1],state=self.values[i], x=500)
+			elif name[1]:
 				self.edits[i],dummy=self.creator.inputbox(name[0],x=500,defaultValue=self.values[i], textLayout=wx.VERTICAL)
 			else:
 				self.edits[i],dummy=self.creator.inputbox(name[0],x=500,defaultValue=self.values[i],style=wx.TE_READONLY, textLayout=wx.VERTICAL)
@@ -209,7 +261,10 @@ class SettingDialogBase(BaseDialog):
 	def GetData(self):
 		ret=[None]*len(self.edits)
 		for i in range(len(self.edits)):
-			ret[i]=self.edits[i].GetLineText(0)
+			if isinstance(self.edits[i],wx.CheckBox):
+				ret[i]=self.edits[i].GetValue()
+			else:
+				ret[i]=self.edits[i].GetLineText(0)
 		ret[0]=ret[0].lower()			#iniファイルへの保存の為キーは小文字に統一
 		return ret
 
@@ -243,7 +298,7 @@ def KeySettingValidation(oldKeyConfig,newKeyConfig,logger,entries=None,AllowNewK
 		AllowNewKeyDuplication	bool	newKey内での重複を許すならTrue
 	"""
 	if logger==None:
-		logger=getLogger("falcon.%s" % "KeySettingValidation")
+		logger=getLogger("%s.%s" % (constants.LOG_PREFIX,"KeySettingValidation"))
 	errors=""
 	oldKeys={}
 	for k,vs in oldKeyConfig.items():
