@@ -41,7 +41,7 @@ class update(threading.Thread):
 
 	def update(self, auto=False):
 		self.log.info("called update auto = %s" % str(auto))
-		if hasattr(sys, "frozen"):
+		if not hasattr(sys, "frozen"):
 			self.log.info("update is unavailable reason: not supported")
 			if not auto:
 				simpleDialog.winDialog(_("アップデート"), _("このバージョンではアップデートを使用できません。"))
