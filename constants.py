@@ -5,10 +5,11 @@
 import wx
 
 # 言語
-SUPPORTING_LANGUAGE={"ja_JP": "日本語","en_US": "English"}
+SUPPORTING_LANGUAGE={"ja-JP": "日本語","en-US": "English"}
 
 # update情報
 UPDATE_URL = "https://actlab.org/api/checkUpdate"
+UPDATER_URL = "https://github.com/actlaboratory/updater/releases/download/1.0.0/updater.zip"
 UPDATER_VERSION = "1.0.0"
 UPDATER_WAKE_WORD = "hello"
 
@@ -21,7 +22,7 @@ KEYMAP_FILE_NAME="keymap.ini"
 #アプリケーション基本情報
 APP_NAME="LAMP"
 APP_FULL_NAME = "Light and Accessible Music Player"
-APP_VERSION="0.0.0"
+APP_VERSION="0.0.6"
 APP_ICON = "icon.ico"
 APP_COPYRIGHT_YEAR="2020"
 APP_LICENSE="Apache License 2.0"
@@ -70,3 +71,4 @@ BASE_PACKAGE_URL = "https://github.com/actlaboratory/LAMP/releases/download/0.0.
 PACKAGE_CONTAIN_ITEMS = ("fx", "resources")#パッケージに含めたいファイルやfolderがあれば指定
 NEED_HOOKS = ()#pyinstallerのhookを追加したい場合は指定
 STARTUP_FILE = "lamp.py"#起動用ファイルを指定
+

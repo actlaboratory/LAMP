@@ -242,12 +242,12 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "CHECK_UPDATE", "VERSION_INFO"])
 
 		#メニューバーの生成
-		self.hMenuBar.Append(self.hFileMenu,_("ファイル") + " (&F)")
-		self.hMenuBar.Append(self.hFunctionMenu, _("機能") + " (&U)")
-		self.hMenuBar.Append(self.hPlaylistMenu,_("プレイリスト") + " (&P)")
-		self.hMenuBar.Append(self.hOperationMenu,_("操作") + " (&O)")
-		self.hMenuBar.Append(self.hSettingsMenu,_("設定") + "(&S)")
-		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ") + " (&H)")
+		self.hMenuBar.Append(self.hFileMenu,_("ファイル(&F)"))
+		self.hMenuBar.Append(self.hFunctionMenu, _("機能(&U)"))
+		self.hMenuBar.Append(self.hPlaylistMenu,_("プレイリスト(&P)"))
+		self.hMenuBar.Append(self.hOperationMenu,_("操作(&O)"))
+		self.hMenuBar.Append(self.hSettingsMenu,_("設定(&S)"))
+		self.hMenuBar.Append(self.hHelpMenu,_("ヘルプ(&H)"))
 		target.SetMenuBar(self.hMenuBar)
 
 		# イベント
@@ -379,13 +379,13 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("SET_SENDTO"):
 			sendToManager.sendToCtrl("LAMP")
 		elif selected==menuItemsStore.getRef("SET_KEYMAP"):
-			if self.setKeymap("MainView",filter=keymap.KeyFilter().SetDefault(False,False)):
+			if self.setKeymap("MainView",_("ショートカットキーの設定"),filter=keymap.KeyFilter().SetDefault(False,False)):
 				#ショートカットキーの変更適用とメニューバーの再描画
 				self.parent.menu.InitShortcut()
 				self.parent.menu.ApplyShortcut(self.parent.hFrame)
 				self.parent.menu.Apply(self.parent.hFrame)
 		elif selected==menuItemsStore.getRef("SET_HOTKEY"):
-			if self.setKeymap("HOTKEY",self.parent.hotkey,filter=self.parent.hotkey.filter):
+			if self.setKeymap("HOTKEY",_("グローバルホットキーの設定"),self.parent.hotkey,filter=self.parent.hotkey.filter):
 				#変更適用
 				self.parent.hotkey.UnSet("HOTKEY",self.parent.hFrame)
 				self.parent.applyHotKey()
@@ -401,7 +401,7 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("VERSION_INFO"):
 			versionDialog.versionDialog()
 
-	def setKeymap(self, identifier,keymap=None,filter=None):
+	def setKeymap(self, identifier,ttl,keymap=None,filter=None):
 		if keymap:
 			try:
 				keys=keymap.map[identifier.upper()]
@@ -429,7 +429,7 @@ class Events(BaseEvents):
 					entries.extend(map.entries[i])
 
 		d=views.globalKeyConfig.Dialog(keyData,menuData,entries,filter)
-		d.Initialize()
+		d.Initialize(ttl)
 		if d.Show()==wx.ID_CANCEL: return False
 
 		result={}
