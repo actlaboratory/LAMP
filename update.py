@@ -13,6 +13,7 @@ import time
 import threading
 import win32api
 from logging import getLogger
+import traceback
 
 def getUpdaterVersion():
 	""" return (pyVersion, exeVersion) """
@@ -40,7 +41,7 @@ class update(threading.Thread):
 
 	def update(self, auto=False):
 		self.log.info("called update auto = %s" % str(auto))
-		if not hasattr(sys, "frozen"):
+		if hasattr(sys, "frozen"):
 			self.log.info("update is unavailable reason: not supported")
 			if not auto:
 				simpleDialog.winDialog(_("アップデート"), _("このバージョンではアップデートを使用できません。"))
@@ -73,6 +74,12 @@ class update(threading.Thread):
 			self.log.info("failed to check update reason: connection is not successful")
 			if not auto:
 				simpleDialog.winDialog(_("アップデート"), _("サーバーへの接続に失敗しました。インターネット接続などをご確認ください"))
+			return
+		except:
+			traceback.print_exc()
+			self.log.info("an error has occurred.")
+			if not auto:
+				simpleDialog.errorDialog(_("サーバーとの通信中に不明なエラーが発生しました。"))
 			return
 		if not response.status_code == 200:
 			self.log.info("failed to check update reason: the server returned invalid status code %d" % (response.status_code))
