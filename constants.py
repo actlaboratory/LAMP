@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #constant values
-#Copyright (C) 20XX anonimous <anonimous@sample.com>
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
 
 import wx
 
@@ -22,7 +22,7 @@ KEYMAP_FILE_NAME="keymap.ini"
 #アプリケーション基本情報
 APP_NAME="LAMP"
 APP_FULL_NAME = "Light and Accessible Music Player"
-APP_VERSION="0.0.7"
+APP_VERSION="0.0.13"
 APP_ICON = "icon.ico"
 APP_COPYRIGHT_YEAR="2019-2021"
 APP_LICENSE="GNU General Public License2.0 or later"
@@ -67,7 +67,7 @@ NOLIST = 103
 DIALOG_PE_CONTINUE = 0 #続行
 
 #build関連定数
-BASE_PACKAGE_URL = "https://github.com/actlaboratory/LAMP/releases/download/0.0.1/LAMP-0.0.1.zip"#差分元のpackageのファイル名またはURL
+BASE_PACKAGE_URL = "https://github.com/actlaboratory/LAMP/releases/download/0.0.7/LAMP-0.0.7.zip"#差分元のpackageのファイル名またはURL
 PACKAGE_CONTAIN_ITEMS = ("fx", "resources")#パッケージに含めたいファイルやfolderがあれば指定
 NEED_HOOKS = ()#pyinstallerのhookを追加したい場合は指定
 STARTUP_FILE = "lamp.py"#起動用ファイルを指定

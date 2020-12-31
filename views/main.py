@@ -91,7 +91,7 @@ class MainView(BaseView):
 		else: view_manager.setBitmapButton(self.muteBtn, self.hPanel, wx.Bitmap("./resources/volume_bk.dat", wx.BITMAP_TYPE_GIF), _("ミュートをオンにする"))
 		self.volumeSlider, dummy = self.horizontalCreator.clearSlider(_("音量"), 0, 100, None,
 			globalVars.app.config.getint("volume","default",default=100, min=0, max=100), x=150, sizerFlag=wx.ALIGN_CENTER, textLayout=None)
-		self.volumeSlider.Bind(wx.EVT_SCROLL, self.events.onSlider)
+		self.volumeSlider.setScrollCallBack(self.events.onVolumeSlider)
 		self.volumeSlider.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
 		self.volumeSlider.SetThumbLength(25)
 		self.volumeSlider.setToolTip(self.val2vol)
@@ -122,7 +122,7 @@ class MainView(BaseView):
 		self.trackBar, dummy = self.creator.clearSlider(_("トラックバー"), x=1000, sizerFlag=wx.EXPAND | wx.LEFT | wx.RIGHT, proportion=0, margin=60, textLayout=None)
 		self.trackBar.SetThumbLength(30)
 		self.trackBar.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
-		self.trackBar.Bind(wx.EVT_SCROLL, self.events.onSlider)
+		self.trackBar.setScrollCallBack(self.events.onTrackBar)
 		self.trackBar.setToolTip(self.sec2TimeStr)
 
 		self.creator.AddSpace(20)
@@ -495,13 +495,13 @@ class Events(BaseEvents):
 			elif event.GetEventObject() == globalVars.app.hMainView.muteBtn:
 				globalVars.eventProcess.mute()
 
-	def onSlider(self, evt):
-		if evt.GetEventObject() == globalVars.app.hMainView.volumeSlider:
-			val = globalVars.app.hMainView.volumeSlider.GetValue()
-			globalVars.eventProcess.changeVolume(vol=val)
-		elif evt.GetEventObject() == globalVars.app.hMainView.trackBar:
-			globalVars.eventProcess.trackBarCtrl(evt.GetEventObject())
-	
+	def onVolumeSlider(self):
+		val = globalVars.app.hMainView.volumeSlider.GetValue()
+		globalVars.eventProcess.changeVolume(vol=val)
+
+	def onTrackBar(self):
+		globalVars.eventProcess.trackBarCtrl(self.parent.trackBar)
+
 	def timerEvent(self, evt):
 		globalVars.eventProcess.refreshView()
 
