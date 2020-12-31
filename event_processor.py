@@ -1,5 +1,7 @@
 import os, sys, platform, wx
 import winsound
+import re
+import requests
 import globalVars
 import constants
 import errorCodes
@@ -142,7 +144,11 @@ class eventProcessor():
             return False
         t = listManager.getTuple(listPorQ, True)
         if listPorQ == constants.QUEUE: globalVars.listInfo.playingTmp = t #キュー再生の時はタプルを一時退避
-        if globalVars.play.setSource(t[constants.ITEM_PATH]):
+        sc = None
+        if re.search("https?://.+\..+", t[constants.ITEM_PATH]) != None: #URLの場合は中にURLがないか確認
+            sc = self.inUrlCheck(t[constants.ITEM_PATH])
+        if sc == None: sc = t[constants.ITEM_PATH]
+        if globalVars.play.setSource(sc):
             ret = globalVars.play.play()
         else: ret = False
         if ret:
@@ -164,7 +170,11 @@ class eventProcessor():
 
     def forcePlay(self, source):
         if not globalVars.play.isDeviceOk(): return False #デバイス異常時は処理を中止
-        if globalVars.play.setSource(source):
+        sc = None
+        if re.search("https?://.+\..+", source) != None: #URLの場合は中にURLがないか確認
+            sc = self.inUrlCheck(source)
+        if sc == None: sc = source
+        if globalVars.play.setSource(sc):
             if globalVars.play.play():
                 ret = True
                 self.playingList = constants.NOLIST # リストではない
@@ -186,6 +196,14 @@ class eventProcessor():
         view_manager.changeListLabel(globalVars.app.hMainView.playlistView)
         view_manager.changeListLabel(globalVars.app.hMainView.queueView)
         return ret
+
+    def inUrlCheck(self, url):
+        try:
+            r = requests.get(url)
+            s = r.text.split("\n")[0]
+            if re.search("https?://.+\..+", s) != None: return s
+            else: return None
+        except: return None
 
     def playError(self):
         # 再生エラーの処理
