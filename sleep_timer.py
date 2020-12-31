@@ -27,7 +27,7 @@ class sleepTimer():
 
     def check(self):
         if not self.sleepTimer: return True
-        m = "スリープタイマーは起動中です。\n"
+        m = _("スリープタイマーは起動中です。\n")
         if self.timeStarted != None:
             t = self._timeStr(self.timeStarted, self.timer.GetInterval() / 1000)
             if t != None: m = m + _("あと%sで発動し、以下を実行します。\n" % t)
