@@ -1,5 +1,6 @@
 import wx
 import globalVars
+import constants
 from views import baseDialog, ViewCreator
 from soundPlayer import player
 
@@ -33,6 +34,9 @@ class settingDialog(baseDialog.BaseDialog):
             elif dl[i] != None: self.deviceDic[dl[i]] = dl[i]
         self.notificationDeviceDic = {"same": _("音楽再生の出力先と同じ")}
         self.notificationDeviceDic.update(self.deviceDic)
+        # 言語内容読み込み
+        self.lang_code = list(constants.SUPPORTING_LANGUAGE.keys())
+        self.lang_name = list(constants.SUPPORTING_LANGUAGE.values())
         self.InstallControls()
         return True
 
@@ -81,6 +85,7 @@ class settingDialog(baseDialog.BaseDialog):
         startupListCreator = ViewCreator.ViewCreator(self.viewMode, startupCreator.GetPanel(), startupCreator.GetSizer(), wx.HORIZONTAL)
         self.startupList, dummy = startupListCreator.inputbox(_("起動時に読み込むプレイリスト(&P)"), defaultValue=globalVars.app.config.getstring("player", "startupPlaylist", ""), x=600, textLayout=None)
         self.startupListSelectBtn = startupListCreator.button(_("参照"), self.onButton)
+        self.langCombo,langLabel = startupCreator.combobox(_("言語(&L)"), self.lang_name, textLayout=wx.HORIZONTAL)
 
         # ネットワーク
         netCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("ネットワーク"), style=wx.ALL, margin=20)
@@ -119,6 +124,7 @@ class settingDialog(baseDialog.BaseDialog):
         globalVars.app.config["volume"]["default"] = str(int(self.volumeSlider.GetValue()))
         globalVars.app.config["player"]["outputDevice"] = self.getKey(self.deviceDic, self.startupDeviceCombo.GetStringSelection())
         globalVars.app.config["player"]["startupPlaylist"] = self.startupList.GetValue()
+        globalVars.app.config["general"]["language"] = self.lang_code[self.langCombo.GetSelection()]
         globalVars.app.config["general"]["update"] = self.updateCheck.IsChecked()
         globalVars.app.config["network"]["manual_proxy"] = self.manualProxy.IsChecked()
         globalVars.app.config["network"]["proxy_server"] = self.proxyServer.GetValue()
@@ -148,6 +154,9 @@ class settingDialog(baseDialog.BaseDialog):
         startupDevice = globalVars.app.config.getstring("player", "outputDevice", "default", self.getKeyList(self.deviceDic))
         selectionStr = self.deviceDic[startupDevice]
         self.startupDeviceCombo.SetStringSelection(selectionStr)
+        language = globalVars.app.config.getstring("general", "language", "en_US", self.lang_code)
+        selectionStr = constants.SUPPORTING_LANGUAGE[language]
+        self.langCombo.SetStringSelection(selectionStr)
 
     def onCheckBox(self, evt=None):
         if evt == None: evtObject = None
