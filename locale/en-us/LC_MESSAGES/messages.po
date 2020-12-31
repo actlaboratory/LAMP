@@ -767,7 +767,8 @@ msgid ""
 msgstr ""
 "Check the preferred items \n"
 "and press [register] button.\n"
-"To remove all settings, press [remove all settings] button."
+"To remove all settings,\n"
+"press [remove all] button."
 
 #: views\fileAssocDialog.py:48
 msgid "音声ファイル"
@@ -824,7 +825,7 @@ msgstr "Shortcut Key Configuration"
 #: views\keyConfig.py:57 views\KeyValueSettingDialogBase.py:315
 #: views\main.py:443
 msgid "なし"
-msgstr "No Information"
+msgstr "None"
 
 #: views\globalKeyConfig.py:61
 #, python-format
@@ -1213,7 +1214,7 @@ msgstr "Enable &Indicator Sound"
 
 #: views\setting_dialog.py:74
 msgid "効果音出力先(&D)"
-msgstr "Output &Device for Indicator sounds"
+msgstr "Output &Device\nfor Indicator sounds"
 
 #: views\setting_dialog.py:75
 msgid "エラーを通知せず無視する(&E)"
