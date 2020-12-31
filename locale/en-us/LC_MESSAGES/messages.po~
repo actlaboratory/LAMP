@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: application\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-27 23:33+0900\n"
-"PO-Revision-Date: 2020-12-27 18:35+0900\n"
+"POT-Creation-Date: 2020-12-27 23:37+0900\n"
+"PO-Revision-Date: 2020-12-27 23:40+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -813,11 +813,11 @@ msgid "なし"
 msgstr "No Information"
 
 #: views\globalKeyConfig.py:61
-#, fuzzy, python-format
+#, python-format
 msgid ""
-"以下の項目において、重複するキー %s が設定されています。\n"
+"以下の項目において、重複するキー %(key)s が設定されています。\n"
 "\n"
-"%s"
+"%(names)s"
 msgstr ""
 "%(key)s is configured in following items.\n"
 "\n"
@@ -857,7 +857,7 @@ msgstr "This shortcut cannot be modified."
 
 #: views\globalKeyConfig.py:125 views\globalKeyConfig.py:128
 msgid "設定完了"
-msgstr ""
+msgstr "Setup has been completed"
 
 #: views\globalKeyConfig.py:125
 msgid "解除しました。"
@@ -1047,18 +1047,16 @@ msgid "情報がありません"
 msgstr "no information"
 
 #: views\main.py:388
-#, fuzzy
 msgid "グローバルホットキーの設定"
-msgstr "&Global Hot Key Settings"
+msgstr "Global Hot Keys Settings"
 
 #: views\main.py:398
 msgid "ヘルプ"
 msgstr "help"
 
 #: views\main.py:398
-#, fuzzy
 msgid "ヘルプファイルが見つかりません。"
-msgstr "This file is not supported."
+msgstr "Help file could not be found."
 
 #: views\main.py:461
 msgid "規定の出力先"
