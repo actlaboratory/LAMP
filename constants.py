@@ -67,7 +67,7 @@ NOLIST = 103
 DIALOG_PE_CONTINUE = 0 #続行
 
 #build関連定数
-BASE_PACKAGE_URL = "https://github.com/actlaboratory/LAMP/releases/download/0.0.7/LAMP-0.0.7.zip"#差分元のpackageのファイル名またはURL
+BASE_PACKAGE_URL = None
 PACKAGE_CONTAIN_ITEMS = ("fx", "resources")#パッケージに含めたいファイルやfolderがあれば指定
 NEED_HOOKS = ()#pyinstallerのhookを追加したい場合は指定
 STARTUP_FILE = "lamp.py"#起動用ファイルを指定

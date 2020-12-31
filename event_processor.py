@@ -312,7 +312,7 @@ class eventProcessor():
         if ret == False:
             if self.playError() == constants.DIALOG_PE_CONTINUE:
                 self.playingList = constants.PLAYLIST
-                self.previousFile()
+                if not self.nextFile(): self.stop()
             else: self.stop()
             return False
         elif ret == errorCodes.END:
@@ -424,6 +424,12 @@ class eventProcessor():
         if evtObj.GetSelectedItemCount() == 1:
             evtObj.setPointer(evtObj.GetFirstSelected())
             p = self.play(lst)
+            if not p:
+                if self.playError() == constants.DIALOG_PE_CONTINUE:
+                    self.playingList = constants.PLAYLIST
+                    if not self.nextFile(): self.stop()
+                else: self.stop()
+
 
     def setSongFeed(self):
         if globalVars.app.config.getboolean("player", "manualSongFeed", False):
