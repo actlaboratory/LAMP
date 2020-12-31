@@ -73,23 +73,31 @@ class eventProcessor():
         else:
             if self.playingList == constants.PLAYLIST: t = listManager.getTuple(constants.PLAYLIST)
             else: t = globalVars.listInfo.playingTmp
-            if t[constants.ITEM_TITLE] == "": title = t[constants.ITEM_NAME] # ファイル名
-            else: title = t[constants.ITEM_TITLE] # タイトル
+            try:
+                if t[constants.ITEM_TITLE] == "": title = t[constants.ITEM_NAME] # ファイル名
+                else: title = t[constants.ITEM_TITLE] # タイトル
+            except IndexError: title = ""
             if self.tagInfoProcess == 0: # アルバム名表示
-                if t[constants.ITEM_ALBUM] == "": album = _("情報なし")
-                else: album = t[constants.ITEM_ALBUM]
+                try:
+                    if t[constants.ITEM_ALBUM] == "": album = _("情報なし")
+                    else: album = t[constants.ITEM_ALBUM]
+                except IndexError: album = ""
                 globalVars.app.hMainView.viewTitle.SetLabel(title)
                 globalVars.app.hMainView.viewTagInfo.SetLabel("💿　" + album)
                 self.tagInfoProcess = 1
             elif self.tagInfoProcess == 1: # アーティスト情報表示
-                if t[constants.ITEM_ARTIST] == "": artist = _("情報なし")
-                else: artist = t[constants.ITEM_ARTIST]
+                try:
+                    if t[constants.ITEM_ARTIST] == "": artist = _("情報なし")
+                    else: artist = t[constants.ITEM_ARTIST]
+                except IndexError: artist = ""
                 globalVars.app.hMainView.viewTitle.SetLabel(title)
                 globalVars.app.hMainView.viewTagInfo.SetLabel("👤　" + artist)
                 self.tagInfoProcess = 2
             elif self.tagInfoProcess == 2: # アルバムアーティスト表示
-                if t[constants.ITEM_ALBUMARTIST] == "": albumArtist = _("情報なし")
-                else: albumArtist = t[constants.ITEM_ALBUMARTIST]
+                try:
+                    if t[constants.ITEM_ALBUMARTIST] == "": albumArtist = _("情報なし")
+                    else: albumArtist = t[constants.ITEM_ALBUMARTIST]
+                except IndexError: albumArtist = ""
                 globalVars.app.hMainView.viewTitle.SetLabel(title)
                 globalVars.app.hMainView.viewTagInfo.SetLabel("💿👤　" + albumArtist)
                 self.tagInfoProcess = 0
