@@ -129,7 +129,7 @@ class queue(virtualListCtrlBase.virtualListCtrl):
 
     def onContextMenu(self, evt):
         self.menu.Apply(self, self.identifier)
-        evt.GetEventObject().PopupMenu(self.menu.hPopupMenu)
+        evt.GetEventObject().PopupMenu(self.menu.hPopupMenu, evt)
 
 class Menu(BaseMenu):
     def Apply(self,target, identifier):
