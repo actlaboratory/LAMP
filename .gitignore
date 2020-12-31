@@ -6,6 +6,7 @@ settings.ini
 keymap.ini
 *.bat
 *log.txt
+errorLog.txt
 build/
 dist/
 *.obj
