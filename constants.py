@@ -22,7 +22,7 @@ KEYMAP_FILE_NAME="keymap.ini"
 #アプリケーション基本情報
 APP_NAME="LAMP"
 APP_FULL_NAME = "Light and Accessible Music Player"
-APP_VERSION="0.0.12"
+APP_VERSION="0.0.13"
 APP_ICON = "icon.ico"
 APP_COPYRIGHT_YEAR="2019-2021"
 APP_LICENSE="GNU General Public License2.0 or later"
