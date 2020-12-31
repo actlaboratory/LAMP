@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LAMP\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-31 13:00+0900\n"
+"POT-Creation-Date: 2020-12-31 21:37+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -480,6 +480,10 @@ msgstr ""
 #: settings.py:18 view_manager.py:74 views\main.py:350
 #: views\sleepTimerDialog.py:49
 msgid "分"
+msgstr ""
+
+#: sleep_timer.py:30
+msgid "スリープタイマーは起動中です。\n"
 msgstr ""
 
 #: sleep_timer.py:33

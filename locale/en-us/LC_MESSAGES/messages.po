@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: application\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-31 12:59+0900\n"
-"PO-Revision-Date: 2020-12-31 13:05+0900\n"
+"POT-Creation-Date: 2020-12-31 21:37+0900\n"
+"PO-Revision-Date: 2020-12-31 21:38+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -493,6 +493,10 @@ msgstr "seconds"
 #: views\sleepTimerDialog.py:49
 msgid "分"
 msgstr "minutes"
+
+#: sleep_timer.py:30
+msgid "スリープタイマーは起動中です。\n"
+msgstr "Sleep timer is running.\n"
 
 #: sleep_timer.py:33
 #, python-format
