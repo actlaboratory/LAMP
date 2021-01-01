@@ -52,13 +52,14 @@ class eventProcessor():
                 self.setNowTimeLabel(val, max)
 
         #ファイル送り
-        if globalVars.play.getStatus() == PLAYER_STATUS_END:
-            globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
-            if globalVars.app.config.getboolean("player", "manualSongFeed", False):
-                self.pause(True, True)
-            else:
-                if self.fileChange() == False:
-                    self.stop()
+        if not self.fileChanging:
+            if globalVars.play.getStatus() == PLAYER_STATUS_END:
+                globalVars.sleepTimer.count() #スリープタイマーのファイル数カウント
+                if globalVars.app.config.getboolean("player", "manualSongFeed", False):
+                    self.pause(True, True)
+                else:
+                    if self.fileChange() == False:
+                        self.stop()
 
         #ファイル戻し（巻き戻し用）
         if globalVars.play.getStatus() == PLAYER_STATUS_OVERREWIND:
@@ -340,7 +341,9 @@ class eventProcessor():
             else: view_manager.buttonSetPlay()
 
     def nextFile(self, button=False):
+        ret = False
         if button==True and globalVars.play.getStatus() == PLAYER_STATUS_STOPPED: return
+        print("kita")
         if not globalVars.play.isDeviceOk(): return False
         if self.shuffleCtrl == None:
             ret = listManager.next(self.playingList)
@@ -349,9 +352,9 @@ class eventProcessor():
         if ret == False:
             if self.playError() == constants.DIALOG_PE_CONTINUE:
                 self.playingList = constants.PLAYLIST
-                self.fileChange()
+                return self.nextFile()
             else: self.stop()
-            return False
+            return ret
         elif ret == errorCodes.END:
             if self.repeatLoopFlag == 2 and len(globalVars.app.hMainView.playlistView) >= 1: #ループ再生
                 self.playingList = constants.PLAYLIST
