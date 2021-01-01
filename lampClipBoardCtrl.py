@@ -1,3 +1,5 @@
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+
 import clipboard, listManager
 
 def paste(type):

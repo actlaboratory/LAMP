@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 #default config
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
 
 from ConfigManager import *
 

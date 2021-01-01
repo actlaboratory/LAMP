@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# effector
+# effector View
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
 
 import wx
 import os

@@ -1,3 +1,6 @@
+# list utils for LAMP
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+
 import wx, os, multiprocessing, re, time, threading
 import globalVars, constants, view_manager, errorCodes, fxManager
 from soundPlayer.bass import pybass, pytags

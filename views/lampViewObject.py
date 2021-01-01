@@ -1,3 +1,6 @@
+# wx view objects for LAMP
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+
 import wx
 import globalVars, listManager, menuItemsStore, lampClipBoardCtrl
 from views.base import BaseMenu, BaseEvents

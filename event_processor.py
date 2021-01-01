@@ -1,3 +1,5 @@
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+
 import os, sys, platform, wx
 import winsound
 import re

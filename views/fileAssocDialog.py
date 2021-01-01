@@ -1,3 +1,6 @@
+#file assoc dialog
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+
 import wx
 import globalVars, fileAssocUtil, fxManager
 from views import baseDialog, ViewCreator, mkDialog, mkDialog

@@ -2,6 +2,7 @@
 #main view
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 #Copyright (C) 2019-2020 yamahubuki <itiro.ishino@gmail.com>
+#Copyright (C) 2020-2020 Hiroki Fujii <hfujii@hisystron.com>
 
 import subprocess
 from views import lampViewObject

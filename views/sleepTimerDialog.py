@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# sleepTimer
+# sleepTimer view
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
 
 from soundPlayer.constants import *
 import wx

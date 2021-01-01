@@ -1,5 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 #Application Main
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
 
 import threading
 import sys, os, wx, time, _datetime

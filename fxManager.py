@@ -1,3 +1,6 @@
+# fx manager
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+
 import globalVars
 from soundPlayer.fxPlayer import *
 from soundPlayer.constants import *

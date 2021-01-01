@@ -1,3 +1,6 @@
+# setting dialog for LAMP
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+
 import wx
 import globalVars
 import constants

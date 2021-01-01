@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 #default key map
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
+#Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
 
 defaultKeymap={}
 

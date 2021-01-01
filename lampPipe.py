@@ -1,3 +1,5 @@
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+
 import wx, namedPipe, globalVars, constants, sys, os, m3uManager, listManager
 
 pipeServer = None
