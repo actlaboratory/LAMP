@@ -1,7 +1,8 @@
 # list utils for LAMP
-# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+# Copyright (C) 2020-2021 Hiroki Fujii <hfujii@hisystron.com>
 
 import wx, os, multiprocessing, re, time, threading
+import configparser
 import globalVars, constants, view_manager, errorCodes, fxManager
 from soundPlayer.bass import pybass, pytags
 from views import objectDetail
@@ -114,8 +115,15 @@ def addItemsThread(progress, flst, lcObj, id=-1):
         # リストで受け取ってフォルダとファイルに分ける
         for s in flst:
             if progress.status == wx.CANCEL: break
-            if (os.path.isfile(s) and os.path.splitext(s)[1].lower() in globalVars.fileExpansions) or re.search("^https?://.+\..+", s)!=None:
+            if (os.path.isfile(s) and os.path.splitext(s)[1].lower() in globalVars.fileExpansions) or re.search("^https?://.+\..+/.*$", s)!=None:
                 pathList.append(s)
+            elif os.path.isfile(s) and os.path.splitext(s)[1].lower() == ".url":
+                try: 
+                    configP = configparser.ConfigParser()
+                    configP.read(s)
+                    url = configP["InternetShortcut"]["url"]
+                    if re.search("^https?://.+\..+/.*$", url)!=None: pathList.append(url)
+                except: pass
             elif os.path.isdir(s):
                 _appendDirList(pathList, s, errorList)
             elif os.path.isfile(s):

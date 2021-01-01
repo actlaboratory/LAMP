@@ -281,7 +281,7 @@ class Events(BaseEvents):
 			rtnCode = d.Show()
 			if rtnCode == d.PLAYLIST:
 				listManager.addItems([d.GetValue()], globalVars.app.hMainView.playlistView)
-			elif rtnCode == dialog.QUEUE:
+			elif rtnCode == d.QUEUE:
 				listManager.addItems([d.GetValue()], globalVars.app.hMainView.queueView)
 			else:
 				return

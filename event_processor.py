@@ -315,13 +315,15 @@ class eventProcessor():
         if ret == False:
             if self.playError() == constants.DIALOG_PE_CONTINUE:
                 self.playingList = constants.PLAYLIST
-                if not self.fileChange(): self.stop()
+                ret = self.previousFile()
             else: self.stop()
             return False
         elif ret == errorCodes.END:
             if self.repeatLoopFlag == 2 and len(globalVars.app.hMainView.playlistView) >= 1: #ループ再生
                 globalVars.app.hMainView.playlistView.setPointer(len(globalVars.app.hMainView.playlistView) - 1)
                 return self.play()
+            if globalVars.play.getStatus() == PLAYER_STATUS_PLAYING: view_manager.buttonSetPause()
+            else: view_manager.buttonSetPlay()
             return False
         else: return True
 
@@ -343,7 +345,6 @@ class eventProcessor():
     def nextFile(self, button=False):
         ret = False
         if button==True and globalVars.play.getStatus() == PLAYER_STATUS_STOPPED: return
-        print("kita")
         if not globalVars.play.isDeviceOk(): return False
         if self.shuffleCtrl == None:
             ret = listManager.next(self.playingList)
@@ -360,6 +361,7 @@ class eventProcessor():
                 self.playingList = constants.PLAYLIST
                 globalVars.app.hMainView.playlistView.setPointer(0)
                 return self.play()
+            else: self.stop()
             return False
         else: return True
 
