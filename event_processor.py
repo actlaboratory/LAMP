@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+# Copyright (C) 2020-2021 Hiroki Fujii <hfujii@hisystron.com>
 
 import os, sys, platform, wx
 import winsound
@@ -27,6 +27,7 @@ class eventProcessor():
         self.muteFlag = False #初期値はミュート解除
         self.shuffleCtrl = None
         self.fileChanging = False # ファイル送りの多重呼び出し防止
+        self.errorSkipCount = 0
 
     def freeBass(self):
         # bass.dllをフリー
@@ -163,6 +164,7 @@ class eventProcessor():
             ret = globalVars.play.play()
         else: ret = False
         if ret:
+            self.errorSkipCount = 0 #エラースキップのカウンタをリセット
             self.playingList = listPorQ
             if ret:
                 view_manager.buttonSetPause()
@@ -195,6 +197,7 @@ class eventProcessor():
             else: ret = False
         else: ret = False
         if ret:
+            self.errorSkipCount = 0 #エラースキップのカウンタをリセット
             view_manager.buttonSetPause()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
             self.refreshTagInfo()
@@ -216,6 +219,14 @@ class eventProcessor():
             else: return None
         except: return None
 
+    def endErrorSkip(self): #エラースキップを必要ならば終了する
+        if self.errorSkipCount > 20:
+            self.stop()
+            globalVars.app.hMainView.notification.show(_("一定回数連続して再生に失敗しました。\n停止します。"), 2)
+            globalVars.app.say(_("一定回数連続して再生に失敗しました。\n停止します。"))
+            return True
+        else: return False
+    
     def playError(self):
         # 再生エラーの処理
         if globalVars.app.config.getboolean("notification", "ignoreError", True): return 0
@@ -315,6 +326,8 @@ class eventProcessor():
         if ret == False:
             if self.playError() == constants.DIALOG_PE_CONTINUE:
                 self.playingList = constants.PLAYLIST
+                self.errorSkipCount += 1
+                if self.endErrorSkip(): return False
                 ret = self.previousFile()
             else: self.stop()
             return False
@@ -353,6 +366,8 @@ class eventProcessor():
         if ret == False:
             if self.playError() == constants.DIALOG_PE_CONTINUE:
                 self.playingList = constants.PLAYLIST
+                self.errorSkipCount += 1
+                if self.endErrorSkip(): return False
                 return self.nextFile()
             else: self.stop()
             return ret
@@ -366,6 +381,7 @@ class eventProcessor():
         else: return True
 
     def stop(self):
+        self.errorSkipCount = 0 #エラースキップのカウンタをリセット
         view_manager.clearStaticInfoView() #スクリーンリーダ用リストの更新
         globalVars.app.hMainView.playlistView.setPointer(-1)
         globalVars.play.stop()
