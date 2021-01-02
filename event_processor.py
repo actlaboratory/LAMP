@@ -222,7 +222,7 @@ class eventProcessor():
     def endErrorSkip(self): #エラースキップを必要ならば終了する
         if self.errorSkipCount > 20:
             self.stop()
-            globalVars.app.hMainView.notification.show(_("一定回数連続して再生に失敗しました。\n停止します。"), 2)
+            globalVars.app.hMainView.notification.show(_("一定回数連続して再生に失敗しました。\n停止します。"), 4)
             globalVars.app.say(_("一定回数連続して再生に失敗しました。\n停止します。"))
             return True
         else: return False
@@ -343,7 +343,10 @@ class eventProcessor():
     def playButtonControl(self):
         # 再生・一時停止を実行
         s = globalVars.play.getStatus()
-        if s == PLAYER_STATUS_DEVICEERROR: return
+        if s == PLAYER_STATUS_DEVICEERROR:
+            globalVars.app.hMainView.notification.show(_("再生デバイスに問題があります。\n設定、または接続を確認してください。"), 4)
+            globalVars.app.say(_("再生デバイスに問題があります。\n設定、または接続を確認してください。"))
+            return
         if s == PLAYER_STATUS_PLAYING:
             self.pause()
         elif globalVars.play.getStatus() == PLAYER_STATUS_PAUSED:
