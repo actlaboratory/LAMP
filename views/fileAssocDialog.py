@@ -1,10 +1,9 @@
-#file assoc dialog
-# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+#file assoc view
+# Copyright (C) 2020-2021 Hiroki Fujii <hfujii@hisystron.com>
 
 import wx
 import globalVars, fileAssocUtil, fxManager
 from views import baseDialog, ViewCreator, mkDialog, mkDialog
-from soundPlayer import player
 
 UNSET = 1001
 
@@ -17,21 +16,24 @@ def assocDialog():
         for s in l:
             if not fileAssocUtil.setAssoc(s, "lamp.audio"):
                 e = mkDialog.Dialog("fileAssocError")
-                e.Initialize(_("エラー"), _("ファイル関連付け情報の書き込みに失敗しました。"), ("了解",))
+                e.Initialize(_("エラー"), _("ファイル関連付け情報の書き込みに失敗しました。"), ("OK",), sound=False)
                 fxManager.error()
                 e.Show()
-                break
-            nd = mkDialog.Dialog("fileAssocOk")
-            nd.Initialize(_("拡張子関連付け完了"), _("ファイルの関連付け情報を書き込みました。\r\nファイルのコンテキストメニュー内、\r\n[プログラムから開く] > [別のプログラムを選択]\r\nに表示されます。"), ("了解",))
-            nd.Show()
+                return
+        nd = mkDialog.Dialog("fileAssocOk")
+        nd.Initialize(_("拡張子関連付け完了"), _("ファイルの関連付け情報を書き込みました。\r\nファイルのコンテキストメニュー内、\r\n[プログラムから開く] > [別のプログラムを選択]\r\nに表示されます。"), ("OK",), sound=False)
+        fxManager.confirm()
+        nd.Show()
     elif r == UNSET:
         if fileAssocUtil.unsetAssoc("lamp.audio"):
             nd = mkDialog.Dialog("unsetFileAssocOk")
-            nd.Initialize(_("関連付け解除完了"), _("ファイルの関連付けを解除しました。"), ("OK",))
+            nd.Initialize(_("関連付け解除完了"), _("ファイルの関連付けを解除しました。"), ("OK",), sound=False)
+            fxManager.confirm()
             nd.Show()
         else:
             e = mkDialog.Dialog("unsetFileAssocError")
-            e.Initialize(_("エラー"), _("ファイルの関連付けを解除できませんでした。"), ("OK",))
+            e.Initialize(_("エラー"), _("ファイルの関連付けを解除できませんでした。"), ("OK",), sound=False)
+            fxManager.error()
             fxManager.error()
             e.Show()
 

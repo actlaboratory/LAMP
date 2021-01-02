@@ -6,7 +6,6 @@ import wx
 import os
 import globalVars
 import views.ViewCreator
-from views import mkDialog
 from soundPlayer.constants import *
 
 import views.ViewCreator

@@ -232,7 +232,7 @@ class eventProcessor():
         if globalVars.app.config.getboolean("notification", "ignoreError", True): return 0
         fxManager.error()
         d = mkDialog.Dialog("playErrorDialog")
-        d.Initialize(_("再生時エラー"), _("このファイルは再生できません。"), (_("継続"),_("停止")))
+        d.Initialize(_("再生時エラー"), _("このファイルは再生できません。"), (_("継続"),_("停止")), sound=False)
         return d.Show()
 
     def pause(self, pause=True, force=False):

@@ -1,5 +1,5 @@
 #"SendTo" Manager
-#Copyright (C) 2019-2020 Hiroki Fujii <hfujii@hisystron.com>
+#Copyright (C) 2020-2021 Hiroki Fujii <hfujii@hisystron.com>
 
 import win32com, sys, os
 import constants, fxManager
@@ -11,7 +11,8 @@ def sendToCtrl(label):
     sFile = SENDTO_PATH + str(label) + ".lnk"
     if os.path.isfile(sFile):
         d = mkDialog.Dialog("sendToDeleteDialog")
-        d.Initialize(_("確認"), _("%sは、送るメニューに登録されています。\n登録を解除しますか。" %constants.APP_NAME), (_("はい")+"(&Y)", _("いいえ")+"(&N)"))
+        d.Initialize(_("確認"), _("%sは、送るメニューに登録されています。\n登録を解除しますか。" %constants.APP_NAME), (_("はい")+"(&Y)", _("いいえ")+"(&N)"), sound=False)
+        fxManager.confirm()
         r = d.Show()
         if r == 1: return
         else:
@@ -41,10 +42,11 @@ def _makeSendTo(label):
 def _error(message):
     fxManager.error()
     d = mkDialog.Dialog("sendToErrorDialog")
-    d.Initialize(_("エラー"), message, ("OK",))
+    d.Initialize(_("エラー"), message, ("OK",), sound=False)
     d.Show()
 
 def _ok(message):
+    fxManager.confirm()
     d = mkDialog.Dialog("sendToSuccessDialog")
-    d.Initialize(_("完了"), message, ("OK",))
+    d.Initialize(_("完了"), message, ("OK",), sound=False)
     d.Show()

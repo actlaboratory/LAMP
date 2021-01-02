@@ -63,13 +63,13 @@ class Dialog(BaseDialog):
     def onButtonClick(self, evt):
         if os.path.exists(self.GetData())==False and self.type != 2: #URI以外のファイルパスエラー
             d = mkDialog.Dialog("pathErrorDialog")
-            d.Initialize(_("パスエラー"), _("入力されたパスは存在しません。"),(("OK"),))
+            d.Initialize(_("パスエラー"), _("入力されたパスは存在しません。"),("OK",), sound=False)
             fxManager.error()
             d.Show()
             return None
         elif re.search("https?://.+\..+", self.GetData()) == None and self.type == 2: #URLエラー
             d = mkDialog.Dialog("urlErrorDialog")
-            d.Initialize(_("パスエラー"), _("入力されたURLに問題があります。"),(("OK"),))
+            d.Initialize(_("パスエラー"), _("入力されたURLに問題があります。"),("OK",), sound=False)
             fxManager.error()
             d.Show()
             return None

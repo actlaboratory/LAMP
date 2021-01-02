@@ -1,10 +1,11 @@
-# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+# Copyright (C) 2020_2021 Hiroki Fujii <hfujii@hisystron.com>
 
 import wx
 import os
 import pickle
 import history
 import datetime
+import fxManager
 import globalVars
 import menuItemsStore
 import listManager
@@ -36,7 +37,8 @@ def loadM3u(path=None, playlist=2):
         f.close()
     else:
         ed = mkDialog.Dialog("m3uLoadErrorDialog")
-        ed.Initialize(_("読み込みエラー"), _("プレイリストファイルの読み込みに失敗しました。"), ("OK",))
+        ed.Initialize(_("読み込みエラー"), _("プレイリストファイルの読み込みに失敗しました。"), ("OK",), sound=False)
+        fxManager.error()
         return ed.Show()
     if playlist == 2: #REPLACE
         if closeM3u() == False: return rtn #closeがキャンセルされたら中止
@@ -74,18 +76,21 @@ def closeM3u():
         if loadM3u(globalVars.listInfo.playlistFile, LOAD_ONLY) != lst:
             if os.path.splitext(globalVars.listInfo.playlistFile)[1] == ".m3u": #変換を確認
                 d = mkDialog.Dialog("m3uConversionConfirmDialog")
-                d.Initialize(_("プレイリスト変換確認"), _("このプレイリストは変更されています。\nm3u8ファイルに変換して保存しますか？"), (_("保存"), _("破棄"), _("キャンセル")))
+                d.Initialize(_("プレイリスト変換確認"), _("このプレイリストは変更されています。\nm3u8ファイルに変換して保存しますか？"), (_("保存"), _("破棄"), _("キャンセル")), sound=False)
+                fxManager.confirm()
                 c = d.Show()
             elif os.path.splitext(globalVars.listInfo.playlistFile)[1] == ".m3u8": #上書きを確認
                 d = mkDialog.Dialog("m3uOverwriteConfirmDialog")
-                d.Initialize(_("プレイリスト上書き保存の確認"), _("このプレイリストは変更されています。\n上書き保存しますか？"), (_("上書き"), _("破棄"), _("キャンセル")))
+                d.Initialize(_("プレイリスト上書き保存の確認"), _("このプレイリストは変更されています。\n上書き保存しますか？"), (_("上書き"), _("破棄"), _("キャンセル")), sound=False)
+                fxManager.confirm()
                 c = d.Show()
             if c == 0: saveM3u8(globalVars.listInfo.playlistFile, False)
             elif c == wx.ID_CANCEL: return False
     else:
         if len(globalVars.app.hMainView.playlistView) != 0:
             d = mkDialog.Dialog("m3uSaveConfirmDialog")
-            d.Initialize(_("プレイリスト保存の確認"), _("このプレイリストは変更されています。\n保存しますか？"), (_("保存"), _("破棄"), _("キャンセル")))
+            d.Initialize(_("プレイリスト保存の確認"), _("このプレイリストは変更されています。\n保存しますか？"), (_("保存"), _("破棄"), _("キャンセル")), sound=False)
+            fxManager.confirm()
             c = d.Show()
             if c == 0: saveM3u8(None, False)
             elif c == wx.ID_CANCEL: return False

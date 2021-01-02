@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 # sleepTimer view
-# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+# Copyright (C) 2020-2021 Hiroki Fujii <hfujii@hisystron.com>
 
 from soundPlayer.constants import *
 import wx
 import os
+import fxManager
 import globalVars
 from views import mkDialog
 
@@ -119,10 +120,12 @@ class Dialog(BaseDialog):
 
     def errorDialog(self, message):
         d = mkDialog.Dialog("sleepTimerErrorDialog")
-        d.Initialize(_("エラー"), message, (_("やり直す"),))
+        d.Initialize(_("エラー"), message, (_("やり直す"),), sound=False)
+        fxManager.error()
         d.Show()
 
     def worningDialog(self, message):
         d = mkDialog.Dialog("sleepTimerWorningDialog")
-        d.Initialize(_("お知らせ"), message, ("OK",))
+        d.Initialize(_("お知らせ"), message, ("OK",), sound=False)
+        fxManager.confirm()
         d.Show()

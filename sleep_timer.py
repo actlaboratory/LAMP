@@ -1,7 +1,8 @@
-# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+# Copyright (C) 2020_2021 Hiroki Fujii <hfujii@hisystron.com>
 
 import wx
 import globalVars
+import fxManager
 import ctypes
 import os
 import time
@@ -41,7 +42,8 @@ class sleepTimer():
             m = m + _("キューの再生が完了したとき、以下を実行します。\n")
         m += _("動作: %s") % self.endValue
         d = mkDialog.Dialog("sleepIndicatorDialog")
-        d.Initialize(_("作動状況"), m, (_("変更"), _("停止"), _("閉じる")))
+        d.Initialize(_("作動状況"), m, (_("変更"), _("停止"), _("閉じる")), sound=False)
+        fxManager.confirm()
         r = d.Show()
         if r == 1:
             self.__init__()

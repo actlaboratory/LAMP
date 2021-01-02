@@ -6,7 +6,6 @@ import configparser
 import globalVars, constants, view_manager, errorCodes, fxManager
 from soundPlayer.bass import pybass, pytags
 from views import objectDetail
-from views import mkDialog
 from views import mkProgress
 from views import loadErrorDialog
 
