@@ -27,3 +27,9 @@ CopyLight (c)2019-2021 Hiroki Fujii,ACT laboratory All lights reserved.
 
 各ライセンスは、licensesディレクトリ内に格納されています。
 
+
+※本ソフトウェアには、以下提供の素材が含まれます。
+
+・フリー音楽素材/魔王魂: https://maoudamashii.jokersounds.com/
+	・load.mp3
+	・error.mp3
