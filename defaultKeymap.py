@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 #default key map
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
+#Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
 
 defaultKeymap={}
 
@@ -30,8 +31,8 @@ defaultKeymap["MAINVIEW"]={
 	"PREVIOUS_TRACK": "ctrl+B",
 	"FAST_FORWARD": "ctrl+rightarrow",
 	"REWIND": "ctrl+leftarrow",
-	"SKIP": "alt+leftarrow",
-	"REVERSE_SKIP": "alt+rightarrow",
+	"SKIP": "alt+rightarrow",
+	"REVERSE_SKIP": "alt+leftarrow",
 	"SKIP_INTERVAL_INCREASE": "alt+uparrow",
 	"SKIP_INTERVAL_DECREASE": "alt+downarrow",
 	"REPEAT_LOOP": "ctrl+L",

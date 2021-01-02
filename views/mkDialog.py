@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
-# sample dialog
+# make accessible dialog
+# Copyright (C) 2020-2021 Hiroki Fujii <hfujii@hisystron.com>
 
 import wx
 import os
+from soundPlayer import fxPlayer
 
 import views.ViewCreator
 from logging import getLogger
 from views.baseDialog import *
 
 class Dialog(BaseDialog):
-    def Initialize(self, title,message,btnTpl):
+    def Initialize(self, title,message,btnTpl, sound=True):
         self.title=title
         self.message=message
         self.btnTpl=btnTpl
@@ -18,6 +20,7 @@ class Dialog(BaseDialog):
         self.btnList = [] #okとキャンセる以外のボタンハンドル
         self.cancelButton = False #キャンセルを設置するときは後でTrue
         self.InstallControls()
+        self.sound = sound
 
         return True
 
@@ -32,6 +35,11 @@ class Dialog(BaseDialog):
                 self.cancelButton = True
             else: self.btnList.append(self.creator.button(s,self.onButtonClick))
 
+    def Show(self):
+        if self.sound:
+            fxPlayer.playFx("./fx/confirm.mp3")
+        return super().Show()
+    
     def GetData(self):
         return self.message
 

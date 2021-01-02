@@ -2,6 +2,7 @@
 #main view
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 #Copyright (C) 2019-2020 yamahubuki <itiro.ishino@gmail.com>
+#Copyright (C) 2020-2021 Hiroki Fujii <hfujii@hisystron.com>
 
 import subprocess
 from views import lampViewObject
@@ -34,7 +35,6 @@ from soundPlayer.constants import *
 
 import view_manager
 import sendToManager
-from views import mkDialog
 from views import fileAssocDialog
 
 from logging import getLogger
@@ -280,7 +280,7 @@ class Events(BaseEvents):
 			rtnCode = d.Show()
 			if rtnCode == d.PLAYLIST:
 				listManager.addItems([d.GetValue()], globalVars.app.hMainView.playlistView)
-			elif rtnCode == dialog.QUEUE:
+			elif rtnCode == d.QUEUE:
 				listManager.addItems([d.GetValue()], globalVars.app.hMainView.queueView)
 			else:
 				return
@@ -420,7 +420,7 @@ class Events(BaseEvents):
 			if refName in keys:
 				keyData[title]=keys[refName]
 			else:
-				keyData[title]="なし"
+				keyData[title]=_("なし")
 			menuData[title]=refName
 
 		entries=[]

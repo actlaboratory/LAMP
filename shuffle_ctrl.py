@@ -1,3 +1,6 @@
+# shuffle controler for LAMP
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+
 import random, math
 import globalVars, constants, listManager, errorCodes
 

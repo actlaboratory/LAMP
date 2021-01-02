@@ -1,5 +1,8 @@
+# Copyright (C) 2020_2021 Hiroki Fujii <hfujii@hisystron.com>
+
 import wx
 import globalVars
+import fxManager
 import ctypes
 import os
 import time
@@ -27,19 +30,20 @@ class sleepTimer():
 
     def check(self):
         if not self.sleepTimer: return True
-        m = "スリープタイマーは起動中です。\n"
+        m = _("スリープタイマーは起動中です。\n")
         if self.timeStarted != None:
             t = self._timeStr(self.timeStarted, self.timer.GetInterval() / 1000)
-            if t != None: m = m + _("あと%sで発動し、以下を実行します。\n" % t)
+            if t != None: m = m + _("あと%sで発動し、以下を実行します。\n") % t
         elif self.fileTimer != False:
-            m = m + _("あと、%d曲で、以下を実行します。\n" %(int(self.fileTimer) - self.fileCount))
+            m = m + _("あと、%d曲で、以下を実行します。\n") %(int(self.fileTimer) - self.fileCount)
         elif self.allFileTimer:
             m = m + _("すべての再生が完了したとき、以下を実行します。\n")
         elif self.queueTimer:
             m = m + _("キューの再生が完了したとき、以下を実行します。\n")
-        m += _("動作: %s" % self.endValue)
+        m += _("動作: %s") % self.endValue
         d = mkDialog.Dialog("sleepIndicatorDialog")
-        d.Initialize(_("作動状況"), m, (_("変更"), _("停止"), _("閉じる")))
+        d.Initialize(_("作動状況"), m, (_("変更"), _("停止"), _("閉じる")), sound=False)
+        fxManager.confirm()
         r = d.Show()
         if r == 1:
             self.__init__()
@@ -57,9 +61,9 @@ class sleepTimer():
         if i-(hour*3600) > 0: min = (i - hour) // 60
         if i-(hour*3600)-(min*60) > 0: sec = i - (hour*3600) - (min*60)
         l = []
-        if hour > 0: l.append(_("%d時間" % hour))
-        if min > 0: l.append(_("%d分" % min))
-        l.append(_("%d秒" % sec))
+        if hour > 0: l.append(_("%d時間") % hour)
+        if min > 0: l.append(_("%d分") % min)
+        l.append(_("%d秒") % sec)
         return "".join(l)
     
     #エラー処理後に呼び出す

@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 # global Vars
-#Copyright (C) 20XX anonimous <anonimous@sample.com>
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
 
 
 """

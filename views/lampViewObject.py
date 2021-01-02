@@ -1,3 +1,6 @@
+# wx view objects for LAMP
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+
 import wx
 import globalVars, listManager, menuItemsStore, lampClipBoardCtrl
 from views.base import BaseMenu, BaseEvents
@@ -129,7 +132,7 @@ class queue(virtualListCtrlBase.virtualListCtrl):
 
     def onContextMenu(self, evt):
         self.menu.Apply(self, self.identifier)
-        evt.GetEventObject().PopupMenu(self.menu.hPopupMenu)
+        evt.GetEventObject().PopupMenu(self.menu.hPopupMenu, evt)
 
 class Menu(BaseMenu):
     def Apply(self,target, identifier):

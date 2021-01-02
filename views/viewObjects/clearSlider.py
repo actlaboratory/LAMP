@@ -127,7 +127,7 @@ class clearSlider(sliderBase.slider):
 
     def onMouseMotion(self, evt):
         if self.enableToolTip:
-            if self.pos2value(evt.GetX())<self.GetMin() or self.pos2value(evt.GetX())>self.GetMax():
+            if round(self.pos2value(evt.GetX()))<self.GetMin() or round(self.pos2value(evt.GetX()))>self.GetMax():
                 if self.toolTip != None:
                     self.toolTip.destroy()
                     self.toolTip = None

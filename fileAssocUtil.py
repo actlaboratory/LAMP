@@ -1,3 +1,6 @@
+# file assoc util
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+
 import wx, itertools, sys, winreg, logging
 import globalVars, shellapi, constants
 

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 #default config
+# Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
 
 from ConfigManager import *
 
@@ -35,13 +36,13 @@ class DefaultSettings:
 			"startupPlaylist": ""
 		}
 		config["volume"]={
-			"default": "100",
+			"default": "50",
 		}
 		config["notification"]={
 			"sound": True,
 			"errorSound": True,
-			"outputDevice": "default",
-			"ignoreError": True
+			"outputDevice": "same",
+			"ignoreError": False
 		}
 		config["network"]={
 			"manual_proxy": False,
