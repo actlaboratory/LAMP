@@ -213,7 +213,7 @@ class eventProcessor():
 
     def inUrlCheck(self, url):
         try:
-            r = requests.get(url, timeput=5)
+            r = requests.get(url, timeout=5)
             s = r.text.split("\n")[0]
             if re.search("https?://.+\..+", s) != None: return s
             else: return None

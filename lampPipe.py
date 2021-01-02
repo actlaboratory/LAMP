@@ -1,6 +1,7 @@
 # Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
 
-import wx, namedPipe, globalVars, constants, sys, os, m3uManager, listManager
+import wx, configparser, re
+import namedPipe, globalVars, constants, sys, os, m3uManager, listManager
 
 pipeServer = None
 
@@ -28,10 +29,17 @@ def stopPipeServer():
 
 def onReceive(msg):
     if os.path.exists(msg):
-        if os.path.isdir(msg) or os.path.splitext(msg)[1].lower() in globalVars.fileExpansions:
+        if os.path.isdir(msg) or os.path.splitext(msg)[1].lower() == ".url" or os.path.splitext(msg)[1].lower() in globalVars.fileExpansions:
             setting = globalVars.app.config.getstring("player", "fileInterrupt", "play", ("play", "addPlaylist", "addQueue", "addQueueHead"))
             if setting == "play":
-                if os.path.isfile(msg): wx.CallAfter(globalVars.eventProcess.forcePlay, msg)
+                if os.path.splitext(msg)[1].lower() == ".url":
+                    try: 
+                        configP = configparser.ConfigParser()
+                        configP.read(msg)
+                        url = configP["InternetShortcut"]["url"]
+                        if re.search("^https?://.+\..+/.*$", url)!=None: wx.CallAfter(globalVars.eventProcess.forcePlay, url)
+                    except: pass
+                elif os.path.isfile(msg): wx.CallAfter(globalVars.eventProcess.forcePlay, msg)
                 else: wx.CallAfter(listManager.addItems, [msg], globalVars.app.hMainView.queueView, 0)
             elif setting == "addPlaylist":
                 if os.path.isfile(msg): wx.CallAfter(listManager.addItems, [msg], globalVars.app.hMainView.playlistView)
