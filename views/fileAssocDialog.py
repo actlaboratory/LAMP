@@ -34,7 +34,6 @@ def assocDialog():
             e = mkDialog.Dialog("unsetFileAssocError")
             e.Initialize(_("エラー"), _("ファイルの関連付けを解除できませんでした。"), ("OK",), sound=False)
             fxManager.error()
-            fxManager.error()
             e.Show()
 
 class dialog(baseDialog.BaseDialog):
@@ -70,7 +69,7 @@ class dialog(baseDialog.BaseDialog):
     def onOkBtn(self, evt):
         if len(self.GetData()) == 0:
             d = mkDialog.Dialog("fileType_notSelected")
-            d.Initialize(_("エラー"), _("1つ以上のファイル形式を選択してください。"), ("OK",))
+            d.Initialize(_("エラー"), _("1つ以上のファイル形式を選択してください。"), ("OK",), sound=False)
             fxManager.error()
             d.Show()
 
