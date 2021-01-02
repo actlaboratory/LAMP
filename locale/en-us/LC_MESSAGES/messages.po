@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: application\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-03 02:39+0900\n"
-"PO-Revision-Date: 2021-01-03 02:41+0900\n"
+"POT-Creation-Date: 2021-01-03 03:14+0900\n"
+"PO-Revision-Date: 2021-01-03 03:15+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -469,12 +469,12 @@ msgstr ""
 "Are you sure to remove it?"
 
 #: sendToManager.py:14
-msgid "はい"
-msgstr "Yes"
+msgid "はい(&Y)"
+msgstr "&Yes"
 
 #: sendToManager.py:14
-msgid "いいえ"
-msgstr "No"
+msgid "いいえ(&N)"
+msgstr "&No"
 
 #: sendToManager.py:21
 msgid "送るメニューの登録を解除しました。"
@@ -1451,6 +1451,12 @@ msgstr "software details"
 msgid ""
 "ライセンス/著作権情報については、同梱の license.txt を参照してください。"
 msgstr "See the included license.txt for licensing / copyright information."
+
+#~ msgid "はい"
+#~ msgstr "Yes"
+
+#~ msgid "いいえ"
+#~ msgstr "No"
 
 #~ msgid "言語(&L)"
 #~ msgstr "&Language"

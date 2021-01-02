@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: application\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-03 02:39+0900\n"
+"POT-Creation-Date: 2021-01-03 03:14+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -453,11 +453,11 @@ msgid ""
 msgstr ""
 
 #: sendToManager.py:14
-msgid "はい"
+msgid "はい(&Y)"
 msgstr ""
 
 #: sendToManager.py:14
-msgid "いいえ"
+msgid "いいえ(&N)"
 msgstr ""
 
 #: sendToManager.py:21
