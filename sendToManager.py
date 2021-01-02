@@ -11,7 +11,7 @@ def sendToCtrl(label):
     sFile = SENDTO_PATH + str(label) + ".lnk"
     if os.path.isfile(sFile):
         d = mkDialog.Dialog("sendToDeleteDialog")
-        d.Initialize(_("確認"), _("%sは、送るメニューに登録されています。\n登録を解除しますか。" %constants.APP_NAME), (_("はい")+"(&Y)", _("いいえ")+"(&N)"), sound=False)
+        d.Initialize(_("確認"), _("%sは、送るメニューに登録されています。\n登録を解除しますか。") %constants.APP_NAME, (_("はい(&Y)"), _("いいえ(&N)")), sound=False)
         fxManager.confirm()
         r = d.Show()
         if r == 1: return
