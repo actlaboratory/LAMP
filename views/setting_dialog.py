@@ -52,10 +52,11 @@ class settingDialog(baseDialog.BaseDialog):
 
         # 一般
         generalCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("一般"), style=wx.ALL, margin=20)
-        self.darkMode = generalCreator.checkbox(_("ダークモード（白黒反転）(&D)"))
+        self.darkMode = generalCreator.checkbox(_("ダークモード（LAMPの再起動が必要）(&D)"))
         if globalVars.app.config.getstring("view", "colormode", "white", ("white", "dark")) == "white":
             self.darkMode.SetValue(False)
         else: self.darkMode.SetValue(True)
+        self.langCombo,langLabel = generalCreator.combobox(_("言語（LAMPの再起動が必要）(&L)"), self.lang_name, textLayout=wx.HORIZONTAL)
         self.fadeOut = generalCreator.checkbox(_("終了時に曲をフェードアウトする(&C)"))
         if globalVars.app.config.getboolean("player", "fadeOutOnExit", False):
             self.fadeOut.SetValue(True)
@@ -88,7 +89,6 @@ class settingDialog(baseDialog.BaseDialog):
         startupListCreator = ViewCreator.ViewCreator(self.viewMode, startupCreator.GetPanel(), startupCreator.GetSizer(), wx.HORIZONTAL)
         self.startupList, dummy = startupListCreator.inputbox(_("起動時に読み込むプレイリスト(&P)"), defaultValue=globalVars.app.config.getstring("player", "startupPlaylist", ""), x=600, textLayout=None)
         self.startupListSelectBtn = startupListCreator.button(_("参照"), self.onButton)
-        self.langCombo,langLabel = startupCreator.combobox(_("言語(&L)"), self.lang_name, textLayout=wx.HORIZONTAL)
 
         # ネットワーク
         netCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("ネットワーク"), style=wx.ALL, margin=20)
