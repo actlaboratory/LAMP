@@ -213,7 +213,7 @@ class eventProcessor():
 
     def inUrlCheck(self, url):
         try:
-            r = requests.get(url)
+            r = requests.get(url, timeput=5)
             s = r.text.split("\n")[0]
             if re.search("https?://.+\..+", s) != None: return s
             else: return None
@@ -343,7 +343,7 @@ class eventProcessor():
     def playButtonControl(self):
         # 再生・一時停止を実行
         s = globalVars.play.getStatus()
-        if s == PLAYER_STATUS_DEVICEERROR:
+        if not globalVars.play.isDeviceOk():
             globalVars.app.hMainView.notification.show(_("再生デバイスに問題があります。\n設定、または接続を確認してください。"), 4)
             globalVars.app.say(_("再生デバイスに問題があります。\n設定、または接続を確認してください。"))
             return
@@ -441,7 +441,10 @@ class eventProcessor():
     
     # リストビューで選択されたアイテムの処理
     def listSelection(self, evtObj):
-        if not globalVars.play.isDeviceOk(): return False #デバイス異常時は処理を中止
+        if not globalVars.play.isDeviceOk():
+            globalVars.app.hMainView.notification.show(_("再生デバイスに問題があります。\n設定、または接続を確認してください。"), 4)
+            globalVars.app.say(_("再生デバイスに問題があります。\n設定、または接続を確認してください。"))
+            return False #デバイス異常時は処理を中止
         if evtObj == globalVars.app.hMainView.playlistView:
             lst = constants.PLAYLIST
         elif evtObj == globalVars.app.hMainView.queueView:
