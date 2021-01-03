@@ -52,6 +52,7 @@ class virtualListCtrl(listCtrlBase.listCtrl):
 
     def clear(self):
         self.lst.clear()
+        self.Select(-1, 0)
         super().SetItemCount(0)
 
     def copy(self):
