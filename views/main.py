@@ -29,6 +29,7 @@ import settings
 import ConfigManager
 import m3uManager
 import effector
+import startupListSetter
 import listManager
 from soundPlayer import player
 from soundPlayer.constants import *
@@ -209,7 +210,7 @@ class Menu(BaseMenu):
 		self.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
 		
 		# プレイリストメニューの中身
-		self.RegisterMenuCommand(self.hPlaylistMenu,"PLAYLIST_HISTORY_LABEL",_("履歴（20件まで）"))
+		self.RegisterMenuCommand(self.hPlaylistMenu, ["SET_STARTUPLIST", "PLAYLIST_HISTORY_LABEL"])
 		self.hPlaylistMenu.Enable(menuItemsStore.getRef("PLAYLIST_HISTORY_LABEL"), False)
 		
 		#操作メニューの中身
@@ -238,6 +239,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hSettingsMenu, "SET_DEVICE_SUB", _("再生出力先の変更"), self.hDeviceSubMenu)
 		self.RegisterMenuCommand(self.hSettingsMenu,
 			["FILE_ASSOCIATE", "SET_SENDTO", "SET_KEYMAP", "SET_HOTKEY", "ENVIRONMENT"])
+		self.hPlaylistMenu.Enable(menuItemsStore.getRef("SET_STARTUPLIST"), False)
 
 		#ヘルプメニューの中身
 		self.RegisterMenuCommand(self.hHelpMenu, ["HELP", "CHECK_UPDATE", "VERSION_INFO"])
@@ -375,6 +377,8 @@ class Events(BaseEvents):
 			else: globalVars.play.setDevice(selected - constants.DEVICE_LIST_MENU)
 		elif selected >= constants.PLAYLIST_HISTORY and selected < constants.PLAYLIST_HISTORY+ 20:
 			m3uManager.loadM3u(globalVars.m3uHistory.getList()[selected - constants.PLAYLIST_HISTORY])
+		elif selected==menuItemsStore.getRef("SET_STARTUPLIST"):
+			startupListSetter.run()
 		elif selected==menuItemsStore.getRef("FILE_ASSOCIATE"):
 			fileAssocDialog.assocDialog()
 		elif selected==menuItemsStore.getRef("SET_SENDTO"):
@@ -469,12 +473,12 @@ class Events(BaseEvents):
 		elif menuObject == self.parent.menu.hPlaylistMenu:
 			menu = self.parent.menu.hPlaylistMenu
 			# 履歴部分を削除
-			for i in range(menu.GetMenuItemCount() - 1):
-				menu.DestroyItem(menu.FindItemByPosition(1))
+			for i in range(menu.GetMenuItemCount() - 2):
+				menu.DestroyItem(menu.FindItemByPosition(2))
 			# 履歴部分を作成
 			index = 0
 			for path in globalVars.m3uHistory.getList():
-				menu.Insert(1, constants.PLAYLIST_HISTORY + index, path)
+				menu.Insert(2, constants.PLAYLIST_HISTORY + index, path)
 				index += 1
 		elif menuObject == self.parent.menu.hOperationMenu:
 			self.parent.menu.hOperationMenu.Check(menuItemsStore.getRef("MANUAL_SONG_FEED"), globalVars.app.config.getboolean("player", "manualSongFeed", False))
