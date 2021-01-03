@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 #default key map
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
-#Copyright (C) 2020 Hiroki Fujii <hfujii@hisystron.com>
+#Copyright (C) 2020-2021 Hiroki Fujii <hfujii@hisystron.com>
 
 defaultKeymap={}
 
@@ -16,6 +16,7 @@ defaultKeymap["MAINVIEW"]={
 	"M3U_ADD": "ctrl+shift+L",
 	"M3U_CLOSE": "ctrl+shift+C",
 	"EXIT": "ctrl+Q",
+	"SET_STARTUPLIST": "",
 	# 機能メニュー
 	"SET_SLEEPTIMER": "ctrl+shift+T",
 	"SET_EFFECTOR": "ctrl+E",
