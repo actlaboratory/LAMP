@@ -85,12 +85,12 @@ def getFileInfoProcess(tuples):
             size = os.path.getsize(l[0])
         else:
             size = 0
-        title = pytags.TAGS_Read(handle, b"%TITL").decode("shift-jis")
+        title = pytags.TAGS_Read(handle, b"%TITL").decode("cp932")
         lengthb = pybass.BASS_ChannelGetLength(handle, pybass.BASS_POS_BYTE)
         length = pybass.BASS_ChannelBytes2Seconds(handle, lengthb)
-        artist = pytags.TAGS_Read(handle, b"%ARTI").decode("shift-jis")
-        album = pytags.TAGS_Read(handle, b"%ALBM").decode("shift-jis")
-        albumArtist = pytags.TAGS_Read(handle, b"%AART").decode("shift-jis")
+        artist = pytags.TAGS_Read(handle, b"%ARTI").decode("cp932")
+        album = pytags.TAGS_Read(handle, b"%ALBM").decode("cp932")
+        albumArtist = pytags.TAGS_Read(handle, b"%AART").decode("cp932")
         pybass.BASS_StreamFree(handle)
         l.extend([size, title, length, artist, album, albumArtist])
         rtn.append(tuple(l))
