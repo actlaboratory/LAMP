@@ -299,7 +299,7 @@ class Events(BaseEvents):
 		elif selected==menuItemsStore.getRef("NEW_M3U8_SAVE"):
 			m3uManager.saveM3u8()
 		elif selected==menuItemsStore.getRef("M3U8_SAVE"):
-			m3uManager.saveM3u8(globalVars.playlist.playlistFile)
+			m3uManager.saveM3u8(globalVars.listInfo.playlistFile)
 		elif selected==menuItemsStore.getRef("M3U_ADD"):
 			m3uManager.loadM3u(None, m3uManager.ADD)
 		elif selected==menuItemsStore.getRef("M3U_CLOSE"):

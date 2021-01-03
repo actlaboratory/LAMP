@@ -66,7 +66,7 @@ class Main(AppBase.MainBase):
 				m3uManager.loadM3u(sys.argv[1])
 				m3uloaded = True
 		startupList = globalVars.app.config.getstring("player", "startupPlaylist", "")
-		if startupList != "" and m3uloaded == False: m3uManager.loadM3u(startupList, 1)
+		if startupList != "" and m3uloaded == False: m3uManager.loadM3u(startupList, 2)
 		return True
 
 	def OnExit(self):
