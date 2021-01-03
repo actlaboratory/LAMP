@@ -315,7 +315,7 @@ class Events(BaseEvents):
 			if globalVars.eventProcess.playingList == constants.PLAYLIST:
 				listManager.infoDialog(listManager.getTuple(constants.PLAYLIST))
 			else:
-				listManager.infoDialog(globalVars.listInfo.tmpTuple)
+				listManager.infoDialog(globalVars.listInfo.playingTmp)
 		# 操作メニューのイベント
 		elif selected==menuItemsStore.getRef("PLAY_PAUSE"):
 			globalVars.eventProcess.playButtonControl()
