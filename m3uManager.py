@@ -55,10 +55,12 @@ def loadM3u(path=None, playlist=2):
         if playlist == 2:
             globalVars.app.hMainView.menu.hFileMenu.SetLabel(menuItemsStore.getRef("M3U8_SAVE"), _("UTF-8プレイリストに変換"))
             globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U8_SAVE"), True)
+            globalVars.app.hMainView.menu.hPlaylistMenu.Enable(menuItemsStore.getRef("SET_STARTUPLIST"), True)
     elif os.path.splitext(globalVars.listInfo.playlistFile)[1] == ".m3u8":
         if playlist == 2:
             globalVars.app.hMainView.menu.hFileMenu.SetLabel(menuItemsStore.getRef("M3U8_SAVE"), _("プレイリストを上書き保存"))
             globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U8_SAVE"), True)
+            globalVars.app.hMainView.menu.hPlaylistMenu.Enable(menuItemsStore.getRef("SET_STARTUPLIST"), True)
     return rtn
 
 #プレイリスト自動保存
@@ -102,6 +104,7 @@ def closeM3u():
     globalVars.app.hMainView.menu.hFileMenu.SetLabel(menuItemsStore.getRef("M3U8_SAVE"), _("プレイリストを上書き保存"))
     globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U8_SAVE"), False)
     globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U_CLOSE"), False)
+    globalVars.app.hMainView.menu.hPlaylistMenu.Enable(menuItemsStore.getRef("SET_STARTUPLIST"), False)
     return True
 
 
