@@ -510,6 +510,7 @@ class Events(BaseEvents):
 		globalVars.eventProcess.refreshView()
 
 	def Exit(self, event=None):
+		if not m3uManager.closeM3u(newSave=False): return
 		globalVars.app.hMainView.timer.Stop()
 		globalVars.app.hMainView.tagInfoTimer.Stop()
 		super().Exit(event)

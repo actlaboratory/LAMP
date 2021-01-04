@@ -70,7 +70,7 @@ def autoSaveM3u8():
     saveM3U8("./pl_auto_save/"+t.strftime("%Y%m%d%H%M%s.m3u8"))
 
 #プレイリストを閉じる（）
-def closeM3u():
+def closeM3u(newSave=True):
     if globalVars.listInfo.playlistFile != None:
         lst = []
         for t in globalVars.app.hMainView.playlistView:
@@ -89,13 +89,14 @@ def closeM3u():
             if c == 0: saveM3u8(globalVars.listInfo.playlistFile, False)
             elif c == wx.ID_CANCEL: return False
     else:
-        if len(globalVars.app.hMainView.playlistView) != 0:
-            d = mkDialog.Dialog("m3uSaveConfirmDialog")
-            d.Initialize(_("プレイリスト保存の確認"), _("このプレイリストは変更されています。\n保存しますか？"), (_("保存"), _("破棄"), _("キャンセル")), sound=False)
-            fxManager.confirm()
-            c = d.Show()
-            if c == 0: saveM3u8(None, False)
-            elif c == wx.ID_CANCEL: return False
+        if newSave:
+            if len(globalVars.app.hMainView.playlistView) != 0:
+                d = mkDialog.Dialog("m3uSaveConfirmDialog")
+                d.Initialize(_("プレイリスト保存の確認"), _("このプレイリストは変更されています。\n保存しますか？"), (_("保存"), _("破棄"), _("キャンセル")), sound=False)
+                fxManager.confirm()
+                c = d.Show()
+                if c == 0: saveM3u8(None, False)
+                elif c == wx.ID_CANCEL: return False
     # 停止して削除
     globalVars.eventProcess.stop()
     globalVars.listInfo.playlistFile = None
