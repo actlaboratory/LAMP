@@ -34,7 +34,7 @@ def exchandler(type, exc, tb):
 		winsound.Beep(1500, 300)
 	else:
 		simpleDialog.winDialog("error", "An error has occured. Contact to the developer for further assistance. Detail:" + "\n".join(msg[-2:]))
-	sys.exit(-1)
+	os._exit(1)
 
 sys.excepthook=exchandler
 

@@ -58,7 +58,8 @@ class Dialog(BaseDialog):
         elif self.type==1:
             d = wx.DirDialog(None, _("フォルダを選択"))
             d.ShowModal()
-        self.iText.SetLabel(d.GetPath())
+        p = d.GetPath()
+        if p != "": self.iText.SetLabel(p)
 
     def onButtonClick(self, evt):
         if os.path.exists(self.GetData())==False and self.type != 2: #URI以外のファイルパスエラー

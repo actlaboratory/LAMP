@@ -29,6 +29,9 @@ dic={
 	"SET_EFFECTOR": _("エフェクター(&F)"),
 	"ABOUT_PLAYING": _("再生中のファイルについて(&A)"),
 	
+	# プレイリストメニュー
+	"PLAYLIST_HISTORY_LABEL": _("履歴（20件まで）"),
+	
 	# 操作メニュー
 	"PLAY_PAUSE": _("再生 / 一時停止(&P)"),
 	"STOP": _("停止(&S)"),
@@ -59,6 +62,7 @@ dic={
 
 	# 設定メニュー
 	"SET_DEVICE_SUB": _("再生出力先の変更(&O)"),
+	"SET_STARTUPLIST": _("このプレイリストを起動時に開く(&L)"),
 	"FILE_ASSOCIATE": _("ファイルの関連付け(&A)"),
 	"SET_SENDTO": _("送るメニューに登録(&S)"),
 	"SET_KEYMAP": _("ショートカットキー設定(&K)"),
