@@ -159,7 +159,7 @@ def _append(paths, lcObj, progress, id):
     progPerTmp = 0
     for path in paths:
         # リストに書き込んでdataNoに+1
-        fName = os.path.splitext(os.path.basename(path))[0]
+        fName = re.sub(r"^([0-9]{1,2}-)?[0-9]{2} (- )?", "", os.path.splitext(os.path.basename(path))[0])
         if id == -1:
             lst.append((path, fName, globalVars.listInfo.itemCounter))
         else:
