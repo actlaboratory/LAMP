@@ -62,7 +62,7 @@ dic={
 
 	# 設定メニュー
 	"SET_DEVICE_SUB": _("再生出力先の変更(&O)"),
-	"SET_STARTUPLIST": _("このプレイリストを起動時に開く"),
+	"SET_STARTUPLIST": _("このプレイリストを起動時に開く(&L)"),
 	"FILE_ASSOCIATE": _("ファイルの関連付け(&A)"),
 	"SET_SENDTO": _("送るメニューに登録(&S)"),
 	"SET_KEYMAP": _("ショートカットキー設定(&K)"),

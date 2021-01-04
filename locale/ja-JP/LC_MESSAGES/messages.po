@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: application\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-03 03:14+0900\n"
+"POT-Creation-Date: 2021-01-04 12:12+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,15 +53,15 @@ msgstr ""
 msgid "継続"
 msgstr ""
 
-#: event_processor.py:235 sleep_timer.py:45 views\main.py:82
+#: event_processor.py:235 sleep_timer.py:45 views\main.py:83
 msgid "停止"
 msgstr ""
 
-#: event_processor.py:300 views\main.py:218
+#: event_processor.py:300 views\main.py:219
 msgid "進む"
 msgstr ""
 
-#: event_processor.py:301 views\main.py:218
+#: event_processor.py:301 views\main.py:219
 msgid "戻る"
 msgstr ""
 
@@ -199,65 +199,65 @@ msgstr ""
 msgid "UTF-8プレイリストに変換"
 msgstr ""
 
-#: m3uManager.py:60 m3uManager.py:102
+#: m3uManager.py:61 m3uManager.py:104
 msgid "プレイリストを上書き保存"
 msgstr ""
 
-#: m3uManager.py:79
+#: m3uManager.py:81
 msgid "プレイリスト変換確認"
 msgstr ""
 
-#: m3uManager.py:79
+#: m3uManager.py:81
 msgid ""
 "このプレイリストは変更されています。\n"
 "m3u8ファイルに変換して保存しますか？"
 msgstr ""
 
-#: m3uManager.py:79 m3uManager.py:92 views\setting_dialog.py:110
+#: m3uManager.py:81 m3uManager.py:94 views\setting_dialog.py:110
 msgid "保存"
 msgstr ""
 
-#: m3uManager.py:79 m3uManager.py:84 m3uManager.py:92
+#: m3uManager.py:81 m3uManager.py:86 m3uManager.py:94
 #: views\setting_dialog.py:112
 msgid "破棄"
 msgstr ""
 
-#: m3uManager.py:79 m3uManager.py:84 m3uManager.py:92
+#: m3uManager.py:81 m3uManager.py:86 m3uManager.py:94
 #: views\KeyValueSettingDialogBase.py:81 views\KeyValueSettingDialogBase.py:259
 #: views\mkDialog.py:33 views\mkOpenDialog.py:47 views\sleepTimerDialog.py:59
 #: views\updateDialog.py:45
 msgid "キャンセル"
 msgstr ""
 
-#: m3uManager.py:84
+#: m3uManager.py:86
 msgid "プレイリスト上書き保存の確認"
 msgstr ""
 
-#: m3uManager.py:84
+#: m3uManager.py:86
 msgid ""
 "このプレイリストは変更されています。\n"
 "上書き保存しますか？"
 msgstr ""
 
-#: m3uManager.py:84
+#: m3uManager.py:86
 msgid "上書き"
 msgstr ""
 
-#: m3uManager.py:92
+#: m3uManager.py:94
 msgid "プレイリスト保存の確認"
 msgstr ""
 
-#: m3uManager.py:92
+#: m3uManager.py:94
 msgid ""
 "このプレイリストは変更されています。\n"
 "保存しますか？"
 msgstr ""
 
-#: m3uManager.py:113
+#: m3uManager.py:116
 msgid "プレイリストファイル保存"
 msgstr ""
 
-#: m3uManager.py:113
+#: m3uManager.py:116
 msgid "m3u8ファイル (.m3u8)"
 msgstr ""
 
@@ -310,134 +310,142 @@ msgid "再生中のファイルについて(&A)"
 msgstr ""
 
 #: menuItemsDic.py:33
-msgid "再生 / 一時停止(&P)"
-msgstr ""
-
-#: menuItemsDic.py:34
-msgid "停止(&S)"
-msgstr ""
-
-#: menuItemsDic.py:35
-msgid "早送り(&F)"
+msgid "履歴（20件まで）"
 msgstr ""
 
 #: menuItemsDic.py:36
-msgid "巻き戻し(&B)"
+msgid "再生 / 一時停止(&P)"
 msgstr ""
 
 #: menuItemsDic.py:37
-msgid "前へ / 頭出し(&R)"
+msgid "停止(&S)"
 msgstr ""
 
 #: menuItemsDic.py:38
-msgid "次へ(&N)"
+msgid "早送り(&F)"
 msgstr ""
 
 #: menuItemsDic.py:39
-msgid "スキップ(&K)"
+msgid "巻き戻し(&B)"
 msgstr ""
 
 #: menuItemsDic.py:40
-msgid "逆スキップ(&E)"
+msgid "前へ / 頭出し(&R)"
+msgstr ""
+
+#: menuItemsDic.py:41
+msgid "次へ(&N)"
 msgstr ""
 
 #: menuItemsDic.py:42
-msgid "スキップ間隔設定(&C)"
+msgid "スキップ(&K)"
 msgstr ""
 
 #: menuItemsDic.py:43
-msgid "スキップ間隔を大きくする(&I)"
+msgid "逆スキップ(&E)"
 msgstr ""
 
-#: menuItemsDic.py:44
-msgid "スキップ間隔を小さくする(&D)"
+#: menuItemsDic.py:45
+msgid "スキップ間隔設定(&C)"
 msgstr ""
 
 #: menuItemsDic.py:46
-msgid "音量(&V)"
+msgid "スキップ間隔を大きくする(&I)"
 msgstr ""
 
 #: menuItemsDic.py:47
-msgid "音量を10&0%に設定"
-msgstr ""
-
-#: menuItemsDic.py:48
-msgid "音量を上げる(&U)"
+msgid "スキップ間隔を小さくする(&D)"
 msgstr ""
 
 #: menuItemsDic.py:49
-msgid "音量を下げる(&D)"
+msgid "音量(&V)"
 msgstr ""
 
 #: menuItemsDic.py:50
-msgid "ミュート(&M)"
+msgid "音量を10&0%に設定"
+msgstr ""
+
+#: menuItemsDic.py:51
+msgid "音量を上げる(&U)"
 msgstr ""
 
 #: menuItemsDic.py:52
-msgid "リピート・ループ(&L)"
+msgid "音量を下げる(&D)"
 msgstr ""
 
 #: menuItemsDic.py:53
-msgid "リピート・ループ切り替え"
-msgstr ""
-
-#: menuItemsDic.py:54
-msgid "解除する(&N)"
+msgid "ミュート(&M)"
 msgstr ""
 
 #: menuItemsDic.py:55
-msgid "リピート(&R)"
+msgid "リピート・ループ(&L)"
 msgstr ""
 
 #: menuItemsDic.py:56
-msgid "ループ(&L)"
+msgid "リピート・ループ切り替え"
 msgstr ""
 
 #: menuItemsDic.py:57
-msgid "シャッフル再生(&H)"
+msgid "解除する(&N)"
 msgstr ""
 
 #: menuItemsDic.py:58
-msgid "手動で曲送り(&M)"
+msgid "リピート(&R)"
+msgstr ""
+
+#: menuItemsDic.py:59
+msgid "ループ(&L)"
+msgstr ""
+
+#: menuItemsDic.py:60
+msgid "シャッフル再生(&H)"
 msgstr ""
 
 #: menuItemsDic.py:61
-msgid "再生出力先の変更(&O)"
-msgstr ""
-
-#: menuItemsDic.py:62
-msgid "ファイルの関連付け(&A)"
-msgstr ""
-
-#: menuItemsDic.py:63
-msgid "送るメニューに登録(&S)"
+msgid "手動で曲送り(&M)"
 msgstr ""
 
 #: menuItemsDic.py:64
-msgid "ショートカットキー設定(&K)"
+msgid "再生出力先の変更(&O)"
 msgstr ""
 
 #: menuItemsDic.py:65
-msgid "グローバルホットキー設定(&G)"
+msgid "このプレイリストを起動時に開く(&L)"
 msgstr ""
 
 #: menuItemsDic.py:66
-msgid "環境設定(&P)"
+msgid "ファイルの関連付け(&A)"
 msgstr ""
 
-#: menuItemsDic.py:69 views\main.py:251
-msgid "ヘルプ(&H)"
+#: menuItemsDic.py:67
+msgid "送るメニューに登録(&S)"
+msgstr ""
+
+#: menuItemsDic.py:68
+msgid "ショートカットキー設定(&K)"
+msgstr ""
+
+#: menuItemsDic.py:69
+msgid "グローバルホットキー設定(&G)"
 msgstr ""
 
 #: menuItemsDic.py:70
+msgid "環境設定(&P)"
+msgstr ""
+
+#: menuItemsDic.py:73 views\main.py:253
+msgid "ヘルプ(&H)"
+msgstr ""
+
+#: menuItemsDic.py:74
 msgid "更新の確認(&U)"
 msgstr ""
 
-#: menuItemsDic.py:71
+#: menuItemsDic.py:75
 msgid "バージョン情報(&V)"
 msgstr ""
 
-#: menuItemsDic.py:73
+#: menuItemsDic.py:77
 msgid "経過時間の読み上げ"
 msgstr ""
 
@@ -479,11 +487,12 @@ msgstr ""
 msgid "登録に失敗しました。"
 msgstr ""
 
-#: sendToManager.py:45 views\base.py:114 views\fileAssocDialog.py:19
-#: views\fileAssocDialog.py:35 views\fileAssocDialog.py:72
-#: views\fontManager.py:25 views\fontManager.py:50 views\globalKeyConfig.py:61
-#: views\globalKeyConfig.py:122 views\KeyValueSettingDialogBase.py:279
-#: views\KeyValueSettingDialogBase.py:330 views\main.py:162
+#: sendToManager.py:45 startupListSetter.py:18 views\base.py:114
+#: views\fileAssocDialog.py:19 views\fileAssocDialog.py:35
+#: views\fileAssocDialog.py:72 views\fontManager.py:25 views\fontManager.py:50
+#: views\globalKeyConfig.py:61 views\globalKeyConfig.py:122
+#: views\KeyValueSettingDialogBase.py:279
+#: views\KeyValueSettingDialogBase.py:330 views\main.py:163
 #: views\sleepTimerDialog.py:123 views\updateDialog.py:66
 msgid "エラー"
 msgstr ""
@@ -492,11 +501,11 @@ msgstr ""
 msgid "完了"
 msgstr ""
 
-#: settings.py:16 view_manager.py:79 views\main.py:351
+#: settings.py:16 view_manager.py:79 views\main.py:353
 msgid "秒"
 msgstr ""
 
-#: settings.py:18 view_manager.py:77 views\main.py:350
+#: settings.py:18 view_manager.py:77 views\main.py:352
 #: views\sleepTimerDialog.py:51
 msgid "分"
 msgstr ""
@@ -571,6 +580,22 @@ msgstr ""
 msgid "コンピュータの電源を切る"
 msgstr ""
 
+#: startupListSetter.py:13 views\globalKeyConfig.py:127
+#: views\globalKeyConfig.py:130
+msgid "設定完了"
+msgstr ""
+
+#: startupListSetter.py:13
+#, python-format
+msgid ""
+"起動時に開くプレイリストに設定しました。\n"
+"%s"
+msgstr ""
+
+#: startupListSetter.py:18
+msgid "設定に失敗しました。"
+msgstr ""
+
 #: update.py:50 update.py:59 update.py:73 update.py:79 update.py:90
 #: update.py:98 update.py:103 update.py:108 update.py:160
 #: views\updateDialog.py:39
@@ -621,16 +646,16 @@ msgid ""
 "ソフトウェア終了時に、自動でアップデートされます。"
 msgstr ""
 
-#: view_manager.py:29 views\main.py:132
+#: view_manager.py:29 views\main.py:133
 msgid "プレイリスト"
 msgstr ""
 
 #: view_manager.py:29 view_manager.py:31 views\loadErrorDialog.py:35
-#: views\loadErrorDialog.py:36 views\main.py:132 views\main.py:135
+#: views\loadErrorDialog.py:36 views\main.py:133 views\main.py:136
 msgid "件"
 msgstr ""
 
-#: view_manager.py:31 views\main.py:135
+#: view_manager.py:31 views\main.py:136
 msgid "キュー"
 msgstr ""
 
@@ -646,11 +671,11 @@ msgstr ""
 msgid "経過時間を確認するには Ctrl + T を押します"
 msgstr ""
 
-#: view_manager.py:75 views\main.py:348 views\sleepTimerDialog.py:49
+#: view_manager.py:75 views\main.py:350 views\sleepTimerDialog.py:49
 msgid "時間"
 msgstr ""
 
-#: view_manager.py:99 views\lampViewObject.py:145 views\main.py:78
+#: view_manager.py:99 views\lampViewObject.py:145 views\main.py:79
 msgid "再生"
 msgstr ""
 
@@ -658,7 +683,7 @@ msgstr ""
 msgid "一時停止"
 msgstr ""
 
-#: view_manager.py:105 views\main.py:84
+#: view_manager.py:105 views\main.py:85
 msgid "リピートに切り替える"
 msgstr ""
 
@@ -670,7 +695,7 @@ msgstr ""
 msgid "リピートとループを解除する"
 msgstr ""
 
-#: view_manager.py:114 views\main.py:86
+#: view_manager.py:114 views\main.py:87
 msgid "シャッフルをオンにする"
 msgstr ""
 
@@ -678,7 +703,7 @@ msgstr ""
 msgid "シャッフルをオフにする"
 msgstr ""
 
-#: view_manager.py:121 view_manager.py:122 views\main.py:90 views\main.py:91
+#: view_manager.py:121 view_manager.py:122 views\main.py:91 views\main.py:92
 msgid "ミュートをオンにする"
 msgstr ""
 
@@ -806,7 +831,7 @@ msgstr ""
 msgid "識別子"
 msgstr ""
 
-#: views\globalKeyConfig.py:31 views\main.py:383
+#: views\globalKeyConfig.py:31 views\main.py:387
 msgid "ショートカットキーの設定"
 msgstr ""
 
@@ -814,7 +839,7 @@ msgstr ""
 #: views\globalKeyConfig.py:102 views\globalKeyConfig.py:107
 #: views\globalKeyConfig.py:120 views\globalKeyConfig.py:128
 #: views\keyConfig.py:57 views\KeyValueSettingDialogBase.py:315
-#: views\main.py:423 views\main.py:443
+#: views\main.py:427 views\main.py:447
 msgid "なし"
 msgstr ""
 
@@ -856,10 +881,6 @@ msgstr ""
 
 #: views\globalKeyConfig.py:122
 msgid "このショートカットは変更できません。"
-msgstr ""
-
-#: views\globalKeyConfig.py:127 views\globalKeyConfig.py:130
-msgid "設定完了"
 msgstr ""
 
 #: views\globalKeyConfig.py:127
@@ -994,27 +1015,27 @@ msgstr ""
 msgid "見つからなかったファイル"
 msgstr ""
 
-#: views\main.py:76
+#: views\main.py:77
 msgid "前へ"
 msgstr ""
 
-#: views\main.py:80
+#: views\main.py:81
 msgid "次へ"
 msgstr ""
 
-#: views\main.py:92
+#: views\main.py:93
 msgid "音量"
 msgstr ""
 
-#: views\main.py:122
+#: views\main.py:123
 msgid "トラックバー"
 msgstr ""
 
-#: views\main.py:140
+#: views\main.py:141
 msgid "状況"
 msgstr ""
 
-#: views\main.py:159
+#: views\main.py:160
 msgid ""
 "で設定されたホットキーが正しくありません。キーの重複、存在しないキー名の指"
 "定、使用できないキーパターンの指定などが考えられます。以下のキーの設定内容を"
@@ -1022,51 +1043,47 @@ msgid ""
 "\n"
 msgstr ""
 
-#: views\main.py:212
-msgid "履歴（20件まで）"
-msgstr ""
-
-#: views\main.py:238
+#: views\main.py:239
 msgid "再生出力先の変更"
 msgstr ""
 
-#: views\main.py:246
+#: views\main.py:248
 msgid "ファイル(&F)"
 msgstr ""
 
-#: views\main.py:247
+#: views\main.py:249
 msgid "機能(&U)"
 msgstr ""
 
-#: views\main.py:248
+#: views\main.py:250
 msgid "プレイリスト(&P)"
 msgstr ""
 
-#: views\main.py:249
+#: views\main.py:251
 msgid "操作(&O)"
 msgstr ""
 
-#: views\main.py:250
+#: views\main.py:252
 msgid "設定(&S)"
 msgstr ""
 
-#: views\main.py:342
+#: views\main.py:344
 msgid "情報がありません"
 msgstr ""
 
-#: views\main.py:389
+#: views\main.py:393
 msgid "グローバルホットキーの設定"
 msgstr ""
 
-#: views\main.py:399
+#: views\main.py:403
 msgid "ヘルプ"
 msgstr ""
 
-#: views\main.py:399
+#: views\main.py:403
 msgid "ヘルプファイルが見つかりません。"
 msgstr ""
 
-#: views\main.py:462
+#: views\main.py:466
 msgid "規定の出力先"
 msgstr ""
 
