@@ -6,6 +6,7 @@ import win32api
 import threading
 import time
 import json
+import wx
 import requests
 import constants
 import globalVars
@@ -32,8 +33,12 @@ class lampController(threading.Thread):
         while not self.exitFlag:
             time.sleep(1    )
             if self.exitFlag: break
-            responseObject = requests.post("http://localhost:8091/lamp/api/v1/putstatus", json=self.__makeData(), timeout=5)
+            responseObject = requests.post("http://localhost:8091/lamp/api/v1/comunication", json=self.__makeData(), timeout=5)
             responseObject.encoding="utf-8"
+            resJson = responseObject.json()
+            for o in resJson["operation"]:
+                if o == "play":
+                    wx.CallAfter(globalVars.eventProcess.playButtonControl)
 
     def exit(self):
         self.exitFlag = True
@@ -80,6 +85,6 @@ class lampController(threading.Thread):
         return ret
 
     def setPlaybackTime(self, sec):
-        if isinstance(sec, int) and sec >= 0:
-            self.playbackTime = sec
+        if (isinstance(sec, int) or isinstance(sec, float)) and sec >= 0:
+            self.playbackTime = int(sec)
         else: self.playbackTime = 0
