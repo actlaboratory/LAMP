@@ -35,10 +35,12 @@ class lampController(threading.Thread):
             if self.exitFlag: break
             responseObject = requests.post("http://localhost:8091/lamp/api/v1/comunication", json=self.__makeData(), timeout=5)
             responseObject.encoding="utf-8"
+            #print(responseObject.text)
             resJson = responseObject.json()
             for o in resJson["operation"]:
-                if o == "play":
-                    wx.CallAfter(globalVars.eventProcess.playButtonControl)
+                if o == "play": wx.CallAfter(globalVars.eventProcess.playButtonControl)
+                elif o == "previous": wx.CallAfter(globalVars.eventProcess.previousBtn)
+                elif o == "next": wx.CallAfter(globalVars.eventProcess.nextFile, True)
 
     def exit(self):
         self.exitFlag = True
