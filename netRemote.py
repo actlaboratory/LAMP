@@ -41,6 +41,8 @@ class lampController(threading.Thread):
                 if o == "play": wx.CallAfter(globalVars.eventProcess.playButtonControl)
                 elif o == "previous": wx.CallAfter(globalVars.eventProcess.previousBtn)
                 elif o == "next": wx.CallAfter(globalVars.eventProcess.nextFile, True)
+                elif o == "volumeUp": wx.CallAfter(globalVars.eventProcess.changeVolume, 5)
+                elif o == "volumeDown": wx.CallAfter(globalVars.eventProcess.changeVolume, -5)
 
     def exit(self):
         self.exitFlag = True
