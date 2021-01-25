@@ -1,4 +1,4 @@
-# lampControllerComunicator
+# lampControllerCommunicator
 # Copyright (C) 2021 Hiroki Fujii <hfujii@hisystron.com>
 
 import os
