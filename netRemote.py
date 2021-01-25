@@ -12,6 +12,7 @@ import constants
 import globalVars
 import listManager
 from soundPlayer.constants import *
+from views import netController
 
 
 class lampController(threading.Thread):
@@ -43,7 +44,16 @@ class lampController(threading.Thread):
                 elif o == "next": wx.CallAfter(globalVars.eventProcess.nextFile, True)
                 elif o == "volumeUp": wx.CallAfter(globalVars.eventProcess.changeVolume, 5)
                 elif o == "volumeDown": wx.CallAfter(globalVars.eventProcess.changeVolume, -5)
+                elif "file/" in o:
+                    self.__filePlay(o)
 
+    # コントローラ表示
+    def showController(self):
+        d = netController.show()
+        if d == wx.ID_CLOSE: self.requestFlag = False
+        elif d == wx.ID_OPEN: self.requestFlag = True
+        return
+    
     def exit(self):
         self.exitFlag = True
     
@@ -51,9 +61,11 @@ class lampController(threading.Thread):
         if globalVars.play.getStatus() == PLAYER_STATUS_PLAYING: playStatus = "playing"
         elif globalVars.play.getStatus() == PLAYER_STATUS_PAUSED: playStatus = "paused"
         else: playStatus = "stopped"
+        userName = globalVars.app.config.getstring("network", "user_name")
+        softwareKey = globalVars.app.config.getstring("network", "software_key")
         jData = {}
         jData["apiVersion"] = 1
-        jData["authentication"] = {"userName": "hirokif", "softwareKey": "1"}
+        jData["authentication"] = {"userName": userName, "softwareKey": softwareKey}
         jData["software"] = {
             "driveSerialNo": win32api.GetVolumeInformation(os.environ["SystemRoot"][:3])[1],
             "pcName": os.environ["COMPUTERNAME"]
@@ -92,3 +104,11 @@ class lampController(threading.Thread):
         if (isinstance(sec, int) or isinstance(sec, float)) and sec >= 0:
             self.playbackTime = int(sec)
         else: self.playbackTime = 0
+
+    def __filePlay(self, resString):
+        l = resString.split("/")
+        if l[0] != "file": return
+        # ローカル用パスを構成
+        basePath = "D:\\hiroki\\our-music\\"
+        path = basePath + "\\".join(l[2:])
+        wx.CallAfter(globalVars.eventProcess.forcePlay, path)
