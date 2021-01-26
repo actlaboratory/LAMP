@@ -34,7 +34,7 @@ class lampController(threading.Thread):
         while not self.exitFlag:
             time.sleep(1    )
             if self.exitFlag: break
-            responseObject = requests.post("http://localhost:8091/lamp/api/v1/comunication", json=self.__makeData(), timeout=5)
+            responseObject = requests.post("http://localhost:8091/lamp/api/v1/comunication", json=self.makeData(), timeout=5)
             responseObject.encoding="utf-8"
             #print(responseObject.text)
             resJson = responseObject.json()
@@ -57,7 +57,7 @@ class lampController(threading.Thread):
     def exit(self):
         self.exitFlag = True
     
-    def __makeData(self):
+    def makeData(self):
         if globalVars.play.getStatus() == PLAYER_STATUS_PLAYING: playStatus = "playing"
         elif globalVars.play.getStatus() == PLAYER_STATUS_PAUSED: playStatus = "paused"
         else: playStatus = "stopped"
