@@ -27,25 +27,31 @@ class lampController(threading.Thread):
         
         self.fileInfo = ["", "", "", "", "", 0]
         self.exitFlag = False
+        self.requestFlag = True
         self.playbackTime = 0
         super().__init__()
 
     def run(self):
+        sleep = constants.API_DEFAULT_INTERVAL
         while not self.exitFlag:
-            time.sleep(1    )
+            time.sleep(sleep)
             if self.exitFlag: break
-            responseObject = requests.post("http://localhost:8091/lamp/api/v1/comunication", json=self.makeData(), timeout=5)
-            responseObject.encoding="utf-8"
-            #print(responseObject.text)
-            resJson = responseObject.json()
-            for o in resJson["operation"]:
-                if o == "play": wx.CallAfter(globalVars.eventProcess.playButtonControl)
-                elif o == "previous": wx.CallAfter(globalVars.eventProcess.previousBtn)
-                elif o == "next": wx.CallAfter(globalVars.eventProcess.nextFile, True)
-                elif o == "volumeUp": wx.CallAfter(globalVars.eventProcess.changeVolume, 5)
-                elif o == "volumeDown": wx.CallAfter(globalVars.eventProcess.changeVolume, -5)
-                elif "file/" in o:
-                    self.__filePlay(o)
+            if not self.requestFlag: continue
+            try:
+                responseObject = requests.post("http://localhost:8091/lamp/api/v1/comunication", json=self.makeData(), timeout=5)
+                responseObject.encoding="utf-8"
+                #print(responseObject.text)
+                resJson = responseObject.json()
+                sleep = int(resJson["apiSecInterval"])
+                for o in resJson["operation"]:
+                    if o == "play": wx.CallAfter(globalVars.eventProcess.playButtonControl)
+                    elif o == "previous": wx.CallAfter(globalVars.eventProcess.previousBtn)
+                    elif o == "next": wx.CallAfter(globalVars.eventProcess.nextFile, True)
+                    elif o == "volumeUp": wx.CallAfter(globalVars.eventProcess.changeVolume, 5)
+                    elif o == "volumeDown": wx.CallAfter(globalVars.eventProcess.changeVolume, -5)
+                    elif "file/" in o:
+                        self.__filePlay(o)
+            except: pass
 
     # コントローラ表示
     def showController(self):
