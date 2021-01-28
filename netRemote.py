@@ -4,6 +4,7 @@
 import os
 import win32api
 import threading
+import pickle
 import time
 import json
 import wx
@@ -24,6 +25,15 @@ class lampController(threading.Thread):
         self.ALBUM = 3
         self.ALBUM_ARTIST = 4
         self.LENGTH = 5
+        
+        # フォルダ一覧読み込み
+        if not os.path.isfile("netDirList.dat"):
+            self.netDirDict = {}
+            self.saveDirDict()
+        else:
+            f = open("netDirList.dat", "rb")
+            self.netDirDict = pickle.load(f)
+            f.close()
         
         self.fileInfo = ["", "", "", "", "", 0]
         self.exitFlag = False
@@ -53,6 +63,11 @@ class lampController(threading.Thread):
                         self.__filePlay(o)
             except: pass
 
+    def saveDirDict(self):
+        f = open("netDirList.dat", "wb")
+        pickle.dump(self.netDirDict, f)
+        f.close()
+    
     # コントローラ表示
     def showController(self):
         d = netController.show()
