@@ -35,13 +35,13 @@ class Dialog(BaseDialog):
     def InstallControls(self):
         """いろんなwidgetを設置する。"""
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20, style=wx.ALL, margin=20)
-        self.listCtrl, dummy = self.creator.listCtrl(_("関連付けられたフォルダ"), style=wx.LC_SINGLE_SEL | wx.LC_REPORT, sizerFlag=wx.EXPAND, size=(800,300))
+        self.listCtrl, dummy = self.creator.listCtrl(_("関連付けられたフォルダ"), style=wx.LC_SINGLE_SEL | wx.LC_REPORT, sizerFlag=wx.EXPAND, size=(1000,300))
         self.listCtrl.AppendColumn(_("名前"))
         self.listCtrl.AppendColumn(_("場所"))
         for i in globalVars.app.config["net_associated_file"]:
             self.listCtrl.Append(str(i), globalVars.app.config["net_associated_file"][i])
-        self.listCtrl.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
-        self.listCtrl.SetColumnWidth(1, wx.LIST_AUTOSIZE_USEHEADER)
+        self.listCtrl.SetColumnWidth(0, 300)
+        self.listCtrl.SetColumnWidth(1, 700)
         
         # リスト書き込み
         for k in globalVars.lampController.netDirDict:
@@ -73,6 +73,8 @@ class Dialog(BaseDialog):
             self.__new()
         elif evt == self.bAdd:
             self.__add()
+        elif evt == self.bDelete:
+            self.__delete()
 
     # 送信ボタン動作
     def __new(self):
@@ -89,6 +91,7 @@ class Dialog(BaseDialog):
                 globalVars.lampController.netDirDict[ret[0]] = ret[1]
                 globalVars.lampController.saveDirDict()
                 self.listCtrl.Append(ret)
+        self.listCtrl.SetFocus()
 
     # 単純追加ボタン操作
     def __add(self):
@@ -100,7 +103,18 @@ class Dialog(BaseDialog):
             globalVars.lampController.netDirDict[ret[0]] = ret[1]
             globalVars.lampController.saveDirDict()
             self.listCtrl.Append(ret)
+        self.listCtrl.SetFocus()
 
+    # 削除
+    def __delete(self):
+        if self.listCtrl.GetSelectedItemCount() == 1:
+            i = self.listCtrl.GetFirstSelected()
+            iText = self.listCtrl.GetItemText(i)
+            if iText in globalVars.lampController.netDirDict:
+                del globalVars.lampController.netDirDict[iText]
+                globalVars.lampController.saveDirDict()
+            self.listCtrl.DeleteItem(i)
+            self.listCtrl.SetFocus()
 
 # ファイル情報送信ビュー
 class netFileSend(BaseDialog):

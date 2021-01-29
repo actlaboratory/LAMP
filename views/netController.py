@@ -23,7 +23,7 @@ def show():
     except Exception as e:
         resJson = False
     
-    if resJson != False and resJson["code"] == 400 and "authentication faild" in resJson["reason"]:
+    if resJson != False and resJson["code"] == 400:
         d = Dialog("networkController")
         d.Initialize()
         return d.Show()

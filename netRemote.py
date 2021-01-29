@@ -61,7 +61,8 @@ class lampController(threading.Thread):
                     elif o == "volumeDown": wx.CallAfter(globalVars.eventProcess.changeVolume, -5)
                     elif "file/" in o:
                         self.__filePlay(o)
-            except: pass
+            except Exception as e:
+                pass
 
     def saveDirDict(self):
         f = open("netDirList.dat", "wb")
@@ -128,8 +129,7 @@ class lampController(threading.Thread):
 
     def __filePlay(self, resString):
         l = resString.split("/")
-        if l[0] != "file": return
+        if l[0] != "file" or not (len(l)>2 and l[1] in self.netDirDict): return
         # ローカル用パスを構成
-        basePath = "D:\\hiroki\\our-music\\"
-        path = basePath + "\\".join(l[2:])
+        path = os.path.join(self.netDirDict[l[1]], "\\".join(l[2:]))
         wx.CallAfter(globalVars.eventProcess.forcePlay, path)
