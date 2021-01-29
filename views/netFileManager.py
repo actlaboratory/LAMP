@@ -83,7 +83,7 @@ class Dialog(BaseDialog):
             return wx.ID_CANCEL
         else:
             d = netFileSend("netFileSendView")
-            d.Initialize(self, dirDialog.GetPath())
+            d.Initialize(dirDialog.GetPath())
             if d.Show() == wx.ID_CANCEL: return wx.ID_CANCEL
             else:
                 ret = d.GetValue()
@@ -132,8 +132,8 @@ class netFileSend(BaseDialog):
         """いろんなwidgetを設置する。"""
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20, style=wx.ALL, margin=20)
         dummy = self.creator.staticText(_("LAMP Controller上に表示する名前を指定します。"))
-        self.name, dummy = self.creator.inputbox(_("名前"))
-        self.processLabel = self.creator.staticText(_("ファイルを集めています..."))
+        self.name, dummy = self.creator.inputbox(_("名前"), x=700, textLayout=wx.HORIZONTAL)
+        self.processLabel = self.creator.staticText(_("ファイルを集めています..."), x=800)
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
         self.bOk = self.creator.button("OK", self.onButtonClick)
         self.bCancel = self.creator.cancelbutton(_("キャンセル"))
@@ -220,12 +220,12 @@ class netFileAddDialog(BaseDialog):
     def InstallControls(self):
         """いろんなwidgetを設置する。"""
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20, style=wx.ALL, margin=20)
-        dummy = self.creator.staticText(_("フォルダの場所と、LAMP Controllerに表示されている名前を指定します。"))
+        dummy = self.creator.staticText(_("フォルダの場所と、LAMP Controller上の名前を指定します。"))
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20, style=wx.ALL, margin=20)
-        self.path, dummy = self.creator.inputbox(_("場所"), textLayout=wx.HORIZONTAL)
+        self.path, dummy = self.creator.inputbox(_("場所"), x=700, textLayout=wx.HORIZONTAL)
         self.bBrowse = self.creator.button(_("参照"), self.onButtonClick)
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20, style=wx.ALL, margin=20)
-        self.name, dummy = self.creator.inputbox(_("名前"), textLayout=wx.HORIZONTAL)
+        self.name, dummy = self.creator.inputbox(_("名前"), x=700, textLayout=wx.HORIZONTAL)
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
         self.bOk = self.creator.button("OK", self.onButtonClick)
         self.bCancel = self.creator.cancelbutton(_("キャンセル"))
@@ -238,8 +238,13 @@ class netFileAddDialog(BaseDialog):
             else: self.path.SetValue(d.GetPath())
         elif eo == self.bOk:
             if self.name.GetValue() in globalVars.lampController.netDirDict:
-                d = mkDialog("alreadyEnteredError")
+                d = mkDialog.Dialog("alreadyEnteredError")
                 d.Initialize(_("エラー"), _("この名前は、すでに使用されています。"), ["OK"], False)
+                fxManager.error()
+                d.Show()
+            elif not os.path.exists(self.path.GetValue()):
+                d = mkDialog.Dialog("pathNotFoundError")
+                d.Initialize(_("エラー"), _("指定された場所が存在しません。"), ["OK"], False)
                 fxManager.error()
                 d.Show()
             else: self.Destroy()
