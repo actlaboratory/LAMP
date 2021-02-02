@@ -62,6 +62,10 @@ ITEM_ALBUMARTIST = 8
 # API定数
 API_VERSION = 1
 API_DEFAULT_INTERVAL = 1
+API_COMUNICATION_URL = "http://lamp.localhost:8091/api/v1/comunication"
+API_SOFTWAREMANAGE_URL = "http://lamp.localhost:8091/api/v1/softwaremanage"
+API_SOFTWAREENTRY_URL = "http://lamp.localhost:8091/api/v1/entry"
+API_PUTFILE_URL = "http://lamp.localhost:8091/api/v1/putfile"
 
 # リスト
 PLAYLIST = 101

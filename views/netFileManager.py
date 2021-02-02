@@ -149,6 +149,9 @@ class netFileSend(BaseDialog):
         return (self.name.GetValue(), self.path)
     
     def onTimer(self, evt):
+        # jsonができあがっていたら、もう集めていない
+        if self.makeFileList.pathList != None: self.processLabel.SetLabel("")
+
         # 名前の設定が完了していて、JSON処理も終了していたときは送信
         if self.setName and self.makeFileList.pathList != None:
             self.bOk.Enable(False)
@@ -167,7 +170,8 @@ class netFileSend(BaseDialog):
             "authentication": {"userName": globalVars.app.config.getstring("network", "user_name", ""), "softwareKey": globalVars.app.config.getstring("network", "software_key", "")},
             "software": {"driveSerialNo": win32api.GetVolumeInformation(os.environ["SystemRoot"][:3])[1], "pcName": os.environ["COMPUTERNAME"]}}
         try:
-            rp = requests.post("http://localhost:8091/lamp/api/v1/putfile", json=obj)
+            rp = requests.post(constants.API_PUTFILE_URL, json=obj)
+            print(rp.text)
             rj = rp.json()
             self.processLabel.SetLabel("")
             if rj["code"] == 200:
@@ -190,6 +194,10 @@ class netFileSend(BaseDialog):
     def onButtonClick(self, event):
         evt = event.GetEventObject()
         if evt == self.bOk:
+            netDirLower = []
+            for k in globalVars.lampController.netDirDict:
+                netDirLower.append(k.lower())
+            if self.name.GetValue().lower() in netDirLower: return self.error(_("この名前は、すでに使用されています。"))
             self.bOk.Enable(False)
             self.setName = True
 
@@ -237,7 +245,10 @@ class netFileAddDialog(BaseDialog):
             if d.ShowModal() == wx.ID_CANCEL: return
             else: self.path.SetValue(d.GetPath())
         elif eo == self.bOk:
-            if self.name.GetValue() in globalVars.lampController.netDirDict:
+            netDirLower = []
+            for k in globalVars.lampController.netDirDict:
+                netDirLower.append(k.lower())
+            if self.name.GetValue().lower() in netDirLower:
                 d = mkDialog.Dialog("alreadyEnteredError")
                 d.Initialize(_("エラー"), _("この名前は、すでに使用されています。"), ["OK"], False)
                 fxManager.error()

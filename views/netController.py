@@ -6,6 +6,7 @@ import wx
 import os
 import win32api
 import requests
+import constants
 import fxManager
 from views import mkDialog
 
@@ -15,12 +16,13 @@ from views.baseDialog import *
 
 def show():
     try:
-        responseObject = requests.post("http://localhost:8091/lamp/api/v1/softwaremanage", json=globalVars.lampController.makeData(), timeout=5)
+        responseObject = requests.post(constants.API_SOFTWAREMANAGE_URL, json=globalVars.lampController.makeData(), timeout=5)
         responseObject.encoding="utf-8"
         resJson = responseObject.json()
         if (resJson["code"] == 200 and resJson["displayName"]) or (resJson["code"] == 400 and resJson["reason"]):
             pass
     except Exception as e:
+        print(e.headers)
         resJson = False
     
     if resJson != False and resJson["code"] == 400:
@@ -92,7 +94,7 @@ class Dialog(BaseDialog):
         try:
             json = globalVars.lampController.makeData()
             json["operation"] = "release"
-            rp = requests.post("http://localhost:8091/lamp/api/v1/softwaremanage", json=json, timeout=30)
+            rp = requests.post(constants.API_SOFTWAREMANAGE_URL, json=json, timeout=30)
             j = rp.json()
             if j["code"] == 200: release = True
             else: release = False
@@ -118,7 +120,7 @@ class Dialog(BaseDialog):
         obj = {"authentication": {"userName": self.userName.GetValue(), "password": self.password.GetValue()},
             "software": {"driveSerialNo": win32api.GetVolumeInformation(os.environ["SystemRoot"][:3])[1], "pcName": os.environ["COMPUTERNAME"], "displayName": self.displayName.GetValue()}, "apiVersion": constants.API_VERSION}
         try:
-            rp = requests.post("http://localhost:8091/lamp/api/v1/entry", json=obj)
+            rp = requests.post(constants.API_SOFTWAREENTRY_URL, json=obj)
             j = rp.json()
             if j["code"] == 200:
                 globalVars.app.config["network"]["user_name"] = self.userName.GetValue()

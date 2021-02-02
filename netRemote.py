@@ -48,9 +48,8 @@ class lampController(threading.Thread):
             if self.exitFlag: break
             if not self.requestFlag: continue
             try:
-                responseObject = requests.post("http://localhost:8091/lamp/api/v1/comunication", json=self.makeData(), timeout=5)
+                responseObject = requests.post(constants.API_COMUNICATION_URL, json=self.makeData(), timeout=5)
                 responseObject.encoding="utf-8"
-                #print(responseObject.text)
                 resJson = responseObject.json()
                 sleep = int(resJson["apiSecInterval"])
                 for o in resJson["operation"]:
