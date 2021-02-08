@@ -20,6 +20,7 @@ dist/
 pl_auto_save
 /test.mp3
 /test.py
+/netDirList.dat
 /m3u_history.dat
 /.vscode
 

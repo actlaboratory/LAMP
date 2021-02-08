@@ -59,8 +59,8 @@ class lampController(threading.Thread):
                     elif o == "stop": wx.CallAfter(globalVars.eventProcess.stop)
                     elif o == "volumeUp": wx.CallAfter(globalVars.eventProcess.changeVolume, 5)
                     elif o == "volumeDown": wx.CallAfter(globalVars.eventProcess.changeVolume, -5)
-                    elif "file/" in o:
-                        self.__filePlay(o)
+                    elif "file/" in o or "playlist/" in o:
+                        self.__fileProcess(o)
             except Exception as e:
                 pass
 
@@ -127,9 +127,10 @@ class lampController(threading.Thread):
             self.playbackTime = int(sec)
         else: self.playbackTime = 0
 
-    def __filePlay(self, resString):
+    def __fileProcess(self, resString):
         l = resString.split("/")
-        if l[0] != "file" or not (len(l)>2 and l[1] in self.netDirDict): return
+        if (not l[0] in ["file", "playlist"]) or not (len(l)>2 and l[1] in self.netDirDict): return
         # ローカル用パスを構成
         path = os.path.join(self.netDirDict[l[1]], "\\".join(l[2:]))
-        wx.CallAfter(globalVars.eventProcess.forcePlay, path)
+        if l[0] == "file": wx.CallAfter(globalVars.eventProcess.forcePlay, path)
+        elif l[0] == "playlist": wx.CallAfter(listManager.addItems, [path], globalVars.app.hMainView.playlistView, id=--1, ignoreError=True)
