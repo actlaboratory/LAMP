@@ -6,6 +6,9 @@ from soundPlayer.fxPlayer import *
 from soundPlayer.constants import *
 import globalVars
 
+def processing():
+    if _notiSound(): playFx("./fx/processing.mp3", _notiDevice())
+
 def confirm():
     if _notiSound(): playFx("./fx/confirm.mp3", _notiDevice())
 

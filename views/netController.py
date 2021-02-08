@@ -22,7 +22,6 @@ def show():
         if (resJson["code"] == 200 and resJson["displayName"]) or (resJson["code"] == 400 and resJson["reason"]):
             pass
     except Exception as e:
-        print(e.headers)
         resJson = False
     
     if resJson != False and resJson["code"] == 400:

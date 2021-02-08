@@ -210,6 +210,7 @@ class eventProcessor():
             view_manager.setFileStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
             globalVars.lampController.setFileInfo() # ネット用ファイル情報更新
         else:
+            self.stop()
             view_manager.buttonSetPlay()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
             view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
