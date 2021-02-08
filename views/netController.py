@@ -125,7 +125,8 @@ class Dialog(BaseDialog):
                 globalVars.app.config["network"]["user_name"] = self.userName.GetValue()
                 globalVars.app.config["network"]["software_key"] = j["softwareKey"]
                 d = mkDialog.Dialog("entry success dialog")
-                d.Initialize(_("登録完了"), _("このLAMPは、LAMP Controllerに登録されました。"), ["OK"], False)
+                if j["status"] == "success": d.Initialize(_("登録完了"), _("このLAMPは、LAMP Controllerに登録されました。"), ["OK"], False)
+                else: d.Initialize(_("登録完了"), _("登録を更新しました。このLAMPは、LAMP Controllerで使用可能です。"), ["OK"], False)
                 fxManager.confirm()
                 d.Show()
                 return True
