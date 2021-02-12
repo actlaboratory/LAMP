@@ -16,9 +16,9 @@ from soundPlayer.constants import *
 import accessible_output2.outputs.auto
 import constants, errorCodes
 def _import():
-	global event_processor, listManager, lampPipe, ConfigManager, globalVars, m3uManager, sleep_timer, DefaultSettings, update, main
+	global event_processor, listManager, lampPipe, ConfigManager, globalVars, m3uManager, sleep_timer, DefaultSettings, update, main, netRemote
 
-	import event_processor, listManager, lampPipe, ConfigManager, globalVars, m3uManager, sleep_timer, DefaultSettings
+	import event_processor, listManager, lampPipe, ConfigManager, globalVars, m3uManager, sleep_timer, DefaultSettings, netRemote
 	import update
 	from views import main
 
@@ -77,6 +77,7 @@ class Main(AppBase.MainBase):
 			while globalVars.play.setVolumeByDiff(-2):
 				time.sleep(0.07)
 		globalVars.play.exit()
+		globalVars.lampController.exit()
 		m3uManager.dumpHistory()
 		globalVars.app.config.write()
 		try: lampPipe.stopPipeServer()
@@ -107,6 +108,8 @@ class Main(AppBase.MainBase):
 		globalVars.sleepTimer = sleep_timer.sleepTimer()
 		globalVars.m3uHistory = m3uManager.loadHistory()
 		globalVars.listInfo = listManager.listInfo()
+		globalVars.lampController = netRemote.lampController()
+		globalVars.lampController.start()
 
 	def __del__(self):
 		try: lampPipe.stopPipeServer()

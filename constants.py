@@ -59,6 +59,16 @@ ITEM_ARTIST = 6
 ITEM_ALBUM = 7
 ITEM_ALBUMARTIST = 8
 
+# API定数
+API_VERSION = 1
+API_DEFAULT_INTERVAL = 2
+#API_BASE_URL = "http://localhost:10100/"
+API_BASE_URL = "https://lamp.hisystron.com/"
+API_COMUNICATION_URL = API_BASE_URL + "api/v1/comunication"
+API_SOFTWAREMANAGE_URL = API_BASE_URL + "api/v1/softwaremanage"
+API_SOFTWAREENTRY_URL = API_BASE_URL + "api/v1/entry"
+API_PUTFILE_URL = API_BASE_URL + "api/v1/putfile"
+
 # リスト
 PLAYLIST = 101
 QUEUE = 102

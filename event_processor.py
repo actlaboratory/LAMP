@@ -52,6 +52,9 @@ class eventProcessor():
                 globalVars.app.hMainView.trackBar.SetValue(val)
                 self.setNowTimeLabel(val, max)
 
+        # ネット用再生時間更新
+        globalVars.lampController.setPlaybackTime(val)
+        
         #ファイル送り
         if not self.fileChanging:
             if globalVars.play.getStatus() == PLAYER_STATUS_END:
@@ -173,10 +176,12 @@ class eventProcessor():
                 self.refreshTagInfo()
                 globalVars.app.hMainView.tagInfoTimer.Start(10000)
             view_manager.setFileStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
+            globalVars.lampController.setFileInfo() # ネット用ファイル情報更新
         if not ret:
             view_manager.buttonSetPlay()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
             view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
+            globalVars.lampController.clearFileInfo() # ネット用ファイル情報更新
         view_manager.changeListLabel(globalVars.app.hMainView.playlistView)
         view_manager.changeListLabel(globalVars.app.hMainView.queueView)
         return ret
@@ -203,10 +208,13 @@ class eventProcessor():
             self.refreshTagInfo()
             globalVars.app.hMainView.tagInfoTimer.Start(10000)
             view_manager.setFileStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
+            globalVars.lampController.setFileInfo() # ネット用ファイル情報更新
         else:
+            self.stop()
             view_manager.buttonSetPlay()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
             view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
+            globalVars.lampController.clearFileInfo() # ネット用ファイル情報更新
         view_manager.changeListLabel(globalVars.app.hMainView.playlistView)
         view_manager.changeListLabel(globalVars.app.hMainView.queueView)
         return ret
@@ -386,6 +394,7 @@ class eventProcessor():
     def stop(self):
         self.errorSkipCount = 0 #エラースキップのカウンタをリセット
         view_manager.clearStaticInfoView() #スクリーンリーダ用リストの更新
+        globalVars.lampController.clearFileInfo() # ネット用ファイル情報更新
         globalVars.app.hMainView.playlistView.setPointer(-1)
         globalVars.play.stop()
         view_manager.buttonSetPlay()
