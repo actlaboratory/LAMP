@@ -75,7 +75,8 @@ class Dialog(BaseDialog):
 
             # 設定パネル
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20, style=wx.ALL, margin=20)
-            self.clientConfigCheck = self.creator.checkbox(_("LAMP Controllerからの操作を有効にする"))
+            # to do
+            #self.clientConfigCheck = self.creator.checkbox(_("LAMP Controllerからの操作を有効にする"))
             
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
             self.releaseBtn = self.creator.button(_("このLAMPを登録解除"),self.onButtonClick)
