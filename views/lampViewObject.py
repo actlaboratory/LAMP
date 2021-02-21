@@ -63,7 +63,7 @@ class playlist(virtualListCtrlBase.virtualListCtrl):
     def insert(self, index, object):
         t = self.get()
         super().insert(index, object)
-        if t != None: self.pointer[self.lst.index(t)]
+        if t != None: self.pointer = self.lst.index(t)
         
     def pop(self, index):
         t = self.get()
