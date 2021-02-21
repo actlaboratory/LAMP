@@ -47,6 +47,7 @@ class lampController(threading.Thread):
             time.sleep(sleep)
             if self.exitFlag: break
             if not self.requestFlag: continue
+            if not globalVars.app.config.getboolean("network","ctrl_client",True): continue
             try:
                 responseObject = requests.post(constants.API_COMUNICATION_URL, json=self.makeData(), timeout=5)
                 responseObject.encoding="utf-8"

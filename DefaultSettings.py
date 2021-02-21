@@ -49,7 +49,8 @@ class DefaultSettings:
 			"proxy_server": "",
 			"proxy_port": 8080,
 			"user_name": "",
-			"software_key": ""
+			"software_key": "",
+			"ctrl_client": True
 		}
 		return config
 

@@ -75,13 +75,23 @@ class Dialog(BaseDialog):
 
             # 設定パネル
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20, style=wx.ALL, margin=20)
-            # to do
-            #self.clientConfigCheck = self.creator.checkbox(_("LAMP Controllerからの操作を有効にする"))
+            self.clientConfigCheck = self.creator.checkbox(_("LAMP Controllerからの操作を有効にする"))
+            if globalVars.app.config.getboolean("network","ctrl_client",True):
+                self.clientConfigCheck.SetValue(True)
+            else: self.clientConfigCheck.SetValue(False)
+            self.clientConfigCheck.Bind(wx.EVT_CHECKBOX, self.onCheckBox)
+            
             
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
             self.releaseBtn = self.creator.button(_("このLAMPを登録解除"),self.onButtonClick)
             self.bCancel = self.creator.cancelbutton(_("閉じる"), self.onButtonClick)
         return
+    
+    def onCheckBox(self, evt):
+        evtObject = evt.GetEventObject()
+        if evtObject == self.clientConfigCheck:
+            if self.clientConfigCheck.IsChecked(): globalVars.app.config["network"]["ctrl_client"] = True
+            else: globalVars.app.config["network"]["ctrl_client"] = False
     
     def onButtonClick(self, evt):
         if self.entered == False and evt.GetEventObject()==self.newEntryBtn:
