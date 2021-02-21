@@ -101,6 +101,7 @@ def closeM3u(newSave=True):
     globalVars.eventProcess.stop()
     globalVars.listInfo.playlistFile = None
     globalVars.app.hMainView.playlistView.clear()
+    globalVars.app.hMainView.playlistLabel.SetLabel( _("プレイリスト") + " (0" + _("件") + ")")
     #メニュー処理
     globalVars.app.hMainView.menu.hFileMenu.SetLabel(menuItemsStore.getRef("M3U8_SAVE"), _("プレイリストを上書き保存"))
     globalVars.app.hMainView.menu.hFileMenu.Enable(menuItemsStore.getRef("M3U8_SAVE"), False)
