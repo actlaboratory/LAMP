@@ -62,7 +62,7 @@ class Dialog(BaseDialog):
             self.pcName, dummy = self.creator.inputbox(_("コンピュータの名前"), defaultValue=os.environ["COMPUTERNAME"], style=wx.TE_READONLY, x=450, textLayout=wx.HORIZONTAL)
             
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
-            self.newEntryBtn = self.creator.button(_("このLAMPを新規登録"),self.onButtonClick)
+            self.newEntryBtn = self.creator.button(_("このLAMPを登録"),self.onButtonClick)
             self.bCancel = self.creator.cancelbutton(_("閉じる"), self.onButtonClick)
         else:
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20, style=wx.ALL, margin=20)
