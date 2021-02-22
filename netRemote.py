@@ -60,6 +60,8 @@ class lampController(threading.Thread):
                     elif o == "stop": wx.CallAfter(globalVars.eventProcess.stop)
                     elif o == "volumeUp": wx.CallAfter(globalVars.eventProcess.changeVolume, 5)
                     elif o == "volumeDown": wx.CallAfter(globalVars.eventProcess.changeVolume, -5)
+                    elif o == "repeatLoop": globalVars.eventProcess.repeatLoopCtrl()
+                    elif o == "shuffle": globalVars.eventProcess.shuffleSw()
                     elif "file/" in o or "playlist/" in o:
                         self.__fileProcess(o)
             except Exception as e:
@@ -86,6 +88,15 @@ class lampController(threading.Thread):
         else: playStatus = "stopped"
         userName = globalVars.app.config.getstring("network", "user_name")
         softwareKey = globalVars.app.config.getstring("network", "software_key")
+        # リピートループ
+        if globalVars.eventProcess.repeatLoopFlag == 0: repeatLoop = "off"
+        elif globalVars.eventProcess.repeatLoopFlag == 1: repeatLoop = "repeat"
+        elif globalVars.eventProcess.repeatLoopFlag == 2: repeatLoop = "loop"
+        else: repeatLoop = ""
+        # シャッフル
+        if globalVars.eventProcess.shuffleCtrl == None: shuffle = "off"
+        else: shuffle = "on"
+
         jData = {}
         jData["apiVersion"] = 1
         jData["authentication"] = {"userName": userName, "softwareKey": softwareKey}
@@ -95,6 +106,8 @@ class lampController(threading.Thread):
         }
         jData["status"] = {
             "playbackStatus": playStatus,
+            "repeatLoop": repeatLoop,
+            "shuffle": shuffle,
             "fileTitle": self.fileInfo[self.TITLE],
             "filePath": self.fileInfo[self.PATH],
             "fileArtist": self.fileInfo[self.ARTIST],
