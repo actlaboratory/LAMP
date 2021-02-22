@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: application\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-22 20:54+0900\n"
+"POT-Creation-Date: 2021-02-23 00:31+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1180,7 +1180,7 @@ msgid "コンピュータの名前"
 msgstr ""
 
 #: views\netController.py:65
-msgid "このLAMPを新規登録"
+msgid "このLAMPを登録"
 msgstr ""
 
 #: views\netController.py:69

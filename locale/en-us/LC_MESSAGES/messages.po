@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: application\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-22 20:54+0900\n"
-"PO-Revision-Date: 2021-02-22 21:22+0900\n"
+"POT-Creation-Date: 2021-02-23 00:31+0900\n"
+"PO-Revision-Date: 2021-02-23 00:32+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -1227,8 +1227,8 @@ msgid "コンピュータの名前"
 msgstr "Computer name"
 
 #: views\netController.py:65
-msgid "このLAMPを新規登録"
-msgstr "Register this LAMP"
+msgid "このLAMPを登録"
+msgstr "register this LAMP"
 
 #: views\netController.py:69
 msgid "このLAMPは、コントローラに登録されています。"
@@ -1666,6 +1666,9 @@ msgstr "software details"
 msgid ""
 "ライセンス/著作権情報については、同梱の license.txt を参照してください。"
 msgstr "See the included license.txt for licensing / copyright information."
+
+#~ msgid "このLAMPを新規登録"
+#~ msgstr "Register this LAMP"
 
 #~ msgid "LAMP Controllerの設定"
 #~ msgstr "LAMP Controller configuration"
