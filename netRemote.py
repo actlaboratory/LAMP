@@ -143,7 +143,7 @@ class lampController(threading.Thread):
 
     def __fileProcess(self, resString):
         l = resString.split("/")
-        if (not l[0] in ["file", "playlist"]) or not (len(l)>2 and l[1] in self.netDirDict): return
+        if (not l[0] in ["file", "playlist"]) or not (len(l)>=2 and l[1] in self.netDirDict): return
         # ローカル用パスを構成
         path = os.path.join(self.netDirDict[l[1]], "\\".join(l[2:]))
         if l[0] == "file": wx.CallAfter(globalVars.eventProcess.forcePlay, path)
