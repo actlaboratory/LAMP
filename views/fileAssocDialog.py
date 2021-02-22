@@ -21,7 +21,7 @@ def assocDialog():
                 e.Show()
                 return
         nd = mkDialog.Dialog("fileAssocOk")
-        nd.Initialize(_("拡張子関連付け完了"), _("ファイルの関連付け情報を書き込みました。\r\nファイルのコンテキストメニュー内、\r\n[プログラムから開く] > [別のプログラムを選択]\r\nに表示されます。"), ("OK",), sound=False)
+        nd.Initialize(_("拡張子関連付け完了"), _("ファイルの関連付け情報を書き込みました。\nファイルのコンテキストメニュー内、\n[プログラムから開く] > [別のプログラムを選択]\nに表示されます。"), ("OK",), sound=False)
         fxManager.confirm()
         nd.Show()
     elif r == UNSET:
