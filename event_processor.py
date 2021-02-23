@@ -261,7 +261,9 @@ class eventProcessor():
     def delete(self, lcObj):
         if lcObj.GetSelectedItemCount() == len(lcObj): # 全選択中ならクリア
             lcObj.clear()
-            self.stop()
+            #操作した側リストの再生を停止
+            if lcObj == listManager.getLCObject(self.playingList):
+                self.stop()
         else:
             # 選択済みアイテムリストを生成
             first = lcObj.GetFirstSelected()
