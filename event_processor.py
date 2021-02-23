@@ -262,7 +262,7 @@ class eventProcessor():
         if lcObj.GetSelectedItemCount() == len(lcObj): # 全選択中ならクリア
             lcObj.clear()
             #操作した側リストの再生を停止
-            if lcObj == listManager.getLCObject(self.playingList):
+            if lcObj == listManager.getLCObject(self.playingList) and self.playingList == constants.PLAYLIST:
                 self.stop()
         else:
             # 選択済みアイテムリストを生成
@@ -271,11 +271,11 @@ class eventProcessor():
             else: 
                 itm = [[first]]
                 nextTmp = first
-                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer() == first:
+                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer() == first and self.playingList == constants.PLAYLIST:
                     self.stop() # 再生中の曲を削除するときは停止
             while True:
                 next = lcObj.GetNextSelected(nextTmp)
-                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer() == next:
+                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer() == next and self.playingList == constants.PLAYLIST:
                     self.stop() # 再生中の曲を削除するときは停止
                 if next < 0:
                     if itm[-1][0] != nextTmp: itm[-1].append(nextTmp)
