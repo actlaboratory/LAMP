@@ -62,6 +62,7 @@ class lampController(threading.Thread):
                     elif o == "volumeDown": wx.CallAfter(globalVars.eventProcess.changeVolume, -5)
                     elif o == "repeatLoop": globalVars.eventProcess.repeatLoopCtrl()
                     elif o == "shuffle": globalVars.eventProcess.shuffleSw()
+                    elif o == "clearAllLists": globalVars.eventProcess.clearAllLists()
                     elif "file/" in o or "playlist/" in o:
                         self.__fileProcess(o)
             except Exception as e:

@@ -249,6 +249,14 @@ class eventProcessor():
         else: #一時停止解除
             if globalVars.play.play(): view_manager.buttonSetPause()
 
+    # リストクリア
+    def clearAllLists(self, evt=None):
+        globalVars.app.hMainView.playlistView.clear()
+        globalVars.app.hMainView.queueView.clear()
+        self.stop()
+        view_manager.changeListLabel(globalVars.app.hMainView.playlistView)
+        view_manager.changeListLabel(globalVars.app.hMainView.queueView)
+    
     #削除（リストオブジェクト, インデックス）
     def delete(self, lcObj):
         if lcObj.GetSelectedItemCount() == len(lcObj): # 全選択中ならクリア
