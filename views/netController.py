@@ -6,6 +6,7 @@ import wx
 import os
 import win32api
 import requests
+from logging import getLogger
 import constants
 import fxManager
 from views import mkDialog
@@ -15,6 +16,7 @@ from logging import getLogger
 from views.baseDialog import *
 
 def show():
+    log=getLogger("%s.NetController" % (constants.LOG_PREFIX,))
     try:
         responseObject = requests.post(constants.API_SOFTWAREMANAGE_URL, json=globalVars.lampController.makeData(), timeout=5)
         responseObject.encoding="utf-8"
@@ -22,6 +24,7 @@ def show():
         if (resJson["code"] == 200 and resJson["displayName"]) or (resJson["code"] == 400 and resJson["reason"]):
             pass
     except Exception as e:
+        log.error(str(e))
         resJson = False
     
     if resJson != False and resJson["code"] == 400:
@@ -46,6 +49,7 @@ class Dialog(BaseDialog):
         self.entered = entered
         self.resJson = resJson
         self.InstallControls()
+        self.log=getLogger("%s.NetController" % (constants.LOG_PREFIX,))
         return True
 
     def InstallControls(self):
@@ -109,6 +113,7 @@ class Dialog(BaseDialog):
             if j["code"] == 200: release = True
             else: release = False
         except Exception as e:
+            self.log.error(str(e))
             release = False
         
         if release:
@@ -166,6 +171,7 @@ class Dialog(BaseDialog):
                 d.Show()
                 return False
         except Exception as e:
+            self.log.error(str(e))
             d = mkDialog.Dialog("entryErrorDialog")
             d.Initialize(_("登録失敗"), _("LAMPの登録に失敗しました。ネットワーク接続などを確認してください。"), ["OK"], False)
             fxManager.error()

@@ -9,6 +9,7 @@ import time
 import json
 import wx
 import requests
+from logging import getLogger
 import constants
 import globalVars
 import listManager
@@ -25,6 +26,7 @@ class lampController(threading.Thread):
         self.ALBUM = 3
         self.ALBUM_ARTIST = 4
         self.LENGTH = 5
+        self.log=getLogger("%s.NetRemote" % (constants.LOG_PREFIX,))
         
         # フォルダ一覧読み込み
         if not os.path.isfile("netDirList.dat"):
@@ -48,6 +50,11 @@ class lampController(threading.Thread):
             if self.exitFlag: break
             if not self.requestFlag: continue
             if not globalVars.app.config.getboolean("network","ctrl_client",True): continue
+            
+            # インターネット接続確認
+            try: response = requests.get("https://www.riken.jp/")
+            except: continue
+            
             try:
                 responseObject = requests.post(constants.API_COMUNICATION_URL, json=self.makeData(), timeout=5)
                 responseObject.encoding="utf-8"
@@ -66,7 +73,7 @@ class lampController(threading.Thread):
                     elif "file/" in o or "playlist/" in o:
                         self.__fileProcess(o)
             except Exception as e:
-                pass
+                self.log.error(str(e))
 
     def saveDirDict(self):
         f = open("netDirList.dat", "wb")

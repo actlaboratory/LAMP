@@ -8,6 +8,7 @@ import os
 import time
 import threading
 import requests
+from logging import getLogger
 import constants
 import globalVars
 import fxManager
@@ -319,6 +320,7 @@ class makeFileListJson(threading.Thread):
     def __init__(self, path):
         self.path = path
         self.pathList = None
+        self.log=getLogger("%s.NetFileManager" % (constants.LOG_PREFIX,))
         super().__init__()
 
     def run(self):
@@ -337,6 +339,7 @@ class makeFileListJson(threading.Thread):
 
 class sendJsonProcess(threading.Thread):
     def setValue(self, name, makeFileList, overWrite=False):
+        self.log=getLogger("%s.NetFileManager" % (constants.LOG_PREFIX,))
         self.name = name
         self.makeFileList = makeFileList
         self.returnValue = None
@@ -363,5 +366,6 @@ class sendJsonProcess(threading.Thread):
             else:
                 return "error"
         except Exception as e:
+            self.log.error(str(e))
             return "error"
 
