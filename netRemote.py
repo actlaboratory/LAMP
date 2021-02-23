@@ -45,6 +45,7 @@ class lampController(threading.Thread):
 
     def run(self):
         sleep = constants.API_DEFAULT_INTERVAL
+        errorCount = 0 # 連続エラーで接続確認処理
         while not self.exitFlag:
             time.sleep(sleep)
             if self.exitFlag: break
@@ -52,8 +53,11 @@ class lampController(threading.Thread):
             if not globalVars.app.config.getboolean("network","ctrl_client",True): continue
             
             # インターネット接続確認
-            try: response = requests.get("https://www.riken.jp/")
-            except: continue
+            if errorCount >= 10:
+                try:
+                    response = requests.get("https://www.riken.jp/")
+                    errorCount = 0
+                except: continue
             
             try:
                 responseObject = requests.post(constants.API_COMUNICATION_URL, json=self.makeData(), timeout=5)
@@ -73,6 +77,7 @@ class lampController(threading.Thread):
                     elif "file/" in o or "playlist/" in o:
                         self.__fileProcess(o)
             except Exception as e:
+                errorCount += 1
                 self.log.error(str(e))
 
     def saveDirDict(self):
