@@ -28,6 +28,8 @@ dic={
 	"SET_SLEEPTIMER": _("スリープタイマーを設定(&S)"),
 	"SET_EFFECTOR": _("エフェクター(&F)"),
 	"ABOUT_PLAYING": _("再生中のファイルについて(&A)"),
+	"SHOW_NET_CONTROLLER": _("LAMP Controller設定"),
+	"SHOW_NET_FILE_MANAGER": "LAMP Controllerのファイル",
 	
 	# プレイリストメニュー
 	"PLAYLIST_HISTORY_LABEL": _("履歴（20件まで）"),

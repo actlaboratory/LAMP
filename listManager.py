@@ -97,15 +97,15 @@ def getFileInfoProcess(tuples):
     pybass.BASS_Free()
     return rtn
 
-# 複数ファイルを追加（ファイルパスリスト, 追加先リストビュー, 追加先インデックス=末尾）
-def addItems(flst, lcObj, id=-1):
+# 複数ファイルを追加（ファイルパスリスト, 追加先リストビュー, 追加先インデックス=末尾, エラー無視=False）
+def addItems(flst, lcObj, id=-1, ignoreError=False):
     progress=mkProgress.Dialog("importProgressDialog")
     progress.Initialize(_("ファイルを集めています..."), _("読み込み中..."))
     progress.Show(False)
-    t = threading.Thread(target=addItemsThread, args=(progress, flst, lcObj, id))
+    t = threading.Thread(target=addItemsThread, args=(progress, flst, lcObj, id, ignoreError))
     t.start()
 
-def addItemsThread(progress, flst, lcObj, id=-1):
+def addItemsThread(progress, flst, lcObj, id=-1, ignoreError=False):
     with lock:
         # 作業するファイルのリスト（ファイルパス）
         pathList = []
@@ -133,7 +133,7 @@ def addItemsThread(progress, flst, lcObj, id=-1):
         if len(lcObj) == 0: _append(pathList, lcObj, progress, -1)
         else: _append(pathList, lcObj, progress, id)
         view_manager.changeListLabel(lcObj)
-        if len(errorList) != 0 or len(notFoundList) != 0:
+        if (len(errorList) != 0 or len(notFoundList) != 0) and ignoreError==False:
             wx.CallAfter(loadErrorDialog.run, errorList, notFoundList)
         fxManager.load()
         wx.CallAfter(progress.Destroy)

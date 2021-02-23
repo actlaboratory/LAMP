@@ -52,6 +52,9 @@ class eventProcessor():
                 globalVars.app.hMainView.trackBar.SetValue(val)
                 self.setNowTimeLabel(val, max)
 
+        # ネット用再生時間更新
+        globalVars.lampController.setPlaybackTime(val)
+        
         #ファイル送り
         if not self.fileChanging:
             if globalVars.play.getStatus() == PLAYER_STATUS_END:
@@ -173,10 +176,12 @@ class eventProcessor():
                 self.refreshTagInfo()
                 globalVars.app.hMainView.tagInfoTimer.Start(10000)
             view_manager.setFileStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
+            globalVars.lampController.setFileInfo() # ネット用ファイル情報更新
         if not ret:
             view_manager.buttonSetPlay()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
             view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
+            globalVars.lampController.clearFileInfo() # ネット用ファイル情報更新
         view_manager.changeListLabel(globalVars.app.hMainView.playlistView)
         view_manager.changeListLabel(globalVars.app.hMainView.queueView)
         return ret
@@ -203,10 +208,13 @@ class eventProcessor():
             self.refreshTagInfo()
             globalVars.app.hMainView.tagInfoTimer.Start(10000)
             view_manager.setFileStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
+            globalVars.lampController.setFileInfo() # ネット用ファイル情報更新
         else:
+            self.stop()
             view_manager.buttonSetPlay()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
             view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
+            globalVars.lampController.clearFileInfo() # ネット用ファイル情報更新
         view_manager.changeListLabel(globalVars.app.hMainView.playlistView)
         view_manager.changeListLabel(globalVars.app.hMainView.queueView)
         return ret
@@ -241,11 +249,21 @@ class eventProcessor():
         else: #一時停止解除
             if globalVars.play.play(): view_manager.buttonSetPause()
 
+    # リストクリア
+    def clearAllLists(self, evt=None):
+        globalVars.app.hMainView.playlistView.clear()
+        globalVars.app.hMainView.queueView.clear()
+        self.stop()
+        view_manager.changeListLabel(globalVars.app.hMainView.playlistView)
+        view_manager.changeListLabel(globalVars.app.hMainView.queueView)
+    
     #削除（リストオブジェクト, インデックス）
     def delete(self, lcObj):
         if lcObj.GetSelectedItemCount() == len(lcObj): # 全選択中ならクリア
             lcObj.clear()
-            self.stop()
+            #操作した側リストの再生を停止
+            if lcObj == listManager.getLCObject(self.playingList) and self.playingList == constants.PLAYLIST:
+                self.stop()
         else:
             # 選択済みアイテムリストを生成
             first = lcObj.GetFirstSelected()
@@ -253,11 +271,11 @@ class eventProcessor():
             else: 
                 itm = [[first]]
                 nextTmp = first
-                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer() == first:
+                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer() == first and self.playingList == constants.PLAYLIST:
                     self.stop() # 再生中の曲を削除するときは停止
             while True:
                 next = lcObj.GetNextSelected(nextTmp)
-                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer() == next:
+                if lcObj == listManager.getLCObject(self.playingList) and lcObj.getPointer() == next and self.playingList == constants.PLAYLIST:
                     self.stop() # 再生中の曲を削除するときは停止
                 if next < 0:
                     if itm[-1][0] != nextTmp: itm[-1].append(nextTmp)
@@ -386,6 +404,7 @@ class eventProcessor():
     def stop(self):
         self.errorSkipCount = 0 #エラースキップのカウンタをリセット
         view_manager.clearStaticInfoView() #スクリーンリーダ用リストの更新
+        globalVars.lampController.clearFileInfo() # ネット用ファイル情報更新
         globalVars.app.hMainView.playlistView.setPointer(-1)
         globalVars.play.stop()
         view_manager.buttonSetPlay()

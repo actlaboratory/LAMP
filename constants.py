@@ -22,8 +22,8 @@ KEYMAP_FILE_NAME="keymap.ini"
 #アプリケーション基本情報
 APP_NAME="LAMP"
 APP_FULL_NAME = "Light and Accessible Music Player"
-APP_VERSION="2.1.0"
-APP_LAST_RELEASE_DATE = "2021-01-04"
+APP_VERSION="2.2.0"
+APP_LAST_RELEASE_DATE = "2021-02-24"
 APP_ICON = "icon.ico"
 APP_COPYRIGHT_YEAR="2019-2021"
 APP_LICENSE="GNU General Public License2.0 or later"
@@ -58,6 +58,16 @@ ITEM_LENGTH = 5
 ITEM_ARTIST = 6
 ITEM_ALBUM = 7
 ITEM_ALBUMARTIST = 8
+
+# API定数
+API_VERSION = 1
+API_DEFAULT_INTERVAL = 2
+#API_BASE_URL = "http://localhost:10100/"
+API_BASE_URL = "https://lamp.actlab.org/"
+API_COMUNICATION_URL = API_BASE_URL + "api/v1/comunication"
+API_SOFTWAREMANAGE_URL = API_BASE_URL + "api/v1/softwaremanage"
+API_SOFTWAREENTRY_URL = API_BASE_URL + "api/v1/entry"
+API_PUTFILE_URL = API_BASE_URL + "api/v1/putfile"
 
 # リスト
 PLAYLIST = 101

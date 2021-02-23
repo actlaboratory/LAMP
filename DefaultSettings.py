@@ -47,7 +47,10 @@ class DefaultSettings:
 		config["network"]={
 			"manual_proxy": False,
 			"proxy_server": "",
-			"proxy_port": 8080
+			"proxy_port": 8080,
+			"user_name": "",
+			"software_key": "",
+			"ctrl_client": True
 		}
 		return config
 

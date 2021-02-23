@@ -21,7 +21,8 @@ class playlist(virtualListCtrlBase.virtualListCtrl):
 
     def OnGetItemText(self, item, column):
         if column == 0: column = 1
-        return super().OnGetItemText(item, column)
+        # 表示項目は独自で返す（Baseの変更へ対応）
+        return self.lst[item][column]
 
     def get(self):
         if self.pointer >= 0 and self.pointer < len(self.lst):
@@ -63,7 +64,7 @@ class playlist(virtualListCtrlBase.virtualListCtrl):
     def insert(self, index, object):
         t = self.get()
         super().insert(index, object)
-        if t != None: self.pointer[self.lst.index(t)]
+        if t != None: self.pointer = self.lst.index(t)
         
     def pop(self, index):
         t = self.get()
@@ -113,7 +114,8 @@ class queue(virtualListCtrlBase.virtualListCtrl):
 
     def OnGetItemText(self, item, column):
         if column == 0: column = 1
-        return super().OnGetItemText(item, column)
+        # 表示項目は独自で返す（Baseの変更へ対応）
+        return self.lst[item][column]
 
     def get(self):
         if self.pointer >= 0 and self.pointer < len(self.lst):

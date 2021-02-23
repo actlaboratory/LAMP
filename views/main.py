@@ -9,6 +9,7 @@ from views import lampViewObject
 from views import setting_dialog
 from views import notificationText
 from views import versionDialog
+from views import netFileManager
 from views import globalKeyConfig
 import logging
 import os
@@ -22,6 +23,7 @@ import constants
 import errorCodes
 import update
 import globalVars
+import netRemote
 import hotkeyHandler
 import menuItemsStore
 import menuItemsDic
@@ -206,7 +208,7 @@ class Menu(BaseMenu):
 		self.hFileMenu.Enable(menuItemsStore.getRef("M3U_CLOSE"), False)
 		
 		#機能メニューの中身
-		self.RegisterMenuCommand(self.hFunctionMenu, ["SET_SLEEPTIMER",	"SET_EFFECTOR", "ABOUT_PLAYING"])
+		self.RegisterMenuCommand(self.hFunctionMenu, ["SET_SLEEPTIMER",	"SET_EFFECTOR", "ABOUT_PLAYING", "SHOW_NET_CONTROLLER", "SHOW_NET_FILE_MANAGER"])
 		self.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
 		
 		# プレイリストメニューの中身
@@ -318,6 +320,10 @@ class Events(BaseEvents):
 				listManager.infoDialog(listManager.getTuple(constants.PLAYLIST))
 			else:
 				listManager.infoDialog(globalVars.listInfo.playingTmp)
+		elif selected == menuItemsStore.getRef("SHOW_NET_CONTROLLER"):
+			globalVars.lampController.showController()
+		elif selected == menuItemsStore.getRef("SHOW_NET_FILE_MANAGER"):
+			netFileManager.run();
 		# 操作メニューのイベント
 		elif selected==menuItemsStore.getRef("PLAY_PAUSE"):
 			globalVars.eventProcess.playButtonControl()

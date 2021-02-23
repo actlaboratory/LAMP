@@ -34,3 +34,4 @@ Copyright (c)2019-2021 Hiroki Fujii,ACT laboratory All rights reserved.
 	・load.mp3
 	・error.mp3
 	・confirm.mp3
+	・processing.mp3
