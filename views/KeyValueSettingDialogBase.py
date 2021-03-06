@@ -325,7 +325,7 @@ def KeySettingValidation(oldKeyConfig,newKeyConfig,logger,entries=None,AllowNewK
 		if e==None:
 			errors+=_("設定されたショートカット%sが認識できません。お手数ですが、このエラーメッセージを作者へご連絡ください。\n") % k
 		elif e in entries and (k not in oldKeys):
-			errors+=_("%(name)sに設定されたショートカットキー%(key)sは、別の場所で利用されています。\n") % {"name": v[0],"key": k}
+			errors+=_("%(command)sに設定されたショートカットキー%(key)sは、別の場所で利用されています。\n") % {"command": v[0],"key": k}
 	if errors!="":
 		dialog(_("エラー"),errors)
 		return False
