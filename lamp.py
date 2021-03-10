@@ -66,6 +66,5 @@ def main():
 	app.initialize()
 	app.MainLoop()
 
-
 #global schope
 if __name__ == "__main__": main()

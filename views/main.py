@@ -14,6 +14,7 @@ from views import globalKeyConfig
 import logging
 import os
 import sys
+import time
 import wx
 import re
 import ctypes
@@ -516,7 +517,13 @@ class Events(BaseEvents):
 		globalVars.eventProcess.refreshView()
 
 	def Exit(self, event=None):
+		if globalVars.app.config.getboolean("player", "fadeOutOnExit", False) and globalVars.play.getStatus() == PLAYER_STATUS_PLAYING:
+			while globalVars.play.setVolumeByDiff(-2):
+				time.sleep(0.07)
 		if not m3uManager.closeM3u(newSave=False): return
 		globalVars.app.hMainView.timer.Stop()
 		globalVars.app.hMainView.tagInfoTimer.Stop()
+		
+		globalVars.play.exit()
+		globalVars.lampController.exit()
 		super().Exit(event)
