@@ -9,7 +9,7 @@ import constants
 import globalVars
 
 from logging import getLogger
-
+import views.ViewCreator
 
 class BaseDialog(object):
 	"""モーダルダイアログの基本クラス。"""
