@@ -48,7 +48,7 @@ class KeyValueSettingDialogBase(BaseDialog):
 	def InstallControls(self):
 		"""いろんなwidgetを設置する。"""
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20,style=wx.ALL,proportion=20)
-		self.hListCtrl, dummy=self.creator.listCtrl(_("現在の登録内容"), proportion=0, sizerFlag=wx.ALL|wx.ALIGN_CENTER_HORIZONTAL,size=(750,300),style=wx.LC_REPORT | wx.LC_SINGLE_SEL)
+		self.hListCtrl, dummy=self.creator.virtualListCtrl(_("現在の登録内容"), proportion=0, sizerFlag=wx.ALL|wx.ALIGN_CENTER_HORIZONTAL,size=(750,300),style=wx.LC_REPORT | wx.LC_SINGLE_SEL)
 
 		for i,info in enumerate(self.columnInfo):
 			self.hListCtrl.InsertColumn(i,info[0],format=info[1],width=info[2])
@@ -230,6 +230,7 @@ class SettingDialogBase(BaseDialog):
 		self.buttons=buttons
 		self.values=list(v)
 		self.edits=[None]*len(self.valueNames)
+		self.buttonObjects=[None]*len(self.valueNames)
 
 	def Initialize(self,title):
 		super().Initialize(self.parent,title,style=wx.WS_EX_VALIDATE_RECURSIVELY|wx.DEFAULT_FRAME_STYLE)
@@ -246,12 +247,14 @@ class SettingDialogBase(BaseDialog):
 				self.edits[i]=self.creator.checkbox(name[1],state=self.values[i], x=500)
 			elif name[1]:
 				self.edits[i],dummy=self.creator.inputbox(name[0],x=500,defaultValue=self.values[i], textLayout=wx.VERTICAL)
+				self.edits[i].hideScrollBar(wx.HORIZONTAL)
 			else:
 				self.edits[i],dummy=self.creator.inputbox(name[0],x=500,defaultValue=self.values[i],style=wx.TE_READONLY, textLayout=wx.VERTICAL)
+				self.edits[i].hideScrollBar(wx.HORIZONTAL)
 			if name[1]==None:
 				self.edits[i].GetParent().Hide()
 			if self.buttons[i]:
-				dummy=self.creator.button(self.buttons[i][0],self.buttons[i][1],sizerFlag=wx.ALIGN_BOTTOM | wx.BOTTOM, margin=10)
+				self.buttonObjects[i]=self.creator.button(self.buttons[i][0],self.buttons[i][1],sizerFlag=wx.ALIGN_BOTTOM | wx.BOTTOM, margin=10)
 
 		#ボタンエリア
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT|wx.TOP, 10)
