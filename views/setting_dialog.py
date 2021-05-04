@@ -86,8 +86,9 @@ class settingDialog(baseDialog.BaseDialog):
         self.volumeSlider, self.volumeLabel = startupCreator.slider(_("規定の音量(&V)"), 0, 100,None, globalVars.app.config.getint("volume","default",default=100, min=0, max=100), textLayout=wx.HORIZONTAL)
         self.startupDeviceCombo, startupDeviceLabel = startupCreator.combobox(_("起動時出力先(&D)"), self.getValueList(self.deviceDic), textLayout=wx.HORIZONTAL)
         self.startupListLabel = startupCreator.staticText(_("起動時に読み込むプレイリスト"))
-        startupListCreator = ViewCreator.ViewCreator(self.viewMode, startupCreator.GetPanel(), startupCreator.GetSizer(), wx.HORIZONTAL)
-        self.startupList, dummy = startupListCreator.inputbox(_("起動時に読み込むプレイリスト(&P)"), defaultValue=globalVars.app.config.getstring("player", "startupPlaylist", ""), x=600, textLayout=None)
+        startupListCreator = ViewCreator.ViewCreator(self.viewMode, startupCreator.GetPanel(), startupCreator.GetSizer(), wx.HORIZONTAL,style=wx.EXPAND)
+        self.startupList, dummy = startupListCreator.inputbox(_("起動時に読み込むプレイリスト(&P)"), defaultValue=globalVars.app.config.getstring("player", "startupPlaylist", ""), x=600, proportion=1,textLayout=None)
+        self.startupList.hideScrollBar(wx.HORIZONTAL)
         self.startupListSelectBtn = startupListCreator.button(_("参照"), self.onButton)
 
         # ネットワーク
@@ -101,6 +102,7 @@ class settingDialog(baseDialog.BaseDialog):
             self.manualProxy.SetValue(True)
         else: self.manualProxy.SetValue(False)
         self.proxyServer, self.proxyServerLabel = netCreator.inputbox(_("サーバ名(&S)"), defaultValue=globalVars.app.config.getstring("network", "proxy_server", ""), x=400, textLayout=wx.HORIZONTAL)
+        self.proxyServer.hideScrollBar(wx.HORIZONTAL)
         self.proxyPort, self.proxyPortLabel = netCreator.spinCtrl(_("ポート(&P)"), 0, 65535, None, globalVars.app.config.getint("network", "proxy_port", 8080, 0, 65535), textLayout=wx.HORIZONTAL)
 
         self.onCheckBox()
