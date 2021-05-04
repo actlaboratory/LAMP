@@ -114,7 +114,12 @@ def addItemsThread(progress, flst, lcObj, id=-1, ignoreError=False):
         # リストで受け取ってフォルダとファイルに分ける
         for s in flst:
             if progress.status == wx.CANCEL: break
-            if (os.path.isfile(s) and os.path.splitext(s)[1].lower() in globalVars.fileExpansions) or re.search("^https?://.+\..+/.*$", s)!=None:
+            if os.path.isfile(s) and os.path.splitext(s)[1].lower() in globalVars.fileExpansions:
+		        # フィルタによる除外処理
+                if not globalVars.filter.test(s):
+                    continue
+                pathList.append(s)
+            elif re.search("^https?://.+\..+/.*$", s)!=None:
                 pathList.append(s)
             elif os.path.isfile(s) and os.path.splitext(s)[1].lower() == ".url":
                 try: 
@@ -146,7 +151,11 @@ def _appendDirList(lst, dir, errorList):
         if len(tp[2]) != 0:
             for file in tp[2]:
                 f = tp[0] + "\\" + file
-                if os.path.splitext(f)[1].lower() in globalVars.fileExpansions: lst.append(f)
+                if os.path.splitext(f)[1].lower() in globalVars.fileExpansions:
+                    # フィルタによる除外処理
+                    if not globalVars.filter.test(f):
+                        continue
+                    lst.append(f)
                 else: errorList.append(f)
 
 # 追加

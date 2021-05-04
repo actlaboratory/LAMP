@@ -21,6 +21,7 @@ defaultKeymap["MAINVIEW"]={
 	"SET_SLEEPTIMER": "ctrl+shift+T",
 	"SET_EFFECTOR": "ctrl+E",
 	"ABOUT_PLAYING": "ctrl+shift+I",
+	"FILTER_SETTING": "",
 	# 操作メニュー
 	"VOLUME_UP": "ctrl+uparrow",
 	"VOLUME_DOWN": "ctrl+downarrow",
