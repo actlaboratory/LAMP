@@ -5,20 +5,21 @@
 import threading
 import sys, os, wx, time, _datetime
 import win32event, win32api, winerror
-import gettext, locale
-import logging
-from logging import getLogger, FileHandler, Formatter
+
 import proxyUtil
+
 import AppBase
+import constants, errorCodes
+
 from simpleDialog import *
 from soundPlayer import player, bassController
 from soundPlayer.constants import *
-import accessible_output2.outputs.auto
-import constants, errorCodes
-def _import():
-	global event_processor, listManager, lampPipe, ConfigManager, globalVars, m3uManager, sleep_timer, DefaultSettings, update, main, netRemote
 
-	import event_processor, listManager, lampPipe, ConfigManager, globalVars, m3uManager, sleep_timer, DefaultSettings, netRemote
+
+def _import():
+	global event_processor, listManager, lampPipe, ConfigManager, globalVars, m3uManager, sleep_timer, DefaultSettings, update, main, netRemote,filterManager
+
+	import event_processor, listManager, lampPipe, ConfigManager, globalVars, m3uManager, sleep_timer, DefaultSettings, netRemote,filterManager
 	import update
 	from views import main
 
@@ -30,7 +31,7 @@ class Main(AppBase.MainBase):
 	def initialize(self):
 		_import()
 		self.log.debug(str(sys.argv))
-		# 多重起動処理8
+		# 多重起動処理
 		try: self.mutex = win32event.CreateMutex(None, 1, constants.PIPE_NAME)
 		except: pass
 		if win32api.GetLastError() == winerror.ERROR_ALREADY_EXISTS:
@@ -48,6 +49,12 @@ class Main(AppBase.MainBase):
 			pr = self.config.getint("network", "proxy_port", 8080, 0, 65535)
 			self.proxyEnviron.set_environ(sv, pr)
 		else: self.proxyEnviron.set_environ()
+
+		#設定ファイル更新処理
+		if self.config.getint("general","fileversion",100,100,999)==100:
+			# 初期値のフィルタ設定を適用
+			self.config.read_dict(DefaultSettings.initialValues)
+			self.config["general"]["fileversion"]=101
 
 		self.SetGlobalVars()
 		# メインビューを表示
@@ -105,6 +112,7 @@ class Main(AppBase.MainBase):
 		globalVars.listInfo = listManager.listInfo()
 		globalVars.lampController = netRemote.lampController()
 		globalVars.lampController.start()
+		globalVars.filter = filterManager.FilterManager()
 
 	def __del__(self):
 		try: lampPipe.stopPipeServer()

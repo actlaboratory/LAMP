@@ -61,10 +61,14 @@ class Dialog(BaseDialog):
             # ログイン情報
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,views.ViewCreator.FlexGridSizer,20,2)
             self.userName, dummy = self.creator.inputbox(_("ユーザー名"), x=450, textLayout=wx.HORIZONTAL)
+            self.userName.hideScrollBar(wx.HORIZONTAL)
             self.password, dummy = self.creator.inputbox(_("パスワード"), style=wx.TE_PASSWORD, x=450, textLayout=wx.HORIZONTAL)
+            self.password.hideScrollBar(wx.HORIZONTAL)
             self.displayName, dummy = self.creator.inputbox(_("LAMPの名前"), x=450, textLayout=wx.HORIZONTAL)
+            self.displayName.hideScrollBar(wx.HORIZONTAL)
             self.pcName, dummy = self.creator.inputbox(_("コンピュータの名前"), defaultValue=os.environ["COMPUTERNAME"], style=wx.TE_READONLY, x=450, textLayout=wx.HORIZONTAL)
-            
+            self.pcName.hideScrollBar(wx.HORIZONTAL)
+
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
             self.newEntryBtn = self.creator.button(_("このLAMPを登録"),self.onButtonClick)
             self.bCancel = self.creator.cancelbutton(_("閉じる"), self.onButtonClick)
@@ -75,7 +79,9 @@ class Dialog(BaseDialog):
             # 情報表示
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,views.ViewCreator.FlexGridSizer,20,2)
             self.lampName, dummy = self.creator.inputbox(_("LAMPの名前"), defaultValue=str(self.resJson["displayName"]), style=wx.TE_READONLY, x=450, textLayout=wx.HORIZONTAL)
+            self.lampName.hideScrollBar(wx.HORIZONTAL)
             self.pcName, dummy = self.creator.inputbox(_("コンピュータの名前"), defaultValue=os.environ["COMPUTERNAME"], style=wx.TE_READONLY, x=450, textLayout=wx.HORIZONTAL)
+            self.pcName.hideScrollBar(wx.HORIZONTAL)
 
             # 設定パネル
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20, style=wx.ALL, margin=20)

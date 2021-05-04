@@ -36,6 +36,7 @@ class Dialog(BaseDialog):
 
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,style=wx.ALL | wx.EXPAND,margin=20)
         self.iText,self.static=self.creator.inputbox(guideTexts[self.type], x=-1,proportion=1,textLayout=wx.VERTICAL,margin=0)
+        self.iText.hideScrollBar(wx.HORIZONTAL)
         if self.type<=1:
             self.browse=self.creator.button(_("参照"),self.onBrowseBtn,sizerFlag=wx.ALIGN_BOTTOM | wx.BOTTOM,margin=3)
             self.browse.SetFocus()

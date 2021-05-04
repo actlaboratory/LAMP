@@ -23,6 +23,7 @@ class Dialog(BaseDialog):
 
 		for title,content in dic.items():
 			self.iName,self.static=self.creator.inputbox(title,None,str(content),wx.TE_READONLY,400)
+			self.iName.hideScrollBar(wx.HORIZONTAL)
 
 		self.buttonArea=views.ViewCreator.BoxSizer(self.sizer,wx.HORIZONTAL, wx.ALIGN_RIGHT)
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.buttonArea,wx.HORIZONTAL,20)

@@ -166,6 +166,7 @@ class netFileSend(BaseDialog):
         else: #更新時のメッセージ
             dummy = self.creator.staticText(_("LAMP Controllerのフォルダ情報を更新しています。"))
         self.name, dummy = self.creator.inputbox(_("名前"), x=700, textLayout=wx.HORIZONTAL)
+        self.name.hideScrollBar(wx.HORIZONTAL)
         if self.nameValue != None:
             self.name.SetValue(self.nameValue)
             self.name.GetParent().Enable(False)
@@ -284,9 +285,11 @@ class netFileAddDialog(BaseDialog):
         dummy = self.creator.staticText(_("フォルダの場所と、LAMP Controller上の名前を指定します。"))
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20, style=wx.ALL, margin=20)
         self.path, dummy = self.creator.inputbox(_("場所"), x=700, textLayout=wx.HORIZONTAL)
+        self.path.hideScrollBar(wx.HORIZONTAL)
         self.bBrowse = self.creator.button(_("参照"), self.onButtonClick)
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20, style=wx.ALL, margin=20)
         self.name, dummy = self.creator.inputbox(_("名前"), x=700, textLayout=wx.HORIZONTAL)
+        self.name.hideScrollBar(wx.HORIZONTAL)
         self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
         self.bOk = self.creator.button("OK", self.onButtonClick)
         self.bCancel = self.creator.cancelbutton(_("キャンセル"))

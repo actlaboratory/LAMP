@@ -10,7 +10,7 @@ class DefaultSettings:
 		config = ConfigManager()
 		config["general"]={
 			"language": "ja-JP",
-			"fileVersion": "100",
+			"fileVersion": "101",
 			"locale": "ja-JP",
 			"update": True,
 			"timeout": 5
@@ -52,6 +52,10 @@ class DefaultSettings:
 			"software_key": "",
 			"ctrl_client": True
 		}
+		config["filter_types"]={
+		}
+		config["filter_patterns"]={
+		}
 		return config
 
 initialValues={}
@@ -59,3 +63,14 @@ initialValues={}
 	この辞書には、ユーザによるキーの削除が許されるが、初回起動時に組み込んでおきたい設定のデフォルト値を設定する。
 	ここでの設定はユーザの環境に設定ファイルがなかった場合のみ適用され、初期値として保存される。
 """
+initialValues["filter_types"]={
+	"filter off vocal" : "0",
+}
+
+initialValues["filter_patterns"]={
+	"filter off vocal" : ".*((vocal off)|(off vocal)|(instrumental)|(\(カラオケ\))).*",
+}
+
+initialValues["filter_startup"]={
+	"filter off vocal" : "False",
+}

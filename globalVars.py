@@ -18,3 +18,4 @@ popupMenu4listView = None
 fileExpansions = [".wav", ".mp3", ".aac", ".m4a", ".ogg", ".opus", ".flac", ".wma", ".wv"]
 update = None
 lampController = None
+filter = None
