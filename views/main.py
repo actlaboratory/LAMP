@@ -209,7 +209,7 @@ class Menu(BaseMenu):
 		self.hFileMenu.Enable(menuItemsStore.getRef("M3U_CLOSE"), False)
 		
 		#機能メニューの中身
-		self.RegisterMenuCommand(self.hFunctionMenu, ["SET_SLEEPTIMER",	"SET_EFFECTOR", "ABOUT_PLAYING", "SHOW_NET_CONTROLLER", "SHOW_NET_FILE_MANAGER"])
+		self.RegisterMenuCommand(self.hFunctionMenu, ["SET_SLEEPTIMER", "SET_EFFECTOR", "SET_CURSOR_PLAYING", "ABOUT_PLAYING", "SHOW_NET_CONTROLLER", "SHOW_NET_FILE_MANAGER"])
 		self.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
 		
 		# プレイリストメニューの中身
@@ -316,6 +316,14 @@ class Events(BaseEvents):
 			globalVars.sleepTimer.set()
 		elif selected == menuItemsStore.getRef("SET_EFFECTOR"):
 			effector.effector()
+		elif selected == menuItemsStore.getRef("SET_CURSOR_PLAYING"):
+			if globalVars.eventProcess.playingList == constants.PLAYLIST:
+				p = self.parent.playlistView
+				p.Focus(p.getPointer())
+				p.Select(-1, 0)
+				p.Select(p.getPointer())
+			else:
+				globalVars.app.hMainView.notification.show(_("プレイリスト上の項目を再生していません。"), 2)
 		elif selected == menuItemsStore.getRef("ABOUT_PLAYING"):
 			if globalVars.eventProcess.playingList == constants.PLAYLIST:
 				listManager.infoDialog(listManager.getTuple(constants.PLAYLIST))
