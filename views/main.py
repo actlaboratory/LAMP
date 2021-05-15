@@ -1,28 +1,30 @@
 ﻿# -*- coding: utf-8 -*-
 #main view
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
-#Copyright (C) 2019-2020 yamahubuki <itiro.ishino@gmail.com>
+#Copyright (C) 2019-2021 yamahubuki <itiro.ishino@gmail.com>
 #Copyright (C) 2020-2021 Hiroki Fujii <hfujii@hisystron.com>
 
-import subprocess
-from views import lampViewObject
-from views import setting_dialog
-from views import notificationText
-from views import versionDialog
-from views import netFileManager
+from views import fileAssocDialog
+from views import filterSettingDialog
 from views import globalKeyConfig
+from views import lampViewObject
+from views import netFileManager
+from views import notificationText
+from views import setting_dialog
+from views import versionDialog
+
+import ctypes
 import logging
 import os
+import pywintypes
+import re
+import subprocess
 import sys
 import time
 import wx
-import re
-import ctypes
-import pywintypes
 
 import constants
 import errorCodes
-import update
 import globalVars
 import netRemote
 import hotkeyHandler
@@ -34,12 +36,13 @@ import m3uManager
 import effector
 import startupListSetter
 import listManager
+import update
+
 from soundPlayer import player
 from soundPlayer.constants import *
 
 import view_manager
 import sendToManager
-from views import fileAssocDialog
 
 from logging import getLogger
 from simpleDialog import dialog
@@ -209,6 +212,10 @@ class Menu(BaseMenu):
 		self.hFileMenu.Enable(menuItemsStore.getRef("M3U_CLOSE"), False)
 		
 		#機能メニューの中身
+		#フィルタ設定
+		self.hFilterSubMenu = wx.Menu()
+		self.RegisterMenuCommand(self.hFilterSubMenu, ["FILTER_SETTING"])
+		self.RegisterMenuCommand(self.hFunctionMenu, "FILTER_SUB", None, self.hFilterSubMenu)
 		self.RegisterMenuCommand(self.hFunctionMenu, ["SET_SLEEPTIMER", "SET_EFFECTOR", "SET_CURSOR_PLAYING", "ABOUT_PLAYING", "SHOW_NET_CONTROLLER", "SHOW_NET_FILE_MANAGER"])
 		self.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
 		
@@ -312,6 +319,14 @@ class Events(BaseEvents):
 		elif selected == menuItemsStore.getRef("EXIT"):
 			self.parent.hFrame.Close()
 		#機能メニューのイベント
+		elif selected >= constants.FILTER_LIST_MENU and selected < constants.FILTER_LIST_MENU + 500:
+			globalVars.filter.get(selected - constants.FILTER_LIST_MENU).setEnable(event.IsChecked())
+		elif selected == menuItemsStore.getRef("FILTER_SETTING"):
+			d = filterSettingDialog.Dialog(*globalVars.filter.getDic())
+			d.Initialize()
+			if d.Show()==wx.ID_CANCEL:
+				return
+			globalVars.filter.loadDic(*d.GetValue())
 		elif selected == menuItemsStore.getRef("SET_SLEEPTIMER"):
 			globalVars.sleepTimer.set()
 		elif selected == menuItemsStore.getRef("SET_EFFECTOR"):
@@ -495,9 +510,21 @@ class Events(BaseEvents):
 			for path in globalVars.m3uHistory.getList():
 				menu.Insert(2, constants.PLAYLIST_HISTORY + index, path)
 				index += 1
+		elif menuObject == self.parent.menu.hFilterSubMenu:
+			menu = self.parent.menu.hFilterSubMenu
+			# いったん全て削除
+			for i in range(menu.GetMenuItemCount() - 1):
+				menu.DestroyItem(menu.FindItemByPosition(0))
+			# 項目を作成
+			index = 0
+			for filter in globalVars.filter.getList():
+				menu.InsertCheckItem(index, constants.FILTER_LIST_MENU + index, filter.getName())
+				menu.Check(constants.FILTER_LIST_MENU + index, filter.isEnable())
+				index += 1
+
 		elif menuObject == self.parent.menu.hOperationMenu:
 			self.parent.menu.hOperationMenu.Check(menuItemsStore.getRef("MANUAL_SONG_FEED"), globalVars.app.config.getboolean("player", "manualSongFeed", False))
-	
+
 	def onButtonClick(self, event):
 			if event.GetEventObject() == globalVars.app.hMainView.previousBtn:
 				globalVars.eventProcess.previousBtn()
