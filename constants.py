@@ -44,6 +44,7 @@ FULL_CHECKED=wx.CHK_CHECKED
 # メニュー
 PLAYLIST_HISTORY= 10500
 DEVICE_LIST_MENU = 10000
+FILTER_LIST_MENU = 11000
 
 # パイプとミューテックスオブジェクトの名前
 PIPE_NAME = "lamp_pipe_jp0000actlab"
