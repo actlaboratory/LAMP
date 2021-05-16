@@ -13,7 +13,8 @@ class DefaultSettings:
 			"fileVersion": "101",
 			"locale": "ja-JP",
 			"update": True,
-			"timeout": 5
+			"timeout": 5,
+			"log_level": "0",
 		}
 		config["view"]={
 			"font": "bold 'ＭＳ ゴシック' 22 windows-932",
