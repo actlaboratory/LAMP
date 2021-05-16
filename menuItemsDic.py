@@ -29,6 +29,7 @@ dic={
 	"SET_EFFECTOR": _("エフェクター(&F)"),
 	"FILTER_SUB": _("フィルター"),
 	"ABOUT_PLAYING": _("再生中のファイルについて(&A)"),
+	"SET_CURSOR_PLAYING": _("再生中のファイルにカーソルを移動"),
 	"SHOW_NET_CONTROLLER": _("LAMP Controller設定"),
 	"SHOW_NET_FILE_MANAGER": "LAMP Controllerのファイル",
 
