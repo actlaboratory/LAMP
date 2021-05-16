@@ -38,7 +38,7 @@ class notification():
         self.dialog.Enable(False)
         self.timer = wx.Timer()
         self.timer.Bind(wx.EVT_TIMER, self.hide)
-        
+
     def show(self, label, time):
         self.label.SetLabel(label)
         self.timer.Stop()
@@ -49,3 +49,6 @@ class notification():
 
     def hide(self, evt=None):
         self.dialog.Hide()
+
+    def destroy(self):
+        self.timer.Destroy()

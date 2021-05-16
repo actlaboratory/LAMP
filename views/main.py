@@ -549,8 +549,10 @@ class Events(BaseEvents):
 				time.sleep(0.07)
 		if not m3uManager.closeM3u(newSave=False): return
 		globalVars.app.hMainView.timer.Stop()
+		globalVars.app.hMainView.timer.Destroy()
 		globalVars.app.hMainView.tagInfoTimer.Stop()
-		
+		globalVars.app.hMainView.tagInfoTimer.Destroy()
+		self.parent.notification.destroy()
 		globalVars.play.exit()
 		globalVars.lampController.exit()
 		super().Exit(event)
