@@ -218,6 +218,7 @@ class Menu(BaseMenu):
 		self.RegisterMenuCommand(self.hFunctionMenu, "FILTER_SUB", None, self.hFilterSubMenu)
 		self.RegisterMenuCommand(self.hFunctionMenu, ["SET_SLEEPTIMER", "SET_EFFECTOR", "SET_CURSOR_PLAYING", "ABOUT_PLAYING", "SHOW_NET_CONTROLLER", "SHOW_NET_FILE_MANAGER"])
 		self.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
+		self.hFunctionMenu.Enable(menuItemsStore.getRef("SET_CURSOR_PLAYING"), False)
 		
 		# プレイリストメニューの中身
 		self.RegisterMenuCommand(self.hPlaylistMenu, ["SET_STARTUPLIST", "PLAYLIST_HISTORY_LABEL"])
