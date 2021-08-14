@@ -85,12 +85,20 @@ def getFileInfoProcess(tuples):
             size = os.path.getsize(l[0])
         else:
             size = 0
-        title = pytags.TAGS_Read(handle, b"%TITL").decode("cp932")
-        lengthb = pybass.BASS_ChannelGetLength(handle, pybass.BASS_POS_BYTE)
-        length = pybass.BASS_ChannelBytes2Seconds(handle, lengthb)
-        artist = pytags.TAGS_Read(handle, b"%ARTI").decode("cp932")
-        album = pytags.TAGS_Read(handle, b"%ALBM").decode("cp932")
-        albumArtist = pytags.TAGS_Read(handle, b"%AART").decode("cp932")
+        length = pybass.BASS_ChannelGetLength(handle, pybass.BASS_POS_BYTE)
+        # 文字関係取得
+        for charCode in ["cp932", "utf-8", ""]:
+            if charCode == "":
+                title, artist, album, albumArtist = "", "", "", ""
+            else:
+                try:
+                    title = pytags.TAGS_Read(handle, b"%TITL").decode(charCode)
+                    artist = pytags.TAGS_Read(handle, b"%ARTI").decode(charCode)
+                    album = pytags.TAGS_Read(handle, b"%ALBM").decode(charCode)
+                    albumArtist = pytags.TAGS_Read(handle, b"%AART").decode(charCode)
+                    break
+                except UnicodeDecodeError as e: continue
+
         pybass.BASS_StreamFree(handle)
         l.extend([size, title, length, artist, album, albumArtist])
         rtn.append(tuple(l))
