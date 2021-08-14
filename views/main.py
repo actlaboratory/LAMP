@@ -552,7 +552,7 @@ class Events(BaseEvents):
 	def timerEvent(self, evt):
 		globalVars.eventProcess.refreshView()
 
-	def Exit(self, event=None):
+	def OnExit(self, event=None):
 		if globalVars.app.config.getboolean("player", "fadeOutOnExit", False) and globalVars.play.getStatus() == PLAYER_STATUS_PLAYING:
 			while globalVars.play.setVolumeByDiff(-2):
 				time.sleep(0.07)
@@ -564,4 +564,4 @@ class Events(BaseEvents):
 		self.parent.notification.destroy()
 		globalVars.play.exit()
 		globalVars.lampController.exit()
-		super().Exit(event)
+		super().OnExit(event)
