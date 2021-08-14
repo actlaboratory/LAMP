@@ -85,7 +85,8 @@ def getFileInfoProcess(tuples):
             size = os.path.getsize(l[0])
         else:
             size = 0
-        length = pybass.BASS_ChannelGetLength(handle, pybass.BASS_POS_BYTE)
+        lengthb = pybass.BASS_ChannelGetLength(handle, pybass.BASS_POS_BYTE)
+        length = pybass.BASS_ChannelBytes2Seconds(handle, lengthb)
         # 文字関係取得
         for charCode in ["cp932", "utf-8", ""]:
             if charCode == "":
