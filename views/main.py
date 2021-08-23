@@ -88,9 +88,16 @@ class MainView(BaseView):
 		self.stopBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, enableTabFocus=False)
 		view_manager.setBitmapButton(self.stopBtn, self.hPanel, wx.Bitmap("./resources/stop.dat", wx.BITMAP_TYPE_GIF), _("停止"))
 		self.repeatLoopBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, enableTabFocus=False)
-		view_manager.setBitmapButton(self.repeatLoopBtn, self.hPanel, wx.Bitmap("./resources/repeatLoop.dat", wx.BITMAP_TYPE_GIF), _("リピートに切り替える"))
+		if globalVars.eventProcess.repeatLoopFlag == 2:
+			view_manager.setBitmapButton(self.repeatLoopBtn, self.hPanel, wx.Bitmap("./resources/loop_on.dat", wx.BITMAP_TYPE_GIF), _("リピートとループを解除する"))
+		elif globalVars.eventProcess.repeatLoopFlag == 1:
+			view_manager.setBitmapButton(self.repeatLoopBtn, self.hPanel, wx.Bitmap("./resources/repeat_on.dat", wx.BITMAP_TYPE_GIF), _("ループに切り替える"))
+		else: view_manager.setBitmapButton(self.repeatLoopBtn, self.hPanel, wx.Bitmap("./resources/repeatLoop.dat", wx.BITMAP_TYPE_GIF), _("リピートに切り替える"))
+		
 		self.shuffleBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, enableTabFocus=False)
-		view_manager.setBitmapButton(self.shuffleBtn, self.hPanel, wx.Bitmap("./resources/shuffle_off.dat", wx.BITMAP_TYPE_GIF), _("シャッフルをオンにする"))
+		if globalVars.eventProcess.shuffleCtrl == None:
+			view_manager.setBitmapButton(self.shuffleBtn, self.hPanel, wx.Bitmap("./resources/shuffle_off.dat", wx.BITMAP_TYPE_GIF), _("シャッフルをオンにする"))
+		else: view_manager.setBitmapButton(self.shuffleBtn, self.hPanel, wx.Bitmap("./resources/shuffle_on.dat", wx.BITMAP_TYPE_GIF), _("シャッフルをオフにする"))
 		self.horizontalCreator.GetSizer().AddStretchSpacer(1)
 		self.muteBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, sizerFlag=wx.ALL|wx.ALIGN_CENTER, enableTabFocus=False)
 		if globalVars.app.config.getstring("view","colorMode","white",("white","dark")) == "white":
@@ -242,7 +249,10 @@ class Menu(BaseMenu):
 		self.RegisterRadioMenuCommand(self.hRepeatLoopSubMenu, "REPEAT_LOOP_NONE")
 		self.RegisterRadioMenuCommand(self.hRepeatLoopSubMenu, "RL_REPEAT")
 		self.RegisterRadioMenuCommand(self.hRepeatLoopSubMenu, "RL_LOOP")
+		if globalVars.eventProcess.repeatLoopFlag == 1: self.hRepeatLoopSubMenu.Check(menuItemsStore.getRef("RL_REPEAT"), True)
+		elif globalVars.eventProcess.repeatLoopFlag == 2: self.hRepeatLoopSubMenu.Check(menuItemsStore.getRef("RL_LOOP"), True)
 		self.RegisterCheckMenuCommand(self.hOperationMenu, "SHUFFLE")
+		if globalVars.eventProcess.shuffleCtrl != None: self.hOperationMenu.Check(menuItemsStore.getRef("SHUFFLE"), True)
 		self.RegisterCheckMenuCommand(self.hOperationMenu, "MANUAL_SONG_FEED")
 		
 		# 設定メニューの中身
