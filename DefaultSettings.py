@@ -29,6 +29,7 @@ class DefaultSettings:
 		}
 		config["player"]={
 			"outputDevice": "default",
+			"repeatStartup": False,
 			"skipInterval": "30",
 			"fadeOutOnExit": False,
 			"fileInterrupt": "play",

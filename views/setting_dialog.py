@@ -90,6 +90,10 @@ class settingDialog(baseDialog.BaseDialog):
         self.startupList, dummy = startupListCreator.inputbox(_("起動時に読み込むプレイリスト(&P)"), defaultValue=globalVars.app.config.getstring("player", "startupPlaylist", ""), x=600, proportion=1,textLayout=None)
         self.startupList.hideScrollBar(wx.HORIZONTAL)
         self.startupListSelectBtn = startupListCreator.button(_("参照"), self.onButton)
+        self.repeatStartup = startupCreator.checkbox(_("リピートモードで起動する(&R)"))
+        if globalVars.app.config.getboolean("player", "repeatStartup", False):
+            self.repeatStartup.SetValue(True)
+        else: self.repeatStartup.SetValue(False)
 
         # ネットワーク
         netCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("ネットワーク"), style=wx.ALL, margin=20)
@@ -129,6 +133,7 @@ class settingDialog(baseDialog.BaseDialog):
         globalVars.app.config["volume"]["default"] = str(int(self.volumeSlider.GetValue()))
         globalVars.app.config["player"]["outputDevice"] = self.getKey(self.deviceDic, self.startupDeviceCombo.GetStringSelection())
         globalVars.app.config["player"]["startupPlaylist"] = self.startupList.GetValue()
+        globalVars.app.config["player"]["repeatStartup"] = self.repeatStartup.IsChecked()
         globalVars.app.config["general"]["language"] = self.lang_code[self.langCombo.GetSelection()]
         globalVars.app.config["general"]["update"] = self.updateCheck.IsChecked()
         globalVars.app.config["network"]["manual_proxy"] = self.manualProxy.IsChecked()
