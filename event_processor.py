@@ -21,7 +21,11 @@ from views import mkDialog
 
 class eventProcessor():
     def __init__(self):
-        self.repeatLoopFlag = 0 #リピート=1, ループ=2
+        # リピートモード起動の設定が有効であればリピートモード
+        # リピート=1, ループ=2
+        if globalVars.app.config.getboolean("player", "repeatStartup", False):
+            self.repeatLoopFlag = 1
+        else: self.repeatLoopFlag = 0
         self.playingList = None
         self.tagInfoProcess = 0 # タグ情報表示フラグ 0=アルバム, 1=アーティスト, 2=アルバムアーティスト
         self.muteFlag = False #初期値はミュート解除
