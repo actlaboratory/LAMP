@@ -30,6 +30,12 @@ class settingDialog(baseDialog.BaseDialog):
             "open": _("新たにプレイリストを開く"),
             "add": _("現在のプレイリストに追加")
         }
+        self.startupPlayModeDic = {
+            "normal": _("通常"),
+            "repeat": _("リピート"),
+            "loop": _("ループ"),
+            "shuffle": _("シャッフル")
+        }
         dl = player.getDeviceList()
         self.deviceDic = {}
         for i in range(len(dl)):
@@ -90,6 +96,7 @@ class settingDialog(baseDialog.BaseDialog):
         self.startupList, dummy = startupListCreator.inputbox(_("起動時に読み込むプレイリスト(&P)"), defaultValue=globalVars.app.config.getstring("player", "startupPlaylist", ""), x=600, proportion=1,textLayout=None)
         self.startupList.hideScrollBar(wx.HORIZONTAL)
         self.startupListSelectBtn = startupListCreator.button(_("参照"), self.onButton)
+        self.startupPlayModeCombo, self.startupPlayModeLabel = startupCreator.combobox(_("起動時再生モード(&M)"), self.getValueList(self.startupPlayModeDic), textLayout=wx.HORIZONTAL)
 
         # ネットワーク
         netCreator = ViewCreator.ViewCreator(self.viewMode, tabCtrl, None, wx.VERTICAL, label=_("ネットワーク"), style=wx.ALL, margin=20)
@@ -129,6 +136,7 @@ class settingDialog(baseDialog.BaseDialog):
         globalVars.app.config["volume"]["default"] = str(int(self.volumeSlider.GetValue()))
         globalVars.app.config["player"]["outputDevice"] = self.getKey(self.deviceDic, self.startupDeviceCombo.GetStringSelection())
         globalVars.app.config["player"]["startupPlaylist"] = self.startupList.GetValue()
+        globalVars.app.config["player"]["startupPlayMode"] = self.getKey(self.startupPlayModeDic, self.startupPlayModeCombo.GetStringSelection())
         globalVars.app.config["general"]["language"] = self.lang_code[self.langCombo.GetSelection()]
         globalVars.app.config["general"]["update"] = self.updateCheck.IsChecked()
         globalVars.app.config["network"]["manual_proxy"] = self.manualProxy.IsChecked()
@@ -159,6 +167,9 @@ class settingDialog(baseDialog.BaseDialog):
         startupDevice = globalVars.app.config.getstring("player", "outputDevice", "default", self.getKeyList(self.deviceDic))
         selectionStr = self.deviceDic[startupDevice]
         self.startupDeviceCombo.SetStringSelection(selectionStr)
+        startupPlayMode = globalVars.app.config.getstring("player", "startupPlayMode", "normal", self.getKeyList(self.startupPlayModeDic))
+        selectionStr = self.startupPlayModeDic[startupPlayMode]
+        self.startupPlayModeCombo.SetStringSelection(selectionStr)
         language = globalVars.app.config.getstring("general", "language", "en_US", self.lang_code)
         selectionStr = constants.SUPPORTING_LANGUAGE[language]
         self.langCombo.SetStringSelection(selectionStr)

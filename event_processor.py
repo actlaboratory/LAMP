@@ -21,11 +21,25 @@ from views import mkDialog
 
 class eventProcessor():
     def __init__(self):
-        self.repeatLoopFlag = 0 #リピート=1, ループ=2
+        # 起動時再生モードに応じて初期化
+        # repeatLoopFlag = リピート=1, ループ=2
+        startupPlayMode = globalVars.app.config.getstring("player", "startupPLayMode", "normal")
+        if startupPlayMode == "shuffle":
+            self.repeatLoopFlag = 0
+            self.shuffleCtrl = []
+        elif startupPlayMode == "loop":
+            self.repeatLoopFlag = 2
+            self.shuffleCtrl = None
+        elif startupPlayMode == "repeat":
+            self.repeatLoopFlag = 1
+            globalVars.play.setRepeat(True)
+            self.shuffleCtrl = None
+        else:
+            self.repeatLoopFlag = 0
+            self.shuffleCtrl = None
         self.playingList = None
         self.tagInfoProcess = 0 # タグ情報表示フラグ 0=アルバム, 1=アーティスト, 2=アルバムアーティスト
         self.muteFlag = False #初期値はミュート解除
-        self.shuffleCtrl = None
         self.fileChanging = False # ファイル送りの多重呼び出し防止
         self.errorSkipCount = 0
 
