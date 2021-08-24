@@ -31,9 +31,10 @@ class settingDialog(baseDialog.BaseDialog):
             "add": _("現在のプレイリストに追加")
         }
         self.startupPlayModeDic = {
-            "normal": _("通常再生"),
+            "normal": _("通常"),
             "repeat": _("リピート"),
-            "shuffleLoop": _("シャッフルとループ")
+            "loop": _("ループ"),
+            "shuffle": _("シャッフル")
         }
         dl = player.getDeviceList()
         self.deviceDic = {}

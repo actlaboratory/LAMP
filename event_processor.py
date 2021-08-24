@@ -24,9 +24,12 @@ class eventProcessor():
         # 起動時再生モードに応じて初期化
         # repeatLoopFlag = リピート=1, ループ=2
         startupPlayMode = globalVars.app.config.getstring("player", "startupPLayMode", "normal")
-        if startupPlayMode == "shuffleLoop":
-            self.repeatLoopFlag = 2
+        if startupPlayMode == "shuffle":
+            self.repeatLoopFlag = 0
             self.shuffleCtrl = []
+        elif startupPlayMode == "loop":
+            self.repeatLoopFlag = 2
+            self.shuffleCtrl = None
         elif startupPlayMode == "repeat":
             self.repeatLoopFlag = 1
             globalVars.play.setRepeat(True)
