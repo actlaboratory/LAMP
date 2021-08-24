@@ -15,6 +15,7 @@ from simpleDialog import *
 from soundPlayer import player, bassController
 from soundPlayer.constants import *
 
+import shuffle_ctrl
 
 def _import():
 	global event_processor, listManager, lampPipe, ConfigManager, globalVars, m3uManager, sleep_timer, DefaultSettings, update, main, netRemote,filterManager
@@ -74,6 +75,10 @@ class Main(AppBase.MainBase):
 				m3uloaded = True
 		startupList = globalVars.app.config.getstring("player", "startupPlaylist", "")
 		if startupList != "" and m3uloaded == False: m3uManager.loadM3u(startupList, 2)
+
+		# シャッフル適用
+		if globalVars.eventProcess.shuffleCtrl == []:
+			globalVars.eventProcess.shuffleCtrl = shuffle_ctrl.shuffle(listManager.getLCObject(constants.PLAYLIST))
 		return True
 
 	def OnExit(self):
@@ -113,6 +118,7 @@ class Main(AppBase.MainBase):
 		globalVars.lampController = netRemote.lampController()
 		globalVars.lampController.start()
 		globalVars.filter = filterManager.FilterManager()
+
 
 	def __del__(self):
 		try: lampPipe.stopPipeServer()
