@@ -206,7 +206,11 @@ def infoDialog(tuple):
     else:
         size = str(round(tuple[constants.ITEM_SIZE] / 10**9, 2)) + "GB"
     if tuple[constants.ITEM_LENGTH] == None or tuple[constants.ITEM_LENGTH] < 0: length = ""
-    else: length = str(int(tuple[constants.ITEM_LENGTH] // 60)) + ":" + format(int(tuple[constants.ITEM_LENGTH]) // 60, "02")
+    else:
+        hour = int(tuple[constants.ITEM_LENGTH] // 3600)
+        min = int((tuple[constants.ITEM_LENGTH] - hour * 3600) // 60)
+        sec = int((tuple[constants.ITEM_LENGTH] - hour * 3600 - min * 60))
+        length = str(hour) + ":" + format(min, "02") + ":" + format(sec, "02")
     dict = {_("ファイルの場所"): tuple[constants.ITEM_PATH],
         _("ファイル名"): tuple[constants.ITEM_NAME],
         _( "ファイルサイズ"): size,

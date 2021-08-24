@@ -178,7 +178,7 @@ class MainView(BaseView):
 		min = 0
 		sec = 0
 		if i > 0: hour = i // 3600
-		if i-(hour*3600) > 0: min = (i - hour) // 60
+		if i-(hour*3600) > 0: min = (i - hour * 3600) // 60
 		if i-(hour*3600)-(min*60) > 0: sec = i - (hour*3600) - (min*60)
 		return f"{hour:01}:{min:02}:{sec:02}"
 
