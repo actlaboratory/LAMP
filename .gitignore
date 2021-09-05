@@ -31,3 +31,4 @@ pl_auto_save
 ./Ionic.Zip.dll
 
 LAMP-snapshot.zip
+*.po~
