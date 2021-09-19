@@ -2,18 +2,22 @@
 # networkController
 # Copyright (C) 2021 Hiroki Fujii <hfujii@hisystron.com>
 
-import wx
 import os
-import win32api
 import requests
-from logging import getLogger
+import webbrowser
+import win32api
+import wx
+
+
 import constants
 import fxManager
-from views import mkDialog
-
 import views.ViewCreator
+
 from logging import getLogger
+
+from views import mkDialog
 from views.baseDialog import *
+
 
 def show():
     log=getLogger("%s.NetController" % (constants.LOG_PREFIX,))
@@ -56,17 +60,22 @@ class Dialog(BaseDialog):
         """いろんなwidgetを設置する。"""
         if not self.entered:
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20, style=wx.ALL, margin=20)
-            self.creator.staticText(_("このLAMPは、コントローラに登録されていません。"), margin=20)
-            
+            self.creator.staticText(_("このLAMPは、コントローラに接続されていません。\nログインしてください。"), margin=20)
+
             # ログイン情報
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,views.ViewCreator.FlexGridSizer,20,2)
             self.userName, dummy = self.creator.inputbox(_("ユーザー名"), x=450, textLayout=wx.HORIZONTAL)
+            self.userName.hideScrollBar(wx.HORIZONTAL)
             self.password, dummy = self.creator.inputbox(_("パスワード"), style=wx.TE_PASSWORD, x=450, textLayout=wx.HORIZONTAL)
+            self.password.hideScrollBar(wx.HORIZONTAL)
             self.displayName, dummy = self.creator.inputbox(_("LAMPの名前"), x=450, textLayout=wx.HORIZONTAL)
+            self.displayName.hideScrollBar(wx.HORIZONTAL)
             self.pcName, dummy = self.creator.inputbox(_("コンピュータの名前"), defaultValue=os.environ["COMPUTERNAME"], style=wx.TE_READONLY, x=450, textLayout=wx.HORIZONTAL)
-            
+            self.pcName.hideScrollBar(wx.HORIZONTAL)
+
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.HORIZONTAL,20,"",wx.ALIGN_RIGHT)
-            self.newEntryBtn = self.creator.button(_("このLAMPを登録"),self.onButtonClick)
+            self.openBrowserBtn = self.creator.button(_("新規登録"), self.__openRegisterPage)
+            self.newEntryBtn = self.creator.okbutton(_("ログインして接続"),self.onButtonClick)
             self.bCancel = self.creator.cancelbutton(_("閉じる"), self.onButtonClick)
         else:
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20, style=wx.ALL, margin=20)
@@ -75,7 +84,9 @@ class Dialog(BaseDialog):
             # 情報表示
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,views.ViewCreator.FlexGridSizer,20,2)
             self.lampName, dummy = self.creator.inputbox(_("LAMPの名前"), defaultValue=str(self.resJson["displayName"]), style=wx.TE_READONLY, x=450, textLayout=wx.HORIZONTAL)
+            self.lampName.hideScrollBar(wx.HORIZONTAL)
             self.pcName, dummy = self.creator.inputbox(_("コンピュータの名前"), defaultValue=os.environ["COMPUTERNAME"], style=wx.TE_READONLY, x=450, textLayout=wx.HORIZONTAL)
+            self.pcName.hideScrollBar(wx.HORIZONTAL)
 
             # 設定パネル
             self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.sizer,wx.VERTICAL,20, style=wx.ALL, margin=20)
@@ -178,3 +189,5 @@ class Dialog(BaseDialog):
             d.Show()
             return False
 
+    def __openRegisterPage(self,event):
+        webbrowser.open("https://lamp.actlab.org/")

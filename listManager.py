@@ -85,12 +85,21 @@ def getFileInfoProcess(tuples):
             size = os.path.getsize(l[0])
         else:
             size = 0
-        title = pytags.TAGS_Read(handle, b"%TITL").decode("cp932")
         lengthb = pybass.BASS_ChannelGetLength(handle, pybass.BASS_POS_BYTE)
         length = pybass.BASS_ChannelBytes2Seconds(handle, lengthb)
-        artist = pytags.TAGS_Read(handle, b"%ARTI").decode("cp932")
-        album = pytags.TAGS_Read(handle, b"%ALBM").decode("cp932")
-        albumArtist = pytags.TAGS_Read(handle, b"%AART").decode("cp932")
+        # 文字関係取得
+        for charCode in ["cp932", "utf-8", ""]:
+            if charCode == "":
+                title, artist, album, albumArtist = "", "", "", ""
+            else:
+                try:
+                    title = pytags.TAGS_Read(handle, b"%TITL").decode(charCode)
+                    artist = pytags.TAGS_Read(handle, b"%ARTI").decode(charCode)
+                    album = pytags.TAGS_Read(handle, b"%ALBM").decode(charCode)
+                    albumArtist = pytags.TAGS_Read(handle, b"%AART").decode(charCode)
+                    break
+                except UnicodeDecodeError as e: continue
+
         pybass.BASS_StreamFree(handle)
         l.extend([size, title, length, artist, album, albumArtist])
         rtn.append(tuple(l))
@@ -114,7 +123,12 @@ def addItemsThread(progress, flst, lcObj, id=-1, ignoreError=False):
         # リストで受け取ってフォルダとファイルに分ける
         for s in flst:
             if progress.status == wx.CANCEL: break
-            if (os.path.isfile(s) and os.path.splitext(s)[1].lower() in globalVars.fileExpansions) or re.search("^https?://.+\..+/.*$", s)!=None:
+            if os.path.isfile(s) and os.path.splitext(s)[1].lower() in globalVars.fileExpansions:
+		        # フィルタによる除外処理
+                if not globalVars.filter.test(s):
+                    continue
+                pathList.append(s)
+            elif re.search("^https?://.+\..+/.*$", s)!=None:
                 pathList.append(s)
             elif os.path.isfile(s) and os.path.splitext(s)[1].lower() == ".url":
                 try: 
@@ -146,7 +160,11 @@ def _appendDirList(lst, dir, errorList):
         if len(tp[2]) != 0:
             for file in tp[2]:
                 f = tp[0] + "\\" + file
-                if os.path.splitext(f)[1].lower() in globalVars.fileExpansions: lst.append(f)
+                if os.path.splitext(f)[1].lower() in globalVars.fileExpansions:
+                    # フィルタによる除外処理
+                    if not globalVars.filter.test(f):
+                        continue
+                    lst.append(f)
                 else: errorList.append(f)
 
 # 追加
@@ -188,7 +206,11 @@ def infoDialog(tuple):
     else:
         size = str(round(tuple[constants.ITEM_SIZE] / 10**9, 2)) + "GB"
     if tuple[constants.ITEM_LENGTH] == None or tuple[constants.ITEM_LENGTH] < 0: length = ""
-    else: length = str(int(tuple[constants.ITEM_LENGTH] // 60)) + ":" + format(int(tuple[constants.ITEM_LENGTH]) // 60, "02")
+    else:
+        hour = int(tuple[constants.ITEM_LENGTH] // 3600)
+        min = int((tuple[constants.ITEM_LENGTH] - hour * 3600) // 60)
+        sec = int((tuple[constants.ITEM_LENGTH] - hour * 3600 - min * 60))
+        length = str(hour) + ":" + format(min, "02") + ":" + format(sec, "02")
     dict = {_("ファイルの場所"): tuple[constants.ITEM_PATH],
         _("ファイル名"): tuple[constants.ITEM_NAME],
         _( "ファイルサイズ"): size,

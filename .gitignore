@@ -1,3 +1,5 @@
+/.venv
+
 *.pyc
 *.log
 *.code-workspace
@@ -27,3 +29,6 @@ pl_auto_save
 ./update_file.zip
 ./updater.exe
 ./Ionic.Zip.dll
+
+LAMP-snapshot.zip
+*.po~

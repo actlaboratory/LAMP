@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LAMP\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-23 00:31+0900\n"
+"POT-Creation-Date: 2021-09-05 20:59+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,167 +23,183 @@ msgid ""
 "確認してください。"
 msgstr ""
 
-#: event_processor.py:89 event_processor.py:97 event_processor.py:105
+#: event_processor.py:103 event_processor.py:111 event_processor.py:119
 msgid "情報なし"
 msgstr ""
 
-#: event_processor.py:133
+#: event_processor.py:147
 msgid "消音を解除"
 msgstr ""
 
-#: event_processor.py:140
+#: event_processor.py:154
 msgid "消音に設定"
 msgstr ""
 
-#: event_processor.py:233 event_processor.py:234
+#: event_processor.py:253 event_processor.py:254
 msgid ""
 "一定回数連続して再生に失敗しました。\n"
 "停止します。"
 msgstr ""
 
-#: event_processor.py:243
+#: event_processor.py:263
 msgid "再生時エラー"
 msgstr ""
 
-#: event_processor.py:243
+#: event_processor.py:263
 msgid "このファイルは再生できません。"
 msgstr ""
 
-#: event_processor.py:243
+#: event_processor.py:263
 msgid "継続"
 msgstr ""
 
-#: event_processor.py:243 sleep_timer.py:45 views\main.py:85
+#: event_processor.py:263 sleep_timer.py:45 views\main.py:89
 msgid "停止"
 msgstr ""
 
-#: event_processor.py:308 views\main.py:221
+#: event_processor.py:338 views\main.py:237
 msgid "進む"
 msgstr ""
 
-#: event_processor.py:309 views\main.py:221
+#: event_processor.py:339 views\main.py:237
 msgid "戻る"
 msgstr ""
 
-#: event_processor.py:310
+#: event_processor.py:340
 msgid "スキップ"
 msgstr ""
 
-#: event_processor.py:355 event_processor.py:356 event_processor.py:454
-#: event_processor.py:455
+#: event_processor.py:385 event_processor.py:386 event_processor.py:485
+#: event_processor.py:486
 msgid ""
 "再生デバイスに問題があります。\n"
 "設定、または接続を確認してください。"
 msgstr ""
 
-#: event_processor.py:402 listManager.py:195 view_manager.py:52
+#: event_processor.py:433 listManager.py:217 view_manager.py:52
 #: view_manager.py:65 view_manager.py:89
 msgid "タイトル"
 msgstr ""
 
-#: event_processor.py:410
+#: event_processor.py:441 views\setting_dialog.py:37
 msgid "シャッフル"
 msgstr ""
 
-#: event_processor.py:415 event_processor.py:430
+#: event_processor.py:446 event_processor.py:461
 msgid "オフ"
 msgstr ""
 
-#: event_processor.py:435
+#: event_processor.py:466 views\setting_dialog.py:35
 msgid "リピート"
 msgstr ""
 
-#: event_processor.py:440
+#: event_processor.py:471 views\setting_dialog.py:36
 msgid "ループ"
 msgstr ""
 
-#: event_processor.py:475 event_processor.py:476
+#: event_processor.py:506 event_processor.py:507
 msgid "曲送りは自動"
 msgstr ""
 
-#: event_processor.py:479 event_processor.py:480
+#: event_processor.py:510 event_processor.py:511
 msgid "曲送りは手動"
 msgstr ""
 
-#: keymapHandlerBase.py:689 keymapHandlerBase.py:719
+#: filterManager.py:19
+msgid "ファイル名で除外"
+msgstr ""
+
+#: filterManager.py:20
+msgid "ファイル名で通過"
+msgstr ""
+
+#: filterManager.py:21
+msgid "パスで除外"
+msgstr ""
+
+#: filterManager.py:22
+msgid "パスで通過"
+msgstr ""
+
+#: keymapHandlerBase.py:696 keymapHandlerBase.py:726
 #, python-format
 msgid "%s は存在しないキーです。"
 msgstr ""
 
-#: keymapHandlerBase.py:760
+#: keymapHandlerBase.py:767
 #, python-format
 msgid "%s は使用できないキーです。"
 msgstr ""
 
-#: keymapHandlerBase.py:769
+#: keymapHandlerBase.py:776
 msgid "修飾キーのみのパターンは設定できません。"
 msgstr ""
 
-#: keymapHandlerBase.py:771
+#: keymapHandlerBase.py:778
 msgid "このキーは修飾キーと合わせて指定する必要があります。"
 msgstr ""
 
-#: keymapHandlerBase.py:776
+#: keymapHandlerBase.py:783
 msgid "修飾キーでないキーを複数指定することはできません。"
 msgstr ""
 
-#: keymapHandlerBase.py:779 keymapHandlerBase.py:787
+#: keymapHandlerBase.py:786 keymapHandlerBase.py:794
 msgid "このキーは、SHIFTキー以外の修飾キーと合わせて指定する必要があります。"
 msgstr ""
 
-#: keymapHandlerBase.py:782
+#: keymapHandlerBase.py:789
 msgid "修飾キーのみの組み合わせは指定できません。"
 msgstr ""
 
-#: keymapHandlerBase.py:791
+#: keymapHandlerBase.py:798
 msgid "この組み合わせは別の用途で予約されているため、利用できません。"
 msgstr ""
 
-#: listManager.py:103 views\netFileManager.py:171
+#: listManager.py:112 views\netFileManager.py:173
 msgid "ファイルを集めています..."
 msgstr ""
 
-#: listManager.py:103
+#: listManager.py:112
 msgid "読み込み中..."
 msgstr ""
 
-#: listManager.py:171
+#: listManager.py:189
 msgid "読み込み中"
 msgstr ""
 
-#: listManager.py:192
+#: listManager.py:214
 msgid "ファイルの場所"
 msgstr ""
 
-#: listManager.py:193 view_manager.py:50 view_manager.py:63 view_manager.py:87
+#: listManager.py:215 view_manager.py:50 view_manager.py:63 view_manager.py:87
 msgid "ファイル名"
 msgstr ""
 
-#: listManager.py:194
+#: listManager.py:216
 msgid "ファイルサイズ"
 msgstr ""
 
-#: listManager.py:196
+#: listManager.py:218
 msgid "長さ"
 msgstr ""
 
-#: listManager.py:197 view_manager.py:54 view_manager.py:67 view_manager.py:91
+#: listManager.py:219 view_manager.py:54 view_manager.py:67 view_manager.py:91
 msgid "アーティスト"
 msgstr ""
 
-#: listManager.py:198 view_manager.py:53 view_manager.py:66 view_manager.py:90
+#: listManager.py:220 view_manager.py:53 view_manager.py:66 view_manager.py:90
 msgid "アルバム"
 msgstr ""
 
-#: listManager.py:199 view_manager.py:55 view_manager.py:68 view_manager.py:92
+#: listManager.py:221 view_manager.py:55 view_manager.py:68 view_manager.py:92
 msgid "アルバムアーティスト"
 msgstr ""
 
-#: m3uManager.py:24 views\setting_dialog.py:177
+#: m3uManager.py:24 views\setting_dialog.py:190
 msgid "プレイリストファイル選択"
 msgstr ""
 
-#: m3uManager.py:24 views\setting_dialog.py:177
+#: m3uManager.py:24 views\setting_dialog.py:190
 msgid "プレイリストファイル (.m3u8/.m3u)"
 msgstr ""
 
@@ -213,19 +229,19 @@ msgid ""
 "m3u8ファイルに変換して保存しますか？"
 msgstr ""
 
-#: m3uManager.py:81 m3uManager.py:95 views\setting_dialog.py:110
+#: m3uManager.py:81 m3uManager.py:95 views\setting_dialog.py:119
 msgid "保存"
 msgstr ""
 
 #: m3uManager.py:81 m3uManager.py:86 m3uManager.py:95
-#: views\setting_dialog.py:112
+#: views\setting_dialog.py:121
 msgid "破棄"
 msgstr ""
 
 #: m3uManager.py:81 m3uManager.py:86 m3uManager.py:95
-#: views\KeyValueSettingDialogBase.py:81 views\KeyValueSettingDialogBase.py:259
-#: views\mkDialog.py:33 views\mkOpenDialog.py:47 views\netFileManager.py:175
-#: views\netFileManager.py:291 views\sleepTimerDialog.py:59
+#: views\KeyValueSettingDialogBase.py:84 views\KeyValueSettingDialogBase.py:275
+#: views\mkDialog.py:33 views\mkOpenDialog.py:48 views\netFileManager.py:177
+#: views\netFileManager.py:295 views\sleepTimerDialog.py:59
 #: views\updateDialog.py:45
 msgid "キャンセル"
 msgstr ""
@@ -254,13 +270,13 @@ msgid ""
 "保存しますか？"
 msgstr ""
 
-#: m3uManager.py:104 view_manager.py:29 views\main.py:135
+#: m3uManager.py:104 view_manager.py:29 views\main.py:146
 msgid "プレイリスト"
 msgstr ""
 
 #: m3uManager.py:104 view_manager.py:29 view_manager.py:31
-#: views\loadErrorDialog.py:35 views\loadErrorDialog.py:36 views\main.py:135
-#: views\main.py:138
+#: views\loadErrorDialog.py:35 views\loadErrorDialog.py:36 views\main.py:146
+#: views\main.py:149
 msgid "件"
 msgstr ""
 
@@ -317,150 +333,162 @@ msgid "エフェクター(&F)"
 msgstr ""
 
 #: menuItemsDic.py:30
+msgid "フィルター"
+msgstr ""
+
+#: menuItemsDic.py:31
 msgid "再生中のファイルについて(&A)"
 msgstr ""
 
-#: menuItemsDic.py:31 views\netController.py:45
+#: menuItemsDic.py:32
+msgid "再生中のファイルにカーソルを移動"
+msgstr ""
+
+#: menuItemsDic.py:33 views\netController.py:52
 msgid "LAMP Controller設定"
 msgstr ""
 
-#: menuItemsDic.py:35
-msgid "履歴（20件まで）"
-msgstr ""
-
-#: menuItemsDic.py:38
-msgid "再生 / 一時停止(&P)"
+#: menuItemsDic.py:36
+msgid "フィルタの編集"
 msgstr ""
 
 #: menuItemsDic.py:39
-msgid "停止(&S)"
-msgstr ""
-
-#: menuItemsDic.py:40
-msgid "早送り(&F)"
-msgstr ""
-
-#: menuItemsDic.py:41
-msgid "巻き戻し(&B)"
+msgid "履歴（20件まで）"
 msgstr ""
 
 #: menuItemsDic.py:42
-msgid "前へ / 頭出し(&R)"
+msgid "再生 / 一時停止(&P)"
 msgstr ""
 
 #: menuItemsDic.py:43
-msgid "次へ(&N)"
+msgid "停止(&S)"
 msgstr ""
 
 #: menuItemsDic.py:44
-msgid "スキップ(&K)"
+msgid "早送り(&F)"
 msgstr ""
 
 #: menuItemsDic.py:45
-msgid "逆スキップ(&E)"
+msgid "巻き戻し(&B)"
+msgstr ""
+
+#: menuItemsDic.py:46
+msgid "前へ / 頭出し(&R)"
 msgstr ""
 
 #: menuItemsDic.py:47
-msgid "スキップ間隔設定(&C)"
+msgid "次へ(&N)"
 msgstr ""
 
 #: menuItemsDic.py:48
-msgid "スキップ間隔を大きくする(&I)"
+msgid "スキップ(&K)"
 msgstr ""
 
 #: menuItemsDic.py:49
-msgid "スキップ間隔を小さくする(&D)"
+msgid "逆スキップ(&E)"
 msgstr ""
 
 #: menuItemsDic.py:51
-msgid "音量(&V)"
+msgid "スキップ間隔設定(&C)"
 msgstr ""
 
 #: menuItemsDic.py:52
-msgid "音量を10&0%に設定"
+msgid "スキップ間隔を大きくする(&I)"
 msgstr ""
 
 #: menuItemsDic.py:53
-msgid "音量を上げる(&U)"
-msgstr ""
-
-#: menuItemsDic.py:54
-msgid "音量を下げる(&D)"
+msgid "スキップ間隔を小さくする(&D)"
 msgstr ""
 
 #: menuItemsDic.py:55
-msgid "ミュート(&M)"
+msgid "音量(&V)"
+msgstr ""
+
+#: menuItemsDic.py:56
+msgid "音量を10&0%に設定"
 msgstr ""
 
 #: menuItemsDic.py:57
-msgid "リピート・ループ(&L)"
+msgid "音量を上げる(&U)"
 msgstr ""
 
 #: menuItemsDic.py:58
-msgid "リピート・ループ切り替え"
+msgid "音量を下げる(&D)"
 msgstr ""
 
 #: menuItemsDic.py:59
-msgid "解除する(&N)"
-msgstr ""
-
-#: menuItemsDic.py:60
-msgid "リピート(&R)"
+msgid "ミュート(&M)"
 msgstr ""
 
 #: menuItemsDic.py:61
-msgid "ループ(&L)"
+msgid "リピート・ループ(&L)"
 msgstr ""
 
 #: menuItemsDic.py:62
-msgid "シャッフル再生(&H)"
+msgid "リピート・ループ切り替え"
 msgstr ""
 
 #: menuItemsDic.py:63
-msgid "手動で曲送り(&M)"
+msgid "解除する(&N)"
+msgstr ""
+
+#: menuItemsDic.py:64
+msgid "リピート(&R)"
+msgstr ""
+
+#: menuItemsDic.py:65
+msgid "ループ(&L)"
 msgstr ""
 
 #: menuItemsDic.py:66
-msgid "再生出力先の変更(&O)"
+msgid "シャッフル再生(&H)"
 msgstr ""
 
 #: menuItemsDic.py:67
-msgid "このプレイリストを起動時に開く(&L)"
-msgstr ""
-
-#: menuItemsDic.py:68
-msgid "ファイルの関連付け(&A)"
-msgstr ""
-
-#: menuItemsDic.py:69
-msgid "送るメニューに登録(&S)"
+msgid "手動で曲送り(&M)"
 msgstr ""
 
 #: menuItemsDic.py:70
-msgid "ショートカットキー設定(&K)"
+msgid "再生出力先の変更(&O)"
 msgstr ""
 
 #: menuItemsDic.py:71
-msgid "グローバルホットキー設定(&G)"
+msgid "このプレイリストを起動時に開く(&L)"
 msgstr ""
 
 #: menuItemsDic.py:72
-msgid "環境設定(&P)"
+msgid "ファイルの関連付け(&A)"
 msgstr ""
 
-#: menuItemsDic.py:75 views\main.py:255
-msgid "ヘルプ(&H)"
+#: menuItemsDic.py:73
+msgid "送るメニューに登録(&S)"
+msgstr ""
+
+#: menuItemsDic.py:74
+msgid "ショートカットキー設定(&K)"
+msgstr ""
+
+#: menuItemsDic.py:75
+msgid "グローバルホットキー設定(&G)"
 msgstr ""
 
 #: menuItemsDic.py:76
+msgid "環境設定(&P)"
+msgstr ""
+
+#: menuItemsDic.py:79 views\main.py:274
+msgid "ヘルプ(&H)"
+msgstr ""
+
+#: menuItemsDic.py:80
 msgid "更新の確認(&U)"
 msgstr ""
 
-#: menuItemsDic.py:77
+#: menuItemsDic.py:81
 msgid "バージョン情報(&V)"
 msgstr ""
 
-#: menuItemsDic.py:79
+#: menuItemsDic.py:83
 msgid "経過時間の読み上げ"
 msgstr ""
 
@@ -475,11 +503,11 @@ msgid ""
 "登録を解除しますか。"
 msgstr ""
 
-#: sendToManager.py:14 views\netFileManager.py:256
+#: sendToManager.py:14 views\netFileManager.py:258
 msgid "はい(&Y)"
 msgstr ""
 
-#: sendToManager.py:14 views\netFileManager.py:256
+#: sendToManager.py:14 views\netFileManager.py:258
 msgid "いいえ(&N)"
 msgstr ""
 
@@ -502,27 +530,26 @@ msgstr ""
 msgid "登録に失敗しました。"
 msgstr ""
 
-#: sendToManager.py:45 startupListSetter.py:18 views\base.py:114
+#: sendToManager.py:45 startupListSetter.py:18 views\base.py:117
 #: views\fileAssocDialog.py:19 views\fileAssocDialog.py:35
 #: views\fileAssocDialog.py:72 views\fontManager.py:25 views\fontManager.py:50
-#: views\globalKeyConfig.py:61 views\globalKeyConfig.py:122
-#: views\KeyValueSettingDialogBase.py:279
-#: views\KeyValueSettingDialogBase.py:330 views\main.py:165
-#: views\netFileManager.py:112 views\netFileManager.py:264
-#: views\netFileManager.py:305 views\netFileManager.py:310
+#: views\globalKeyConfig.py:61 views\KeyValueSettingDialogBase.py:297
+#: views\KeyValueSettingDialogBase.py:348 views\main.py:176
+#: views\netFileManager.py:113 views\netFileManager.py:266
+#: views\netFileManager.py:309 views\netFileManager.py:314
 #: views\sleepTimerDialog.py:123 views\updateDialog.py:66
 msgid "エラー"
 msgstr ""
 
-#: sendToManager.py:51 views\netController.py:118
+#: sendToManager.py:51 views\netController.py:134
 msgid "完了"
 msgstr ""
 
-#: settings.py:16 view_manager.py:79 views\main.py:359
+#: settings.py:16 view_manager.py:79 views\main.py:394
 msgid "秒"
 msgstr ""
 
-#: settings.py:18 view_manager.py:77 views\main.py:358
+#: settings.py:18 view_manager.py:77 views\main.py:393
 #: views\sleepTimerDialog.py:51
 msgid "分"
 msgstr ""
@@ -562,9 +589,9 @@ msgstr ""
 msgid "変更"
 msgstr ""
 
-#: sleep_timer.py:45 views\effectorDialog.py:43 views\netController.py:66
-#: views\netController.py:87 views\netFileManager.py:64
-#: views\versionDialog.py:46
+#: sleep_timer.py:45 views\effectorDialog.py:43 views\netController.py:79
+#: views\netController.py:102 views\netFileManager.py:65
+#: views\versionDialog.py:49
 msgid "閉じる"
 msgstr ""
 
@@ -665,12 +692,12 @@ msgid ""
 "ソフトウェア終了時に、自動でアップデートされます。"
 msgstr ""
 
-#: view_manager.py:31 views\main.py:138
+#: view_manager.py:31 views\main.py:149
 msgid "キュー"
 msgstr ""
 
 #: view_manager.py:51 view_manager.py:64 view_manager.py:88
-#: views\netFileManager.py:41 views\netFileManager.py:285
+#: views\netFileManager.py:42 views\netFileManager.py:287
 msgid "場所"
 msgstr ""
 
@@ -682,11 +709,11 @@ msgstr ""
 msgid "経過時間を確認するには Ctrl + T を押します"
 msgstr ""
 
-#: view_manager.py:75 views\main.py:356 views\sleepTimerDialog.py:49
+#: view_manager.py:75 views\main.py:391 views\sleepTimerDialog.py:49
 msgid "時間"
 msgstr ""
 
-#: view_manager.py:99 views\lampViewObject.py:145 views\main.py:81
+#: view_manager.py:99 views\lampViewObject.py:147 views\main.py:85
 msgid "再生"
 msgstr ""
 
@@ -694,27 +721,27 @@ msgstr ""
 msgid "一時停止"
 msgstr ""
 
-#: view_manager.py:105 views\main.py:87
+#: view_manager.py:105 views\main.py:95
 msgid "リピートに切り替える"
 msgstr ""
 
-#: view_manager.py:108
+#: view_manager.py:108 views\main.py:94
 msgid "ループに切り替える"
 msgstr ""
 
-#: view_manager.py:111
+#: view_manager.py:111 views\main.py:92
 msgid "リピートとループを解除する"
 msgstr ""
 
-#: view_manager.py:114 views\main.py:89
+#: view_manager.py:114 views\main.py:99
 msgid "シャッフルをオンにする"
 msgstr ""
 
-#: view_manager.py:117
+#: view_manager.py:117 views\main.py:100
 msgid "シャッフルをオフにする"
 msgstr ""
 
-#: view_manager.py:121 view_manager.py:122 views\main.py:93 views\main.py:94
+#: view_manager.py:121 view_manager.py:122 views\main.py:104 views\main.py:105
 msgid "ミュートをオンにする"
 msgstr ""
 
@@ -722,11 +749,11 @@ msgstr ""
 msgid "ミュートをオフにする"
 msgstr ""
 
-#: views\base.py:64
+#: views\base.py:67
 msgid "現在メニューは操作できません"
 msgstr ""
 
-#: views\base.py:111
+#: views\base.py:114
 msgid ""
 "で設定されたショートカットキーが正しくありません。キーの重複、存在しないキー"
 "名の指定、使用できないキーパターンの指定などが考えられます。以下のキーの設定"
@@ -821,6 +848,49 @@ msgstr ""
 msgid "1つ以上のファイル形式を選択してください。"
 msgstr ""
 
+#: views\filterSettingDialog.py:17 views\filterSettingDialog.py:54
+#: views\globalKeyConfig.py:20 views\globalKeyConfig.py:74
+#: views\netFileManager.py:41 views\netFileManager.py:168
+#: views\netFileManager.py:291
+msgid "名前"
+msgstr ""
+
+#: views\filterSettingDialog.py:18
+msgid "種別"
+msgstr ""
+
+#: views\filterSettingDialog.py:19 views\filterSettingDialog.py:56
+msgid "パターン"
+msgstr ""
+
+#: views\filterSettingDialog.py:20
+msgid "状態"
+msgstr ""
+
+#: views\filterSettingDialog.py:21
+msgid "起動時"
+msgstr ""
+
+#: views\filterSettingDialog.py:55
+msgid "タイプ"
+msgstr ""
+
+#: views\filterSettingDialog.py:57
+msgid "有効にする"
+msgstr ""
+
+#: views\filterSettingDialog.py:58
+msgid "起動時にデフォルトで有効にする"
+msgstr ""
+
+#: views\filterSettingDialog.py:65
+msgid "フィルターの設定"
+msgstr ""
+
+#: views\filterSettingDialog.py:76
+msgid "入力パターンが不正です。"
+msgstr ""
+
 #: views\fontManager.py:25
 msgid ""
 "設定されているフォント情報が不正です。デフォルトのフォントを適用します。"
@@ -828,12 +898,6 @@ msgstr ""
 
 #: views\fontManager.py:50
 msgid "原因不明のエラーにより、フォントの変更に失敗しました。"
-msgstr ""
-
-#: views\globalKeyConfig.py:20 views\globalKeyConfig.py:74
-#: views\netFileManager.py:40 views\netFileManager.py:167
-#: views\netFileManager.py:288
-msgid "名前"
 msgstr ""
 
 #: views\globalKeyConfig.py:21
@@ -844,15 +908,16 @@ msgstr ""
 msgid "識別子"
 msgstr ""
 
-#: views\globalKeyConfig.py:31 views\main.py:393
+#: views\globalKeyConfig.py:31 views\main.py:428
 msgid "ショートカットキーの設定"
 msgstr ""
 
 #: views\globalKeyConfig.py:54 views\globalKeyConfig.py:71
 #: views\globalKeyConfig.py:102 views\globalKeyConfig.py:107
 #: views\globalKeyConfig.py:120 views\globalKeyConfig.py:128
-#: views\keyConfig.py:57 views\KeyValueSettingDialogBase.py:315
-#: views\main.py:433 views\main.py:453
+#: views\globalKeyConfig.py:138 views\globalKeyConfig.py:143
+#: views\keyConfig.py:57 views\KeyValueSettingDialogBase.py:333
+#: views\main.py:468 views\main.py:488
 msgid "なし"
 msgstr ""
 
@@ -919,100 +984,100 @@ msgstr ""
 msgid "設定解除"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:51
+#: views\KeyValueSettingDialogBase.py:54
 msgid "現在の登録内容"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:72
+#: views\KeyValueSettingDialogBase.py:75
 msgid "追加(&A)"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:73
+#: views\KeyValueSettingDialogBase.py:76
 msgid "変更(&M)"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:75
+#: views\KeyValueSettingDialogBase.py:78
 msgid "削除(&D)"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:80 views\KeyValueSettingDialogBase.py:258
-#: views\objectDetail.py:29
+#: views\KeyValueSettingDialogBase.py:83 views\KeyValueSettingDialogBase.py:274
+#: views\objectDetail.py:30
 msgid "ＯＫ"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:122
-#: views\KeyValueSettingDialogBase.py:152
+#: views\KeyValueSettingDialogBase.py:125
+#: views\KeyValueSettingDialogBase.py:155
 #, python-format
 msgid "この%sは既に登録されています。登録を上書きしますか？"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:122
-#: views\KeyValueSettingDialogBase.py:152 views\netFileManager.py:256
+#: views\KeyValueSettingDialogBase.py:125
+#: views\KeyValueSettingDialogBase.py:155 views\netFileManager.py:258
 msgid "上書き確認"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:279
+#: views\KeyValueSettingDialogBase.py:297
 #, python-format
 msgid "%sを空白や半角の=を含む値に設定することはできません。"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:319
+#: views\KeyValueSettingDialogBase.py:337
 #, python-format
 msgid "%(v1)sと%(v2)sに同じショートカットキー%(key)sが設定されています。\n"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:322
+#: views\KeyValueSettingDialogBase.py:340
 #, python-format
 msgid ""
 "%(v1)s、%(v2)sなど計%(count)d箇所に同じショートカットキー%(key)sが設定されて"
 "います。\n"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:326
+#: views\KeyValueSettingDialogBase.py:344
 #, python-format
 msgid ""
 "設定されたショートカット%sが認識できません。お手数ですが、このエラーメッセー"
 "ジを作者へご連絡ください。\n"
 msgstr ""
 
-#: views\KeyValueSettingDialogBase.py:328
+#: views\KeyValueSettingDialogBase.py:346
 #, python-format
 msgid ""
-"%(name)sに設定されたショートカットキー%(key)sは、別の場所で利用されていま"
+"%(command)sに設定されたショートカットキー%(key)sは、別の場所で利用されていま"
 "す。\n"
 msgstr ""
 
-#: views\lampViewObject.py:149
+#: views\lampViewObject.py:151
 msgid "キューの先頭に割り込み"
 msgstr ""
 
-#: views\lampViewObject.py:150 views\mkOpenDialog.py:46
+#: views\lampViewObject.py:152 views\mkOpenDialog.py:47
 #: views\setting_dialog.py:26
 msgid "キューに追加"
 msgstr ""
 
-#: views\lampViewObject.py:155 views\mkOpenDialog.py:44
+#: views\lampViewObject.py:157 views\mkOpenDialog.py:45
 #: views\setting_dialog.py:25
 msgid "プレイリストに追加"
 msgstr ""
 
-#: views\lampViewObject.py:158
+#: views\lampViewObject.py:160
 msgid "コピー"
 msgstr ""
 
-#: views\lampViewObject.py:159
+#: views\lampViewObject.py:161
 msgid "貼り付け"
 msgstr ""
 
-#: views\lampViewObject.py:160
+#: views\lampViewObject.py:162
 msgid "削除"
 msgstr ""
 
-#: views\lampViewObject.py:161
+#: views\lampViewObject.py:163
 msgid "すべてを選択"
 msgstr ""
 
-#: views\lampViewObject.py:162 views\objectDetail.py:16
+#: views\lampViewObject.py:164 views\objectDetail.py:16
 msgid "このファイルについて"
 msgstr ""
 
@@ -1028,27 +1093,27 @@ msgstr ""
 msgid "見つからなかったファイル"
 msgstr ""
 
-#: views\main.py:79
+#: views\main.py:83
 msgid "前へ"
 msgstr ""
 
-#: views\main.py:83
+#: views\main.py:87
 msgid "次へ"
 msgstr ""
 
-#: views\main.py:95
+#: views\main.py:106
 msgid "音量"
 msgstr ""
 
-#: views\main.py:125
+#: views\main.py:136
 msgid "トラックバー"
 msgstr ""
 
-#: views\main.py:143
+#: views\main.py:154
 msgid "状況"
 msgstr ""
 
-#: views\main.py:162
+#: views\main.py:173
 msgid ""
 "で設定されたホットキーが正しくありません。キーの重複、存在しないキー名の指"
 "定、使用できないキーパターンの指定などが考えられます。以下のキーの設定内容を"
@@ -1056,47 +1121,51 @@ msgid ""
 "\n"
 msgstr ""
 
-#: views\main.py:241
+#: views\main.py:260
 msgid "再生出力先の変更"
 msgstr ""
 
-#: views\main.py:250
+#: views\main.py:269
 msgid "ファイル(&F)"
 msgstr ""
 
-#: views\main.py:251
+#: views\main.py:270
 msgid "機能(&U)"
 msgstr ""
 
-#: views\main.py:252
+#: views\main.py:271
 msgid "プレイリスト(&P)"
 msgstr ""
 
-#: views\main.py:253
+#: views\main.py:272
 msgid "操作(&O)"
 msgstr ""
 
-#: views\main.py:254
+#: views\main.py:273
 msgid "設定(&S)"
 msgstr ""
 
-#: views\main.py:350
+#: views\main.py:352
+msgid "プレイリスト上の項目を再生していません。"
+msgstr ""
+
+#: views\main.py:385
 msgid "情報がありません"
 msgstr ""
 
-#: views\main.py:399
+#: views\main.py:434
 msgid "グローバルホットキーの設定"
 msgstr ""
 
-#: views\main.py:409
+#: views\main.py:444
 msgid "ヘルプ"
 msgstr ""
 
-#: views\main.py:409
+#: views\main.py:444
 msgid "ヘルプファイルが見つかりません。"
 msgstr ""
 
-#: views\main.py:472
+#: views\main.py:507
 msgid "規定の出力先"
 msgstr ""
 
@@ -1124,205 +1193,211 @@ msgstr ""
 msgid "URLを指定"
 msgstr ""
 
-#: views\mkOpenDialog.py:40 views\netFileManager.py:286
-#: views\setting_dialog.py:91
+#: views\mkOpenDialog.py:41 views\netFileManager.py:289
+#: views\setting_dialog.py:98
 msgid "参照"
 msgstr ""
 
-#: views\mkOpenDialog.py:56
+#: views\mkOpenDialog.py:57
 msgid "ファイルを選択"
 msgstr ""
 
-#: views\mkOpenDialog.py:59
+#: views\mkOpenDialog.py:60
 msgid "フォルダを選択"
 msgstr ""
 
-#: views\mkOpenDialog.py:67 views\mkOpenDialog.py:73
+#: views\mkOpenDialog.py:68 views\mkOpenDialog.py:74
 msgid "パスエラー"
 msgstr ""
 
-#: views\mkOpenDialog.py:67
+#: views\mkOpenDialog.py:68
 msgid "入力されたパスは存在しません。"
 msgstr ""
 
-#: views\mkOpenDialog.py:73
+#: views\mkOpenDialog.py:74
 msgid "入力されたURLに問題があります。"
 msgstr ""
 
-#: views\netController.py:37 views\netController.py:124
+#: views\netController.py:44 views\netController.py:140
 msgid "通信失敗"
 msgstr ""
 
-#: views\netController.py:37
+#: views\netController.py:44
 msgid ""
 "登録状況の確認に失敗しました。\n"
 "ネットワーク接続などを確認してください。"
 msgstr ""
 
-#: views\netController.py:55
-msgid "このLAMPは、コントローラに登録されていません。"
+#: views\netController.py:63
+msgid ""
+"このLAMPは、コントローラに接続されていません。\n"
+"ログインしてください。"
 msgstr ""
 
-#: views\netController.py:59
+#: views\netController.py:67
 msgid "ユーザー名"
 msgstr ""
 
-#: views\netController.py:60
+#: views\netController.py:69
 msgid "パスワード"
 msgstr ""
 
-#: views\netController.py:61 views\netController.py:73
+#: views\netController.py:71 views\netController.py:86
 msgid "LAMPの名前"
 msgstr ""
 
-#: views\netController.py:62 views\netController.py:74
+#: views\netController.py:73 views\netController.py:88
 msgid "コンピュータの名前"
 msgstr ""
 
-#: views\netController.py:65
-msgid "このLAMPを登録"
-msgstr ""
-
-#: views\netController.py:69
-msgid "このLAMPは、コントローラに登録されています。"
+#: views\netController.py:77
+msgid "新規登録"
 msgstr ""
 
 #: views\netController.py:78
+msgid "ログインして接続"
+msgstr ""
+
+#: views\netController.py:82
+msgid "このLAMPは、コントローラに登録されています。"
+msgstr ""
+
+#: views\netController.py:93
 msgid "LAMP Controllerからの操作を有効にする"
 msgstr ""
 
-#: views\netController.py:86
+#: views\netController.py:101
 msgid "このLAMPを登録解除"
 msgstr ""
 
-#: views\netController.py:118
+#: views\netController.py:134
 msgid "このLAMPの登録を解除しました。"
 msgstr ""
 
-#: views\netController.py:124
+#: views\netController.py:140
 msgid ""
 "LAMPの登録を解除できませんでした。\n"
 "ネットワーク接続などを確認してください。"
 msgstr ""
 
-#: views\netController.py:139 views\netController.py:140
+#: views\netController.py:155 views\netController.py:156
 msgid "登録完了"
 msgstr ""
 
-#: views\netController.py:139
+#: views\netController.py:155
 msgid "このLAMPは、LAMP Controllerに登録されました。"
 msgstr ""
 
-#: views\netController.py:140
+#: views\netController.py:156
 msgid "登録を更新しました。このLAMPは、LAMP Controllerで使用可能です。"
 msgstr ""
 
-#: views\netController.py:146 views\netController.py:152
-#: views\netController.py:164 views\netController.py:170
+#: views\netController.py:162 views\netController.py:168
+#: views\netController.py:180 views\netController.py:187
 msgid "登録失敗"
 msgstr ""
 
-#: views\netController.py:146
+#: views\netController.py:162
 msgid "LAMPの名前は、1文字以上、30文字以内で指定してください。"
 msgstr ""
 
-#: views\netController.py:152
+#: views\netController.py:168
 msgid "このLAMPは、すでに登録されています。"
 msgstr ""
 
-#: views\netController.py:158
+#: views\netController.py:174
 msgid "認証失敗"
 msgstr ""
 
-#: views\netController.py:158
+#: views\netController.py:174
 msgid "ユーザー名、またはパスワードが謝っています。"
 msgstr ""
 
-#: views\netController.py:164 views\netController.py:170
+#: views\netController.py:180 views\netController.py:187
 msgid "LAMPの登録に失敗しました。ネットワーク接続などを確認してください。"
 msgstr ""
 
-#: views\netFileManager.py:29
+#: views\netFileManager.py:30
 msgid "LAMP Controllerのファイル"
 msgstr ""
 
-#: views\netFileManager.py:39
+#: views\netFileManager.py:40
 msgid "関連付けられたフォルダ"
 msgstr ""
 
-#: views\netFileManager.py:56
+#: views\netFileManager.py:57
 msgid "このLAMPから削除"
 msgstr ""
 
-#: views\netFileManager.py:58
+#: views\netFileManager.py:59
 msgid "このLAMPに追加"
 msgstr ""
 
-#: views\netFileManager.py:60
+#: views\netFileManager.py:61
 msgid "コントローラの情報を更新"
 msgstr ""
 
-#: views\netFileManager.py:62
+#: views\netFileManager.py:63
 msgid "新しくコントローラに送信"
 msgstr ""
 
-#: views\netFileManager.py:112
+#: views\netFileManager.py:113
 msgid "場所が利用できません。フォルダを確認してください。"
 msgstr ""
 
-#: views\netFileManager.py:147
+#: views\netFileManager.py:148
 msgid "フォルダ情報送信"
 msgstr ""
 
-#: views\netFileManager.py:164
+#: views\netFileManager.py:165
 msgid "LAMP Controller上に表示する名前を指定します。"
 msgstr ""
 
-#: views\netFileManager.py:166
+#: views\netFileManager.py:167
 msgid "LAMP Controllerのフォルダ情報を更新しています。"
 msgstr ""
 
-#: views\netFileManager.py:214
+#: views\netFileManager.py:216
 msgid "フォルダ名は、1文字以上、30文字以内で指定してください。"
 msgstr ""
 
-#: views\netFileManager.py:216
+#: views\netFileManager.py:218
 msgid "通信に失敗しました。ネットワーク接続などを確認してください。"
 msgstr ""
 
-#: views\netFileManager.py:227
+#: views\netFileManager.py:229
 msgid "通信中..."
 msgstr ""
 
-#: views\netFileManager.py:243 views\netFileManager.py:305
+#: views\netFileManager.py:245 views\netFileManager.py:309
 msgid "この名前は、すでに使用されています。"
 msgstr ""
 
-#: views\netFileManager.py:250
+#: views\netFileManager.py:252
 msgid "送信完了"
 msgstr ""
 
-#: views\netFileManager.py:250
+#: views\netFileManager.py:252
 msgid "フォルダ情報の転送が完了しました。"
 msgstr ""
 
-#: views\netFileManager.py:256
+#: views\netFileManager.py:258
 msgid "このフォルダはすでに登録されています。上書きしますか。"
 msgstr ""
 
-#: views\netFileManager.py:273
+#: views\netFileManager.py:275
 msgid "フォルダの追加"
 msgstr ""
 
-#: views\netFileManager.py:283
+#: views\netFileManager.py:285
 msgid "フォルダの場所と、LAMP Controller上の名前を指定します。"
 msgstr ""
 
-#: views\netFileManager.py:310
+#: views\netFileManager.py:314
 msgid "指定された場所が存在しません。"
 msgstr ""
 
-#: views\setting_dialog.py:13 views\setting_dialog.py:51
+#: views\setting_dialog.py:13 views\setting_dialog.py:57
 msgid "環境設定"
 msgstr ""
 
@@ -1354,99 +1429,107 @@ msgstr ""
 msgid "現在のプレイリストに追加"
 msgstr ""
 
-#: views\setting_dialog.py:36
+#: views\setting_dialog.py:34
+msgid "通常"
+msgstr ""
+
+#: views\setting_dialog.py:42
 msgid "規定の再生デバイス"
 msgstr ""
 
-#: views\setting_dialog.py:38
+#: views\setting_dialog.py:44
 msgid "音楽再生の出力先と同じ"
 msgstr ""
 
-#: views\setting_dialog.py:54
+#: views\setting_dialog.py:60
 msgid "一般"
 msgstr ""
 
-#: views\setting_dialog.py:55
+#: views\setting_dialog.py:61
 msgid "ダークモード（LAMPの再起動が必要）(&D)"
 msgstr ""
 
-#: views\setting_dialog.py:59
+#: views\setting_dialog.py:65
 msgid "言語（LAMPの再起動が必要）(&L)"
 msgstr ""
 
-#: views\setting_dialog.py:60
+#: views\setting_dialog.py:66
 msgid "終了時に曲をフェードアウトする(&C)"
 msgstr ""
 
-#: views\setting_dialog.py:64
+#: views\setting_dialog.py:70
 msgid "曲送りを手動で行う(&M)"
 msgstr ""
 
-#: views\setting_dialog.py:68
+#: views\setting_dialog.py:74
 msgid "新たなファイルにより開かれたとき(&F)"
 msgstr ""
 
-#: views\setting_dialog.py:69
+#: views\setting_dialog.py:75
 msgid "新たなプレイリストにより開かれたとき(&P)"
 msgstr ""
 
-#: views\setting_dialog.py:72
+#: views\setting_dialog.py:78
 msgid "通知"
 msgstr ""
 
-#: views\setting_dialog.py:73
+#: views\setting_dialog.py:79
 msgid "音声読み上げの出力先(&S)"
 msgstr ""
 
-#: views\setting_dialog.py:74
+#: views\setting_dialog.py:80
 msgid "効果音による通知を有効にする(&I)"
 msgstr ""
 
-#: views\setting_dialog.py:78
+#: views\setting_dialog.py:84
 msgid "効果音出力先(&D)"
 msgstr ""
 
-#: views\setting_dialog.py:79
+#: views\setting_dialog.py:85
 msgid "エラーを通知せず無視する(&E)"
 msgstr ""
 
-#: views\setting_dialog.py:85
+#: views\setting_dialog.py:91
 msgid "起動"
 msgstr ""
 
-#: views\setting_dialog.py:86
+#: views\setting_dialog.py:92
 msgid "規定の音量(&V)"
 msgstr ""
 
-#: views\setting_dialog.py:87
+#: views\setting_dialog.py:93
 msgid "起動時出力先(&D)"
 msgstr ""
 
-#: views\setting_dialog.py:88
+#: views\setting_dialog.py:94
 msgid "起動時に読み込むプレイリスト"
 msgstr ""
 
-#: views\setting_dialog.py:90
+#: views\setting_dialog.py:96
 msgid "起動時に読み込むプレイリスト(&P)"
 msgstr ""
 
-#: views\setting_dialog.py:94
+#: views\setting_dialog.py:99
+msgid "起動時再生モード(&M)"
+msgstr ""
+
+#: views\setting_dialog.py:102
 msgid "ネットワーク"
 msgstr ""
 
-#: views\setting_dialog.py:95
+#: views\setting_dialog.py:103
 msgid "起動時に更新を確認(&U)"
 msgstr ""
 
-#: views\setting_dialog.py:99
+#: views\setting_dialog.py:107
 msgid "手動でプロキシ設定を行う(&M)"
 msgstr ""
 
-#: views\setting_dialog.py:103
+#: views\setting_dialog.py:111
 msgid "サーバ名(&S)"
 msgstr ""
 
-#: views\setting_dialog.py:104
+#: views\setting_dialog.py:113
 msgid "ポート(&P)"
 msgstr ""
 
@@ -1582,31 +1665,31 @@ msgid ""
 "updater.exeが見つかりませんでした。誤って削除したかなどをご確認ください。"
 msgstr ""
 
-#: views\versionDialog.py:18
+#: views\versionDialog.py:21
 msgid "バージョン情報"
 msgstr ""
 
-#: views\versionDialog.py:27
+#: views\versionDialog.py:30
 msgid "ソフトウェアバージョン"
 msgstr ""
 
-#: views\versionDialog.py:28
+#: views\versionDialog.py:31
 msgid "アップデータバージョン"
 msgstr ""
 
-#: views\versionDialog.py:30
+#: views\versionDialog.py:33
 msgid "ライセンス"
 msgstr ""
 
-#: views\versionDialog.py:31
+#: views\versionDialog.py:34
 msgid "開発元"
 msgstr ""
 
-#: views\versionDialog.py:32
+#: views\versionDialog.py:35
 msgid "ソフトウェア詳細情報"
 msgstr ""
 
-#: views\versionDialog.py:34
+#: views\versionDialog.py:37
 msgid ""
 "ライセンス/著作権情報については、同梱の license.txt を参照してください。"
 msgstr ""

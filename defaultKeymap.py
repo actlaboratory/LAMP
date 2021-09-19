@@ -20,7 +20,9 @@ defaultKeymap["MAINVIEW"]={
 	# 機能メニュー
 	"SET_SLEEPTIMER": "ctrl+shift+T",
 	"SET_EFFECTOR": "ctrl+E",
+	"SET_CURSOR_PLAYING": "",
 	"ABOUT_PLAYING": "ctrl+shift+I",
+	"FILTER_SETTING": "",
 	# 操作メニュー
 	"VOLUME_UP": "ctrl+uparrow",
 	"VOLUME_DOWN": "ctrl+downarrow",

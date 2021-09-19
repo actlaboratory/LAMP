@@ -22,7 +22,7 @@ KEYMAP_FILE_NAME="keymap.ini"
 #アプリケーション基本情報
 APP_NAME="LAMP"
 APP_FULL_NAME = "Light and Accessible Music Player"
-APP_VERSION="2.2.0"
+APP_VERSION="2.3.0"
 APP_LAST_RELEASE_DATE = "2021-02-24"
 APP_ICON = "icon.ico"
 APP_COPYRIGHT_YEAR="2019-2021"
@@ -44,6 +44,7 @@ FULL_CHECKED=wx.CHK_CHECKED
 # メニュー
 PLAYLIST_HISTORY= 10500
 DEVICE_LIST_MENU = 10000
+FILTER_LIST_MENU = 11000
 
 # パイプとミューテックスオブジェクトの名前
 PIPE_NAME = "lamp_pipe_jp0000actlab"

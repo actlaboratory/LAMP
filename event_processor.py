@@ -21,11 +21,25 @@ from views import mkDialog
 
 class eventProcessor():
     def __init__(self):
-        self.repeatLoopFlag = 0 #リピート=1, ループ=2
+        # 起動時再生モードに応じて初期化
+        # repeatLoopFlag = リピート=1, ループ=2
+        startupPlayMode = globalVars.app.config.getstring("player", "startupPLayMode", "normal")
+        if startupPlayMode == "shuffle":
+            self.repeatLoopFlag = 0
+            self.shuffleCtrl = []
+        elif startupPlayMode == "loop":
+            self.repeatLoopFlag = 2
+            self.shuffleCtrl = None
+        elif startupPlayMode == "repeat":
+            self.repeatLoopFlag = 1
+            globalVars.play.setRepeat(True)
+            self.shuffleCtrl = None
+        else:
+            self.repeatLoopFlag = 0
+            self.shuffleCtrl = None
         self.playingList = None
         self.tagInfoProcess = 0 # タグ情報表示フラグ 0=アルバム, 1=アーティスト, 2=アルバムアーティスト
         self.muteFlag = False #初期値はミュート解除
-        self.shuffleCtrl = None
         self.fileChanging = False # ファイル送りの多重呼び出し防止
         self.errorSkipCount = 0
 
@@ -118,7 +132,7 @@ class eventProcessor():
             min = 0
             sec = 0
             if i > 0: hour = i // 3600
-            if i-(hour*3600) > 0: min = (i - hour) // 60
+            if i-(hour*3600) > 0: min = (i - hour * 3600) // 60
             if i-(hour*3600)-(min*60) > 0: sec = i - (hour*3600) - (min*60)
             time.append(f"{hour:01}:{min:02}:{sec:02}")
         if globalVars.app.hMainView.nowTime.GetLabel() != time[0]+" / "+time[1]:
@@ -173,6 +187,10 @@ class eventProcessor():
                 view_manager.buttonSetPause()
                 listManager.setTag(listPorQ)
                 globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), True)
+                if self.playingList == constants.PLAYLIST:
+                    globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("SET_CURSOR_PLAYING"), True)
+                else:
+                    globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("SET_CURSOR_PLAYING"), False)
                 self.refreshTagInfo()
                 globalVars.app.hMainView.tagInfoTimer.Start(10000)
             view_manager.setFileStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
@@ -180,6 +198,7 @@ class eventProcessor():
         if not ret:
             view_manager.buttonSetPlay()
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
+            globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("SET_CURSOR_PLAYING"), False)
             view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
             globalVars.lampController.clearFileInfo() # ネット用ファイル情報更新
         view_manager.changeListLabel(globalVars.app.hMainView.playlistView)
@@ -215,6 +234,7 @@ class eventProcessor():
             globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
             view_manager.clearStaticInfoView() #スクリーンリーダ用リストとウィンドウ情報更新
             globalVars.lampController.clearFileInfo() # ネット用ファイル情報更新
+        globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("SET_CURSOR_PLAYING"), False)
         view_manager.changeListLabel(globalVars.app.hMainView.playlistView)
         view_manager.changeListLabel(globalVars.app.hMainView.queueView)
         return ret
@@ -409,6 +429,7 @@ class eventProcessor():
         globalVars.play.stop()
         view_manager.buttonSetPlay()
         globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
+        globalVars.app.hMainView.menu.hFunctionMenu.Enable(menuItemsStore.getRef("SET_CURSOR_PLAYING"), False)
         globalVars.app.hMainView.viewTitle.SetLabel(_("タイトル") + " : ")
         globalVars.app.hMainView.viewTagInfo.SetLabel("")
         globalVars.app.hMainView.tagInfoTimer.Stop()

@@ -1,27 +1,30 @@
 ﻿# -*- coding: utf-8 -*-
 #main view
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
-#Copyright (C) 2019-2020 yamahubuki <itiro.ishino@gmail.com>
+#Copyright (C) 2019-2021 yamahubuki <itiro.ishino@gmail.com>
 #Copyright (C) 2020-2021 Hiroki Fujii <hfujii@hisystron.com>
 
-import subprocess
-from views import lampViewObject
-from views import setting_dialog
-from views import notificationText
-from views import versionDialog
-from views import netFileManager
+from views import fileAssocDialog
+from views import filterSettingDialog
 from views import globalKeyConfig
+from views import lampViewObject
+from views import netFileManager
+from views import notificationText
+from views import setting_dialog
+from views import versionDialog
+
+import ctypes
 import logging
 import os
-import sys
-import wx
-import re
-import ctypes
 import pywintypes
+import re
+import subprocess
+import sys
+import time
+import wx
 
 import constants
 import errorCodes
-import update
 import globalVars
 import netRemote
 import hotkeyHandler
@@ -33,12 +36,13 @@ import m3uManager
 import effector
 import startupListSetter
 import listManager
+import update
+
 from soundPlayer import player
 from soundPlayer.constants import *
 
 import view_manager
 import sendToManager
-from views import fileAssocDialog
 
 from logging import getLogger
 from simpleDialog import dialog
@@ -84,9 +88,16 @@ class MainView(BaseView):
 		self.stopBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, enableTabFocus=False)
 		view_manager.setBitmapButton(self.stopBtn, self.hPanel, wx.Bitmap("./resources/stop.dat", wx.BITMAP_TYPE_GIF), _("停止"))
 		self.repeatLoopBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, enableTabFocus=False)
-		view_manager.setBitmapButton(self.repeatLoopBtn, self.hPanel, wx.Bitmap("./resources/repeatLoop.dat", wx.BITMAP_TYPE_GIF), _("リピートに切り替える"))
+		if globalVars.eventProcess.repeatLoopFlag == 2:
+			view_manager.setBitmapButton(self.repeatLoopBtn, self.hPanel, wx.Bitmap("./resources/loop_on.dat", wx.BITMAP_TYPE_GIF), _("リピートとループを解除する"))
+		elif globalVars.eventProcess.repeatLoopFlag == 1:
+			view_manager.setBitmapButton(self.repeatLoopBtn, self.hPanel, wx.Bitmap("./resources/repeat_on.dat", wx.BITMAP_TYPE_GIF), _("ループに切り替える"))
+		else: view_manager.setBitmapButton(self.repeatLoopBtn, self.hPanel, wx.Bitmap("./resources/repeatLoop.dat", wx.BITMAP_TYPE_GIF), _("リピートに切り替える"))
+		
 		self.shuffleBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, enableTabFocus=False)
-		view_manager.setBitmapButton(self.shuffleBtn, self.hPanel, wx.Bitmap("./resources/shuffle_off.dat", wx.BITMAP_TYPE_GIF), _("シャッフルをオンにする"))
+		if globalVars.eventProcess.shuffleCtrl == None:
+			view_manager.setBitmapButton(self.shuffleBtn, self.hPanel, wx.Bitmap("./resources/shuffle_off.dat", wx.BITMAP_TYPE_GIF), _("シャッフルをオンにする"))
+		else: view_manager.setBitmapButton(self.shuffleBtn, self.hPanel, wx.Bitmap("./resources/shuffle_on.dat", wx.BITMAP_TYPE_GIF), _("シャッフルをオフにする"))
 		self.horizontalCreator.GetSizer().AddStretchSpacer(1)
 		self.muteBtn = self.horizontalCreator.button("", self.events.onButtonClick, style=wx.BU_NOTEXT|wx.BU_EXACTFIT|wx.BORDER_NONE, sizerFlag=wx.ALL|wx.ALIGN_CENTER, enableTabFocus=False)
 		if globalVars.app.config.getstring("view","colorMode","white",("white","dark")) == "white":
@@ -174,7 +185,7 @@ class MainView(BaseView):
 		min = 0
 		sec = 0
 		if i > 0: hour = i // 3600
-		if i-(hour*3600) > 0: min = (i - hour) // 60
+		if i-(hour*3600) > 0: min = (i - hour * 3600) // 60
 		if i-(hour*3600)-(min*60) > 0: sec = i - (hour*3600) - (min*60)
 		return f"{hour:01}:{min:02}:{sec:02}"
 
@@ -208,8 +219,13 @@ class Menu(BaseMenu):
 		self.hFileMenu.Enable(menuItemsStore.getRef("M3U_CLOSE"), False)
 		
 		#機能メニューの中身
-		self.RegisterMenuCommand(self.hFunctionMenu, ["SET_SLEEPTIMER",	"SET_EFFECTOR", "ABOUT_PLAYING", "SHOW_NET_CONTROLLER", "SHOW_NET_FILE_MANAGER"])
+		#フィルタ設定
+		self.hFilterSubMenu = wx.Menu()
+		self.RegisterMenuCommand(self.hFilterSubMenu, ["FILTER_SETTING"])
+		self.RegisterMenuCommand(self.hFunctionMenu, "FILTER_SUB", None, self.hFilterSubMenu)
+		self.RegisterMenuCommand(self.hFunctionMenu, ["SET_SLEEPTIMER", "SET_EFFECTOR", "SET_CURSOR_PLAYING", "ABOUT_PLAYING", "SHOW_NET_CONTROLLER", "SHOW_NET_FILE_MANAGER"])
 		self.hFunctionMenu.Enable(menuItemsStore.getRef("ABOUT_PLAYING"), False)
+		self.hFunctionMenu.Enable(menuItemsStore.getRef("SET_CURSOR_PLAYING"), False)
 		
 		# プレイリストメニューの中身
 		self.RegisterMenuCommand(self.hPlaylistMenu, ["SET_STARTUPLIST", "PLAYLIST_HISTORY_LABEL"])
@@ -233,7 +249,10 @@ class Menu(BaseMenu):
 		self.RegisterRadioMenuCommand(self.hRepeatLoopSubMenu, "REPEAT_LOOP_NONE")
 		self.RegisterRadioMenuCommand(self.hRepeatLoopSubMenu, "RL_REPEAT")
 		self.RegisterRadioMenuCommand(self.hRepeatLoopSubMenu, "RL_LOOP")
+		if globalVars.eventProcess.repeatLoopFlag == 1: self.hRepeatLoopSubMenu.Check(menuItemsStore.getRef("RL_REPEAT"), True)
+		elif globalVars.eventProcess.repeatLoopFlag == 2: self.hRepeatLoopSubMenu.Check(menuItemsStore.getRef("RL_LOOP"), True)
 		self.RegisterCheckMenuCommand(self.hOperationMenu, "SHUFFLE")
+		if globalVars.eventProcess.shuffleCtrl != None: self.hOperationMenu.Check(menuItemsStore.getRef("SHUFFLE"), True)
 		self.RegisterCheckMenuCommand(self.hOperationMenu, "MANUAL_SONG_FEED")
 		
 		# 設定メニューの中身
@@ -311,10 +330,26 @@ class Events(BaseEvents):
 		elif selected == menuItemsStore.getRef("EXIT"):
 			self.parent.hFrame.Close()
 		#機能メニューのイベント
+		elif selected >= constants.FILTER_LIST_MENU and selected < constants.FILTER_LIST_MENU + 500:
+			globalVars.filter.get(selected - constants.FILTER_LIST_MENU).setEnable(event.IsChecked())
+		elif selected == menuItemsStore.getRef("FILTER_SETTING"):
+			d = filterSettingDialog.Dialog(*globalVars.filter.getDic())
+			d.Initialize()
+			if d.Show()==wx.ID_CANCEL:
+				return
+			globalVars.filter.loadDic(*d.GetValue())
 		elif selected == menuItemsStore.getRef("SET_SLEEPTIMER"):
 			globalVars.sleepTimer.set()
 		elif selected == menuItemsStore.getRef("SET_EFFECTOR"):
 			effector.effector()
+		elif selected == menuItemsStore.getRef("SET_CURSOR_PLAYING"):
+			if globalVars.eventProcess.playingList == constants.PLAYLIST:
+				p = self.parent.playlistView
+				p.Focus(p.getPointer())
+				p.Select(-1, 0)
+				p.Select(p.getPointer())
+			else:
+				globalVars.app.hMainView.notification.show(_("プレイリスト上の項目を再生していません。"), 2)
 		elif selected == menuItemsStore.getRef("ABOUT_PLAYING"):
 			if globalVars.eventProcess.playingList == constants.PLAYLIST:
 				listManager.infoDialog(listManager.getTuple(constants.PLAYLIST))
@@ -486,9 +521,21 @@ class Events(BaseEvents):
 			for path in globalVars.m3uHistory.getList():
 				menu.Insert(2, constants.PLAYLIST_HISTORY + index, path)
 				index += 1
+		elif menuObject == self.parent.menu.hFilterSubMenu:
+			menu = self.parent.menu.hFilterSubMenu
+			# いったん全て削除
+			for i in range(menu.GetMenuItemCount() - 1):
+				menu.DestroyItem(menu.FindItemByPosition(0))
+			# 項目を作成
+			index = 0
+			for filter in globalVars.filter.getList():
+				menu.InsertCheckItem(index, constants.FILTER_LIST_MENU + index, filter.getName())
+				menu.Check(constants.FILTER_LIST_MENU + index, filter.isEnable())
+				index += 1
+
 		elif menuObject == self.parent.menu.hOperationMenu:
 			self.parent.menu.hOperationMenu.Check(menuItemsStore.getRef("MANUAL_SONG_FEED"), globalVars.app.config.getboolean("player", "manualSongFeed", False))
-	
+
 	def onButtonClick(self, event):
 			if event.GetEventObject() == globalVars.app.hMainView.previousBtn:
 				globalVars.eventProcess.previousBtn()
@@ -515,8 +562,16 @@ class Events(BaseEvents):
 	def timerEvent(self, evt):
 		globalVars.eventProcess.refreshView()
 
-	def Exit(self, event=None):
+	def OnExit(self, event=None):
+		if globalVars.app.config.getboolean("player", "fadeOutOnExit", False) and globalVars.play.getStatus() == PLAYER_STATUS_PLAYING:
+			while globalVars.play.setVolumeByDiff(-2):
+				time.sleep(0.07)
 		if not m3uManager.closeM3u(newSave=False): return
 		globalVars.app.hMainView.timer.Stop()
+		globalVars.app.hMainView.timer.Destroy()
 		globalVars.app.hMainView.tagInfoTimer.Stop()
-		super().Exit(event)
+		globalVars.app.hMainView.tagInfoTimer.Destroy()
+		self.parent.notification.destroy()
+		globalVars.play.exit()
+		globalVars.lampController.exit()
+		super().OnExit(event)
