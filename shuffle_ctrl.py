@@ -27,7 +27,7 @@ class shuffle():
                     self.previous(lstConstant)
         else:
             # キューなどからの復帰
-            if self.history[elf.playIndex] in self.list:
+            if self.history[self.playIndex] in self.list:
                 self.list.setPointer(self.list.index(self.history[self.playIndex]))
                 return globalVars.eventProcess.play()
             else:
