@@ -7,9 +7,10 @@ import _winxptheme
 
 import constants
 import globalVars
+import views.ViewCreator
 
 from logging import getLogger
-import views.ViewCreator
+
 
 class BaseDialog(object):
 	"""モーダルダイアログの基本クラス。"""
@@ -23,10 +24,11 @@ class BaseDialog(object):
 			globalVars.app.config.getstring("view","textWrapping","off",("on","off"))
 		)
 
-	def Initialize(self, parent,ttl,style=wx.DEFAULT_DIALOG_STYLE | wx.BORDER_DEFAULT):
+	def Initialize(self, parent,ttl,style=wx.CAPTION | wx.SYSTEM_MENU | wx.BORDER_DEFAULT):
 		"""タイトルを指定して、ウィンドウを初期化し、親の中央に配置するように設定。"""
 		self.wnd=wx.Dialog(parent,-1, ttl,style = style)
 		_winxptheme.SetWindowTheme(self.wnd.GetHandle(),"","")
+		self.wnd.SetEscapeId(wx.ID_NONE)
 		self.wnd.Bind(wx.EVT_CLOSE,self.OnClose)
 
 		self.panel = wx.Panel(self.wnd,wx.ID_ANY)
@@ -51,7 +53,7 @@ class BaseDialog(object):
 
 	def Destroy(self):
 		self.log.debug("destroy")
-		if not self.wnd.IsBeingDeleted(): self.wnd.Destroy()
+		self.wnd.Destroy()
 
 	def GetValue(self):
 		self.log.debug("Value:%s" % str(self.value))
@@ -62,23 +64,7 @@ class BaseDialog(object):
 
 	#closeイベントで呼ばれる。Alt+F4対策
 	def OnClose(self,event):
-		if event.CanVeto():
-			winList = self.wnd.GetChildren()
-			for w in winList:
-				if w.IsTopLevel():
-					if not w.Close():
-						event.Veto()
-						return
-			if self.wnd.GetWindowStyleFlag() | wx.CLOSE_BOX==wx.CLOSE_BOX:
-				self._destroy()
-				return
-			else:
-				event.Veto()
-				return
-
-	def _destroy(self):
-		if self.wnd.IsModal():
-			if not self.wnd.IsBeingDeleted():
-				self.wnd.EndModal(wx.ID_CANCEL)
+		if self.wnd.GetWindowStyleFlag() & wx.CLOSE_BOX==wx.CLOSE_BOX:
+			event.Skip()
 		else:
-			if not self.wnd.IsBeingDeleted(): self.wnd.Destroy()
+			event.Veto()
