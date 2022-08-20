@@ -1,6 +1,6 @@
 		Light and Accessible Music Player -LAMP-
 
-	バージョン:　　ver.2.3.2
+	バージョン:　　ver.2.4.0
 	リリース:　　　2022-08-20
 	開発・配布元:　ACT Laboratory　(https://actlab.org/)
 	主要開発者:　　藤井弘毅
