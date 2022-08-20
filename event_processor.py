@@ -1,6 +1,7 @@
 # Copyright (C) 2020-2021 Hiroki Fujii <hfujii@hisystron.com>
 
 import os, sys, platform, wx
+import math
 import winsound
 import re
 import requests
@@ -53,10 +54,12 @@ class eventProcessor():
         val = globalVars.play.getPosition()
         if max < 0:
             globalVars.app.hMainView.trackBar.SetMax(0)
+            globalVars.app.hMainView.trackBar.SetPageSize(10)
             globalVars.app.hMainView.trackBar.Disable()
             self.setNowTimeLabel(0, 0)
         else:
             globalVars.app.hMainView.trackBar.SetMax(max)
+            globalVars.app.hMainView.trackBar.SetPageSize(math.ceil(max / 10))
             globalVars.app.hMainView.trackBar.Enable()
             if val == -1:
                 globalVars.app.hMainView.trackBar.SetValue(0)
