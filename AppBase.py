@@ -1,5 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 #Application Initializer
+#Copyright (C) 2019-2022 yamahubuki <itiro.ishino@gmail.com>
+
 
 import accessible_output2.outputs
 import datetime
@@ -14,12 +16,12 @@ import traceback
 import win32api
 import wx
 
-from accessible_output2.outputs.base import OutputError
-
 import constants
 import DefaultSettings
-import views.langDialog
 import simpleDialog
+import views.langDialog
+
+from accessible_output2.outputs.base import OutputError
 
 
 class MaiｎBase(wx.App):
@@ -93,8 +95,12 @@ class MaiｎBase(wx.App):
 
 	def InitLogger(self):
 		"""ログ機能を初期化して準備する。"""
+		ex = ""
 		try:
 			self.deleteAllLogs()
+		except Exception as e:
+			ex = "".join(traceback.TracebackException.from_exception(e).format())
+		try:
 			self.hLogHandler=logging.handlers.RotatingFileHandler(constants.LOG_FILE_NAME, mode="w", encoding="UTF-8", maxBytes=2**20*256, backupCount=5)
 			self.hLogHandler.setLevel(logging.DEBUG)
 			self.hLogFormatter=logging.Formatter("%(name)s - %(levelname)s - %(message)s (%(asctime)s)")
@@ -107,6 +113,8 @@ class MaiｎBase(wx.App):
 		self.log=logging.getLogger(constants.LOG_PREFIX+".Main")
 		r="executable" if self.frozen else "interpreter"
 		self.log.info("Starting"+constants.APP_NAME+" "+constants.APP_VERSION+" as %s!" % r)
+		if ex:
+			self.log.error("failed to deleteAllLogs().\n"+ex)
 
 	def deleteAllLogs(self):
 		for i in glob.glob("%s*" % constants.LOG_FILE_NAME):
