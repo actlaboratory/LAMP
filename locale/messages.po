@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LAMP\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-05 20:59+0900\n"
+"POT-Creation-Date: 2022-08-20 15:56+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,91 +17,101 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: AppBase.py:45
+#: AppBase.py:51
 msgid ""
 "ログ機能の初期化に失敗しました。下記のファイルへのアクセスが可能であることを"
 "確認してください。"
 msgstr ""
 
-#: event_processor.py:103 event_processor.py:111 event_processor.py:119
+#: AppBase.py:60
+msgid "音声エンジンエラー"
+msgstr ""
+
+#: AppBase.py:60
+msgid ""
+"音声読み上げ機能の初期化に失敗したため、読み上げ機能を使用できません。出力先"
+"の変更をお試しください。"
+msgstr ""
+
+#: event_processor.py:106 event_processor.py:114 event_processor.py:122
 msgid "情報なし"
 msgstr ""
 
-#: event_processor.py:147
+#: event_processor.py:150
 msgid "消音を解除"
 msgstr ""
 
-#: event_processor.py:154
+#: event_processor.py:157
 msgid "消音に設定"
 msgstr ""
 
-#: event_processor.py:253 event_processor.py:254
+#: event_processor.py:256 event_processor.py:257
 msgid ""
 "一定回数連続して再生に失敗しました。\n"
 "停止します。"
 msgstr ""
 
-#: event_processor.py:263
+#: event_processor.py:266
 msgid "再生時エラー"
 msgstr ""
 
-#: event_processor.py:263
+#: event_processor.py:266
 msgid "このファイルは再生できません。"
 msgstr ""
 
-#: event_processor.py:263
+#: event_processor.py:266
 msgid "継続"
 msgstr ""
 
-#: event_processor.py:263 sleep_timer.py:45 views\main.py:89
+#: event_processor.py:266 sleep_timer.py:45 views\main.py:89
 msgid "停止"
 msgstr ""
 
-#: event_processor.py:338 views\main.py:237
+#: event_processor.py:341 views\main.py:237
 msgid "進む"
 msgstr ""
 
-#: event_processor.py:339 views\main.py:237
+#: event_processor.py:342 views\main.py:237
 msgid "戻る"
 msgstr ""
 
-#: event_processor.py:340
+#: event_processor.py:343
 msgid "スキップ"
 msgstr ""
 
-#: event_processor.py:385 event_processor.py:386 event_processor.py:485
-#: event_processor.py:486
+#: event_processor.py:388 event_processor.py:389 event_processor.py:488
+#: event_processor.py:489
 msgid ""
 "再生デバイスに問題があります。\n"
 "設定、または接続を確認してください。"
 msgstr ""
 
-#: event_processor.py:433 listManager.py:217 view_manager.py:52
+#: event_processor.py:436 listManager.py:217 view_manager.py:52
 #: view_manager.py:65 view_manager.py:89
 msgid "タイトル"
 msgstr ""
 
-#: event_processor.py:441 views\setting_dialog.py:37
+#: event_processor.py:444 views\setting_dialog.py:37
 msgid "シャッフル"
 msgstr ""
 
-#: event_processor.py:446 event_processor.py:461
+#: event_processor.py:449 event_processor.py:464
 msgid "オフ"
 msgstr ""
 
-#: event_processor.py:466 views\setting_dialog.py:35
+#: event_processor.py:469 views\setting_dialog.py:35
 msgid "リピート"
 msgstr ""
 
-#: event_processor.py:471 views\setting_dialog.py:36
+#: event_processor.py:474 views\setting_dialog.py:36
 msgid "ループ"
 msgstr ""
 
-#: event_processor.py:506 event_processor.py:507
+#: event_processor.py:509 event_processor.py:510
 msgid "曲送りは自動"
 msgstr ""
 
-#: event_processor.py:510 event_processor.py:511
+#: event_processor.py:513 event_processor.py:514
 msgid "曲送りは手動"
 msgstr ""
 
@@ -530,7 +540,7 @@ msgstr ""
 msgid "登録に失敗しました。"
 msgstr ""
 
-#: sendToManager.py:45 startupListSetter.py:18 views\base.py:117
+#: sendToManager.py:45 startupListSetter.py:18 views\base.py:119
 #: views\fileAssocDialog.py:19 views\fileAssocDialog.py:35
 #: views\fileAssocDialog.py:72 views\fontManager.py:25 views\fontManager.py:50
 #: views\globalKeyConfig.py:61 views\KeyValueSettingDialogBase.py:297
@@ -749,11 +759,11 @@ msgstr ""
 msgid "ミュートをオフにする"
 msgstr ""
 
-#: views\base.py:67
+#: views\base.py:68
 msgid "現在メニューは操作できません"
 msgstr ""
 
-#: views\base.py:114
+#: views\base.py:116
 msgid ""
 "で設定されたショートカットキーが正しくありません。キーの重複、存在しないキー"
 "名の指定、使用できないキーパターンの指定などが考えられます。以下のキーの設定"
@@ -1106,7 +1116,7 @@ msgid "音量"
 msgstr ""
 
 #: views\main.py:136
-msgid "トラックバー"
+msgid "位置"
 msgstr ""
 
 #: views\main.py:154
