@@ -133,7 +133,7 @@ class MainView(BaseView):
 
 		#トラックバーエリア
 		#self.horizontalCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT, margin=60)
-		self.trackBar, dummy = self.creator.clearSlider(_("トラックバー"), x=1000, sizerFlag=wx.EXPAND | wx.LEFT | wx.RIGHT, proportion=0, margin=60, textLayout=None)
+		self.trackBar, dummy = self.creator.clearSlider(_("位置"), x=1000, sizerFlag=wx.EXPAND | wx.LEFT | wx.RIGHT, proportion=0, margin=60, textLayout=None)
 		self.trackBar.SetThumbLength(30)
 		self.trackBar.Bind(wx.EVT_KEY_UP, stopArrowPropagation)
 		self.trackBar.setScrollCallBack(self.events.onTrackBar)
