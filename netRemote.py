@@ -51,6 +51,8 @@ class lampController(threading.Thread):
             if self.exitFlag: break
             if not self.requestFlag: continue
             if not globalVars.app.config.getboolean("network","ctrl_client",True): continue
+            if not globalVars.app.config.getstring("network", "user_name"): continue
+            if not globalVars.app.config.getstring("network", "software_key"): continue
             
             # インターネット接続確認
             if errorCount >= 10:
