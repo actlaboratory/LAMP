@@ -52,7 +52,8 @@ class clearSlider(sliderBase.slider):
         self.callBack = func
 
     def paintEvent(self,event):
-        dc = wx.PaintDC(self)
+        dc = wx.BufferedPaintDC(self)
+
         ellipseWidth = dc.GetSize().GetHeight() / 2
 
         # はみ出た円を消すために背景色で塗る

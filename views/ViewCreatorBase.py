@@ -498,6 +498,7 @@ class ViewCreatorBase():
 		hStaticText,sizer,parent=self._addDescriptionText(text,textLayout,sizerFlag, proportion,margin)
 
 		hSlider=self.winObject["clear_slider"](parent, wx.ID_ANY, size=(x,-1),value=defaultValue, minValue=min, maxValue=max, style=style, enableTabFocus=enableTabFocus)
+		hSlider.SetBackgroundStyle(wx.BG_STYLE_PAINT)
 		hSlider.Bind(wx.EVT_SCROLL_CHANGED,event)
 		self._setFace(hSlider)
 		if x==-1:	#幅を拡張
