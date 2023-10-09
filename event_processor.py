@@ -50,8 +50,8 @@ class eventProcessor():
 
     def refreshView(self):
         #トラックバー更新
-        max = globalVars.play.getLength()
-        val = globalVars.play.getPosition()
+        max = (int)(globalVars.play.getLength())
+        val = (int)(globalVars.play.getPosition())
         if max < 0:
             globalVars.app.hMainView.trackBar.SetMax(0)
             globalVars.app.hMainView.trackBar.SetPageSize(10)
