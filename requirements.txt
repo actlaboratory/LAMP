@@ -1,7 +1,7 @@
 ﻿wxpython==4.2.1
 pywin32
 winpaths
-pyinstaller==5.12
+pyinstaller==6.3.0
 pyperclip
 requests
 https://github.com/actlaboratory/named-pipe/archive/v1.0.5.zip
