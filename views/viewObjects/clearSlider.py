@@ -147,7 +147,7 @@ class clearSlider(sliderBase.slider):
             self.toolTip = None
 
     def SetValue(self,value):
-        super().SetValue(value)
+        super().SetValue(int(value))
         self.Refresh()
 
     def mouseClickEvent(self,event):
