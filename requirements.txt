@@ -1,4 +1,4 @@
-﻿wxpython==4.2.1
+﻿wxpython==4.2.2
 pywin32
 winpaths
 pyinstaller==6.3.0
