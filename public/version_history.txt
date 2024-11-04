@@ -1,6 +1,7 @@
 LAMP Version History
 
-Version 2.4.1 202X/X/X
+Version 2.5.0 202X/X/X
+　全体的な動作速度を向上
 　トラックバーおよび音量調整バーのちらつきを改善
 
 Version 2.4.0 2022/8/20
