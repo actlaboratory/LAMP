@@ -4,7 +4,6 @@
 import re
 
 def getValueString(ref_id):
-	print(ref_id)
 	if re.match(r'^SKIP_BY_SECONDS_[0-9]+$', ref_id):
 		sec = int(ref_id.replace("SKIP_BY_SECONDS_", ""))
 		return skipBySeconds(sec)
@@ -87,9 +86,7 @@ dic={
 	"HELP": _("ヘルプ(&H)"),
 	"CHECK_UPDATE": _("更新の確認(&U)"),
 	"VERSION_INFO": _("バージョン情報(&V)"),
-	"SKIP_BY_SECONDS_5": _("5秒スキップ"),
 	"SAY_TIME": _("経過時間の読み上げ"),
- 
 
 	"":""		#セパレータ追加時用
 }
