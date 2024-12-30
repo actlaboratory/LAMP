@@ -136,7 +136,7 @@ class update(threading.Thread):
 		self._file_name = "update_file.zip"
 		response = requests.get(url, stream = True)
 		total_size = int(response.headers["Content-Length"])
-		wx.CallAfter(self.dialog.gauge.SetRange, total_size/100)
+		wx.CallAfter(self.dialog.gauge.SetRange, (int)(total_size/100))
 		now_size = 0
 		broken = False
 		with open(self._file_name, mode="wb") as f:
@@ -146,7 +146,7 @@ class update(threading.Thread):
 					break
 				f.write(chunk)
 				now_size += len(chunk)
-				wx.CallAfter(self.dialog.gauge.SetValue, (now_size/100))
+				wx.CallAfter(self.dialog.gauge.SetValue, (int)(now_size/100))
 				wx.YieldIfNeeded()
 		if broken:
 			self.log.info("downloading update file has canceled by user")
