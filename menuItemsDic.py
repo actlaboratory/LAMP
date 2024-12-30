@@ -4,6 +4,14 @@
 import re
 
 def getValueString(ref_id):
+	print(ref_id)
+	if re.match(r'^SKIP_BY_SECONDS_[0-9]+$', ref_id):
+		sec = int(ref_id.replace("SKIP_BY_SECONDS_", ""))
+		return skipBySeconds(sec)
+	if re.match(r'^REVERSE_SKIP_BY_SECONDS_[0-9]+$', ref_id):
+		sec = int(ref_id.replace("REVERSE_SKIP_BY_SECONDS_", ""))
+		return reverse_skipBySeconds(sec)
+ 
 	""" ナビキーとダイアログ文字列を消去した文字列を取り出し """
 	dicVal = dic[ref_id]
 	s = re.sub("\.\.\.$", "", dicVal)
@@ -79,8 +87,25 @@ dic={
 	"HELP": _("ヘルプ(&H)"),
 	"CHECK_UPDATE": _("更新の確認(&U)"),
 	"VERSION_INFO": _("バージョン情報(&V)"),
-	
+	"SKIP_BY_SECONDS_5": _("5秒スキップ"),
 	"SAY_TIME": _("経過時間の読み上げ"),
+ 
 
 	"":""		#セパレータ追加時用
 }
+
+def skipBySeconds(sec):
+    if sec < 60:
+        return _("%d秒スキップ" % (sec,))
+    elif sec % 60 == 0:
+        return _("%d分スキップ" % (sec / 60,))
+    else:
+        return _("%d分%d秒スキップ" % (int(sec / 60), sec % 60))
+
+def reverse_skipBySeconds(sec):
+    if sec < 60:
+        return _("%d秒逆スキップ" % (sec,))
+    elif sec % 60 == 0:
+        return _("%d分逆スキップ" % (sec / 60,))
+    else:
+        return _("%d分%d秒逆スキップ" % (int(sec / 60), sec % 60))
