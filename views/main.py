@@ -446,6 +446,17 @@ class Events(BaseEvents):
 			update.checkUpdate()
 		elif selected==menuItemsStore.getRef("VERSION_INFO"):
 			versionDialog.versionDialog()
+		else:
+			entries = self.parent.menu.keymap.GetEntries(self.parent.identifier)
+			for entry in entries:
+				refName = entry.GetRefName()
+				# 時間スキップ
+				if re.match(r'^SKIP_BY_SECONDS_[0-9]+$', refName) and selected==menuItemsStore.getRef(refName):
+					sec = int(refName.replace("SKIP_BY_SECONDS_", ""))
+					globalVars.eventProcess.skip(sec)
+				if re.match(r'^REVERSE_SKIP_BY_SECONDS_[0-9]+$', refName) and selected==menuItemsStore.getRef(refName):
+					sec = int(refName.replace("REVERSE_SKIP_BY_SECONDS_", ""))
+					globalVars.eventProcess.skip(sec, False)
 
 	def setKeymap(self, identifier,ttl,keymap=None,filter=None):
 		if keymap:
