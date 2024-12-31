@@ -52,7 +52,7 @@ class clearSlider(sliderBase.slider):
         self.callBack = func
 
     def paintEvent(self,event):
-        dc = wx.BufferedPaintDC(self)
+        dc = wx.PaintDC(self)
 
         ellipseWidth = dc.GetSize().GetHeight() / 2
 

@@ -53,20 +53,24 @@ class eventProcessor():
         max = (int)(globalVars.play.getLength())
         val = (int)(globalVars.play.getPosition())
         if max < 0:
-            globalVars.app.hMainView.trackBar.SetMax(0)
+            if globalVars.app.hMainView.trackBar.GetMax() != 0:
+                globalVars.app.hMainView.trackBar.SetMax(0)
             globalVars.app.hMainView.trackBar.SetPageSize(10)
             globalVars.app.hMainView.trackBar.Disable()
             self.setNowTimeLabel(0, 0)
         else:
-            globalVars.app.hMainView.trackBar.SetMax(max)
+            if globalVars.app.hMainView.trackBar.GetMax() != max:
+                globalVars.app.hMainView.trackBar.SetMax(max)
             globalVars.app.hMainView.trackBar.SetPageSize(math.ceil(max / 10))
             globalVars.app.hMainView.trackBar.Enable()
             if val == -1:
-                globalVars.app.hMainView.trackBar.SetValue(0)
+                if globalVars.app.hMainView.trackBar.GetValue() != 0:
+                    globalVars.app.hMainView.trackBar.SetValue(0)
                 globalVars.app.hMainView.trackBar.Disable()
                 self.setNowTimeLabel(0, max)
             else:
-                globalVars.app.hMainView.trackBar.SetValue(val)
+                if globalVars.app.hMainView.trackBar.GetValue() != val:
+                    globalVars.app.hMainView.trackBar.SetValue(val)
                 self.setNowTimeLabel(val, max)
 
         # ネット用再生時間更新
