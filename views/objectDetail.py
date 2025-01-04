@@ -27,7 +27,7 @@ class Dialog(BaseDialog):
 
 		self.buttonArea=views.ViewCreator.BoxSizer(self.sizer,wx.HORIZONTAL, wx.ALIGN_RIGHT)
 		self.creator=views.ViewCreator.ViewCreator(self.viewMode,self.panel,self.buttonArea,wx.HORIZONTAL,20)
-		self.bOk=self.creator.okbutton(_("ＯＫ"),None)
+		self.bOk=self.creator.closebutton(_("ＯＫ"),None)
 
 	def GetValue(self):
 		return None
