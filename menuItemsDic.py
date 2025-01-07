@@ -93,16 +93,16 @@ dic={
 
 def skipBySeconds(sec):
     if sec < 60:
-        return _("%d秒スキップ" % (sec,))
+        return _("%d秒スキップ") % (sec,)
     elif sec % 60 == 0:
-        return _("%d分スキップ" % (sec / 60,))
+        return _("%d分スキップ") % (sec / 60,)
     else:
-        return _("%d分%d秒スキップ" % (int(sec / 60), sec % 60))
+        return _("%d分%d秒スキップ") % (int(sec / 60), sec % 60)
 
 def reverse_skipBySeconds(sec):
     if sec < 60:
-        return _("%d秒逆スキップ" % (sec,))
+        return _("%d秒逆スキップ") % (sec,)
     elif sec % 60 == 0:
-        return _("%d分逆スキップ" % (sec / 60,))
+        return _("%d分逆スキップ") % (sec / 60,)
     else:
-        return _("%d分%d秒逆スキップ" % (int(sec / 60), sec % 60))
+        return _("%d分%d秒逆スキップ") % (int(sec / 60), sec % 60)
