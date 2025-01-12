@@ -117,13 +117,13 @@ class MainView(BaseView):
 		infoCreator = views.ViewCreator.ViewCreator(self.viewMode, self.hPanel, self.creator.GetSizer(), wx.HORIZONTAL,0, style=wx.EXPAND | wx.LEFT | wx.RIGHT, margin=60)
 		lb = infoCreator.staticText("♪")
 		f = lb.GetFont()
-		f.SetPointSize(f.GetPointSize() * (5/3))
+		f.SetPointSize((int)(f.GetPointSize() * (5/3)))
 		lb.SetFont(f)
 		infoRight = views.ViewCreator.ViewCreator(self.viewMode, infoCreator.GetPanel(), infoCreator.GetSizer(), wx.VERTICAL,0, style=wx.EXPAND | wx.LEFT, margin=5, proportion=1)
 		self.viewTitle = infoRight.staticText("")
 		self.viewTagInfo = infoRight.staticText("")
 		f = self.viewTagInfo.GetFont()
-		f.SetPointSize(f.GetPointSize() * (2/3))
+		f.SetPointSize((int)(f.GetPointSize() * (2/3)))
 		self.viewTagInfo.SetFont(f)
 		self.tagInfoTimer = wx.Timer()
 		self.tagInfoTimer.Bind(wx.EVT_TIMER, globalVars.eventProcess.refreshTagInfo)
@@ -446,6 +446,17 @@ class Events(BaseEvents):
 			update.checkUpdate()
 		elif selected==menuItemsStore.getRef("VERSION_INFO"):
 			versionDialog.versionDialog()
+		else:
+			entries = self.parent.menu.keymap.GetEntries(self.parent.identifier)
+			for entry in entries:
+				refName = entry.GetRefName()
+				# 時間スキップ
+				if re.match(r'^SKIP_BY_SECONDS_[0-9]+$', refName) and selected==menuItemsStore.getRef(refName):
+					sec = int(refName.replace("SKIP_BY_SECONDS_", ""))
+					globalVars.eventProcess.skip(sec)
+				if re.match(r'^REVERSE_SKIP_BY_SECONDS_[0-9]+$', refName) and selected==menuItemsStore.getRef(refName):
+					sec = int(refName.replace("REVERSE_SKIP_BY_SECONDS_", ""))
+					globalVars.eventProcess.skip(sec, False)
 
 	def setKeymap(self, identifier,ttl,keymap=None,filter=None):
 		if keymap:

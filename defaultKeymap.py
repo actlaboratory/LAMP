@@ -51,6 +51,18 @@ defaultKeymap["MAINVIEW"]={
 	"VERSION_INFO": "ctrl+shift+V",
 	# その他
 	"SAY_TIME": "ctrl+T",
+	"SKIP_BY_SECONDS_5": "",
+	"SKIP_BY_SECONDS_15": "",
+	"SKIP_BY_SECONDS_30": "",
+	"SKIP_BY_SECONDS_60": "",
+	"SKIP_BY_SECONDS_300": "",
+	"SKIP_BY_SECONDS_900": "",
+	"REVERSE_SKIP_BY_SECONDS_5": "",
+	"REVERSE_SKIP_BY_SECONDS_15": "",
+	"REVERSE_SKIP_BY_SECONDS_30": "",
+	"REVERSE_SKIP_BY_SECONDS_60": "",
+	"REVERSE_SKIP_BY_SECONDS_300": "",
+	"REVERSE_SKIP_BY_SECONDS_900": "",
 }
 
 defaultKeymap["playlist"]={
