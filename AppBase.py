@@ -3,7 +3,7 @@
 #Copyright (C) 2019-2022 yamahubuki <itiro.ishino@gmail.com>
 
 
-import accessible_output2.outputs
+import speech.outputs
 import datetime
 import gettext
 import glob
@@ -21,7 +21,7 @@ import DefaultSettings
 import simpleDialog
 import views.langDialog
 
-from accessible_output2.outputs.base import OutputError
+from speech.outputs.base import OutputError
 
 
 class MaiｎBase(wx.App):
@@ -58,40 +58,40 @@ class MaiｎBase(wx.App):
 			self.log.error("Failed to initialize speech output.")
 			self.log.error(traceback.format_exc())
 			simpleDialog.winDialog(_("音声エンジンエラー"), _("音声読み上げ機能の初期化に失敗したため、読み上げ機能を使用できません。出力先の変更をお試しください。"))
-			self.speech = accessible_output2.outputs.nospeech.NoSpeech()
+			self.speech = speech.outputs.nospeech.NoSpeech()
 
 	def _InitSpeech(self):
 		# 音声読み上げの準備
 		reader=self.config["speech"]["reader"]
 		if(reader=="PCTK"):
 			self.log.info("use reader 'PCTalker'")
-			self.speech=accessible_output2.outputs.pc_talker.PCTalker()
+			self.speech=speech.outputs.pc_talker.PCTalker()
 		elif(reader=="NVDA"):
 			self.log.info("use reader 'NVDA'")
-			self.speech=accessible_output2.outputs.nvda.NVDA()
+			self.speech=speech.outputs.nvda.NVDA()
 		#SAPI4はバグってるっぽいので無効にしておく
 #		elif(reader=="SAPI4"):
 #			self.log.info("use reader 'SAPI4'")
-#			self.speech=accessible_output2.outputs.sapi4.Sapi4()
+#			self.speech=speech.outputs.sapi4.Sapi4()
 		elif(reader=="SAPI5"):
 			self.log.info("use reader 'SAPI5'")
-			self.speech=accessible_output2.outputs.sapi5.SAPI5()
+			self.speech=speech.outputs.sapi5.SAPI5()
 		elif(reader=="AUTO"):
 			self.log.info("use reader 'AUTO'")
-			self.speech=accessible_output2.outputs.auto.Auto()
+			self.speech=speech.outputs.auto.Auto()
 		elif(reader=="JAWS"):
 			self.log.info("use reader 'JAWS'")
-			self.speech=accessible_output2.outputs.jaws.Jaws()
+			self.speech=speech.outputs.jaws.Jaws()
 		elif(reader=="CLIPBOARD"):
 			self.log.info("use reader 'CLIPBOARD'")
-			self.speech=accessible_output2.outputs.clipboard.Clipboard()
+			self.speech=speech.outputs.clipboard.Clipboard()
 		elif(reader=="NOSPEECH"):
 			self.log.info("use reader 'NOSPEECH'")
-			self.speech=accessible_output2.outputs.nospeech.NoSpeech()
+			self.speech=speech.outputs.nospeech.NoSpeech()
 		else:
 			self.config.set("speech","reader","AUTO")
 			self.log.warning("Setting missed! speech.reader reset to 'AUTO'")
-			self.speech=accessible_output2.outputs.auto.Auto()
+			self.speech=speech.outputs.auto.Auto()
 
 	def InitLogger(self):
 		"""ログ機能を初期化して準備する。"""
