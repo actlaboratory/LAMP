@@ -1,4 +1,4 @@
-Copyright (c)2019-2021 Hiroki Fujii,ACT laboratory All rights reserved.
+Copyright (c)2019-2025 Hiroki Fujii,ACT laboratory All rights reserved.
 
 本ソフトウェアは、GPL v2の条件に従い、自由に利用することができます。
 本ソフトウェアのソースコードは、readme.txtに記載のURLよりダウンロード可能です。
@@ -18,7 +18,7 @@ Copyright (c)2019-2021 Hiroki Fujii,ACT laboratory All rights reserved.
 
 ・MITライセンスに基づく以下のライブラリ
 	pytags　(https://pypi.org/project/pytags/)
-	AccessibleOutput2　(https://pypi.org/project/accessible-output2/)
+	speech　(https://github.com/actlaboratory/speech)　Copyright (c) 2019 Christopher Toth
 
 ・MS-PL
 	DotNetZip
