@@ -10,3 +10,4 @@ https://github.com/actlaboratory/history/archive/v1.0.3.zip
 https://github.com/actlaboratory/soundPlayer/archive/0.5.4.zip
 https://github.com/actlaboratory/diff_archiver/archive/v1.0.1.zip
 pillow==9.5
+C:\Users\hirok\Documents\scripts\speech
